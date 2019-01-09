@@ -1,13 +1,11 @@
 # coding=utf-8
 """Project level url handler."""
-from django.conf.urls import patterns, include, url
-from django.conf.urls.i18n import i18n_patterns
-from django.contrib.auth import views as auth_views  # noqa
+from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
-from django.conf.urls.static import static
 from django.http import HttpResponseServerError
 from django.template import loader, Context
+from django.conf.urls.static import static
 
 admin.autodiscover()
 handler404 = 'base.views.error_views.custom_404'
@@ -30,17 +28,18 @@ def handler500(request):
         'request': request,
     })))
 
-
-urlpatterns = []
-# These patterns work if there is a locale code injected in front of them
-# e.g. /en/reports/
-urlpatterns += i18n_patterns(
-    url(r'^site-admin/', include(admin.site.urls)),
+urlpatterns = [
+    #url(r'^site-admin/', include(admin.site.urls)),
     url(r'^', include('base.urls')),
-    url(r'^grappelli/', include('grappelli.urls')),
-    url(r'^accounts/', include('allauth.urls')),
-)
+    #url(r'^grappelli/', include('grappelli.urls')),
+    #url(r'^accounts/', include('allauth.urls')),
+]
 
 if settings.DEBUG:
-    urlpatterns += static(
-        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns.append(
+        static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))
+    urlpatterns.append(
+        static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    )
+
+

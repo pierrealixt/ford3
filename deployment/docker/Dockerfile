@@ -9,8 +9,8 @@ MAINTAINER Tim Sutton<tim@kartoza.com>
 RUN apt-get update -y; apt-get -y --force-yes install yui-compressor
 
 ADD REQUIREMENTS.txt /REQUIREMENTS.txt
-RUN pip install -r /REQUIREMENTS.txt
-RUN pip install uwsgi
+RUN pip3 install -r /REQUIREMENTS.txt
+RUN pip3 install uwsgi
 
 
 # Open port 8080 as we will be running our uwsgi socket on that

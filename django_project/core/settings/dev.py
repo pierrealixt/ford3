@@ -61,7 +61,7 @@ try:
     # noinspection PyUnresolvedReferences
     import devserver  # noqa
     INSTALLED_APPS += (
-        'devserver',
+        #'devserver',
     )
     # more details at https://github.com/dcramer/django-devserver#configuration
     DEVSERVER_DEFAULT_ADDR = '0.0.0.0'
