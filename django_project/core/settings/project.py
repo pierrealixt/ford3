@@ -44,7 +44,8 @@ MIDDLEWARE_CLASSES = (
 
 # Project specific javascript files to be pipelined
 # For third party libs like jquery should go in contrib.py
-PIPELINE_JS['project'] = {
+
+PIPELINE['JAVASCRIPT']['project'] = {
     'source_filenames': (
         'js/csrf-ajax.js',
         'js/ford3.js',
@@ -54,7 +55,7 @@ PIPELINE_JS['project'] = {
 
 # Project specific css files to be pipelined
 # For third party libs like bootstrap should go in contrib.py
-PIPELINE_CSS['project'] = {
+PIPELINE['STYLESHEETS']['project']  = {
     'source_filenames': (
         'css/ford3.css',
         'css/form.css',

@@ -95,8 +95,8 @@ TEMPLATES = [
             'context_processors': [
                 # Already defined Django-related contexts
                 'django.contrib.auth.context_processors.auth',
-                'django.core.context_processors.request',
-                'django.core.context_processors.media',
+                'django.template.context_processors.request',
+                'django.template.context_processors.media',
                 'django.template.context_processors.i18n',
 
                 # `allauth` needs this from django
