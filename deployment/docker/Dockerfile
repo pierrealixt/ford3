@@ -1,6 +1,6 @@
 #--------- Generic stuff all our Dockerfiles should start with so we get caching ------------
 # Note this base image is based on debian
-FROM kartoza/django-base
+FROM kartoza/django-base:3.7
 MAINTAINER Tim Sutton<tim@kartoza.com>
 
 #RUN  ln -s /bin/true /sbin/initctl
@@ -9,8 +9,8 @@ MAINTAINER Tim Sutton<tim@kartoza.com>
 RUN apt-get update -y; apt-get -y --force-yes install yui-compressor
 
 ADD REQUIREMENTS.txt /REQUIREMENTS.txt
-RUN pip install -r /REQUIREMENTS.txt
-RUN pip install uwsgi
+RUN pip3 install -r /REQUIREMENTS.txt
+RUN pip3 install uwsgi
 
 
 # Open port 8080 as we will be running our uwsgi socket on that

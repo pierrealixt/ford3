@@ -63,7 +63,6 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     absolute_path('core', 'base_static'),
-    absolute_path('certification', 'static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -96,8 +95,8 @@ TEMPLATES = [
             'context_processors': [
                 # Already defined Django-related contexts
                 'django.contrib.auth.context_processors.auth',
-                'django.core.context_processors.request',
-                'django.core.context_processors.media',
+                'django.template.context_processors.request',
+                'django.template.context_processors.media',
                 'django.template.context_processors.i18n',
 
                 # `allauth` needs this from django
@@ -155,7 +154,7 @@ LOGGING = {
             'class': 'django.utils.log.AdminEmailHandler'
         },
         'null': {
-            'class': 'django.utils.log.NullHandler',
+            'class': 'logging.NullHandler',
         },
     },
     'loggers': {
