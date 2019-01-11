@@ -108,3 +108,4 @@ venv.bak/
 deployment/btsync-db.env
 deployment/btsync-media.env
 django_project/.pycharm_helpers/
+secret.py
