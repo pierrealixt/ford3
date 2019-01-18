@@ -183,14 +183,14 @@ dbschema:
 	@echo "------------------------------------------------------------------"
 	@echo "Print the database schema to stdio"
 	@echo "------------------------------------------------------------------"
-	@docker exec -t -i $(PROJECT_ID)-db /bin/bash -c "PGPASSWORD=docker pg_dump -s -h localhost -U docker gis"
+	@docker exec -t -i $(PROJECT_ID)_db_1 /bin/bash -c "PGPASSWORD=docker pg_dump -s -h localhost -U docker gis"
 
 dbshell:
 	@echo
 	@echo "------------------------------------------------------------------"
 	@echo "Shelling in in production database"
 	@echo "------------------------------------------------------------------"
-	@docker exec -t -i $(PROJECT_ID)-db psql -U docker -h localhost gis
+	@docker exec -t -i $(PROJECT_ID)_db_1 psql -U docker -h localhost gis
 
 dbrestore:
 	@echo
@@ -201,14 +201,14 @@ dbrestore:
 	@echo "stopping uwsgi container"
 	@docker-compose -p $(PROJECT_ID) stop uwsgi
 	@echo "dropping gis"
-	@docker exec -t $(PROJECT_ID)-db su - postgres -c "dropdb gis"
+	@docker exec -t $(PROJECT_ID)_db_1 su - postgres -c "dropdb gis"
 	@echo "creating gis"
-	@docker exec -t $(PROJECT_ID)-db su - postgres -c "createdb -O docker -T template_postgis gis"
+	@docker exec -t $(PROJECT_ID)_db_1 su - postgres -c "createdb -O docker -T template_postgis gis"
 	@echo "restoring gis"
 	@# Because we pipe from one docker command to another and we are going
 	@# to execute this Make command from a remote server at times, we need to using use interactive mode (-i)
 	@# in the first command and not use terminal (-t) in the second. Please do not change these!
-	@docker exec -t  $(PROJECT_ID)-db pg_restore /backups/latest.dmp | docker exec -i $(PROJECT_ID)-db su - postgres -c "psql gis"
+	@docker exec -t  $(PROJECT_ID)_db_1 pg_restore /backups/latest.dmp | docker exec -i $(PROJECT_ID)_db_1 su - postgres -c "psql gis"
 	@docker-compose -p $(PROJECT_ID) start uwsgi
 	@echo "starting uwsgi container"
 
