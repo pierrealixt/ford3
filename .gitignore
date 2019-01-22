@@ -110,5 +110,8 @@ deployment/btsync-media.env
 django_project/.pycharm_helpers/
 secret.py
 
+.sync
+deployment/static
+
 # MacOS files
 .DS_Store
