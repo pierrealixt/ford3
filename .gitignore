@@ -115,3 +115,7 @@ deployment/static
 
 # MacOS files
 .DS_Store
+
+# Untracked files
+backups
+ford3-snapshot.dmp
