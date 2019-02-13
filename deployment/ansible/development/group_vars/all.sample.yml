@@ -1,0 +1,67 @@
+---
+# Set to yes, if you're using pycharm for development
+# Otherwise, set no
+use_pycharm: yes
+# Your linux/mac user that will run ansible
+remote_user: lucernae
+# Your linux/mac group that will run ansible
+remote_group: staff
+# Your project location (this repo)
+project_path: "/Users/lucernae/Documents/WorkingDir/Projects/kartoza/ford3"
+# True if it will be running on Travis
+on_travis: False
+# Project name as pycharm namespace
+project_name: Ford3
+
+btsync_db:
+  environment:
+    # Fill this information with the btsync credentials
+    # The environment file should define two variables:
+    # SECRET: a RW btsync key if the server is a production server
+    #         a RO btsync key if it is staging or development machine
+    # DEVICE: a unique device name so you can recognise which host is being peered with in btsync
+    SECRET: ""
+    DEVICE: ""
+
+btsync_media:
+  environment:
+    # Fill this information with the btsync credentials
+    # The environment file should define two variables:
+    # SECRET: a RW btsync key if the server is a production server
+    #         a RO btsync key if it is staging or development machine
+    # DEVICE: a unique device name so you can recognise which host is being peered with in btsync
+    SECRET: ""
+    DEVICE: ""
+
+uwsgi:
+  # Uncomment this line to directly make the container run django server
+#  command: python manage.py runserver 0.0.0.0:8080
+  environment:
+    DJANGO_SETTINGS_MODULE: core.settings.dev_docker
+
+web:
+  # Comment the entire volumes lines to use default production conf
+  volumes:
+    - ./sites-enabled/dev.conf:/etc/nginx/conf.d/default.conf:ro
+
+interpreters:
+  ford3:
+    name: 'Ford3 Container'
+    domain_alias: 'ford3.test'
+    # Choose ssh port you want to expose
+    ssh_port: &interpreters_port 51203
+    pycharm_helpers: /home/web/django_project/.pycharm_helpers
+    ipaddress: scanagroempresa-docker.test
+
+docker_port_forward:
+  # Comment out db if you don't want to expose db to host
+  db:
+    db: 6543
+  uwsgi:
+    http: 51202
+    # Choose ssh port you want to expose
+    ssh: *interpreters_port
+  web:
+    # Use port you want to forward in host
+    http: 80
+    https: 443

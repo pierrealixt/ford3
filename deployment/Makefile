@@ -1,8 +1,21 @@
 export COMPOSE_PROJECT_NAME=ford3
-export COMPOSE_FILE=docker-compose.yml
+export COMPOSE_FILE=docker-compose.yml$(shell if [ -f docker-compose.override.yml ]; then echo ":docker-compose.override.yml"; fi)
 export ANSIBLE_PROJECT_SETUP_DIR=ansible
 
 SHELL := /bin/bash
+
+# ----------------------------------------------------------------------------
+#    S E T U P     C O M M A N D S
+# ----------------------------------------------------------------------------
+
+ansible-check:
+	@echo "Check ansible command"
+	@ansible -i ${ANSIBLE_PROJECT_SETUP_DIR}/development/hosts all -m ping
+	@ansible-playbook -i ${ANSIBLE_PROJECT_SETUP_DIR}/development/hosts ${ANSIBLE_PROJECT_SETUP_DIR}/development/site.yml --list-tasks --list-hosts $(ANSIBLE_ARGS)
+
+setup-ansible:
+	@echo "Setup configurations using ansible"
+	@ansible-playbook -i ${ANSIBLE_PROJECT_SETUP_DIR}/development/hosts ${ANSIBLE_PROJECT_SETUP_DIR}/development/site.yml $(ANSIBLE_ARGS)
 
 # ----------------------------------------------------------------------------
 #    P R O D U C T I O N     C O M M A N D S
@@ -15,6 +28,7 @@ build:
 	@echo "------------------------------------------------------------------"
 	@echo "Building in production mode"
 	@echo "------------------------------------------------------------------"
+	@docker-compose build base_uwsgi
 	@docker-compose build uwsgi
 
 web:

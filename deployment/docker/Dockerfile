@@ -12,6 +12,8 @@ ADD REQUIREMENTS.txt /REQUIREMENTS.txt
 RUN pip3 install -r /REQUIREMENTS.txt
 RUN pip3 install uwsgi
 
+ADD uwsgi.conf /uwsgi.conf
+
 
 # Open port 8080 as we will be running our uwsgi socket on that
 EXPOSE 8080

@@ -1,0 +1,70 @@
+version: '2'
+services:
+
+  db:
+    volumes:
+      - ./pg/postgres_data:/var/lib/postgresql
+
+    {% if 'db' in docker_port_forward and 'db' in docker_port_forward.db -%}
+    ports:
+      - "{{ docker_port_forward.db.db }}:5432"
+    {% endif %}
+
+  uwsgi:
+    build:
+      context: docker
+      dockerfile: Dockerfile-dev
+    image: ford3_dev_uwsgi
+
+    {% if 'entrypoint' in uwsgi -%}
+    entrypoint: {{ uwsgi.entrypoint }}
+    {% endif %}
+
+    {% if 'command' in uwsgi -%}
+    command: {{ uwsgi.command }}
+    {% endif %}
+
+    {% if 'environment' in uwsgi -%}
+    environment:
+
+      {% for k, v in uwsgi.environment.iteritems() -%}
+      {{ k }}: "{{ v }}"
+      {% endfor %}
+
+    {% endif %}
+
+    {% if 'uwsgi' in docker_port_forward -%}
+    ports:
+      - "{{ docker_port_forward.uwsgi.ssh }}:22"
+    {% endif %}
+
+  web:
+
+    {% if 'volumes' in web -%}
+    volumes:
+
+      {% for v in web.volumes -%}
+      - "{{ v }}"
+      {% endfor %}
+
+    {% endif %}
+
+    {% if 'web' in docker_port_forward -%}
+    ports:
+      - "{{ docker_port_forward.web.http }}:80"
+      - "{{ docker_port_forward.web.https }}:443"
+    {% endif %}
+
+  btsync-db:
+    environment:
+
+      {% for k, v in btsync_db.environment.iteritems() -%}
+      {{ k }}: "{{ v }}"
+      {% endfor %}
+
+  btsync-media:
+    environment:
+
+      {% for k, v in btsync_media.environment.iteritems() -%}
+      {{ k }}: "{{ v }}"
+      {% endfor %}

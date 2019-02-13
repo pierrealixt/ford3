@@ -116,6 +116,14 @@ deployment/static
 # MacOS files
 .DS_Store
 
-# Untracked files
+# Database stuff
 backups
-ford3-snapshot.dmp
+*.dmp
+pg
+
+# Ansible Project Dev Setup
+deployment/ansible/tmp
+!deployment/ansible/tmp/.gitkeep
+deployment/ansible/development/site.retry
+deployment/ansible/development/group_vars/all.yml
+deployment/docker-compose.override.yml
