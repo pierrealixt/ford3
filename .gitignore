@@ -109,3 +109,21 @@ deployment/btsync-db.env
 deployment/btsync-media.env
 django_project/.pycharm_helpers/
 secret.py
+
+.sync
+deployment/static
+
+# MacOS files
+.DS_Store
+
+# Database stuff
+backups
+*.dmp
+pg
+
+# Ansible Project Dev Setup
+deployment/ansible/tmp
+!deployment/ansible/tmp/.gitkeep
+deployment/ansible/development/site.retry
+deployment/ansible/development/group_vars/all.yml
+deployment/docker-compose.override.yml

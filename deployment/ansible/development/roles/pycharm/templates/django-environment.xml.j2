@@ -1,0 +1,13 @@
+
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="PATH" value="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" />
+        <env name="PYTHONPATH" value="/home/web/django_project" />
+        <env name="LANG" value="C.UTF-8" />
+
+        {# Django environment #}
+
+        {% for key, value in uwsgi.environment.iteritems() -%}
+
+        <env name="{{ key }}" value="{{ value }}" />
+
+        {% endfor %}
