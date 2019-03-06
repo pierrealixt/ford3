@@ -340,7 +340,7 @@ build-devweb: db
 
 flake8:
 	@docker-compose exec uwsgi flake8 --version
-	@docker-compose exec uwsgi flake8 --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128,E402 --exclude='../django_project/.pycharm_helpers','../django_project/*/migrations/','../django_project/*/urls.py','../django_project/core/settings/secret.py' ../django_project || true
+	@docker-compose exec uwsgi flake8
 
 update-translation-strings:
 	@echo
