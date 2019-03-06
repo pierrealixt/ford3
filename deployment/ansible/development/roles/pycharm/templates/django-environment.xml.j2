@@ -6,7 +6,7 @@
 
         {# Django environment #}
 
-        {% for key, value in uwsgi.environment.iteritems() -%}
+        {% for key, value in uwsgi.environment.items() -%}
 
         <env name="{{ key }}" value="{{ value }}" />
 

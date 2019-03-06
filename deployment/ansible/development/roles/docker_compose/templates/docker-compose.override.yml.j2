@@ -27,7 +27,7 @@ services:
     {% if 'environment' in uwsgi -%}
     environment:
 
-      {% for k, v in uwsgi.environment.iteritems() -%}
+      {% for k, v in uwsgi.environment.items() -%}
       {{ k }}: "{{ v }}"
       {% endfor %}
 
@@ -58,13 +58,13 @@ services:
   btsync-db:
     environment:
 
-      {% for k, v in btsync_db.environment.iteritems() -%}
+      {% for k, v in btsync_db.environment.items() -%}
       {{ k }}: "{{ v }}"
       {% endfor %}
 
   btsync-media:
     environment:
 
-      {% for k, v in btsync_media.environment.iteritems() -%}
+      {% for k, v in btsync_media.environment.items() -%}
       {{ k }}: "{{ v }}"
       {% endfor %}
