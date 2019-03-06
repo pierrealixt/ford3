@@ -338,16 +338,6 @@ build-devweb: db
 	@echo "------------------------------------------------------------------"
 	@docker-compose build devweb
 
-# Run pep8 style checking
-#http://pypi.python.org/pypi/pep8
-pep8:
-	@echo
-	@echo "-----------"
-	@echo "PEP8 issues"
-	@echo "-----------"
-	@docker-compose exec uwsgi pycodestyle --version
-	@@docker-compose exec uwsgi pycodestyle --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128,E402  --exclude='../django_project/.pycharm_helpers','../django_project/*/migrations/','../django_project/*/urls.py','../django_project/core/settings/secret.py' ../django_project || true
-
 flake8:
 	@echo "Check flake 8"
 	@docker-compose exec uwsgi flake8
