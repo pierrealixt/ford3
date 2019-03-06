@@ -1,0 +1,9 @@
+version: '2'
+services:
+
+  # We will use latest tag of currently deployed docker image
+  base_uwsgi:
+    image: kartoza/ford3_django:latest
+
+  uwsgi:
+    image: kartoza/ford3_django:latest

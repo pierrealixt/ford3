@@ -1,8 +1,22 @@
 # .coveragerc to control coverage.py
 [run]
+data_file = .coverage
 branch = True
 source = .
-omit = */tests/*,*migrations/*
+parallel=True
+omit=
+	# Of course we omit test files coverage. It doesn't matter
+	*/test/*
+	*/tests/*
+
+	# No need to check coverage on these locations
+	*/migrations/*
+	*/scripts/*
+	*/static/*
+	*/templates/*
+concurrency=
+	thread
+	multiprocessing
 
 [report]
 # Regexes for lines to exclude from consideration

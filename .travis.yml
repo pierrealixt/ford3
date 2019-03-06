@@ -1,0 +1,53 @@
+dist: xenial
+
+language: python
+
+python:
+  - "3.7"
+
+services: docker
+
+env:
+  - COMPOSE_PROJECT_NAME: 'ford3'
+    COMPOSE_FILE: 'docker-compose.yml:docker-compose.override.yml'
+
+before_install:
+  # Attempt to detect docker context changes
+  - deployment/scripts/travis/check-docker-context.sh
+  - pushd deployment
+  - source compose.env.sh
+  - cat docker-compose.override.yml
+  - popd
+
+install:
+  - pip install -U docker-compose
+  - pip install -r REQUIREMENTS-dev.txt
+
+script: skip
+
+jobs:
+  include:
+    - stage: Test
+      script:
+        - pushd deployment
+        - echo "Preparing Docker Stack"
+        - make build up wait-for-db migrate collectstatic
+        - make status
+        - echo "Docker stack ready"
+        - echo "Preparing unittests"
+        - make flake8
+        - echo "Run unittests"
+        # Will need to add Makefile command shortcut
+        - source compose.env.sh
+        - docker-compose exec uwsgi python manage.py test --noinput
+        - popd
+      after_success:
+        # Find coverage files
+        - pushd django_project
+        - coverage combine
+        # Fix path (codecov.yml doesn't work)
+        # Replace parent directory to travis directory, because we are running
+        # coverage using docker mount
+        - sed -i 's/home\/web\/django_project/home\/travis\/build\/kartoza\/ford3\/django_project/g' .coverage
+        - codecov
+        - popd

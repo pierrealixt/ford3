@@ -71,6 +71,9 @@ db:
 	@echo "------------------------------------------------------------------"
 	@docker-compose up -d db
 
+wait-for-db:
+	@docker-compose exec dbbackups /bin/bash -c "until psql -l -d gis; do echo 'Waiting for databases.'; sleep 5; done"
+
 nginx:
 	@echo
 	@echo "------------------------------------------------------------------"
