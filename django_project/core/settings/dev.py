@@ -1,5 +1,4 @@
-from .project import INSTALLED_APPS
-from .base import SECRET_KEY # noqa
+from .project import *
 
 
 # Set debug to True for development

@@ -1,19 +1,8 @@
-# coding=utf-8
-
-"""Project level settings.
-
-Adjust these values as needed but don't commit passwords etc. to any public
-repository!
-"""
-
 import os  # noqa
 from django.utils.translation import ugettext_lazy as _
 from .utils import absolute_path
-from .contrib import (
-    PIPELINE,
-    MIDDLEWARE_CLASSES,
-    INSTALLED_APPS
-)
+from .contrib import *
+
 
 # Project apps
 INSTALLED_APPS += (
