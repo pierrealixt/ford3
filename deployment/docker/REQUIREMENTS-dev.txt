@@ -1,15 +1,12 @@
+flake8==3.7.7
+pycodestyle==2.5.0
+pyflakes==2.1.1
+mccabe==0.6.1
 django-nose
 coverage
-pycodestyle==2.5.0
 pylint
-flake8==3.3.0
 factory_boy
-
-#django-devserver
 
 # documentation
 Sphinx
-
-# pdb plus plus
-pdbpp
 
