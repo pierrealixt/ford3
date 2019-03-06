@@ -1,9 +1,9 @@
 from django.db import models
 from ford3.models.campus import Campus
-from ford3.models.module import Module
 from ford3.models.occupation import Occupation
 from ford3.models.sub_field_of_study import SubFieldOfStudy
 from ford3.models.subject import Subject
+from ford3.models.interest import Interest
 
 
 class Qualification(models.Model):
@@ -16,10 +16,11 @@ class Qualification(models.Model):
     sub_field_of_study_id = models.ForeignKey(
         SubFieldOfStudy,
         on_delete=models.PROTECT)
-    modules = models.ManyToManyField(Module)
     occupation_id = models.ForeignKey(
         Occupation,
         on_delete=models.PROTECT)
+    interests = models.ManyToManyField(
+        Interest)
 
     id = models.IntegerField(
         blank=False,
@@ -85,11 +86,43 @@ class Qualification(models.Model):
         null=False,
         unique=False,
         help_text='')
-    estimated_annual_fee = models.IntegerField(
+    completion_rate = models.IntegerField(
+        blank=False,
+        null=False,
+        unique=False,
+        help_text='',
+        default=0)
+    total_cost = models.IntegerField(
         blank=False,
         null=False,
         unique=False,
         help_text='')
+    total_cost_comment = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
+    critical_skill = models.BooleanField(
+        blank=False,
+        null=False,
+        unique=False,
+        help_text='',
+        default=False)
+    green_occupation = models.BooleanField(
+        blank=False,
+        null=False,
+        unique=False,
+        help_text='',
+        default=False)
+    high_demand_occupation = models.BooleanField(
+        blank=False,
+        null=False,
+        unique=False,
+        help_text='',
+        default=False)
+
+
 
     def __str__(self):
         return self.name
