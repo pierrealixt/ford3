@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 WSGI config for web project.
 
@@ -49,8 +48,6 @@ def application(environ, start_response):
 
     Places env vars defined in apache conf into a context accessible by django.
     """
-    #if 'GITHUB_PASSWORD' in environ:
-    #    os.environ['GITHUB_PASSWORD'] = environ['GITHUB_PASSWORD']
     return _application(environ, start_response)
 
 # Apply WSGI middleware here.

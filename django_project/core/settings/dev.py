@@ -1,4 +1,6 @@
-from .project import *  # noqa
+from .project import INSTALLED_APPS
+from .base import SECRET_KEY # noqa
+
 
 # Set debug to True for development
 DEBUG = True
@@ -61,7 +63,7 @@ try:
     # noinspection PyUnresolvedReferences
     import devserver  # noqa
     INSTALLED_APPS += (
-        #'devserver',
+        # 'devserver',
     )
     # more details at https://github.com/dcramer/django-devserver#configuration
     DEVSERVER_DEFAULT_ADDR = '0.0.0.0'

@@ -28,4 +28,3 @@ class Occupation(models.Model):
 
     def get_description(self):
         return self.description
-
