@@ -31,8 +31,6 @@ def ensure_secret_key_file():
         from django.utils.crypto import get_random_string
         secret_key = get_random_string(
             50, 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)')
-        disqus_shortname = get_random_string(
-            50, 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)')
         with open(secret_path, 'w') as f:
             f.write("SECRET_KEY = " + repr(secret_key) + "\n")
             f.write("SENTRY_KEY = ''\n")
