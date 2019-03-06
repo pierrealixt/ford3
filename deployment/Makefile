@@ -382,6 +382,9 @@ pull-translation-source:
 	@echo "------------------------------------------------------------------"
 	@tx pull -a -f
 
+
+test:
+	@docker-compose exec uwsgi python manage.py test
 # --------------- help --------------------------------
 
 help:
