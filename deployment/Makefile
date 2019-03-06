@@ -350,7 +350,7 @@ pep8:
 
 flake8:
 	@echo "Check flake 8"
-	@flake8 ../django_project
+	@docker-compose exec uwsgi flake8
 
 update-translation-strings:
 	@echo
