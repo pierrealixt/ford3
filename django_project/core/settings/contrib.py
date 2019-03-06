@@ -1,7 +1,4 @@
-from .base import (
-    INSTALLED_APPS,
-    MIDDLEWARE_CLASSES
-)
+from .base import *
 
 # Extra installed apps - grapelli needs to be added before others
 INSTALLED_APPS = (
