@@ -1,6 +1,5 @@
-# coding=utf-8
-
-import unittest
+# import unittest
+from django.test import TestCase
 import os
 import sys
 from subprocess import Popen, PIPE
@@ -12,25 +11,30 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class TestPythonStyle(unittest.TestCase):
+class TestPythonStyle(TestCase):
 
     def test_flake8(self):
         """Test if the code is Flake8 compliant."""
-        if os.environ.get('ON_TRAVIS', False):
-            root = '../'
-            command = ['flake8']
-            output = Popen(command, stdout=PIPE, cwd=root).communicate()[0]
-            default_number_lines = 0
-        elif sys.platform.startswith('win'):
-            # ET I don't know on windows.
-            pass
+        command = ['flake8']
+        root = './'
+        output = Popen(command, stdout=PIPE, cwd=root).communicate()[0]
+        default_number_lines = 0
 
-        else:
-            # OSX and linux just delegate to make
-            root = '../../'
-            command = ['make', 'flake8']
-            output = Popen(command, stdout=PIPE, cwd=root).communicate()[0]
-            default_number_lines = 0
+        # if os.environ.get('ON_TRAVIS', False):
+        #     root = '../'
+        #     command = ['flake8']
+        #     output = Popen(command, stdout=PIPE, cwd=root).communicate()[0]
+        #     default_number_lines = 0
+        # elif sys.platform.startswith('win'):
+        #     # ET I don't know on windows.
+        #     pass
+
+        # else:
+        #     # OSX and linux just delegate to make
+        #     root = '../../'
+        #     command = ['make', 'flake8']
+        #     output = Popen(command, stdout=PIPE, cwd=root).communicate()[0]
+        #     default_number_lines = 0
 
         # make pep8 produces some extra lines by default.
         lines = len(output.splitlines()) - default_number_lines
