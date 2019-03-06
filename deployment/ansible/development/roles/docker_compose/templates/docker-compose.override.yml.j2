@@ -27,7 +27,7 @@ services:
     {% if 'environment' in uwsgi -%}
     environment:
 
-      {% for k, v in uwsgi.environment.items() -%}
+      {% for k, v in uwsgi.environment.iteritems() -%}
       {{ k }}: "{{ v }}"
       {% endfor %}
 
