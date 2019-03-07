@@ -7,7 +7,6 @@ class Campus(models.Model):
     provider_id = models.ForeignKey(
         Provider,
         on_delete=models.CASCADE)
-
     id = models.IntegerField(
         blank=False,
         null=False,
