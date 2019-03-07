@@ -58,13 +58,13 @@ services:
   btsync-db:
     environment:
 
-      {% for k, v in btsync_db.environment.items() -%}
+      {% for k, v in btsync_db.environment.iteritems() -%}
       {{ k }}: "{{ v }}"
       {% endfor %}
 
   btsync-media:
     environment:
 
-      {% for k, v in btsync_media.environment.items() -%}
+      {% for k, v in btsync_media.environment.iteritems() -%}
       {{ k }}: "{{ v }}"
       {% endfor %}
