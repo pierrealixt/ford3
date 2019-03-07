@@ -42,9 +42,11 @@ class ModelFactories:
             green_occupation=True,
             high_demand_occupation=False,
             )
-        qualification_test_object_instance.interests.add(
-            ModelFactories.get_interest_test_object);
 
+        
+        qualification_test_object_instance.interests.add(
+            ModelFactories.get_interest_test_object());
+        print(qualification_test_object_instance.interests)
         return qualification_test_object_instance
 
     @staticmethod
@@ -91,7 +93,7 @@ class ModelFactories:
     def get_campus_event_test_object(new_id=1):
         campus_event_test_object_instance = CampusEvent.objects.create(
             id=new_id,
-            campus_id=ModelFactories.get_campus_event_test_object(),
+            campus_id=ModelFactories.get_campus_test_object(),
             name='Campus Event Test Name',
             date_start=datetime.date(2019, 3, 6),
             date_end=datetime.date(2019, 8, 9),
