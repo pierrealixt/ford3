@@ -4,10 +4,10 @@
 
 from os.path import exists, dirname, join
 
-from .project import *
+from .project import *  # noqa
 
 try:
-    from .secret import *
+    from .secret import *  # noqa
 except ImportError:
     SENTRY_KEY = None
 

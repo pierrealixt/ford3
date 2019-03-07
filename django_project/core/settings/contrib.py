@@ -1,4 +1,4 @@
-from .base import *
+from .base import *  # noqa
 
 # Extra installed apps - grapelli needs to be added before others
 INSTALLED_APPS = (
