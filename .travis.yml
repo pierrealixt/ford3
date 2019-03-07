@@ -13,8 +13,11 @@ env:
 
 before_install:
   # Attempt to detect docker context changes
-  - deployment/scripts/travis/check-docker-context.sh
+  # Will disable this improvements, until in the future we have
+  # a clear approach on how to cache build for Travis
+#  - deployment/scripts/travis/check-docker-context.sh
   - pushd deployment
+  - cp -f scripts/travis/docker-compose.override.newbuild.yml docker-compose.override.yml
   - source compose.env.sh
   - cat docker-compose.override.yml
   - popd
