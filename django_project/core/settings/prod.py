@@ -4,11 +4,8 @@
 
 from os.path import exists, dirname, join
 
-from .project import (
-    PIPELINE,
-    INSTALLED_APPS,
-    MIDDLEWARE_CLASSES
-)
+from .project import *
+
 try:
     from .secret import *
 except ImportError:

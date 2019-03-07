@@ -59,3 +59,5 @@ PIPELINE['STYLESHEETS']['project'] = {
         'media': 'screen, projection',
     },
 }
+
+STATIC_URL = '/static/'

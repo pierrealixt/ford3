@@ -6,4 +6,7 @@ services:
     image: kartoza/ford3_django:latest
 
   uwsgi:
-    image: kartoza/ford3_django:latest
+    build:
+      context: docker
+      dockerfile: Dockerfile-dev
+    image: ford3_dev_uwsgi
