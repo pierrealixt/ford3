@@ -4,55 +4,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>FORD3</title>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, shrink-to-fit=0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>FORD3</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+	<link rel="stylesheet"
+		  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		  crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 	{#    Link Internal Stylesheet		#}
-	<link rel="stylesheet" type="text/css" href="{% static 'css/stylesheet.css' %}">
+	<link rel="stylesheet" type="text/css"
+		  href="{% static 'css/stylesheet.css' %}">
 
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
-        integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"
-        crossorigin="anonymous"></script>
+			integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+			crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+			integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"
+			crossorigin="anonymous"></script>
 
 	{% block head %} {% endblock %}
 
 </head>
 <body id="page-top">
-		<nav class="navbar">
-		<div class="open-edu-logo"></div> <div class="question-mark-logo"></div>
-		</nav>
+<nav class="navbar">
+	<div class="open-edu-logo"></div>
+	<div class="question-mark-logo"></div>
+</nav>
 <div class="wrapper">
 
 
-{% block side_navbar %}
-	 {% include 'side_navbar.html' %} <!-- side_navbar.html -->
-{% endblock %}
+	{% block side_navbar %}
+		{% include 'side_navbar.html' %} <!-- side_navbar.html -->
+	{% endblock %}
 
-{%  block body %}
+	{% block body %}
 
 
 
-	<!-- TestContent -->
-    {% include 'test_widgets.html' %} <!-- test_widgets.html -->
-{% endblock %}
+		<!-- TestContent -->
+		{% include 'test_widgets.html' %} <!-- test_widgets.html -->
+	{% endblock %}
 </div>
 </div>
 </body>
 
 <script>
-	$(function () {
-		$('[data-toggle="tooltip"]').tooltip()
-	})
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 </script>
 
 

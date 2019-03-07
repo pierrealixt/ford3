@@ -1,655 +1,657 @@
 body {
-        --c-purple: #2C314F;
-        --c-blue: #7ACDCF;
-        --c-orange: #FCB53B;
-        --c-blue-d: #47B4B6;
-        --c-orange-d: #F99824;
-        --c-smoke: #EFEEE9;
-        --c-grey-l: #D5D5D5;
-        --c-grey: #AAAAAA;
-        --c-grey-d: #464646;
-        --c-purple-grey: #1B1D28;
-        --cg-blue-dblue: linear-gradient(to right, #7ACDCF, #47B4B6);
-        --cg-orange-dorange: linear-gradient(to right, #FCB53B, #F99824);
-    }
+    --c-purple: #2C314F;
+    --c-blue: #7ACDCF;
+    --c-orange: #FCB53B;
+    --c-blue-d: #47B4B6;
+    --c-orange-d: #F99824;
+    --c-smoke: #EFEEE9;
+    --c-grey-l: #D5D5D5;
+    --c-grey: #AAAAAA;
+    --c-grey-d: #464646;
+    --c-purple-grey: #1B1D28;
+    --cg-blue-dblue: linear-gradient(to right, #7ACDCF, #47B4B6);
+    --cg-orange-dorange: linear-gradient(to right, #FCB53B, #F99824);
+}
 
-    h1 {
-        Font-family: Lato;
-        Font-size: 70px;
-        Font-weight: bold;
-        color: var(--c-purple);
-    }
+h1 {
+    Font-family: Lato;
+    Font-size: 70px;
+    Font-weight: bold;
+    color: var(--c-purple);
+}
 
-    h2 {
-        Font-family: Lato;
-        Font-size: 55px;
-        Font-weight: bold;
-        color: var(--c-purple);
-    }
+h2 {
+    Font-family: Lato;
+    Font-size: 55px;
+    Font-weight: bold;
+    color: var(--c-purple);
+}
 
-    h3 {
-        Font-family: Lato;
-        Font-size: 40px;
-        Font-weight: bold;
-        color: var(--c-purple);
-    }
+h3 {
+    Font-family: Lato;
+    Font-size: 40px;
+    Font-weight: bold;
+    color: var(--c-purple);
+}
 
-    h4 {
-        Font-family: Lato;
-        Font-size: 24px;
-        Font-weight: bold;
-        color: var(--c-blue);
-    }
+h4 {
+    Font-family: Lato;
+    Font-size: 24px;
+    Font-weight: bold;
+    color: var(--c-blue);
+}
 
-    .edu-button {
-        height: 5rem;
-        width: 10rem;
-        border-radius: 4px;
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-        padding-left: 3rem;
-        padding-right: 3rem;
-        text-align: center;
-        align-items: center;
-        display: inline-grid;
-        cursor: pointer;
-    }
+.edu-button {
+    height: 5rem;
+    width: 10rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    text-align: center;
+    align-items: center;
+    display: inline-grid;
+    cursor: pointer;
+}
 
-    .edu-button:active {
-        box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
-    }
+.edu-button:active {
+    box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
+}
 
-    .edu-button-blue {
-        color: white;
-        background-image: var(--cg-blue-dblue);
-        background-color: var(--c-blue);
-    }
+.edu-button-blue {
+    color: white;
+    background-image: var(--cg-blue-dblue);
+    background-color: var(--c-blue);
+}
 
-    .edu-button-blue:hover {
-        background-image: none;
-        background-color: var(--c-blue-d);
-    }
+.edu-button-blue:hover {
+    background-image: none;
+    background-color: var(--c-blue-d);
+}
 
-    .edu-button-blue:focus {
-        outline-color: var(--c-blue-d);
-    }
+.edu-button-blue:focus {
+    outline-color: var(--c-blue-d);
+}
 
-    .edu-button-orange {
-        color: white;
-        background-image: var(--cg-orange-dorange);
-        background-color: var(--c-orange);
-    }
+.edu-button-orange {
+    color: white;
+    background-image: var(--cg-orange-dorange);
+    background-color: var(--c-orange);
+}
 
-    .edu-button-orange:hover {
-        background-image: none;
-        background-color: var(--c-orange-d);
-    }
+.edu-button-orange:hover {
+    background-image: none;
+    background-color: var(--c-orange-d);
+}
 
-    .edu-button-orange:focus {
-        outline-color: var(--c-orange);
-    }
+.edu-button-orange:focus {
+    outline-color: var(--c-orange);
+}
 
-    .edu-button-grey {
-        color: black;
-        background-color: var(--c-smoke);
-    }
+.edu-button-grey {
+    color: black;
+    background-color: var(--c-smoke);
+}
 
-    .edu-button-grey:hover {
-        background-color: var(--c-grey-l);
-    }
+.edu-button-grey:hover {
+    background-color: var(--c-grey-l);
+}
 
-    .edu-button-grey:focus {
-        outline-color: var(--c-grey-l);
-    }
-
-
+.edu-button-grey:focus {
+    outline-color: var(--c-grey-l);
+}
 
 
+/*  ----------------------------- SWITCH CSS - modified https://www.w3schools.com/howto/howto_css_switch.asp  ----------------------------- */
 
-    /*  ----------------------------- SWITCH CSS - modified https://www.w3schools.com/howto/howto_css_switch.asp  ----------------------------- */
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    opacity: 0.7;
+}
 
-    /* The switch - the box around the slider */
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 60px;
-        height: 34px;
-    }
+.switch:hover {
+    opacity: 1;
+}
 
-    /* Hide default HTML checkbox */
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
 
-    /* The slider */
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: var(--c-smoke);
-        -webkit-transition: .4s;
-        transition: .4s;
-        border-radius: 3px;
-        box-shadow: inset 0px 1px 5px rgba(0, 0, 0, 0.4);
-    }
+}
 
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 26px;
-        width: 26px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        -webkit-transition: .4s;
-        transition: .4s;
-        border-radius: 3px;
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--c-smoke);
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 3px;
+    box-shadow: inset 0px 1px 5px rgba(0, 0, 0, 0.4);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 3px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
 
 
-    }
+}
 
-    input:checked+.slider {
-        background-color: var(--c-blue);
-        box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
-    }
+input:checked + .slider {
+    background-color: var(--c-blue);
+    box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
+}
 
-    input:focus+.slider {
-        box-shadow: 0 0 1px #2196F3;
-        box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
-    }
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+    box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
+}
 
-    input:checked+.slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
-    }
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
 
-    /* ------------------------------ END OF SWITCH CSS ----------------------------- */
+/* ------------------------------ END OF SWITCH CSS ----------------------------- */
 /* ------------------------------ SLIDER ----------------------------- */
-    .slidecontainer {
-        width: 100%;
-        /* Width of the outside container */
-    }
-
-    /* The range-slider itself */
-    .range-slider {
-        -webkit-appearance: none;
-        cursor: pointer;
-        /* Override default CSS styles */
-        appearance: none;
-        width: 100%;
-        /* Full-width */
-        height: 1rem;
-        /* Specified height */
-        max-height: 20px;
-        min-height: 10px;
-        background: #efeee9;
-        /* Grey background */
-        outline: none;
-        /* Remove outline */
-        opacity: 0.7;
-        /* Set transparency (for mouse-over effects on hover) */
-        -webkit-transition: .2s;
-        /* 0.2 seconds transition on hover */
-        transition: opacity .2s;
-        border-radius: 3px;
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
-
-    }
-
-    /* Mouse-over effects */
-    .range-slider:hover {
-        opacity: 1;
-        /* Fully shown on mouse-over */
-    }
-
-    /* The range-slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
-    .range-slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        /* Override default look */
-        appearance: none;
-        width: 1.5rem;
-        /* Set a specific range-slider handle width */
-        height: 1.5rem;
-        /* range-slider handle height */
-        background-color: white;
-        /* Green background */
-        cursor: pointer;
-        /* Cursor on hover */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-        border-radius: 3px;
-    }
-
-    .range-slider::-moz-range-thumb {
-        width: 1.5rem;
-        /* Set a specific range-slider handle width */
-        height: 1.5rem;
-        /* range-slider handle height */
-
-       background-color: white;
-        /* Green background */
-        cursor: pointer;
-        /* Cursor on hover */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    }
-
-    /* ------------------------------ END OF SLIDER CSS ----------------------------- */
-
-    /* ------------------------------ CHECKBOX Based on: https://www.w3schools.com/howto/howto_css_custom_checkbox.asp ------------------------------ */
-
-    /* The checkbox-container */
-    .checkbox-container {
-        display: block;
-        position: relative;
-        padding-left: 35px;
-        margin: 0.25rem;
-        cursor: pointer;
-
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-
-    }
-
-    /* Hide the browser's default checkbox */
-    .checkbox-container input {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-        height: 0;
-        width: 0;
-        background-size: contain;
-        border-width: 0.5px;
-        border-color: transparent
-    }
-
-    /* Create a custom checkbox */
-    .checkmark {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 1.5rem;
-        width: 1.5rem;
-        background-color: var(--c-smoke);
-        background-image: none;
-        background-size: 80%;
-        border-radius: 3px;
-        box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
-    }
-
-    /* On mouse-over, add a grey background color */
-    .checkbox-container:hover input~.checkmark {
-        border-color: var(--c-blue);
-        border-style: solid;
-        border-width: 0.5px;
-    }
-
-    /* When the checkbox is checked, add a blue background */
-    .checkbox-container input:checked~.checkmark {
-        background-color: var(--c-blue);
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='17' viewBox='0 0 24 17'%3E%3Cdefs%3E%3Cpath id='yrvda' d='M588.667 173l-14.896 15-6.771-6.818'/%3E%3C/defs%3E%3Cg%3E%3Cg transform='translate(-566 -172)'%3E%3Cuse fill='%23fff' fill-opacity='0' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='50' stroke-width='2' xlink:href='%23yrvda'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: center;
-    }
-
-
-    /* Create the checkmark/indicator (hidden when not checked) */
-    .checkmark:after {
-        content: "";
-        position: absolute;
-        display: none;
-
-    }
-
-    /* Show the checkmark when checked */
-    .checkbox-container input:checked~.checkmark:after {
-        display: block;
-    }
-
-
-    /* Style the checkmark/indicator */
-    .checkbox-container .checkmark:after {
-        background-image: none;
-        background-repeat: no-repeat;
-    }
-
-    /* ------------------------------ END OF CHECKBOX CSS ------------------------------ */
-
-    /* ------------------------------ RADIO BUTTONS ------------------------------ */
-
-    /* Customize the label (the container-radio-buttons) */
-    .container-radio-buttons {
-        display: block;
-        position: relative;
-        padding-left: 35px;
-        margin-bottom: 12px;
-        cursor: pointer;
-        font-size: 22px;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-
-    /* Hide the browser's default radio button */
-    .checkbox-container input {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-        height: 0;
-        width: 0;
-        background-size: contain;
-        border-width: 1px;
-        border-color: transparent;
-    }
-
-    /* Create a custom radio button */
-    .radio-dot {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 25px;
-        width: 25px;
-        background-color: var(--c-smoke);
-        border-radius: 50%;
-        box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
-    }
-
-    /* On mouse-over, add a grey background color */
-    .checkbox-container input~.radio-dot:hover {
-        border-color: var(--c-blue);
-        border-style: solid;
-        border-width: 0.5px;
-
-    }
-
-    /* When the radio button is checked, add a blue background */
-    .checkbox-container input:checked~.radio-dot {
-        background-color: var(--c-blue);
-        border-color: var(--c-blue);
-        border-style: solid;
-        border-width: 0.5px;
-    }
-
-    /* Create the indicator (the dot/circle - hidden when not checked) */
-    .radio-dot:after {
-        content: "";
-        position: absolute;
-        display: none;
-
-    }
-
-    .checkbox-container input:checked~.radio-dot:hover {
-        background-color: var(--c-blue);
-    }
-
-
-    /* Show the indicator (dot/circle) when checked */
-    .checkbox-container input:checked~.radio-dot:after {
-        display: block;
-        background-color: white;
-
-
-    }
-
-    /* Style the indicator (dot/circle) */
-    .checkbox-container .radio-dot:after {
-        top: 8px;
-        left: 8px;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: white;
-        box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.4);
-    }
-
-    /* ----------------------------- END OF RADIO BUTTONS ----------------------------- */
-    /* ----------------------------- TOOLTIPS ----------------------------- */
-
-    .bs-tooltip-top .arrow.arrow::before {
-        border-top-color: var(--c-orange);
-    }
-
-    .bs-tooltip-right .arrow.arrow::before {
-        border-right-color: var(--c-orange);
-    }
-
-    .bs-tooltip-left .arrow.arrow::before {
-        border-left-color: var(--c-orange);
-    }
-
-    .bs-tooltip-bottom .arrow.arrow::before {
-        border-bottom-color: var(--c-orange);
-    }
-
-    .tooltip-inner {
-        background-image: var(--cg-orange-dorange);
-    }
-
-    .tooltip.show {
-        opacity: 1;
-    }
-
-    /* ----------------------------- END OF TOOLTIPS BUTTONS ----------------------------- */
-    /* ----------------------------- DROPDOWN ----------------------------- */
-
-    .edu-button.edu-dropdown-button {
-        width: 100%;
-        text-align: left;
-        min-width: 200px;
-        border: 1px solid var(--c-grey);
-        color: var(--c-grey);
-        font-size: 1.25rem;
-        z-index: 2;
-        height: 2.5rem;
-
-    }
-
-    .edu-button.edu-dropdown-button:hover {
-        border-color: var(--c-grey-d);
-        color: var(--c-grey-d);
-    }
-
-    .edu-button.edu-dropdown-button:active {
-        border-color: var(--c-blue);
-        border-width: 1px;
-        color: var(--c-grey-d);
-    }
-
-    .edu-button.edu-dropdown-button:focus-within {
-        border-color: var(--c-blue);
-        border-width: 1px;
-        color: var(--c-grey-d);
-        outline-color: var(--c-blue);
-    }
-
-    .edu-button.edu-dropdown-button:visited {
-        border-color: var(--c-blue);
-        border-width: 1.5px;
-        color: var(--c-grey-d);
-    }
-
-    .dropdown-item {
-        color: var(--c-grey-d);
-    }
-
-    .dropdown-item:hover {
-        background-color: rgba(122, 205, 207, 0.2);
-    }
-
-    .btn-group {
-        width: 100%;
-        min-width: 200px;
-    }
-
-    .dropdown-menu {
-        width: 100%;
-        min-width: 200px;
-        top: -5px !important;
-        z-index: 1;
-        border-radius: 0;
-        color: var(--c-grey-d);
-        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.25);
-    }
-
-    .edu-button {
-        height: 5rem;
-        width: 10rem;
-        border-radius: 4px;
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-        padding-left: 3rem;
-        padding-right: 3rem;
-        text-align: center;
-        align-items: center;
-        display: inline-grid;
-    }
-
-    .edu-button:active {
-        box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
-    }
-
-    .dropdown-toggle::after {
-        display: inline-block;
-        width: 2rem;
-        height: 2rem;
-        color: transparent;
-        content: "";
-        position: absolute;
-        right: 2rem;
-        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAYAAABxLuKEAAADQUlEQVR4Xu3ZMYgTQRQG4Pc2QYxaWKpw3TVpBRtBQbCxiHCQm00RLQRBi8PGazV3YOXZHcLZKEFMdkIIHF5ppVgI1gpayiHYWQgJMU8SNiEXksvOzM7srrzUs7Nvvvz7ZrJB4M9cAWSX+QIMsyAZDMMwak2DE8OJ4cSoCXBi1Ly4x3BiODFqApwYNS/uMZwYToyaQNTE1Ov104VC4RoRXUTEw263K6vV6u9Y7paySdrt9vl+v3/D87wVAPhcLpcPEJGGZU56TK1W84rF4gNE3AaAM+M1ENEhEV2vVCpfUrYu7XI6nc7ZXq/3DBHvzEzyrlAo3CyVSn8mMEEQ7CNiacHdfnmed7VcLn/VriYlF0opzwHAewBYXVDSWyFEaQTTbDYveZ73aUntmceJgDIiIKK1EYyU8hEAbEX4UjOLExUlhNkbwQRB8BQRH0aAGQ7JHI4KSgjTHifmPgA8jwiTKRxVlNDgyQim0WhcyOVy3wDg1P+Eo4NCRANEXJ3sSlLKWwBQV4BJdXJ0UMK1PxZCbB/5rRQEwV1EfJF1HAOUXSHExpED3hgj6zhxoMyFCXepTCYnLpSFMFnEiRPlWJgpnL3p31QR+o/zc44uChHt+L6/OW9NS19UtVqt20T0Kq04NlCWJmYsmVYcWyiRYYYD04ZjE0UJJk04tlGUYdKA4wJFCyZJHFco2jBJ4LhEMYJxieMaxRjGBY4Bypbv+7UIB9K5Q5Ye8KJMbGsrN0DZ9H1/J0rti8bEAhMmp0JEb1RPyABwWQjxfbbAJFFieZSmF9RqtXRwfgLAlWmcpFFihzFIzgQnDShWYAxx1gHg5TF/hs1tCURk3FNmJ46tx8xOrPlYKfdLGyjWEjNenW0cWyjWYQweq6XJsYniBMYSzoYQYnepnsEAaz3GYs+xjuIsMTM95zUA5DS/TCcozmGGN5RSrg1fCGrgOENJBEYTxylKYjCKOM5REoWJiJMISuIw4Va+PhgM6oh4cqoh/wCAe0KIA80mbXyZs+36uEobjcZKPp8XAHCCiD4CwAchxF/j1RlMkAoYg/qtXcowC2gZhmHUnjpODCeGE6MmwIlR8+Iew4nhxKgJcGLUvLjHcGLUEvMP+5b/fHJqUEYAAAAASUVORK5CYII=');
-        background-repeat: no-repeat;
-        background-size: contain;
-    }
-
-    .dropdown-toggle:hover:after {
-        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAYAAABxLuKEAAADOklEQVR4Xu3av2sUQRQH8Pf2wnKoxZUqpPMvEGwE5SS7EywipIjYaCEIWgQb06oJWBm7IMRGCWKRw8YoIXNrpVgI1gpaShDsLOycJ3vchfW4ze3M7szsyrt6Mz8+953vzSVB4NdEAWSXyQIMk5MMhmEYvdLgxHBiODF6ApwYPS/uGE4MJ0ZPgBOj58Udw4nhxOgJFE2MEOIoAFwgotMAsD8zM7O9u7v7q5LZajbI/Pz8CSK6CACzAPBJSvkGAChdZrZjAiHEbSJaQ8Rjoz0Q0T4RRUmSfK7ZvoyX0+12O2EYPgKA69lBiOhtu92+tLOz8/sAJo7jV4i4kDPbTwA4L6X8Yryamvxgt9s9HobhOwA4lbOk11LKhQHM3NzcmVar9XHK2huPUwBlRLA4gInj+C4irhZ4UxuLo4ECRLQ5gBFCPASAOwVg0kcah6ODMjR4OYCJouhWEASPC8I0CscAJd3fg9FROomIXwHgyP+EY4ii0mLOfipdRcQtDZhaJ8cQJe2Xe/1+f+2f70pRFN0IguBJ03FKoGz0+/3l8QvewKPpOFWgTIRpMk5VKLkwTcSpEuVQmBEOIm4ios7vbZzfc0xRAGBdSrkyqVOnbjiKomuI+KyuODZQpiZmJFlXHFsohWGGx6pWybGJogVTJxzbKNowdcBxgWIE4xPHFYoxjA8clyilYFziuEYpDeMCpwTKqpTyvuYX4oPHp17wigxs655jiqKUWkmSZL3I2vOeqQQmHVwIcYWIXujekBHx7N7e3rfxBfpEqeQoZTdkiPMDEc9lcXyjVA5TIjkHOHVAsQJTBkcptRQEwdND/hg2sRKq6JTxgSvrmPGBDY+Vdl/aQLGWmNHubOPYQrEOU+JYTU2OTRQnMDZwlFLLSZJsTNUr8YC1jrHVOS5QnCUm2zkA8BwAWiZvpisU5zDphHEcLyJiTxfHJYoXGBMc1yjeYHRwfKB4hSmC4wvFO8wQZwkAthCxnSnk70qpm0mSpP9F6eXl7OP6sN0JIWaJ6DIihkT0odPpvO/1en+8iAwnrQWMT4C8uRkmR4ZhGEbvwHJiODGcGD0BToyeF3cMJ4YToyfAidHz4o7hxOgl5i/q19um37+eSQAAAABJRU5ErkJggg==');
-        background-repeat: no-repeat;
-        background-size: contain;
-    }
-
-    .dropdown-toggle:focus:after {
-        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAYAAABxLuKEAAADRElEQVR4Xu3av4sTQRQH8Pd28QoPq0P0D7AQC5sIggdnYLMLKVUCh4WFYBks5LBUr5LzCoVrFBRPxEa0sNxZvKBgY2Xhqf0hwhWaNrnNkwQ3rHfZ7M7szk72eGkzO9n3yXfeTH4g8GOiALLLZAGGSUgGwzCMXNPgxHBiODFyApwYOS/uMZwYToycACdGzot7DCeGEyMnMOOJQcdxztm2XScii4jeBUHwrZAKFScx3mM8zztPRM8Q8UyshpCIbgkhHinWlfsyozCu615CxNcAYE+qZDAYtIMg2MhdpcIExmDSUKJaTOEYgcmKYhKndBhZFFM4pcKoopjAKQ0mL0rZOKXAFIVSJo52GM/zlgHgZdKWrLCTji4ZDAYrQRCsq16fdp1WmCEKEb1CRC2voxNHyw0P3w3dKLFlpSU5WmAUUXbDMLxi2/YTADidFvX48zqSUziMKgoALPm+/73ZbB4Pw/CDaZxCYfKiRCmYBZzCYIpC2YfzCQBOmVhWhcAUjRJB1Ov1k3Nzcx9N4OSGaTQa1xDxueSWvBv1lLQ0mMLJBaMbxWRylGHKQsmLAwD3fN+/m5bM/c8rwZSNUgDOuu/7KzI40jCmUMrGkYIxjVImTmaYWUEpCycTzKyhlIGTCjOrKLpxpsI0Go0biPhY1+FNZpeYNlb1EAgAibtVIswQxbKs4VcAMo/MJ1qZSbOMLRpnIkzVUHQsqwMwVUXJi0NEG0KIdjTPfzBVRykSZwwz3H0sy9rMsp5jY4z1lLT7VO05RHRHCLE6gllcXDw2Pz//CwCOpr1gFVDyJmdvb682gvE87zoAPD1MKDlxHkQwawCQ9dPnzC6fpDdWYVm9GcG4rnsbEe9nSEzlUBSTszmCcRznrG3bX1JgKouigLM83pVc132IiDcTcCqPkhWHiD73+/0LY5hWq2V3u90XAHA1jkNEbwGgLYT4mWGpVWKI4zgnLMt6H/9DJBH1EXFtZ2dndXt7u3fg5Ot53hIRXSSi32EYiq2trR+VqFbyJmu12pGFhYXL/37x/Nrr9YJOp/Nn4slXcu5DPTz1+5hDXf2U4hgmAYdhGEauKXBiODGcGDkBToycF/cYTgwnRk6AEyPnxT0mwesvCyfqh+gHST4AAAAASUVORK5CYII=');
-        background-repeat: no-repeat;
-        background-size: contain;
-    }
-
-
-
-    /* ----------------------------- END OF DROPDOWN ----------------------------- */
-
-    /* ----------------------------- TEXT INPUTS ----------------------------- */
-
-    input[type='text'] {
-        padding: 0.5rem;
-        padding-left: 1.5rem;
-        border-radius: 4px;
-        border-style: solid;
-        border-width: 1px;
-        border-color: var(--c-grey);
-        color: var(--c-grey-d);
-        width: 100%;
-        font-weight: 400;
-    }
-
-    input[type='text']::placeholder {
-        color: var(--c-grey-l);
-    }
-
-    input[type='text']:focus {
-        outline-color: var(--c-blue) !important;
-    }
-
-    input[type='text']:hover {
-        color: var(--c-grey-d);
-        border-color: var(--c-grey-d);
-    }
-
-    input[type='text']:hover::placeholder {
-        color: var(--c-grey);
-        border-color: var(--c-grey-d);
-
-    }
-
-    /* ----------------------------- END OF TEXT INPUTS ----------------------------- */
-
-    .round-block {
-        height: 10vw;
-        width: 10vw;
-        border-radius: 15%;
-        text-align: center;
-        color: grey;
-    }
-
-    /* ----------------------------- ICONS ----------------------------- */
-
-    .edu-icon {
-        position: inherit;
-        height: 1.5rem;
-        width: 1.5rem;
-        background-size: contain;
-        z-index: 2;
-    }
-
-    /* TODO: Replace all icons with static file references */
-
-    .edu-icon-checkmark-white {
-        background-image: url('../images/checkmark.svg');
-        background-repeat: no-repeat;
-    }
-
-    .edu-icon-up-arrow-small-dark {
-        background-image: url('../images/up-small-dark.png');
-        background-repeat: no-repeat;
-    }
-
-    .edu-icon-down-arrow-small-light {
-        background-image: url('../images/down-small-light.png');
-        background-repeat: no-repeat;
-    }
-
-    .edu-icon-down-arrow-small-dark {
-        background-image: url('../images/down-small-dark.png');
-        background-repeat: no-repeat;
-    }
-
-    /* ----------------------------- END ICONS ----------------------------- */
-    /* ----------------------------- TOP OVERHEAD BAR ----------------------------- */
-
-    .navbar {
-        height: 3rem;
-        min-height: 50px;
-        max-height: 80px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-        background-color: var(--c-purple);
-        padding-left: 3rem;
-    }
-
-    .open-edu-logo {
-        width: 30%;
-        min-width: 110px;
-        height: 1rem;
-        background-image: url('../images/open_edu_logo.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-    }
-
-    .question-mark-logo {
-        width: 1rem;
-        height: 1rem;
-        min-width: 10px;
-        min-height: 10px;
-        max-width: 20px;
-        max-height: 20px;
-        background-image: url('../images/question_mark.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-        display: inline-flex;
-    }
+.slidecontainer {
+    width: 100%;
+    /* Width of the outside container */
+}
+
+/* The range-slider itself */
+.range-slider {
+    -webkit-appearance: none;
+    cursor: pointer;
+    /* Override default CSS styles */
+    appearance: none;
+    width: 100%;
+    /* Full-width */
+    height: 1rem;
+    /* Specified height */
+    max-height: 20px;
+    min-height: 10px;
+    background: #efeee9;
+    /* Grey background */
+    outline: none;
+    /* Remove outline */
+    opacity: 0.7;
+    /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s;
+    /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+
+}
+
+/* Mouse-over effects */
+.range-slider:hover {
+    opacity: 1;
+    /* Fully shown on mouse-over */
+}
+
+/* The range-slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    /* Override default look */
+    appearance: none;
+    width: 1.5rem;
+    /* Set a specific range-slider handle width */
+    height: 1.5rem;
+    /* range-slider handle height */
+    background-color: white;
+    /* Green background */
+    cursor: pointer;
+    /* Cursor on hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+}
+
+.range-slider::-moz-range-thumb {
+    width: 1.5rem;
+    /* Set a specific range-slider handle width */
+    height: 1.5rem;
+    /* range-slider handle height */
+
+    background-color: white;
+    /* Green background */
+    cursor: pointer;
+    /* Cursor on hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* ------------------------------ END OF SLIDER CSS ----------------------------- */
+
+/* ------------------------------ CHECKBOX Based on: https://www.w3schools.com/howto/howto_css_custom_checkbox.asp ------------------------------ */
+
+/* The checkbox-container */
+.checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin: 0.25rem;
+    cursor: pointer;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+    background-size: contain;
+    border-width: 0.5px;
+    border-color: transparent
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1.5rem;
+    width: 1.5rem;
+    background-color: var(--c-smoke);
+    background-image: none;
+    background-size: 80%;
+    border-radius: 3px;
+    box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* On mouse-over, add a grey background color */
+.checkbox-container:hover input ~ .checkmark {
+    border-color: var(--c-blue);
+    border-style: solid;
+    border-width: 0.5px;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox-container input:checked ~ .checkmark {
+    background-color: var(--c-blue);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='17' viewBox='0 0 24 17'%3E%3Cdefs%3E%3Cpath id='yrvda' d='M588.667 173l-14.896 15-6.771-6.818'/%3E%3C/defs%3E%3Cg%3E%3Cg transform='translate(-566 -172)'%3E%3Cuse fill='%23fff' fill-opacity='0' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-miterlimit='50' stroke-width='2' xlink:href='%23yrvda'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+
+}
+
+/* Show the checkmark when checked */
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+
+/* Style the checkmark/indicator */
+.checkbox-container .checkmark:after {
+    background-image: none;
+    background-repeat: no-repeat;
+}
+
+/* ------------------------------ END OF CHECKBOX CSS ------------------------------ */
+
+/* ------------------------------ RADIO BUTTONS ------------------------------ */
+
+/* Customize the label (the container-radio-buttons) */
+.container-radio-buttons {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+    background-size: contain;
+    border-width: 1px;
+    border-color: transparent;
+}
+
+/* Create a custom radio button */
+.radio-dot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: var(--c-smoke);
+    border-radius: 50%;
+    box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* On mouse-over, add a grey background color */
+.checkbox-container input ~ .radio-dot:hover {
+    border-color: var(--c-blue);
+    border-style: solid;
+    border-width: 0.5px;
+
+}
+
+/* When the radio button is checked, add a blue background */
+.checkbox-container input:checked ~ .radio-dot {
+    background-color: var(--c-blue);
+    border-color: var(--c-blue);
+    border-style: solid;
+    border-width: 0.5px;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.radio-dot:after {
+    content: "";
+    position: absolute;
+    display: none;
+
+}
+
+.checkbox-container input:checked ~ .radio-dot:hover {
+    background-color: var(--c-blue);
+}
+
+
+/* Show the indicator (dot/circle) when checked */
+.checkbox-container input:checked ~ .radio-dot:after {
+    display: block;
+    background-color: white;
+
+
+}
+
+/* Style the indicator (dot/circle) */
+.checkbox-container .radio-dot:after {
+    top: 8px;
+    left: 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* ----------------------------- END OF RADIO BUTTONS ----------------------------- */
+/* ----------------------------- TOOLTIPS ----------------------------- */
+
+.bs-tooltip-top .arrow.arrow::before {
+    border-top-color: var(--c-orange);
+}
+
+.bs-tooltip-right .arrow.arrow::before {
+    border-right-color: var(--c-orange);
+}
+
+.bs-tooltip-left .arrow.arrow::before {
+    border-left-color: var(--c-orange);
+}
+
+.bs-tooltip-bottom .arrow.arrow::before {
+    border-bottom-color: var(--c-orange);
+}
+
+.tooltip-inner {
+    background-image: var(--cg-orange-dorange);
+}
+
+.tooltip.show {
+    opacity: 1;
+}
+
+/* ----------------------------- END OF TOOLTIPS BUTTONS ----------------------------- */
+/* ----------------------------- DROPDOWN ----------------------------- */
+
+.edu-button.edu-dropdown-button {
+    width: 100%;
+    text-align: left;
+    min-width: 200px;
+    border: 1px solid var(--c-grey);
+    color: var(--c-grey);
+    font-size: 1.25rem;
+    z-index: 2;
+    height: 2.5rem;
+
+}
+
+.edu-button.edu-dropdown-button:hover {
+    border-color: var(--c-grey-d);
+    color: var(--c-grey-d);
+}
+
+.edu-button.edu-dropdown-button:active {
+    border-color: var(--c-blue);
+    border-width: 1px;
+    color: var(--c-grey-d);
+}
+
+.edu-button.edu-dropdown-button:focus-within {
+    border-color: var(--c-blue);
+    border-width: 1px;
+    color: var(--c-grey-d);
+    outline-color: var(--c-blue);
+}
+
+.edu-button.edu-dropdown-button:visited {
+    border-color: var(--c-blue);
+    border-width: 1.5px;
+    color: var(--c-grey-d);
+}
+
+.dropdown-item {
+    color: var(--c-grey-d);
+}
+
+.dropdown-item:hover {
+    background-color: rgba(122, 205, 207, 0.2);
+}
+
+.btn-group {
+    width: 100%;
+    min-width: 200px;
+}
+
+.dropdown-menu {
+    width: 100%;
+    min-width: 200px;
+    top: -5px !important;
+    z-index: 1;
+    border-radius: 0;
+    color: var(--c-grey-d);
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.edu-button {
+    height: 5rem;
+    width: 10rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    text-align: center;
+    align-items: center;
+    display: inline-grid;
+}
+
+.edu-button:active {
+    box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+.dropdown-toggle::after {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    color: transparent;
+    content: "";
+    position: absolute;
+    right: 2rem;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAYAAABxLuKEAAADQUlEQVR4Xu3ZMYgTQRQG4Pc2QYxaWKpw3TVpBRtBQbCxiHCQm00RLQRBi8PGazV3YOXZHcLZKEFMdkIIHF5ppVgI1gpayiHYWQgJMU8SNiEXksvOzM7srrzUs7Nvvvz7ZrJB4M9cAWSX+QIMsyAZDMMwak2DE8OJ4cSoCXBi1Ly4x3BiODFqApwYNS/uMZwYToyaQNTE1Ov104VC4RoRXUTEw263K6vV6u9Y7paySdrt9vl+v3/D87wVAPhcLpcPEJGGZU56TK1W84rF4gNE3AaAM+M1ENEhEV2vVCpfUrYu7XI6nc7ZXq/3DBHvzEzyrlAo3CyVSn8mMEEQ7CNiacHdfnmed7VcLn/VriYlF0opzwHAewBYXVDSWyFEaQTTbDYveZ73aUntmceJgDIiIKK1EYyU8hEAbEX4UjOLExUlhNkbwQRB8BQRH0aAGQ7JHI4KSgjTHifmPgA8jwiTKRxVlNDgyQim0WhcyOVy3wDg1P+Eo4NCRANEXJ3sSlLKWwBQV4BJdXJ0UMK1PxZCbB/5rRQEwV1EfJF1HAOUXSHExpED3hgj6zhxoMyFCXepTCYnLpSFMFnEiRPlWJgpnL3p31QR+o/zc44uChHt+L6/OW9NS19UtVqt20T0Kq04NlCWJmYsmVYcWyiRYYYD04ZjE0UJJk04tlGUYdKA4wJFCyZJHFco2jBJ4LhEMYJxieMaxRjGBY4Bypbv+7UIB9K5Q5Ye8KJMbGsrN0DZ9H1/J0rti8bEAhMmp0JEb1RPyABwWQjxfbbAJFFieZSmF9RqtXRwfgLAlWmcpFFihzFIzgQnDShWYAxx1gHg5TF/hs1tCURk3FNmJ46tx8xOrPlYKfdLGyjWEjNenW0cWyjWYQweq6XJsYniBMYSzoYQYnepnsEAaz3GYs+xjuIsMTM95zUA5DS/TCcozmGGN5RSrg1fCGrgOENJBEYTxylKYjCKOM5REoWJiJMISuIw4Va+PhgM6oh4cqoh/wCAe0KIA80mbXyZs+36uEobjcZKPp8XAHCCiD4CwAchxF/j1RlMkAoYg/qtXcowC2gZhmHUnjpODCeGE6MmwIlR8+Iew4nhxKgJcGLUvLjHcGLUEvMP+5b/fHJqUEYAAAAASUVORK5CYII=');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.dropdown-toggle:hover:after {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAYAAABxLuKEAAADOklEQVR4Xu3av2sUQRQH8Pf2wnKoxZUqpPMvEGwE5SS7EywipIjYaCEIWgQb06oJWBm7IMRGCWKRw8YoIXNrpVgI1gpaShDsLOycJ3vchfW4ze3M7szsyrt6Mz8+953vzSVB4NdEAWSXyQIMk5MMhmEYvdLgxHBiODF6ApwYPS/uGE4MJ0ZPgBOj58Udw4nhxOgJFE2MEOIoAFwgotMAsD8zM7O9u7v7q5LZajbI/Pz8CSK6CACzAPBJSvkGAChdZrZjAiHEbSJaQ8Rjoz0Q0T4RRUmSfK7ZvoyX0+12O2EYPgKA69lBiOhtu92+tLOz8/sAJo7jV4i4kDPbTwA4L6X8Yryamvxgt9s9HobhOwA4lbOk11LKhQHM3NzcmVar9XHK2huPUwBlRLA4gInj+C4irhZ4UxuLo4ECRLQ5gBFCPASAOwVg0kcah6ODMjR4OYCJouhWEASPC8I0CscAJd3fg9FROomIXwHgyP+EY4ii0mLOfipdRcQtDZhaJ8cQJe2Xe/1+f+2f70pRFN0IguBJ03FKoGz0+/3l8QvewKPpOFWgTIRpMk5VKLkwTcSpEuVQmBEOIm4ios7vbZzfc0xRAGBdSrkyqVOnbjiKomuI+KyuODZQpiZmJFlXHFsohWGGx6pWybGJogVTJxzbKNowdcBxgWIE4xPHFYoxjA8clyilYFziuEYpDeMCpwTKqpTyvuYX4oPHp17wigxs655jiqKUWkmSZL3I2vOeqQQmHVwIcYWIXujekBHx7N7e3rfxBfpEqeQoZTdkiPMDEc9lcXyjVA5TIjkHOHVAsQJTBkcptRQEwdND/hg2sRKq6JTxgSvrmPGBDY+Vdl/aQLGWmNHubOPYQrEOU+JYTU2OTRQnMDZwlFLLSZJsTNUr8YC1jrHVOS5QnCUm2zkA8BwAWiZvpisU5zDphHEcLyJiTxfHJYoXGBMc1yjeYHRwfKB4hSmC4wvFO8wQZwkAthCxnSnk70qpm0mSpP9F6eXl7OP6sN0JIWaJ6DIihkT0odPpvO/1en+8iAwnrQWMT4C8uRkmR4ZhGEbvwHJiODGcGD0BToyeF3cMJ4YToyfAidHz4o7hxOgl5i/q19um37+eSQAAAABJRU5ErkJggg==');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.dropdown-toggle:focus:after {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAABGCAYAAABxLuKEAAADRElEQVR4Xu3av4sTQRQH8Pd28QoPq0P0D7AQC5sIggdnYLMLKVUCh4WFYBks5LBUr5LzCoVrFBRPxEa0sNxZvKBgY2Xhqf0hwhWaNrnNkwQ3rHfZ7M7szk72eGkzO9n3yXfeTH4g8GOiALLLZAGGSUgGwzCMXNPgxHBiODFyApwYOS/uMZwYToycACdGzot7DCeGEyMnMOOJQcdxztm2XScii4jeBUHwrZAKFScx3mM8zztPRM8Q8UyshpCIbgkhHinWlfsyozCu615CxNcAYE+qZDAYtIMg2MhdpcIExmDSUKJaTOEYgcmKYhKndBhZFFM4pcKoopjAKQ0mL0rZOKXAFIVSJo52GM/zlgHgZdKWrLCTji4ZDAYrQRCsq16fdp1WmCEKEb1CRC2voxNHyw0P3w3dKLFlpSU5WmAUUXbDMLxi2/YTADidFvX48zqSUziMKgoALPm+/73ZbB4Pw/CDaZxCYfKiRCmYBZzCYIpC2YfzCQBOmVhWhcAUjRJB1Ov1k3Nzcx9N4OSGaTQa1xDxueSWvBv1lLQ0mMLJBaMbxWRylGHKQsmLAwD3fN+/m5bM/c8rwZSNUgDOuu/7KzI40jCmUMrGkYIxjVImTmaYWUEpCycTzKyhlIGTCjOrKLpxpsI0Go0biPhY1+FNZpeYNlb1EAgAibtVIswQxbKs4VcAMo/MJ1qZSbOMLRpnIkzVUHQsqwMwVUXJi0NEG0KIdjTPfzBVRykSZwwz3H0sy9rMsp5jY4z1lLT7VO05RHRHCLE6gllcXDw2Pz//CwCOpr1gFVDyJmdvb682gvE87zoAPD1MKDlxHkQwawCQ9dPnzC6fpDdWYVm9GcG4rnsbEe9nSEzlUBSTszmCcRznrG3bX1JgKouigLM83pVc132IiDcTcCqPkhWHiD73+/0LY5hWq2V3u90XAHA1jkNEbwGgLYT4mWGpVWKI4zgnLMt6H/9DJBH1EXFtZ2dndXt7u3fg5Ot53hIRXSSi32EYiq2trR+VqFbyJmu12pGFhYXL/37x/Nrr9YJOp/Nn4slXcu5DPTz1+5hDXf2U4hgmAYdhGEauKXBiODGcGDkBToycF/cYTgwnRk6AEyPnxT0mwesvCyfqh+gHST4AAAAASUVORK5CYII=');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+
+/* ----------------------------- END OF DROPDOWN ----------------------------- */
+
+/* ----------------------------- TEXT INPUTS ----------------------------- */
+
+input[type='text'] {
+    padding: 0.5rem;
+    padding-left: 1.5rem;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--c-grey);
+    color: var(--c-grey-d);
+    width: 100%;
+    font-weight: 400;
+}
+
+input[type='text']::placeholder {
+    color: var(--c-grey-l);
+}
+
+input[type='text']:focus {
+    outline-color: var(--c-blue) !important;
+}
+
+input[type='text']:hover {
+    color: var(--c-grey-d);
+    border-color: var(--c-grey-d);
+}
+
+input[type='text']:hover::placeholder {
+    color: var(--c-grey);
+    border-color: var(--c-grey-d);
+
+}
+
+/* ----------------------------- END OF TEXT INPUTS ----------------------------- */
+
+.round-block {
+    height: 10vw;
+    width: 10vw;
+    border-radius: 15%;
+    text-align: center;
+    color: grey;
+}
+
+/* ----------------------------- ICONS ----------------------------- */
+
+.edu-icon {
+    position: inherit;
+    height: 1.5rem;
+    width: 1.5rem;
+    background-size: contain;
+    z-index: 2;
+}
+
+/* TODO: Replace all icons with static file references */
+
+.edu-icon-checkmark-white {
+    background-image: url('../images/checkmark.svg');
+    background-repeat: no-repeat;
+}
+
+.edu-icon-up-arrow-small-dark {
+    background-image: url('../images/up-small-dark.png');
+    background-repeat: no-repeat;
+}
+
+.edu-icon-down-arrow-small-light {
+    background-image: url('../images/down-small-light.png');
+    background-repeat: no-repeat;
+}
+
+.edu-icon-down-arrow-small-dark {
+    background-image: url('../images/down-small-dark.png');
+    background-repeat: no-repeat;
+}
+
+/* ----------------------------- END ICONS ----------------------------- */
+/* ----------------------------- TOP OVERHEAD BAR ----------------------------- */
+
+.navbar {
+    height: 3rem;
+    min-height: 50px;
+    max-height: 80px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    background-color: var(--c-purple);
+    padding-left: 3rem;
+}
+
+.open-edu-logo {
+    width: 30%;
+    min-width: 110px;
+    height: 1rem;
+    background-image: url('../images/open_edu_logo.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.question-mark-logo {
+    width: 1rem;
+    height: 1rem;
+    min-width: 10px;
+    min-height: 10px;
+    max-width: 20px;
+    max-height: 20px;
+    background-image: url('../images/question_mark.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-flex;
+}
