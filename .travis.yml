@@ -31,15 +31,13 @@ jobs:
       script:
         - pushd deployment
         - echo "Preparing Docker Stack"
-        - make build up wait-for-db migrate collectstatic
+        - make build up wait-for-db generate-django-secret migrate collectstatic
         - make status
         - echo "Docker stack ready"
         - echo "Preparing unittests"
         - make flake8
         - echo "Run unittests"
-        # Will need to add Makefile command shortcut
-        - source compose.env.sh
-        - docker-compose exec uwsgi python manage.py test --noinput
+        - make test
         - popd
       after_success:
         # Find coverage files

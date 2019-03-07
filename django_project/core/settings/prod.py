@@ -10,7 +10,7 @@ from .project import (
     MIDDLEWARE_CLASSES
 )
 try:
-    from .secret import SENTRY_KEY
+    from .secret import *
 except ImportError:
     SENTRY_KEY = None
 

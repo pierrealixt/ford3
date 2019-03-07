@@ -74,6 +74,10 @@ db:
 wait-for-db:
 	@docker-compose exec dbbackups /bin/bash -c "until psql -l -d gis; do echo 'Waiting for databases.'; sleep 5; done"
 
+generate-django-secret:
+	@echo "Generating Django Secret Key"
+	@docker-compose exec uwsgi /bin/bash -c "echo -e \"from core.settings.utils import ensure_secret_key_file\\nensure_secret_key_file()\" | python manage.py shell"
+
 nginx:
 	@echo
 	@echo "------------------------------------------------------------------"
@@ -378,6 +382,8 @@ pull-translation-source:
 
 test:
 	@docker-compose exec uwsgi python manage.py test
+
+
 # --------------- help --------------------------------
 
 help:
