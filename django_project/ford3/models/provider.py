@@ -10,9 +10,10 @@ class Provider(models.Model):
         primary_key=True)
     name = models.CharField(
         blank=True,
-        null=True,
+        null=False,
         unique=False,
         help_text='',
+        default='',
         max_length=255)
     website = models.CharField(
         blank=True,
@@ -40,13 +41,32 @@ class Provider(models.Model):
         max_length=255)
     postal_address = models.CharField(
         blank=False,
-        null=False,
+        null=True,
         unique=False,
         help_text='',
         max_length=255)
+    physical_address = models.CharField(
+        blank = False,
+        null = True,
+        unique = False,
+        help_text ='',
+        max_length = 255)
+    telephone = models.CharField(
+        blank = False,
+        null = True,
+        unique = False,
+        help_text ='',
+        max_length = 255)
+    provider_type = models.CharField(
+        blank = False,
+        null = False,
+        unique = False,
+        default='',
+        help_text ='',
+        max_length = 255)
+
 
     pass
 
     def __str__(self):
         return self.name
-

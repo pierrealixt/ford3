@@ -39,6 +39,24 @@ class Requirement(models.Model):
         null=False,
         unique=False,
         help_text='')
+    portfolio = models.BooleanField(
+        blank=False,
+        null=False,
+        unique=False,
+        help_text='',
+        default=False)
+    portfolio_comment = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
+    aps_calculator_link = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
 
     def __str__(self):
         return self.description

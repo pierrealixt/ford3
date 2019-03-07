@@ -7,7 +7,6 @@ class Campus(models.Model):
     provider_id = models.ForeignKey(
         Provider,
         on_delete=models.CASCADE)
-
     id = models.IntegerField(
         blank=False,
         null=False,
@@ -20,14 +19,47 @@ class Campus(models.Model):
         unique=False,
         help_text='',
         max_length=255)
-    # location = models.PointField(
-    #   blank=True,
-    #   null=True,
-    #   help_text='The spatial point position of the campus')
+    location = models.PointField(
+      blank=True,
+      null=True,
+      help_text='The spatial point position of the campus')
+    photo_url = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
+    telephone = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
+    email = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
+    max_students_per_year = models.IntegerField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='')
+    physical_address = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
+    postal_address = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
 
     pass
 
     def __str__(self):
         return self.name
-
-

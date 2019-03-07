@@ -71,6 +71,13 @@ db:
 	@echo "------------------------------------------------------------------"
 	@docker-compose up -d db
 
+wait-for-db:
+	@docker-compose exec dbbackups /bin/bash -c "until psql -l -d gis; do echo 'Waiting for databases.'; sleep 5; done"
+
+generate-django-secret:
+	@echo "Generating Django Secret Key"
+	@docker-compose exec uwsgi /bin/bash -c "echo -e \"from core.settings.utils import ensure_secret_key_file\\nensure_secret_key_file()\" | python manage.py shell"
+
 nginx:
 	@echo
 	@echo "------------------------------------------------------------------"
@@ -338,19 +345,9 @@ build-devweb: db
 	@echo "------------------------------------------------------------------"
 	@docker-compose build devweb
 
-# Run pep8 style checking
-#http://pypi.python.org/pypi/pep8
-pep8:
-	@echo
-	@echo "-----------"
-	@echo "PEP8 issues"
-	@echo "-----------"
-	@pep8 --version
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128,E402  --exclude='../django_project/.pycharm_helpers','../django_project/*/migrations/','../django_project/*/urls.py','../django_project/core/settings/secret.py' ../django_project || true
-
 flake8:
-	@echo "Check flake 8"
-	@flake8 ../django_project
+	@docker-compose exec uwsgi flake8 --version
+	@docker-compose exec uwsgi flake8
 
 update-translation-strings:
 	@echo
@@ -381,6 +378,11 @@ pull-translation-source:
 	@echo "You need to set up your transifex client first."
 	@echo "------------------------------------------------------------------"
 	@tx pull -a -f
+
+
+test:
+	@docker-compose exec uwsgi python manage.py test
+
 
 # --------------- help --------------------------------
 

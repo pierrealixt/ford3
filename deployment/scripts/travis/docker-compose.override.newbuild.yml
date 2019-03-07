@@ -1,0 +1,13 @@
+version: '2'
+services:
+
+  # This docker compose files will make sure that we build a new docker image
+  base_uwsgi:
+    build: docker
+    image: ford3_uwsgi
+
+  uwsgi:
+    build:
+      context: docker
+      dockerfile: Dockerfile-dev
+    image: ford3_dev_uwsgi

@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
-"""Settings for when running under docker in development mode."""
 from .dev import *  # noqa
-import os
-print (os.environ)
+import os # noqa
+
+SECRET_KEY = '*fneknn-)l-b+6muz(d*z#$7ng_(kxkxf)9a65f(ewbiwqmmj$'
 
 ALLOWED_HOSTS = ['*',
                  u'0.0.0.0']
