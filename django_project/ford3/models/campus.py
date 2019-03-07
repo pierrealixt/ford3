@@ -30,7 +30,7 @@ class Campus(models.Model):
         unique=False,
         help_text='',
         max_length=255)
-    telephone = models.IntegerField(
+    telephone = models.BigIntegerField(
         blank=False,
         null=True,
         unique=False,

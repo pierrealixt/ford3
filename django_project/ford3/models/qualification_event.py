@@ -35,3 +35,6 @@ class QualificationEvent(models.Model):
         unique=False,
         help_text='',
         max_length=255)
+
+    def __str__(self):
+        return self.name

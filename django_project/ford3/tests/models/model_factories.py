@@ -76,14 +76,15 @@ class ModelFactories:
     def get_campus_test_object(new_id=1):
         campus_test_object_instance = Campus.objects.create(
             id=new_id,
-            provider_id=ModelFactories.get_provider_test_object(),
+            provider_id=ModelFactories.get_provider_test_object(1),
             name='Object Test Name',
             photo_url= 'Is this going to be base64 encoded?',
-            telephone='+27137441422',
+            telephone=27137441422,
             email='test@campus.com',
-            max_students_per_year='42',
+            max_students_per_year=42,
             physical_address='24 Test Street, Extension Test, TestVille',
-            postal_address='Email us rather')
+            postal_address='Email us rather'
+        )
 
         return campus_test_object_instance
 
@@ -91,7 +92,7 @@ class ModelFactories:
     def get_campus_event_test_object(new_id=1):
         campus_event_test_object_instance = CampusEvent.objects.create(
             id=new_id,
-            campus_id=ModelFactories.get_campus_event_test_object(),
+            campus_id=ModelFactories.get_campus_test_object(),
             name='Campus Event Test Name',
             date_start=datetime.date(2019, 3, 6),
             date_end=datetime.date(2019, 8, 9),
@@ -129,8 +130,8 @@ class ModelFactories:
             admissions_contact_no='0137527576',
             postal_address='1200',
             physical_address='Some long physical address',
-            telephone='27821233322',
-            provider_type='Technicon',
+            telephone=27821233323,
+            provider_type='Technicon'
         )
 
         return provider_test_object_instance
