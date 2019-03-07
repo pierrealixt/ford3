@@ -70,6 +70,10 @@ body {
         background-color: var(--c-blue-d);
     }
 
+    .edu-button-blue:focus {
+        outline-color: var(--c-blue-d);
+    }
+
     .edu-button-orange {
         color: white;
         background-image: var(--cg-orange-dorange);
@@ -81,6 +85,10 @@ body {
         background-color: var(--c-orange-d);
     }
 
+    .edu-button-orange:focus {
+        outline-color: var(--c-orange);
+    }
+
     .edu-button-grey {
         color: black;
         background-color: var(--c-smoke);
@@ -89,6 +97,12 @@ body {
     .edu-button-grey:hover {
         background-color: var(--c-grey-l);
     }
+
+    .edu-button-grey:focus {
+        outline-color: var(--c-grey-l);
+    }
+
+
 
 
 
@@ -619,7 +633,8 @@ body {
     }
 
     .open-edu-logo {
-        width: 80%;
+        width: 30%;
+        min-width: 110px;
         height: 1rem;
         background-image: url('../images/open_edu_logo.png');
         background-repeat: no-repeat;

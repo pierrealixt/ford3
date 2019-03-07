@@ -1,0 +1,113 @@
+<nav id="sidebar">
+	<div class="container-fluid">
+		<div class="col-12">
+			<div id="provider-photo" class="provider-photo">
+			</div>
+		</div>
+		<div class="col-12 side-bar-title" id="provider-name">
+			False Bay College
+		</div>
+		<div class="row">
+			<ul>
+				<li class="selected">Fish Hoek</li>
+				<li>Mitchell's Plain</li>
+				<li>Khayelitsha</li>
+				<li>Muizenberg</li>
+				<li>Westlake</li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+
+<style>
+	.wrapper {
+		display: flex;
+		width: 100%;
+		align-items: stretch;
+	}
+
+	#sidebar {
+		min-width: 250px;
+		max-width: 250px;
+		background-color: var(--c-purple);
+		color: #fff;
+		transition: all 0.3s;
+		margin-left: -250px;
+	}
+
+	#sidebar.active {
+		margin-left: 0px;
+	}
+
+	@media (max-width: 768px) {
+		#sidebar {
+			margin-left: -250px;
+		}
+
+		#sidebar.active {
+			margin-left: 0;
+		}
+	}
+
+	#sidebar ul {
+		width: 100%;
+		padding: 0;
+	}
+
+	#sidebar ul li {
+		    padding-left: 1rem;
+			padding-top: 0.5rem;
+			width: 100%;
+			list-style: none;
+			cursor: pointer;
+			background-color: rgba(255,255,255,0.13);
+			height: 2.5rem;
+			line-height: 1.25rem;
+			color: white;
+	}
+
+	#sidebar ul li:hover {
+		background-color: rgba(255,255,255,0.21);
+
+	}
+
+	#sidebar ul li.selected {
+		background-color: rgba(255,255,255,0.21);
+	}
+
+	#sidebar ul li.active {
+		background-color: rgba(255,255,255,0.29);
+	}
+	.provider-photo {
+		    width: 10rem;
+		height: 10rem;
+		max-width: 180px;
+		min-width: 100px;
+		border-radius: 50%;
+		background-color: white;
+		max-height: 180px;
+		min-height: 100px;
+		margin-top: 2rem;
+		margin-bottom: 1rem;
+		background-color: white;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.side-bar-title {
+		text-align: center;
+		font-size: 1.125rem;
+		margin-bottom: 1rem;
+	}
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+
+    });
+</script>

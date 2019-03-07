@@ -4,12 +4,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>FORD3</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>{% block title %} {{ APPLICATION_NAME }} | {% block subtitle %}{% endblock %} {% endblock %}</title>
+    <title>FORD3</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -25,26 +24,36 @@
         integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"
         crossorigin="anonymous"></script>
 
-    <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-    </script>
-
-    {% block head %} {% endblock %}
+	{% block head %} {% endblock %}
 
 </head>
 <body id="page-top">
+		<nav class="navbar">
+		<div class="open-edu-logo"></div> <div class="question-mark-logo"></div>
+		</nav>
+<div class="wrapper">
 
-<nav class="navbar">
-	<div class="open-edu-logo"></div> <div class="question-mark-logo"></div>
-</nav>
+
+{% block side_navbar %}
+	 {% include 'side_navbar.html' %} <!-- side_navbar.html -->
+{% endblock %}
 
 {%  block body %}
+
+
+
 	<!-- TestContent -->
     {% include 'test_widgets.html' %} <!-- test_widgets.html -->
 {% endblock %}
-
+</div>
+</div>
 </body>
+
+<script>
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+</script>
+
 
 </html>
