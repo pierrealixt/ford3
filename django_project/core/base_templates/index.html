@@ -35,13 +35,13 @@
 </head>
 <body id="page-top">
 
-{% block navigation %}
-    <!-- Navigation -->
-    {% include 'overhead_bar.html' %}
-{% endblock %}
+<nav class="navbar">
+	<div class="open-edu-logo"></div> <div class="question-mark-logo"></div>
+</nav>
 
 {%  block body %}
-	Test body
+	<!-- TestContent -->
+    {% include 'test_widgets.html' %} <!-- test_widgets.html -->
 {% endblock %}
 
 </body>
