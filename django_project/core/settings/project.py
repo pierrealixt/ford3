@@ -60,6 +60,7 @@ PIPELINE['STYLESHEETS']['project']  = {
     'source_filenames': (
         'css/ford3.css',
         'css/form.css',
+        'css/stylesheet.css',
     ),
     'output_filename': 'css/project.css',
     'extra_context': {
