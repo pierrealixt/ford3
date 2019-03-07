@@ -6,6 +6,6 @@ class TestRequirement(TestCase):
 
     def test_requirement_description(self):
         new_requirement = ModelFactories.get_requirement_test_object()
-        self.assertEqual(new_requirement.__str__(), 
+        self.assertEqual(new_requirement.__str__(),
             """Some long description that goes on..."""
         )

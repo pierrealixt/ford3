@@ -1,6 +1,6 @@
 from django.db import models
-
 from ford3.models.campus import Campus
+
 
 class CampusEvent(models.Model):
     id = models.IntegerField(

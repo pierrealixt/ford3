@@ -13,4 +13,3 @@ urlpatterns = [
 
 # Prevent cloudflare from showing an ad laden 404 with no context
 handler404 = custom_404
-
