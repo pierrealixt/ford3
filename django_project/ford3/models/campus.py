@@ -30,11 +30,12 @@ class Campus(models.Model):
         unique=False,
         help_text='',
         max_length=255)
-    telephone = models.BigIntegerField(
+    telephone = models.CharField(
         blank=False,
         null=True,
         unique=False,
-        help_text='')
+        help_text='',
+        max_length=255)
     email = models.CharField(
         blank=False,
         null=True,

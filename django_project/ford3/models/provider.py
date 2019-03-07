@@ -51,12 +51,12 @@ class Provider(models.Model):
         unique = False,
         help_text ='',
         max_length = 255)
-    telephone = models.BigIntegerField(
+    telephone = models.CharField(
         blank = False,
-        null = False,
+        null = True,
         unique = False,
-        default=0,
-        help_text ='')
+        help_text ='',
+        max_length = 255)
     provider_type = models.CharField(
         blank = False,
         null = False,
@@ -64,6 +64,7 @@ class Provider(models.Model):
         default='',
         help_text ='',
         max_length = 255)
+
 
     pass
 
