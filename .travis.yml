@@ -25,6 +25,8 @@ before_install:
 install:
   - pip install -U docker-compose
   - pip install -r REQUIREMENTS-dev.txt
+  # for codecov coverage
+  - pip install codecov
 
 script: skip
 
@@ -50,5 +52,6 @@ jobs:
         # Replace parent directory to travis directory, because we are running
         # coverage using docker mount
         - sed -i 's/home\/web\/django_project/home\/travis\/build\/kartoza\/ford3\/django_project/g' .coverage
+        - cat .coverage
         - codecov
         - popd
