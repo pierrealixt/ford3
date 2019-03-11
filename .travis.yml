@@ -40,7 +40,7 @@ jobs:
         - echo "Preparing unittests"
         - make flake8
         - echo "Run unittests"
-        - make test
+        - make coverage-test
         - popd
       after_success:
         # Find coverage files

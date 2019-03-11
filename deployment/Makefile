@@ -383,6 +383,8 @@ pull-translation-source:
 test:
 	@docker-compose exec uwsgi python manage.py test
 
+coverage-test:
+	@docker-compose exec uwsgi coverage run manage.py test
 
 # --------------- help --------------------------------
 
