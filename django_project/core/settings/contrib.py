@@ -1,7 +1,8 @@
 from .base import *  # noqa
 
-# Extra installed apps - grapelli needs to be added before others
+# Extra installed apps that needs to be added before others
 INSTALLED_APPS = (
+    'test_without_migrations',
     'grappelli',
 ) + INSTALLED_APPS
 

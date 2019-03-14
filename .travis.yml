@@ -9,7 +9,7 @@ services: docker
 
 env:
   - COMPOSE_PROJECT_NAME: 'ford3'
-    COMPOSE_FILE: 'docker-compose.yml:docker-compose.override.yml'
+    COMPOSE_FILE: 'docker-compose.yml:docker-compose.override.yml:scripts/travis/selenium-compose.yml'
 
 before_install:
   # Attempt to detect docker context changes
@@ -36,12 +36,13 @@ jobs:
       script:
         - pushd deployment
         - echo "Preparing Docker Stack"
-        - make build up wait-for-db generate-django-secret migrate collectstatic
+        - make build up wait-for-db generate-django-secret migrate collectstatic selenium-up
         - make status
         - echo "Docker stack ready"
         - echo "Preparing unittests"
         - make flake8
         - echo "Run unittests"
+        # In the future, we might want to consider separating module unit test and selenium test
         - make coverage-test
         - popd
       after_success:

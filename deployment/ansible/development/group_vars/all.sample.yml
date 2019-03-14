@@ -38,6 +38,13 @@ uwsgi:
 #  command: python manage.py runserver 0.0.0.0:8080
   environment:
     DJANGO_SETTINGS_MODULE: core.settings.dev_docker
+    # For Selenium tests
+    SELENIUM_DRIVER: http://hub:4444/wd/hub
+    SELENIUM_UNIT_TEST_FLAG: 'True'
+    # The hostname base url that is going to be accessed by Selenium
+    # Since we are using docker, we can just use the service name internally.
+    SELENIUM_TEST_HOSTNAME: 'uwsgi'
+    SELENIUM_TEST_PORT: 8080
 
 web:
   # Comment the entire volumes lines to use default production conf
@@ -51,7 +58,7 @@ interpreters:
     # Choose ssh port you want to expose
     ssh_port: &interpreters_port 51203
     pycharm_helpers: /home/web/django_project/.pycharm_helpers
-    ipaddress: scanagroempresa-docker.test
+    ipaddress: 'ford3.test'
 
 docker_port_forward:
   # Comment out db if you don't want to expose db to host

@@ -1,17 +1,17 @@
-# from django.test import TestCase
-# from selenium import webdriver
-# from selenium.webdriver.common.desired_capabilities import DesiredCapabilities # noqa
-#
-#
-# class TestHomepage(TestCase):
-#
-#     def setUp(self):
-#         self.browser = webdriver.Remote("http://172.21.0.1:4444/wd/hub",
-#                                   DesiredCapabilities.CHROME)
-#
-#     def tearDown(self):
-#         self.browser.quit()
-#
-#     def runTest(self):
-#         self.browser.get('http://10.0.0.6:80')
-#         self.assertIn('FORD3', self.browser.title)
+# coding=utf-8
+import unittest
+
+from ford3.tests.functional.utils import SeleniumTestCase, selenium_flag_ready
+
+
+class TestHomepage(SeleniumTestCase):
+
+    @unittest.skipUnless(
+        selenium_flag_ready(),
+        'Selenium test was not setup')
+    def test_homepage(self):
+        # test that driver perfectly configured
+        self.assertTrue(self.driver)
+
+        self.driver.get(self.live_server_url)
+        self.assertIn('FORD3', self.driver.title)
