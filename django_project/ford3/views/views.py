@@ -1,3 +1,9 @@
-from django.shortcuts import render # noqa
+# coding=utf-8
 
-# Create your views here.
+from django.conf import settings
+from formtools.wizard.views import CookieWizardView
+
+
+class CampusWizard(CookieWizardView):
+
+    file_storage = settings.DEFAULT_FILE_STORAGE

@@ -23,12 +23,12 @@ class Campus(models.Model):
       blank=True,
       null=True,
       help_text='The spatial point position of the campus')
-    photo_url = models.CharField(
+    photo = models.FileField(
         blank=False,
         null=True,
-        unique=False,
-        help_text='',
-        max_length=255)
+        help_text='Representative photo of campus',
+        upload_to='campus/photo'
+    )
     telephone = models.CharField(
         blank=False,
         null=True,
