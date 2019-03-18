@@ -37,10 +37,10 @@ THUMBNAIL_ALIASES = {
 INSTALLED_APPS += (
     'pipeline',)
 
-MIDDLEWARE_CLASSES += (
+MIDDLEWARE += [
     # For rosetta localisation
     'django.middleware.locale.LocaleMiddleware',
-)
+]
 
 DEFAULT_FILE_STORAGE = (
     'django_hashedfilenamestorage.storage.HashedFilenameFileSystemStorage')

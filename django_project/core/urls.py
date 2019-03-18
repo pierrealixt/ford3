@@ -3,15 +3,15 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
-from django.http import HttpResponseServerError
-from django.template import loader, Context
+from django.shortcuts import render
+
 # from django.conf.urls.static import static
 
 admin.autodiscover()
 handler404 = 'base.views.error_views.custom_404'
 
 
-def handler500(request):
+def handler500(request, template_name='500.html', *args, **kwargs):
     """500 error handler which includes ``request`` in the context.
 
     See http://raven.readthedocs.org/en/latest/integrations/
@@ -23,14 +23,19 @@ def handler500(request):
     Context: None
     """
     # You need to create a 500.html template.
-    t = loader.get_template('500.html')
-    return HttpResponseServerError(t.render(Context({
-        'request': request,
-    })))
+    response = render(
+        request,
+        template_name,
+        context={
+            'request': request
+        },
+        status=500)
+    return response
 
 
 urlpatterns = [
-    # url(r'^site-admin/', include(admin.site.urls)),
+    url(r'^site-admin/', admin.site.urls),
+    url(r'^ford3/', include('ford3.urls')),
     url(r'^', include('base.urls')),
     # url(r'^grappelli/', include('grappelli.urls')),
     # url(r'^accounts/', include('allauth.urls')),
