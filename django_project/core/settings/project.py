@@ -33,9 +33,9 @@ LANGUAGES = (
 LOCALE_PATHS = (absolute_path('locale'),)
 
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
     # Add any custome middleware classes here
-) + MIDDLEWARE_CLASSES
+] + MIDDLEWARE
 
 # Project specific javascript files to be pipelined
 # For third party libs like jquery should go in contrib.py

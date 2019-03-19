@@ -1,0 +1,17 @@
+.nav-wizard-steps {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.form-actions {
+    text-align: center;
+}
+
+.form-steps-count {
+    padding-top: 35px;
+    vertical-align: middle;
+}
+
+.helptext {
+    font-size: 10pt;
+}

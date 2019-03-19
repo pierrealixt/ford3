@@ -4,6 +4,7 @@ from .base import *  # noqa
 INSTALLED_APPS = (
     'test_without_migrations',
     'grappelli',
+    'formtools',
 ) + INSTALLED_APPS
 
 INSTALLED_APPS += (
@@ -35,12 +36,13 @@ THUMBNAIL_ALIASES = {
 # Pipeline related settings
 
 INSTALLED_APPS += (
+    'crispy_forms',
     'pipeline',)
 
-MIDDLEWARE_CLASSES += (
+MIDDLEWARE += [
     # For rosetta localisation
     'django.middleware.locale.LocaleMiddleware',
-)
+]
 
 DEFAULT_FILE_STORAGE = (
     'django_hashedfilenamestorage.storage.HashedFilenameFileSystemStorage')
@@ -99,3 +101,6 @@ ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_SIGNUP_FORM_CLASS = 'base.forms.SignupForm'
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
+# Set default template pack
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

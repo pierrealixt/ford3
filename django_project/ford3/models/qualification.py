@@ -92,7 +92,9 @@ class Qualification(models.Model):
         unique=False,
         help_text='',
         default=0)
-    total_cost = models.IntegerField(
+    total_cost = models.DecimalField(
+        max_digits=20,
+        decimal_places=2,
         blank=False,
         null=False,
         unique=False,

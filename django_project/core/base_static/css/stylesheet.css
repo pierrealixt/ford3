@@ -13,6 +13,11 @@ body {
     --cg-orange-dorange: linear-gradient(to right, #FCB53B, #F99824);
 }
 
+html, body, .wrapper {
+    min-height: 100% !important;
+    height: 100%;
+}
+
 h1 {
     Font-family: Lato;
     Font-size: 70px;
