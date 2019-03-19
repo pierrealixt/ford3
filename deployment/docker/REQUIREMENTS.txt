@@ -15,3 +15,4 @@ django-allauth
 # support special characters
 Unidecode
 selenium==3.141.0
+django-formtools==2.1
