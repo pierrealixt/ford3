@@ -2,7 +2,6 @@ flake8==3.7.7
 pycodestyle==2.5.0
 pyflakes==2.1.1
 mccabe==0.6.1
-django-test-without-migrations==0.6
 django-nose
 coverage
 pylint
