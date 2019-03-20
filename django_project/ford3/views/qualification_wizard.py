@@ -5,7 +5,11 @@ from ford3.models import (
     Campus,
     Requirement
 )
-from ford3.forms.qualification import *
+from ford3.forms.qualification import (
+    QualificationDetailForm,
+    QualificationDurationFeesForm,
+    QualificationRequirementsForm
+)
 
 
 class QualificationFormWizard(CookieWizardView):
@@ -63,8 +67,8 @@ class QualificationFormWizard(CookieWizardView):
             vars(QualificationDurationFeesForm)['declared_fields']
         )
         qualification_form_fields = (
-            list(detail_form_fields.keys()) +
-            list(duration_fees_form_fields.keys())
+            list(detail_form_fields.keys()) + list(
+            duration_fees_form_fields.keys())
         )
         for qualification_field in qualification_form_fields:
             try:
@@ -91,7 +95,7 @@ class QualificationFormWizard(CookieWizardView):
                     )
             except AttributeError:
                 continue
-        requirement = Requirement.objects.create(
+        Requirement.objects.create(
             qualification_id=qualification,
             **requirement_fields
         )

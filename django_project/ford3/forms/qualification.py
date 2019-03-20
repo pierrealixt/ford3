@@ -111,8 +111,8 @@ class QualificationRequirementsForm(QualificationForm):
         label='Required Entrance Qualification:',
         help_text='*List from SAQA',
         required=False,
-        choices=[('', '-')] +
-                [(level, level.value) for level in SaqaQualificationLevel]
+        choices=[('', '-')] + [
+            (level, level.value) for level in SaqaQualificationLevel]
     )
 
     interview = forms.TypedChoiceField(
