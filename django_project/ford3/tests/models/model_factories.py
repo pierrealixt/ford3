@@ -79,7 +79,7 @@ class ModelFactories:
             id=new_id,
             provider_id=ModelFactories.get_provider_test_object(),
             name='Object Test Name',
-            photo_url= 'Is this going to be base64 encoded?',
+            photo='campus/photo/12345.jpg',
             telephone='+27137441422',
             email='test@campus.com',
             max_students_per_year='42',

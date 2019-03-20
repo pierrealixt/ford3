@@ -6,6 +6,7 @@ django-model-utils
 django-pipeline
 django-pure-pagination
 django-reversion
+django-formtools==2.1
 
 easy-thumbnails
 django-widget-tweaks
@@ -14,6 +15,8 @@ django-grappelli
 django-allauth
 # support special characters
 Unidecode
+
+# Production test related
 selenium==3.141.0
-django-formtools==2.1
 django-extensions==2.1.6
+django-test-without-migrations==0.6

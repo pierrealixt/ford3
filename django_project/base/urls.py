@@ -1,6 +1,6 @@
 # coding=utf-8
 """Urls for changelog application."""
-from django.conf.urls import url, include
+from django.conf.urls import url
 
 from .views import Home, custom_404
 
@@ -9,7 +9,6 @@ urlpatterns = [
     url(regex='^$',
         view=Home.as_view(),
         name='home'),
-    url(r'^', include('ford3.urls')),
 ]
 
 # Prevent cloudflare from showing an ad laden 404 with no context
