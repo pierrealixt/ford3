@@ -7,6 +7,7 @@ let addSubject = (e) => {
      console.log($clone.find('.col-form-label'));
      $clone.find('.col-form-label').html('Subject ' + subjectList + ':');
      $clone.find('.subject-list').attr('name',  '2-subject_' + subjectList);
+     $clone.find('.subject-minimum-score').val('');
      $clone.find('.subject-minimum-score').attr('name',  'subject-minimum-score_' + subjectList);
      $(e).remove();
      $('#subject-length').val(subjectList);

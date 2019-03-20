@@ -2,7 +2,9 @@ from django.shortcuts import redirect, Http404, get_object_or_404
 from formtools.wizard.views import CookieWizardView
 from ford3.models import (
     Qualification,
-    Requirement
+    Requirement,
+    Subject,
+    QualificationEntranceRequirementSubject
 )
 from ford3.forms.qualification import (
     QualificationDetailForm,
@@ -85,12 +87,35 @@ class QualificationFormWizard(CookieWizardView):
             **qualification_fields
         )
 
+        # Subjects
+        post_dict = self.request.POST
+        subject_length = post_dict.get('subject-length', 1)
+        for subject_index in range(int(subject_length)):
+            subject = None
+            subject_index += 1
+            subject_key = '2-subject'
+            minimum_score_key = 'subject-minimum-score'
+            if subject_index > 1:
+                subject_key += '_%s' % subject_index
+                minimum_score_key += '_%s' % subject_index
+            if subject_key in post_dict and post_dict[subject_key]:
+                subject = Subject.objects.get(
+                    id=post_dict[subject_key]
+                )
+            if subject and post_dict[minimum_score_key]:
+                QualificationEntranceRequirementSubject.objects.create(
+                    subject_id=subject,
+                    qualification_id=self.qualification,
+                    minimum_score=int(post_dict[minimum_score_key])
+                )
+
         # Requirement data
         requirement_form_fields = (
             vars(QualificationRequirementsForm)['declared_fields']
         )
         for requirement_field in requirement_form_fields.keys():
             try:
+                getattr(Requirement, requirement_field)
                 if form_data[requirement_field]:
                     requirement_fields[requirement_field] = (
                         form_data[requirement_field]
