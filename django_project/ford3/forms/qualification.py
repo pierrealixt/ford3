@@ -16,6 +16,11 @@ class QualificationForm(forms.Form):
 
 
 class QualificationDetailForm(QualificationForm):
+    name = forms.CharField(
+        label='Qualification name:',
+        required=True,
+        max_length=255
+    )
     short_description = forms.CharField(
         label='Short Description of this Qualification:',
         help_text='*120 character max',
@@ -47,7 +52,7 @@ class QualificationDetailForm(QualificationForm):
 
 
 class QualificationDurationFeesForm(QualificationForm):
-    full_time_qualification = forms.TypedChoiceField(
+    full_time = forms.TypedChoiceField(
         label='Full-Time Qualification:',
         coerce=lambda x: x == 'True',
         required=False,
@@ -55,7 +60,7 @@ class QualificationDurationFeesForm(QualificationForm):
         widget=forms.RadioSelect
     )
 
-    part_time_qualification = forms.TypedChoiceField(
+    part_time = forms.TypedChoiceField(
         label='Part-Time Qualification:',
         coerce=lambda x: x == 'True',
         required=False,
@@ -107,7 +112,7 @@ class QualificationRequirementsForm(QualificationForm):
         help_text='*List from SAQA',
         required=False,
         choices=[('', '-')] +
-                [(level.name, level.value) for level in SaqaQualificationLevel]
+                [(level, level.value) for level in SaqaQualificationLevel]
     )
 
     interview = forms.TypedChoiceField(
@@ -151,7 +156,7 @@ class QualificationRequirementsForm(QualificationForm):
         )
     )
 
-    qualification_require_subject = forms.TypedChoiceField(
+    require_certain_subjects = forms.TypedChoiceField(
         label='Does Qualification require certain subjects:',
         coerce=lambda x: x == 'True',
         required=False,

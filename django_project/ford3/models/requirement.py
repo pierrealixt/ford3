@@ -2,6 +2,7 @@ from django.db import models
 from ford3.models.qualification import Qualification
 from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
 
+
 class Requirement(models.Model):
     qualification_id = models.ForeignKey(
         Qualification,
@@ -53,6 +54,16 @@ class Requirement(models.Model):
         blank=True,
         null=True,
         help_text='')
+    require_aps_score = models.BooleanField(
+        blank=True,
+        null=True,
+        help_text='',
+        default=False)
+    require_certain_subjects = models.BooleanField(
+        blank=True,
+        null=True,
+        help_text='',
+        default=False)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.description

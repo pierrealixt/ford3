@@ -35,15 +35,9 @@ class Qualification(models.Model):
         unique=True,
         help_text='Key of qualification',
         primary_key=True)
-    qualification_id = models.IntegerField(
-        blank=False,
-        null=False,
-        unique=False,
-        help_text='')
     saqa_id = models.IntegerField(
-        blank=False,
-        null=False,
-        unique=False,
+        blank=True,
+        null=True,
         help_text='')
     name = models.CharField(
         blank=False,
