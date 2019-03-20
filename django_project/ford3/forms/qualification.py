@@ -1,5 +1,6 @@
 from django import forms
 from crispy_forms.helper import FormHelper
+from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
 
 
 class QualificationForm(forms.Form):
@@ -33,23 +34,33 @@ class QualificationDetailForm(QualificationForm):
     )
     nqf_level = forms.IntegerField(
         label='NQF Level on completion:',
-        help_text='*Populated from SAQA'
-    )
-    distance_learning = forms.BooleanField(
-        label='Distance Learning',
+        help_text='*Populated from SAQA',
         required=False
+    )
+    distance_learning = forms.TypedChoiceField(
+        label='Distance Learning:',
+        coerce=lambda x: x == 'True',
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect
     )
 
 
 class QualificationDurationFeesForm(QualificationForm):
-    full_time_qualification = forms.BooleanField(
-        label='Full-Time Qualification',
-        required=False
+    full_time_qualification = forms.TypedChoiceField(
+        label='Full-Time Qualification:',
+        coerce=lambda x: x == 'True',
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect
     )
 
-    part_time_qualification = forms.BooleanField(
-        label="Part-Time Qualification",
-        required=False
+    part_time_qualification = forms.TypedChoiceField(
+        label='Part-Time Qualification:',
+        coerce=lambda x: x == 'True',
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect
     )
 
     duration = forms.IntegerField(
@@ -74,6 +85,7 @@ class QualificationDurationFeesForm(QualificationForm):
 
     total_cost = forms.DecimalField(
         label='Total Cost of Qualification',
+        required=False,
         widget=forms.TextInput(
             attrs={'placeholder': 'ZAR'}
         )
@@ -84,29 +96,37 @@ class QualificationDurationFeesForm(QualificationForm):
         help_text='*Any extra comments on '
                   'how Costs of this Qualification work',
         required=False,
+        widget=forms.Textarea,
         max_length=255
     )
 
 
 class QualificationRequirementsForm(QualificationForm):
-
-    required_entrance_qualification = forms.ChoiceField(
+    min_nqf_level = forms.ChoiceField(
         label='Required Entrance Qualification:',
         help_text='*List from SAQA',
-        required=False
+        required=False,
+        choices=[('', '-')] +
+                [(level.name, level.value) for level in SaqaQualificationLevel]
     )
 
-    interview = forms.BooleanField(
-        label='Is there an interview',
-        required=False
+    interview = forms.TypedChoiceField(
+        label='Is there an interview:',
+        coerce=lambda x: x == 'True',
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect
     )
 
-    require_portfolio = forms.BooleanField(
-        label='Require portfolio',
-        required=False
+    portfolio = forms.TypedChoiceField(
+        label='Require a portfolio:',
+        coerce=lambda x: x == 'True',
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect
     )
 
-    portfolio_requirement = forms.CharField(
+    portfolio_comment = forms.CharField(
         label='What does the portfolio require:',
         required=False,
         widget=forms.Textarea(
@@ -115,12 +135,15 @@ class QualificationRequirementsForm(QualificationForm):
         max_length=120
     )
 
-    require_aps_score = forms.BooleanField(
-        label='Require an APS score',
-        required=False
+    require_aps_score = forms.TypedChoiceField(
+        label='Require an APS score:',
+        coerce=lambda x: x == 'True',
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect
     )
 
-    aps_link = forms.URLField(
+    aps_calculator_link = forms.URLField(
         label='Link to APS Calculator on Website [if any]:',
         required=False,
         widget=forms.TextInput(
@@ -128,7 +151,10 @@ class QualificationRequirementsForm(QualificationForm):
         )
     )
 
-    qualification_require_subject = forms.BooleanField(
-        label='Does Qualification require certain subjects',
-        required=False
+    qualification_require_subject = forms.TypedChoiceField(
+        label='Does Qualification require certain subjects:',
+        coerce=lambda x: x == 'True',
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect
     )
