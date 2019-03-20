@@ -2,7 +2,6 @@ from django.shortcuts import redirect, Http404, get_object_or_404
 from formtools.wizard.views import CookieWizardView
 from ford3.models import (
     Qualification,
-    Campus,
     Requirement
 )
 from ford3.forms.qualification import (
@@ -14,24 +13,25 @@ from ford3.forms.qualification import (
 
 class QualificationFormWizard(CookieWizardView):
     template_name = 'qualification_form.html'
-    campus = Campus.objects.none()
 
-    def qualification_campus(self, campus_id):
+    @property
+    def qualification(self):
         """
-        Get campus from campus id
-        :param campus_id: id of campus
-        :return: campus object
+        Get qualification from id
+        :return: qualification object
         """
-        if not campus_id:
+        qualification_id = self.request.GET.get('id', None)
+        if not qualification_id:
             raise Http404()
         return get_object_or_404(
-            Campus,
-            id=campus_id
+            Qualification,
+            id=qualification_id
         )
 
     def get(self, *args, **kwargs):
-        campus_id = self.request.GET.get('campus_id', None)
-        self.qualification_campus(campus_id)
+        qualification = self.qualification
+        if not qualification:
+            raise Http404()
         return super(QualificationFormWizard, self).get(*args, **kwargs)
 
     def get_context_data(self, form, **kwargs):
@@ -78,8 +78,10 @@ class QualificationFormWizard(CookieWizardView):
                 )
             except AttributeError:
                 continue
-        qualification = Qualification.objects.create(
-            campus_id=self.campus,
+
+        Qualification.objects.filter(
+            id=self.qualification.id
+        ).update(
             **qualification_fields
         )
 
@@ -96,13 +98,11 @@ class QualificationFormWizard(CookieWizardView):
             except AttributeError:
                 continue
         Requirement.objects.create(
-            qualification_id=qualification,
+            qualification_id=self.qualification,
             **requirement_fields
         )
 
     def done(self, form_list, **kwargs):
-        campus_id = self.request.GET.get('campus_id', None)
-        self.campus = self.qualification_campus(campus_id)
         form_data = dict()
         for form in form_list:
             form_data.update(form.cleaned_data)

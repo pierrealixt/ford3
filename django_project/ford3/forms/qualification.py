@@ -16,11 +16,6 @@ class QualificationForm(forms.Form):
 
 
 class QualificationDetailForm(QualificationForm):
-    name = forms.CharField(
-        label='Qualification name:',
-        required=True,
-        max_length=255
-    )
     short_description = forms.CharField(
         label='Short Description of this Qualification:',
         help_text='*120 character max',
