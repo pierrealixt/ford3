@@ -17,9 +17,9 @@
                     {% for form_name in form_name_list %}
                         <li class="nav-item">
                             <a class="nav-link
-                            {% if forloop.counter ==  wizard.steps.step1 %}
+                            {% if forloop.counter == wizard.steps.step1 %}
                                 active
-                            {% endif %}" href="#">
+                            {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}" href="#">
                                 <h4 class="list-group-item-heading">
                                     Step {{ forloop.counter }}</h4>
                                 <p class="list-group-item-text">{{ form_name }}</p>

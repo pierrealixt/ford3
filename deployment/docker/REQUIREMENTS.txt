@@ -16,3 +16,4 @@ django-allauth
 Unidecode
 selenium==3.141.0
 django-formtools==2.1
+django-extensions==2.1.6

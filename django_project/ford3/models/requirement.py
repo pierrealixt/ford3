@@ -34,7 +34,7 @@ class Requirement(models.Model):
         null=False,
         unique=False,
         help_text='')
-    min_qualification = models.IntegerField(
+    min_nqf_level = models.IntegerField(
         blank=False,
         null=False,
         unique=False,

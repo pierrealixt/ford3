@@ -37,6 +37,7 @@ THUMBNAIL_ALIASES = {
 
 INSTALLED_APPS += (
     'crispy_forms',
+    'django_extensions',
     'pipeline',)
 
 MIDDLEWARE += [
@@ -104,3 +105,7 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
 # Set default template pack
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}

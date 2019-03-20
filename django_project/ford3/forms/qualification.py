@@ -86,3 +86,49 @@ class QualificationDurationFeesForm(QualificationForm):
         required=False,
         max_length=255
     )
+
+
+class QualificationRequirementsForm(QualificationForm):
+
+    required_entrance_qualification = forms.ChoiceField(
+        label='Required Entrance Qualification:',
+        help_text='*List from SAQA',
+        required=False
+    )
+
+    interview = forms.BooleanField(
+        label='Is there an interview',
+        required=False
+    )
+
+    require_portfolio = forms.BooleanField(
+        label='Require portfolio',
+        required=False
+    )
+
+    portfolio_requirement = forms.CharField(
+        label='What does the portfolio require:',
+        required=False,
+        widget=forms.Textarea(
+            attrs={'rows': '5'}
+        ),
+        max_length=120
+    )
+
+    require_aps_score = forms.BooleanField(
+        label='Require an APS score',
+        required=False
+    )
+
+    aps_link = forms.URLField(
+        label='Link to APS Calculator on Website [if any]:',
+        required=False,
+        widget=forms.TextInput(
+            attrs={'placeholder': 'www.example/aps.com'}
+        )
+    )
+
+    qualification_require_subject = forms.BooleanField(
+        label='Does Qualification require certain subjects',
+        required=False
+    )
