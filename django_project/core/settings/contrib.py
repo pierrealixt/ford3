@@ -4,6 +4,7 @@ from .base import *  # noqa
 INSTALLED_APPS = (
     'test_without_migrations',
     'grappelli',
+    'formtools',
 ) + INSTALLED_APPS
 
 INSTALLED_APPS += (
@@ -35,6 +36,8 @@ THUMBNAIL_ALIASES = {
 # Pipeline related settings
 
 INSTALLED_APPS += (
+    'crispy_forms',
+    'django_extensions',
     'pipeline',)
 
 MIDDLEWARE += [
@@ -99,3 +102,10 @@ ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_SIGNUP_FORM_CLASS = 'base.forms.SignupForm'
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
+# Set default template pack
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}

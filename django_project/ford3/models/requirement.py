@@ -1,5 +1,6 @@
 from django.db import models
 from ford3.models.qualification import Qualification
+from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
 
 
 class Requirement(models.Model):
@@ -7,7 +8,7 @@ class Requirement(models.Model):
         Qualification,
         on_delete=models.CASCADE)
 
-    id = models.IntegerField(
+    id = models.AutoField(
         blank=False,
         null=False,
         unique=True,
@@ -16,47 +17,53 @@ class Requirement(models.Model):
     description = models.CharField(
         blank=True,
         null=True,
-        unique=False,
         help_text='',
         max_length=255)
     assessment = models.BooleanField(
-        blank=False,
-        null=False,
-        unique=False,
-        help_text='')
+        blank=True,
+        null=True,
+        help_text='',
+        default=False)
     interview = models.BooleanField(
-        blank=False,
-        null=False,
-        unique=False,
-        help_text='')
+        blank=True,
+        null=True,
+        help_text='',
+        default=False)
     admission_point_score = models.IntegerField(
-        blank=False,
-        null=False,
-        unique=False,
+        blank=True,
+        null=True,
         help_text='')
-    min_qualification = models.IntegerField(
-        blank=False,
-        null=False,
-        unique=False,
-        help_text='')
+    min_nqf_level = models.CharField(
+        blank=True,
+        null=True,
+        help_text='',
+        max_length=120,
+        choices=[(level, level.value) for level in SaqaQualificationLevel]
+    )
     portfolio = models.BooleanField(
-        blank=False,
-        null=False,
-        unique=False,
+        blank=True,
+        null=True,
         help_text='',
         default=False)
     portfolio_comment = models.CharField(
-        blank=False,
+        blank=True,
         null=True,
-        unique=False,
         help_text='',
         max_length=255)
-    aps_calculator_link = models.CharField(
-        blank=False,
+    aps_calculator_link = models.URLField(
+        blank=True,
         null=True,
-        unique=False,
+        help_text='')
+    require_aps_score = models.BooleanField(
+        blank=True,
+        null=True,
         help_text='',
-        max_length=255)
+        default=False)
+    require_certain_subjects = models.BooleanField(
+        blank=True,
+        null=True,
+        help_text='',
+        default=False)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.description
