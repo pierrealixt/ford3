@@ -1,7 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
-from ford3.models import Interest
+from ford3.models import Interest, Occupation
 
 
 class QualificationForm(forms.Form):
@@ -163,11 +163,58 @@ class QualificationRequirementsForm(QualificationForm):
 
 class QualificationInterestsAndJobsForm(QualificationForm):
 
-    interests = forms.ModelMultipleChoiceField(
+    interest_list = forms.ModelMultipleChoiceField(
         label='Choose three interests associated to this Qualification:',
         queryset=Interest.objects.all(),
         required=False,
         widget=forms.SelectMultiple(
-            attrs={'data-background-color': 'turquoise'}
+            attrs={
+                'data-background-color': 'turquoise',
+                'data-max-selected': '3'
+            }
         )
+    )
+
+    occupation_list = forms.ModelMultipleChoiceField(
+        label=(
+            'Choose up to five Occupations that '
+            'this Qualification could prepare you for:'
+        ),
+        queryset=Occupation.objects.all(),
+        required=False,
+        widget=forms.SelectMultiple(
+            attrs={
+                'data-background-color': 'gray',
+                'data-max-selected': '5'
+            }
+        )
+    )
+
+    critical_skill = forms.TypedChoiceField(
+        label=(
+            'Does the qualification prepare for a '
+            '<b>critical skills</b> occupation:'
+        ),
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect
+    )
+
+    green_occupation = forms.TypedChoiceField(
+        label=(
+            'Does the qualification prepare for a <b>green</b> occupation:'
+        ),
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect
+    )
+
+    high_demand_occupation = forms.TypedChoiceField(
+        label=(
+            'Does the qualification '
+            'prepare for a <b>high demand</b> occupation:'
+        ),
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect
     )

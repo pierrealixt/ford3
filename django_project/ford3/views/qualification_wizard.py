@@ -68,9 +68,13 @@ class QualificationFormWizard(CookieWizardView):
         duration_fees_form_fields = (
             vars(QualificationDurationFeesForm)['declared_fields']
         )
+        interests_and_jobs_form_fields = (
+            vars(QualificationInterestsAndJobsForm)['declared_fields']
+        )
         qualification_form_fields = (
-            list(detail_form_fields.keys()) + list(
-            duration_fees_form_fields.keys())
+            list(detail_form_fields.keys()
+                ) + list(duration_fees_form_fields.keys()
+                ) + list(interests_and_jobs_form_fields.keys())
         )
         for qualification_field in qualification_form_fields:
             try:
@@ -88,11 +92,18 @@ class QualificationFormWizard(CookieWizardView):
         )
 
         # Update interests
-        interests = form_data['interests']
+        interests = form_data['interest_list']
         for interest in self.qualification.interests.all():
             self.qualification.interests.remove(interest)
         for interest in interests:
             self.qualification.interests.add(interest)
+
+        # Update occupations
+        occupations = form_data['occupation_list']
+        for occupation in self.qualification.occupations.all():
+            self.qualification.occupations.remove(occupation)
+        for occupation in occupations:
+            self.qualification.occupations.add(occupation)
 
         # Requirement data
         requirement_form_fields = (

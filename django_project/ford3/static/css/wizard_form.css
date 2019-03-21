@@ -84,3 +84,11 @@
 .multiple-select-square.turquoise.odd {
     background-color: rgba(122, 205, 207, 0.25);
 }
+
+.multiple-select-square.gray {
+    background-color: #efeee9;
+}
+
+.multiple-select-square.gray.odd {
+    background-color: #d5d5d5;
+}
