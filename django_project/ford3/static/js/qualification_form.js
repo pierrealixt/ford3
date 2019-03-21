@@ -3,7 +3,7 @@ let addSubject = (e) => {
      subjectList++;
      let $row = $(e).parent().parent().parent();
      let $clone = $row.clone();
-     console.log($clone.find('.col-form-label'));
+     $row.parent().append($clone);
      $clone.find('.col-form-label').html('Subject ' + subjectList + ':');
      $clone.find('.subject-list').attr('name',  '2-subject_' + subjectList);
      $clone.find('.subject-minimum-score').val('');
