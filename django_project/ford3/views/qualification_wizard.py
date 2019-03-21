@@ -90,24 +90,29 @@ class QualificationFormWizard(CookieWizardView):
         # Subjects
         post_dict = self.request.POST
         subject_length = post_dict.get('subject-length', 1)
-        for subject_index in range(int(subject_length)):
+        for subject_index in range(1, int(subject_length) + 1):
             subject = None
-            subject_index += 1
             subject_key = '2-subject'
             minimum_score_key = 'subject-minimum-score'
             if subject_index > 1:
-                subject_key += '_%s' % subject_index
-                minimum_score_key += '_%s' % subject_index
+                subject_key += f'_{subject_index}'
+                minimum_score_key += f'_{subject_index}'
             if subject_key in post_dict and post_dict[subject_key]:
                 subject = Subject.objects.get(
                     id=post_dict[subject_key]
                 )
             if subject and post_dict[minimum_score_key]:
-                QualificationEntranceRequirementSubject.objects.create(
-                    subject_id=subject,
-                    qualification_id=self.qualification,
-                    minimum_score=int(post_dict[minimum_score_key])
+                requirement_subjects, created = (
+                    QualificationEntranceRequirementSubject.objects.
+                    get_or_create(
+                        subject_id=subject,
+                        qualification_id=self.qualification,
+                    )
                 )
+                requirement_subjects.minimum_score = (
+                    int(post_dict[minimum_score_key])
+                )
+                requirement_subjects.save()
 
         # Requirement data
         requirement_form_fields = (
