@@ -10,7 +10,7 @@ django-formtools==2.1
 
 easy-thumbnails
 django-widget-tweaks
-raven
+raven==6.10.0
 django-grappelli
 django-allauth
 # support special characters
