@@ -3,7 +3,6 @@ let addSubject = (e) => {
      subjectList++;
      let $row = $(e).parent().parent().parent();
      let $clone = $row.clone();
-     $row.parent().append($clone);
      console.log($clone.find('.col-form-label'));
      $clone.find('.col-form-label').html('Subject ' + subjectList + ':');
      $clone.find('.subject-list').attr('name',  '2-subject_' + subjectList);
