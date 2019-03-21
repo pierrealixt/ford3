@@ -1,5 +1,5 @@
 let multipleSelectedLists = {};
-let interestSelectedHandler = (e) => {
+let multipleSelectHandler = (e) => {
     let $div = $(e);
     let $listSelectedDiv = $div.parent().find('.list-selected');
     let inputName = $listSelectedDiv.data('name');
@@ -74,7 +74,7 @@ let addSubject = (e) => {
                 if (childrenIndex % 2) {
                     oddClass = 'odd';
                 }
-                $(selectDiv).parent().append('<span onclick="interestSelectedHandler(this)" class="multiple-select-square ' + backgroundColorClass + ' ' + oddClass + '" data-value="' + $(this).val() + '">' + $(this).text() + '</span>');
+                $(selectDiv).parent().append('<span onclick="multipleSelectHandler(this)" class="multiple-select-square ' + backgroundColorClass + ' ' + oddClass + '" data-value="' + $(this).val() + '">' + $(this).text() + '</span>');
                 childrenIndex++;
             });
         });
