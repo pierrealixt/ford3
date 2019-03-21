@@ -4,13 +4,15 @@ from ford3.models import (
     Qualification,
     Requirement,
     Subject,
-    QualificationEntranceRequirementSubject
+    QualificationEntranceRequirementSubject,
+    QualificationEvent
 )
 from ford3.forms.qualification import (
     QualificationDetailForm,
     QualificationDurationFeesForm,
     QualificationRequirementsForm,
-    QualificationInterestsAndJobsForm
+    QualificationInterestsAndJobsForm,
+    QualificationImportantDatesForm,
 )
 
 
@@ -44,6 +46,7 @@ class QualificationFormWizard(CookieWizardView):
             'Duration & Fees',
             'Requirements',
             'Interest & Jobs',
+            'Important Dates',
         ]
         return context
 
@@ -147,10 +150,31 @@ class QualificationFormWizard(CookieWizardView):
                     )
             except AttributeError:
                 continue
-        Requirement.objects.create(
-            qualification_id=self.qualification,
-            **requirement_fields
+        if requirement_form_fields:
+            Requirement.objects.create(
+                qualification_id=self.qualification,
+                **requirement_fields
+            )
+
+        # Qualification events
+        qualification_event_form_fields = (
+            vars(QualificationImportantDatesForm)['declared_fields']
         )
+        qualification_event_fields = {}
+        for qualification_event in qualification_event_form_fields.keys():
+            try:
+                getattr(QualificationEvent, qualification_event)
+                if form_data[qualification_event]:
+                    qualification_event_fields[qualification_event] = (
+                        form_data[qualification_event]
+                    )
+            except AttributeError:
+                continue
+        if qualification_event_fields:
+            QualificationEvent.objects.create(
+                qualification_id=self.qualification,
+                **qualification_event_fields
+            )
 
     def done(self, form_list, **kwargs):
         form_data = dict()

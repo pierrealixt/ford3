@@ -25,29 +25,39 @@ let multipleSelectHandler = (e) => {
         }
     }
     if (updateHiddenInputs) {
-        $listSelectedDiv.html('');
-        for (let i = 0; i < multipleSelectedLists[inputName].length; i++) {
-            let selectedValue = multipleSelectedLists[inputName][i];
-            $listSelectedDiv.append('<input type="hidden" name="' + inputName + '" value="' + selectedValue + '">')
-        }
+        updateListSelected($listSelectedDiv, inputName);
+    }
+};
+
+let updateListSelected = (listSelectedHiddenInput, inputName) => {
+    listSelectedHiddenInput.html('');
+    if (!multipleSelectedLists.hasOwnProperty(inputName)) {
+        return false;
+    }
+    for (let i = 0; i < multipleSelectedLists[inputName].length; i++) {
+        let selectedValue = multipleSelectedLists[inputName][i];
+        listSelectedHiddenInput.append('<input type="hidden" name="' + inputName + '" value="' + selectedValue + '">')
     }
 };
 
 let subjectList = 1;
 let addSubject = (e) => {
-     subjectList++;
-     let $row = $(e).parent().parent().parent();
-     let $clone = $row.clone();
-     $row.parent().append($clone);
-     $clone.find('.col-form-label').html('Subject ' + subjectList + ':');
-     $clone.find('.subject-list').attr('name',  '2-subject_' + subjectList);
-     $clone.find('.subject-minimum-score').val('');
-     $clone.find('.subject-minimum-score').attr('name',  'subject-minimum-score_' + subjectList);
-     $(e).remove();
-     $('#subject-length').val(subjectList);
+    subjectList++;
+    let $row = $(e).parent().parent().parent();
+    let $clone = $row.clone();
+    $row.parent().append($clone);
+    $clone.find('.col-form-label').html('Subject ' + subjectList + ':');
+    $clone.find('.subject-list').attr('name', '2-subject_' + subjectList);
+    $clone.find('.subject-minimum-score').val('');
+    $clone.find('.subject-minimum-score').attr('name', 'subject-minimum-score_' + subjectList);
+    $(e).remove();
+    $('#subject-length').val(subjectList);
 };
 
 (function () {
+    // Datepicker
+    $(".dateinput").datepicker();
+
     // Show sidebar
     let sidebar = document.getElementById('sidebar');
     sidebar.classList.toggle('active');
@@ -62,6 +72,9 @@ let addSubject = (e) => {
         $selectMultiple.parent().prev().removeClass('col-md-3').addClass('col-md-12');
         $.each($selectMultiple, function (index, selectDiv) {
             let inputName = $(selectDiv).attr('name');
+            if (!multipleSelectedLists.hasOwnProperty(inputName)) {
+                multipleSelectedLists[inputName] = [];
+            }
             let backgroundColorClass = $(selectDiv).data('background-color');
             let maxSelected = $(selectDiv).data('max-selected');
             $(selectDiv).attr('name', '');
@@ -71,12 +84,20 @@ let addSubject = (e) => {
             let childrenIndex = 1;
             $(selectDiv).children().each(function () {
                 let oddClass = '';
+                let selectedClass = '';
+                if ($(this).is(':selected')) {
+                    multipleSelectedLists[inputName].push(parseInt($(this).val()));
+                    selectedClass = 'selected';
+                }
                 if (childrenIndex % 2) {
                     oddClass = 'odd';
                 }
-                $(selectDiv).parent().append('<span onclick="multipleSelectHandler(this)" class="multiple-select-square ' + backgroundColorClass + ' ' + oddClass + '" data-value="' + $(this).val() + '">' + $(this).text() + '</span>');
+                $(selectDiv).parent().append(
+                    '<span onclick="multipleSelectHandler(this)" class="multiple-select-square ' + backgroundColorClass + ' ' + oddClass + ' ' + selectedClass + '" data-value="' + $(this).val() + '">' + $(this).text() + '</span>'
+                );
                 childrenIndex++;
             });
+            updateListSelected($(selectDiv).parent().find('.list-selected'), inputName);
         });
     }
 

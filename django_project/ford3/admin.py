@@ -8,7 +8,8 @@ from ford3.models import (
     Interest,
     Occupation,
     Subject,
-    SecondaryInstitutionType
+    SecondaryInstitutionType,
+    QualificationEvent
 )
 
 # Register your models here.
@@ -21,3 +22,4 @@ admin.site.register(Interest)
 admin.site.register(Occupation)
 admin.site.register(Subject)
 admin.site.register(SecondaryInstitutionType)
+admin.site.register(QualificationEvent)
