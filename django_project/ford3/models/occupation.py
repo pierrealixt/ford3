@@ -8,11 +8,10 @@ class Occupation(models.Model):
         unique=False,
         help_text='',
         max_length=255)
-    description = models.CharField(
+    description = models.TextField(
         blank=True,
         null=True,
-        help_text='',
-        max_length=500)
+        help_text='')
 
     pass
 
