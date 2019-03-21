@@ -4,7 +4,8 @@ from ford3.models import (
     Qualification,
     QualificationEntranceRequirementSubject,
     Provider,
-    Requirement
+    Requirement,
+    Interest
 )
 
 # Register your models here.
@@ -13,3 +14,4 @@ admin.site.register(Provider)
 admin.site.register(Qualification)
 admin.site.register(QualificationEntranceRequirementSubject)
 admin.site.register(Requirement)
+admin.site.register(Interest)

@@ -1,6 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
+from ford3.models import Interest
 
 
 class QualificationForm(forms.Form):
@@ -157,4 +158,16 @@ class QualificationRequirementsForm(QualificationForm):
         required=False,
         choices=((True, 'Yes'), (False, 'No')),
         widget=forms.RadioSelect
+    )
+
+
+class QualificationInterestsAndJobsForm(QualificationForm):
+
+    interests = forms.ModelMultipleChoiceField(
+        label='Choose three interests associated to this Qualification:',
+        queryset=Interest.objects.all(),
+        required=False,
+        widget=forms.SelectMultiple(
+            attrs={'data-background-color': 'turquoise'}
+        )
     )

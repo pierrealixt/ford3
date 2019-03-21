@@ -7,7 +7,8 @@ from ford3.models import (
 from ford3.forms.qualification import (
     QualificationDetailForm,
     QualificationDurationFeesForm,
-    QualificationRequirementsForm
+    QualificationRequirementsForm,
+    QualificationInterestsAndJobsForm
 )
 
 
@@ -39,7 +40,8 @@ class QualificationFormWizard(CookieWizardView):
         context['form_name_list'] = [
             'Details',
             'Duration & Fees',
-            'Requirements'
+            'Requirements',
+            'Interest & Jobs',
         ]
         return context
 
@@ -84,6 +86,13 @@ class QualificationFormWizard(CookieWizardView):
         ).update(
             **qualification_fields
         )
+
+        # Update interests
+        interests = form_data['interests']
+        for interest in self.qualification.interests.all():
+            self.qualification.interests.remove(interest)
+        for interest in interests:
+            self.qualification.interests.add(interest)
 
         # Requirement data
         requirement_form_fields = (
