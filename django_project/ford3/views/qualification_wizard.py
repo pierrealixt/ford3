@@ -2,7 +2,9 @@ from django.shortcuts import redirect, Http404, get_object_or_404
 from formtools.wizard.views import CookieWizardView
 from ford3.models import (
     Qualification,
-    Requirement
+    Requirement,
+    Subject,
+    QualificationEntranceRequirementSubject
 )
 from ford3.forms.qualification import (
     QualificationDetailForm,
@@ -85,12 +87,40 @@ class QualificationFormWizard(CookieWizardView):
             **qualification_fields
         )
 
+        # Subjects
+        post_dict = self.request.POST
+        subject_length = post_dict.get('subject-length', 1)
+        for subject_index in range(1, int(subject_length) + 1):
+            subject = None
+            subject_key = '2-subject'
+            minimum_score_key = 'subject-minimum-score'
+            if subject_index > 1:
+                subject_key += f'_{subject_index}'
+                minimum_score_key += f'_{subject_index}'
+            if subject_key in post_dict and post_dict[subject_key]:
+                subject = Subject.objects.get(
+                    id=post_dict[subject_key]
+                )
+            if subject and post_dict[minimum_score_key]:
+                requirement_subjects, created = (
+                    QualificationEntranceRequirementSubject.objects.
+                    get_or_create(
+                        subject_id=subject,
+                        qualification_id=self.qualification,
+                    )
+                )
+                requirement_subjects.minimum_score = (
+                    int(post_dict[minimum_score_key])
+                )
+                requirement_subjects.save()
+
         # Requirement data
         requirement_form_fields = (
             vars(QualificationRequirementsForm)['declared_fields']
         )
         for requirement_field in requirement_form_fields.keys():
             try:
+                getattr(Requirement, requirement_field)
                 if form_data[requirement_field]:
                     requirement_fields[requirement_field] = (
                         form_data[requirement_field]

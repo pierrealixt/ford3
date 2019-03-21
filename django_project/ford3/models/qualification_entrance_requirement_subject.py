@@ -11,19 +11,13 @@ class QualificationEntranceRequirementSubject(models.Model):
         Subject,
         on_delete=models.PROTECT)
 
-    id = models.IntegerField(
-        blank=False,
-        null=False,
-        unique=True,
-        help_text='',
-        primary_key=True)
     minimum_score = models.IntegerField(
         blank=False,
         null=False,
         unique=False,
         help_text='')
     required = models.BooleanField(
-        blank=False,
-        null=False,
-        unique=False,
+        blank=True,
+        null=True,
+        default=False,
         help_text='')
