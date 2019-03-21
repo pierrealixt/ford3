@@ -9,7 +9,8 @@ from .project import *  # noqa
 try:
     from .secret import *  # noqa
 except ImportError:
-    SENTRY_KEY = None
+    import os
+    SENTRY_KEY = os.environ['SENTRY_KEY']
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
