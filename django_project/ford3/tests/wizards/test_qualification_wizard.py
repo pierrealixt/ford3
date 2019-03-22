@@ -2,6 +2,9 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from ford3.tests.models.model_factories import ModelFactories
 from ford3.models.qualification import Qualification
+from ford3.models.qualification_entrance_requirement_subject import (
+    QualificationEntranceRequirementSubject
+)
 from ford3.views.qualification_wizard import QualificationFormWizardDataProcess
 
 
@@ -40,12 +43,20 @@ class TestQualificationWizard(TestCase):
         'date_start': None,
         'date_end': None,
         'other_event': '',
-        'event_date': None
+        'event_date': None,
+        'subject_list': '1,2',
+        'minimum_score_list': '-1,2'
     }
 
     def setUp(self):
         self.qualification = ModelFactories.get_qualification_test_object(
             new_id=1
+        )
+        self.subject_1 = ModelFactories.get_subject_test_object(
+            new_id=1
+        )
+        self.subject_2 = ModelFactories.get_subject_test_object(
+            new_id=2
         )
         self.qualification_data_process = QualificationFormWizardDataProcess(
             qualification=self.qualification,
@@ -111,3 +122,15 @@ class TestQualificationWizard(TestCase):
                 qualification_value,
                 wizard_form_data
             )
+
+    def test_add_subjects_to_qualification(self):
+        self.qualification_data_process.add_subjects(
+            form_data=self.wizard_form_data
+        )
+        subjects = QualificationEntranceRequirementSubject.objects.filter(
+            qualification_id=self.qualification,
+        )
+        self.assertEqual(subjects.count(), 2)
+        self.assertTrue(QualificationEntranceRequirementSubject.objects.filter(
+            minimum_score=2
+        ).exists())

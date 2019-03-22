@@ -67,6 +67,38 @@ class QualificationFormWizardDataProcess(object):
                 continue
         return qualification_fields
 
+    def add_subjects(self, form_data):
+        """
+        Add subjects to qualification
+        :param form_data: dict of form data
+        """
+        subject_list = form_data['subject_list'].split(',')
+        minimum_score_list = form_data['minimum_score_list'].split(',')
+        for index, subject_value in enumerate(subject_list):
+            try:
+                subject = Subject.objects.get(
+                    id=subject_value
+                )
+            except Subject.DoesNotExist:
+                continue
+            requirement_subjects, created = (
+                QualificationEntranceRequirementSubject.objects.
+                get_or_create(
+                    subject_id=subject,
+                    qualification_id=self.qualification,
+                )
+            )
+            try:
+                minimum_score_value = int(minimum_score_list[index])
+            except IndexError:
+                continue
+            if minimum_score_value == -1:
+                continue
+            requirement_subjects.minimum_score = (
+                minimum_score_value
+            )
+            requirement_subjects.save()
+
     def process_data(self, form_data):
         """
         Process qualification form data then update qualification
@@ -107,30 +139,7 @@ class QualificationFormWizardDataProcess(object):
             self.qualification.occupations.add(occupation)
 
         # Subjects
-        subject_length = self.post_dict.get('subject-length', 1)
-        for subject_index in range(1, int(subject_length) + 1):
-            subject = None
-            subject_key = '2-subject'
-            minimum_score_key = 'subject-minimum-score'
-            if subject_index > 1:
-                subject_key += f'_{subject_index}'
-                minimum_score_key += f'_{subject_index}'
-            if subject_key in self.post_dict and self.post_dict[subject_key]:
-                subject = Subject.objects.get(
-                    id=self.post_dict[subject_key]
-                )
-            if subject and self.post_dict[minimum_score_key]:
-                requirement_subjects, created = (
-                    QualificationEntranceRequirementSubject.objects.
-                    get_or_create(
-                        subject_id=subject,
-                        qualification_id=self.qualification,
-                    )
-                )
-                requirement_subjects.minimum_score = (
-                    int(self.post_dict[minimum_score_key])
-                )
-                requirement_subjects.save()
+        self.add_subjects(form_data)
 
         # Requirement data
         requirement_form_fields = (

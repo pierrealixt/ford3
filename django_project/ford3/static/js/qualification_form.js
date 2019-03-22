@@ -1,5 +1,6 @@
 let multipleSelectedLists = {};
 let multipleSelectHandler = (e) => {
+    // Handler for multiple select changed event
     let $div = $(e);
     let $listSelectedDiv = $div.parent().find('.list-selected');
     let inputName = $listSelectedDiv.data('name');
@@ -30,6 +31,7 @@ let multipleSelectHandler = (e) => {
 };
 
 let updateListSelected = (listSelectedHiddenInput, inputName) => {
+    // Function to update multiple list selected
     listSelectedHiddenInput.html('');
     if (!multipleSelectedLists.hasOwnProperty(inputName)) {
         return false;
@@ -41,17 +43,61 @@ let updateListSelected = (listSelectedHiddenInput, inputName) => {
 };
 
 let subjectList = 1;
-let addSubject = (e) => {
+let addSubject = (e, selectedValue = '', minimumScoreValue = '') => {
+    // Function to add new subject
     subjectList++;
     let $row = $(e).parent().parent().parent();
     let $clone = $row.clone();
     $row.parent().append($clone);
+    let $subjectInput = $clone.find('.subject-list');
+    $subjectInput.change(subjectChangedHandler);
+    $subjectInput.val(selectedValue);
+    let $minimumScoreInput = $clone.find('.subject-minimum-score');
+    $minimumScoreInput.change(minimumScoreChangedHandler);
     $clone.find('.col-form-label').html('Subject ' + subjectList + ':');
     $clone.find('.subject-list').attr('name', '2-subject_' + subjectList);
-    $clone.find('.subject-minimum-score').val('');
+    $clone.find('.subject-minimum-score').val(minimumScoreValue);
     $clone.find('.subject-minimum-score').attr('name', 'subject-minimum-score_' + subjectList);
-    $(e).remove();
-    $('#subject-length').val(subjectList);
+    $row.find('.add-subject-btn').remove();
+};
+
+let subjectChangedHandler = (e) => {
+    // Handler for Subject select changed event
+    let $target = $(e.target);
+    let selectedValue = $target.find(':selected').val();
+    let $subjectListInput = $('#subject-list');
+    customSelectChangedHandler($target, $subjectListInput, selectedValue);
+};
+
+let minimumScoreChangedHandler = (e) => {
+    // Handler for minimum score input changed event
+    let $target = $(e.target);
+    let selectedValue = $target.val();
+    let $subjectListInput = $('#minimum-score-list');
+    customSelectChangedHandler($target, $subjectListInput, selectedValue);
+};
+
+let customSelectChangedHandler = ($target, $hiddenListInput, selectedValue) => {
+    // This is for subject and minimum score div
+    let subjectListInputValue = $hiddenListInput.val().split(',');
+
+    // Get index
+    let subjectIndex = 0;
+    let name = $target.attr('name');
+    let splittedName = name.split('_');
+    if (splittedName.length > 1) {
+        subjectIndex = splittedName[1] - 1;
+    }
+    if (subjectIndex > subjectListInputValue.length - 1) {
+        for (let i = subjectListInputValue.length - 1; i < subjectIndex; i++) {
+            subjectListInputValue.push('-1');
+        }
+    }
+    if (!selectedValue) {
+        selectedValue = -1;
+    }
+    subjectListInputValue[subjectIndex] = selectedValue;
+    $hiddenListInput.val(subjectListInputValue.join(','));
 };
 
 (function () {
@@ -93,7 +139,8 @@ let addSubject = (e) => {
                     oddClass = 'odd';
                 }
                 $(selectDiv).parent().append(
-                    '<span onclick="multipleSelectHandler(this)" class="multiple-select-square ' + backgroundColorClass + ' ' + oddClass + ' ' + selectedClass + '" data-value="' + $(this).val() + '">' + $(this).text() + '</span>'
+                    '<span onclick="multipleSelectHandler(this)" class="multiple-select-square ' +
+                    backgroundColorClass + ' ' + oddClass + ' ' + selectedClass + '" data-value="' + $(this).val() + '">' + $(this).text() + '</span>'
                 );
                 childrenIndex++;
             });
@@ -103,11 +150,39 @@ let addSubject = (e) => {
 
     // Subject form
     let subjectInput = $('.subject-list');
+    let minimumScoreList = $('#minimum-score-list').val().split(',');
     if (subjectInput.length) {
         let subjectInputParent = subjectInput.parent();
+        subjectInput.change(subjectChangedHandler);
         subjectInputParent.parent().parent().before().append('<input type="hidden" name="subject-length" id="subject-length" value=1>');
         subjectInputParent.addClass('row');
-        subjectInputParent.append('<div class="col-md-4"><input type="number" name="subject-minimum-score" placeholder="Minimum Score" class="textInput form-control subject-minimum-score"></div>');
+        let minimumScoreValue = '';
+        if (typeof minimumScoreList[0] !== 'undefined') {
+            minimumScoreValue = minimumScoreList[0];
+        }
+        subjectInputParent.append('<div class="col-md-4"><input type="number" name="subject-minimum-score" placeholder="Minimum Score" class="textInput form-control subject-minimum-score" value="' + minimumScoreValue + '"></div>');
         subjectInputParent.append('<div class="col-md-4"><button type="button" class="add-subject-btn btn btn-default" onclick="addSubject(this)">Add Subject</button></div>')
+        $('.subject-minimum-score').change(minimumScoreChangedHandler);
     }
+    let subjectListHiddenInput = $('#subject-list');
+    let selectedSubjects = subjectListHiddenInput.val().split(',');
+    $.each(selectedSubjects, function (subjectIndex, selectedValue) {
+        if (subjectIndex === 0) {
+            return true;
+        }
+        let subjectInputName = "2-subject";
+        if (subjectIndex > 1) {
+            subjectInputName += '_' + subjectIndex;
+        }
+        // Get the subject select div
+        let $input = $('select[name="' + subjectInputName + '"]').children();
+        let minimumScoreValue = '';
+        if (typeof minimumScoreList[subjectIndex] !== 'undefined') {
+            minimumScoreValue = minimumScoreList[subjectIndex];
+            if (minimumScoreValue === '-1') {
+                minimumScoreValue = '';
+            }
+        }
+        addSubject($input, selectedValue, minimumScoreValue);
+    });
 })();
