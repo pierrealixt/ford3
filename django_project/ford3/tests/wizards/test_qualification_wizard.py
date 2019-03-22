@@ -1,3 +1,4 @@
+import datetime
 from django.test import TestCase
 from django.test.utils import override_settings
 from ford3.tests.models.model_factories import ModelFactories
@@ -5,6 +6,7 @@ from ford3.models.qualification import Qualification
 from ford3.models.qualification_entrance_requirement_subject import (
     QualificationEntranceRequirementSubject
 )
+from ford3.models.qualification_event import QualificationEvent
 from ford3.models.requirement import Requirement
 from ford3.views.qualification_wizard import QualificationFormWizardDataProcess
 
@@ -148,11 +150,34 @@ class TestQualificationWizard(TestCase):
         self.qualification_data_process.add_requirements(
             requirement_form_data
         )
-        requirement = Requirement.objects.filter(
+        requirements = Requirement.objects.filter(
             qualification_id=self.qualification.id
-        )[0]
+        )
+        self.assertTrue(requirements.exists())
+        requirement = requirements[0]
         for key, value in requirement_form_data.items():
             self.assertEqual(
                 value,
                 getattr(requirement, key)
+            )
+
+    def test_add_qualification_events(self):
+        qualification_event_data = {
+            'date_start': datetime.date(2018, 1, 1),
+            'date_end': datetime.date(2019, 1, 1),
+            'other_event': 'event',
+            'event_date': datetime.date(2020, 1, 1)
+        }
+        self.qualification_data_process.add_qualification_event(
+            qualification_event_data
+        )
+        events = QualificationEvent.objects.filter(
+            qualification_id=self.qualification.id
+        )
+        self.assertTrue(events.exists())
+        event = events[0]
+        for key, value in qualification_event_data.items():
+            self.assertEqual(
+                value,
+                getattr(event, key)
             )
