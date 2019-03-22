@@ -122,7 +122,7 @@ class QualificationFormWizardDataProcess(object):
             if subject and self.post_dict[minimum_score_key]:
                 requirement_subjects, created = (
                     QualificationEntranceRequirementSubject.objects.
-                        get_or_create(
+                    get_or_create(
                         subject_id=subject,
                         qualification_id=self.qualification,
                     )

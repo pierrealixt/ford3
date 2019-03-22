@@ -103,9 +103,9 @@ class TestQualificationWizard(TestCase):
         for key, qualification_data in qualification_form_data.items():
             qualification_value = getattr(updated_qualification, key)
             wizard_form_data = self.wizard_form_data[key]
-            if qualification_value is '':
+            if qualification_value == '':
                 qualification_value = None
-            if wizard_form_data is '':
+            if wizard_form_data == '':
                 wizard_form_data = None
             self.assertEqual(
                 qualification_value,
