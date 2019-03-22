@@ -5,6 +5,7 @@ from ford3.models.qualification import Qualification
 from ford3.models.qualification_entrance_requirement_subject import (
     QualificationEntranceRequirementSubject
 )
+from ford3.models.requirement import Requirement
 from ford3.views.qualification_wizard import QualificationFormWizardDataProcess
 
 
@@ -59,8 +60,7 @@ class TestQualificationWizard(TestCase):
             new_id=2
         )
         self.qualification_data_process = QualificationFormWizardDataProcess(
-            qualification=self.qualification,
-            post_dict={}
+            qualification=self.qualification
         )
 
     def test_validate_data(self):
@@ -134,3 +134,25 @@ class TestQualificationWizard(TestCase):
         self.assertTrue(QualificationEntranceRequirementSubject.objects.filter(
             minimum_score=2
         ).exists())
+
+    def test_add_requirements(self):
+        requirement_form_data = {
+            'min_nqf_level': 'LEVEL_1',
+            'interview': True,
+            'portfolio': True,
+            'portfolio_comment': 'comment',
+            'require_aps_score': False,
+            'aps_calculator_link': 'http://test.com',
+            'require_certain_subjects': False
+        }
+        self.qualification_data_process.add_requirements(
+            requirement_form_data
+        )
+        requirement = Requirement.objects.filter(
+            qualification_id=self.qualification.id
+        )[0]
+        for key, value in requirement_form_data.items():
+            self.assertEqual(
+                value,
+                getattr(requirement, key)
+            )

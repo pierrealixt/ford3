@@ -18,9 +18,8 @@ from ford3.forms.qualification import (
 
 class QualificationFormWizardDataProcess(object):
 
-    def __init__(self, qualification, post_dict):
+    def __init__(self, qualification):
         self.qualification = qualification
-        self.post_dict = post_dict
 
     def duration_in_months(self, duration, duration_type):
         """
@@ -99,13 +98,35 @@ class QualificationFormWizardDataProcess(object):
             )
             requirement_subjects.save()
 
+    def add_requirements(self, form_data):
+        """
+        Add requirements to qualification
+        :param form_data: dict of form data
+        """
+        requirement_fields = {}
+        requirement_form_fields = (
+            vars(QualificationRequirementsForm)['declared_fields']
+        )
+        for requirement_field in requirement_form_fields.keys():
+            try:
+                getattr(Requirement, requirement_field)
+                if form_data[requirement_field]:
+                    requirement_fields[requirement_field] = (
+                        form_data[requirement_field]
+                    )
+            except AttributeError:
+                continue
+        if requirement_form_fields:
+            Requirement.objects.create(
+                qualification_id=self.qualification,
+                **requirement_fields
+            )
+
     def process_data(self, form_data):
         """
         Process qualification form data then update qualification
         :param form_data: dict of form data
         """
-        requirement_fields = {}
-
         qualification_form_data = self.qualification_form_data(
             form_data
         )
@@ -141,24 +162,8 @@ class QualificationFormWizardDataProcess(object):
         # Subjects
         self.add_subjects(form_data)
 
-        # Requirement data
-        requirement_form_fields = (
-            vars(QualificationRequirementsForm)['declared_fields']
-        )
-        for requirement_field in requirement_form_fields.keys():
-            try:
-                getattr(Requirement, requirement_field)
-                if form_data[requirement_field]:
-                    requirement_fields[requirement_field] = (
-                        form_data[requirement_field]
-                    )
-            except AttributeError:
-                continue
-        if requirement_form_fields:
-            Requirement.objects.create(
-                qualification_id=self.qualification,
-                **requirement_fields
-            )
+        # Add requirements
+        self.add_requirements(form_data)
 
         # Qualification events
         qualification_event_form_fields = (
@@ -220,8 +225,7 @@ class QualificationFormWizard(CookieWizardView):
         for form in form_list:
             form_data.update(form.cleaned_data)
         qualification_data_process = QualificationFormWizardDataProcess(
-            self.qualification,
-            self.request.POST.dict()
+            self.qualification
         )
         qualification_data_process.process_data(
             form_data
