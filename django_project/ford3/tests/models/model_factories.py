@@ -31,7 +31,6 @@ class ModelFactories:
             credits_after_completion=200,
             distance_learning=False,
             total_cost=100000,
-            occupation_id=ModelFactories.get_occupation_test_object(),
             campus_id=ModelFactories.get_campus_test_object(),
             sub_field_of_study_id=(
                 ModelFactories.get_sub_field_of_study_test_object()),
@@ -42,7 +41,9 @@ class ModelFactories:
             high_demand_occupation=False,
             )
 
-
+        qualification_test_object_instance.occupations.add(
+            ModelFactories.get_occupation_test_object()
+        )
         qualification_test_object_instance.interests.add(
             ModelFactories.get_interest_test_object())
         return qualification_test_object_instance
