@@ -28,3 +28,6 @@ DATABASES = {
         }
     }
 }
+
+PIPELINE_ENABLED = False
+STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
