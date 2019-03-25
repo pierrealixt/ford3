@@ -10,10 +10,10 @@ class Qualification(models.Model):
     subjects = models.ManyToManyField(
         Subject,
         through='QualificationEntranceRequirementSubject')
-    campus_id = models.ForeignKey(
+    campus = models.ForeignKey(
         Campus,
         on_delete=models.CASCADE)
-    sub_field_of_study_id = models.ForeignKey(
+    sub_field_of_study = models.ForeignKey(
         SubFieldOfStudy,
         null=True,
         blank=True,
@@ -27,12 +27,6 @@ class Qualification(models.Model):
         null=True,
         blank=True)
 
-    id = models.AutoField(
-        blank=False,
-        null=False,
-        unique=True,
-        help_text='Key of qualification',
-        primary_key=True)
     saqa_id = models.IntegerField(
         blank=True,
         null=True,
