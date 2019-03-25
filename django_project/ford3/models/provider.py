@@ -2,12 +2,6 @@ from django.db import models
 
 
 class Provider(models.Model):
-    # id = models.AutoField(
-    #     blank=False,
-    #     null=False,
-    #     unique=True,
-    #     help_text='',
-    #     primary_key=True)
     name = models.CharField(
         blank=True,
         null=False,
