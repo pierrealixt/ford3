@@ -8,4 +8,5 @@ class TestQualificationEvent(TestCase):
         new_qualification_event = (
             ModelFactories.get_qualification_event_test_object())
         self.assertEqual(
-            new_qualification_event.__str__(), 'Qualification Event Test Name')
+            new_qualification_event.__unicode__(),
+            'Qualification Event Test Name')

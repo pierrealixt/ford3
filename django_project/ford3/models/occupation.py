@@ -2,24 +2,16 @@ from django.db import models
 
 
 class Occupation(models.Model):
-    id = models.IntegerField(
-        blank=False,
-        null=False,
-        unique=True,
-        help_text='',
-        primary_key=True)
     name = models.CharField(
         blank=False,
         null=False,
         unique=False,
         help_text='',
         max_length=255)
-    description = models.CharField(
+    description = models.TextField(
         blank=True,
         null=True,
-        unique=False,
-        help_text='',
-        max_length=255)
+        help_text='')
 
     pass
 

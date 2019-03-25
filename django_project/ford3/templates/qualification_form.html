@@ -6,6 +6,8 @@
     {{ wizard.form.media }}
     <link rel="stylesheet" type="text/css"
           href="{% static 'css/wizard_form.css' %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/libs/jquery-ui-1.12.1-custom/jquery-ui.min.css' %}">
 {% endblock %}
 
 {% block body %}
@@ -74,6 +76,8 @@
 {% endblock %}
 
 {% block footer %}
+    <script type="text/javascript"
+            src="{% static 'js/libs/jquery-ui-1.12.1-custom/jquery-ui.min.js' %}"></script>
     <script type="text/javascript"
             src="{% static 'js/qualification_form.js' %}"></script>
 

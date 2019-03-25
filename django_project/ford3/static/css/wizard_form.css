@@ -51,3 +51,44 @@
 .form-check-inline {
     padding-top: 10px;
 }
+
+.multiple-select-square {
+    display: inline-block;
+    text-align: center;
+    padding-top: 17px;
+    width: 160px;
+    height: 60px;
+    border-bottom: 1px solid #FFF;
+    border-right: 1px solid #FFF;
+    font-size: 12pt;
+    font-weight: bold;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+.multiple-select-square:hover {
+    cursor: pointer;
+    background-color: rgba(252, 181, 59, 0.41) !important;
+}
+
+.multiple-select-square.selected {
+    background-color: #FCB53B !important;
+}
+
+.multiple-select-square.turquoise {
+    background-color: rgba(122, 205, 207, 0.5);
+}
+
+.multiple-select-square.turquoise.odd {
+    background-color: rgba(122, 205, 207, 0.25);
+}
+
+.multiple-select-square.gray {
+    background-color: #efeee9;
+}
+
+.multiple-select-square.gray.odd {
+    background-color: #d5d5d5;
+}

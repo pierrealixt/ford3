@@ -18,16 +18,14 @@ class Qualification(models.Model):
         null=True,
         blank=True,
         on_delete=models.PROTECT)
-    occupation_id = models.ForeignKey(
+    occupations = models.ManyToManyField(
         Occupation,
         null=True,
-        blank=True,
-        on_delete=models.PROTECT)
+        blank=True)
     interests = models.ManyToManyField(
         Interest,
         null=True,
-        blank=True
-    )
+        blank=True)
 
     id = models.AutoField(
         blank=False,

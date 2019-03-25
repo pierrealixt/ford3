@@ -1,7 +1,11 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
-from ford3.models import Subject
+from ford3.models import (
+    Interest,
+    Occupation,
+    Subject
+)
 
 
 class QualificationForm(forms.Form):
@@ -165,6 +169,112 @@ class QualificationRequirementsForm(QualificationForm):
         queryset=Subject.objects.all(),
         required=False,
         widget=forms.Select(
-            attrs={'class': 'col-md-4 subject-list', 'id': ''}
+            attrs={'class': 'col-md-4 subject-list'}
+        )
+    )
+
+    subject_list = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput(
+            attrs={'id': 'subject-list'}
+        )
+    )
+
+    minimum_score_list = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput(
+            attrs={'id': 'minimum-score-list'}
+        )
+    )
+
+
+class QualificationInterestsAndJobsForm(QualificationForm):
+    interest_list = forms.ModelMultipleChoiceField(
+        label='Choose three interests associated to this Qualification:',
+        queryset=Interest.objects.all(),
+        required=False,
+        widget=forms.SelectMultiple(
+            attrs={
+                'data-background-color': 'turquoise',
+                'data-max-selected': '3'
+            }
+        )
+    )
+
+    occupation_list = forms.ModelMultipleChoiceField(
+        label=(
+            'Choose up to five Occupations that '
+            'this Qualification could prepare you for:'
+        ),
+        queryset=Occupation.objects.all(),
+        required=False,
+        widget=forms.SelectMultiple(
+            attrs={
+                'data-background-color': 'gray',
+                'data-max-selected': '5'
+            }
+        )
+    )
+
+    critical_skill = forms.TypedChoiceField(
+        label=(
+            'Does the qualification prepare for a '
+            '<b>critical skills</b> occupation:'
+        ),
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect
+    )
+
+    green_occupation = forms.TypedChoiceField(
+        label=(
+            'Does the qualification prepare for a <b>green</b> occupation:'
+        ),
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect
+    )
+
+    high_demand_occupation = forms.TypedChoiceField(
+        label=(
+            'Does the qualification '
+            'prepare for a <b>high demand</b> occupation:'
+        ),
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect
+    )
+
+
+class QualificationImportantDatesForm(QualificationForm):
+    date_start = forms.DateField(
+        label='Application period start:',
+        required=False,
+        widget=forms.DateInput(
+            attrs={'class': 'col-md-4'}
+        )
+    )
+
+    date_end = forms.DateField(
+        label='Application period end:',
+        required=False,
+        widget=forms.DateInput(
+            attrs={'class': 'col-md-4'}
+        )
+    )
+
+    other_event = forms.CharField(
+        label='Other event [if any]:',
+        required=False,
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Title, eg, Exhibition'}
+        )
+    )
+
+    event_date = forms.DateField(
+        label='Event Date:',
+        required=False,
+        widget=forms.DateInput(
+            attrs={'class': 'col-md-4'}
         )
     )
