@@ -4,16 +4,10 @@ from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
 
 
 class Requirement(models.Model):
-    qualification_id = models.ForeignKey(
+    qualification = models.ForeignKey(
         Qualification,
         on_delete=models.CASCADE)
 
-    id = models.AutoField(
-        blank=False,
-        null=False,
-        unique=True,
-        help_text='',
-        primary_key=True)
     description = models.CharField(
         blank=True,
         null=True,

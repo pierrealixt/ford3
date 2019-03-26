@@ -4,17 +4,11 @@ from ford3.models.occupation import Occupation
 
 
 class SubFieldOfStudy(models.Model):
-    field_of_study_id = models.ForeignKey(
+    field_of_study = models.ForeignKey(
         FieldOfStudy,
         on_delete=models.PROTECT)
     occupation_id = models.ManyToManyField(Occupation)
 
-    id = models.IntegerField(
-        blank=False,
-        null=False,
-        unique=True,
-        help_text='',
-        primary_key=True)
     name = models.CharField(
         blank=False,
         null=False,

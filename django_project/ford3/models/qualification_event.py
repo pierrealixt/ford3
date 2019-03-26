@@ -4,7 +4,7 @@ from ford3.models.qualification import Qualification
 
 
 class QualificationEvent(models.Model):
-    qualification_id = models.ForeignKey(
+    qualification = models.ForeignKey(
         Qualification,
         on_delete=models.CASCADE)
     name = models.CharField(
