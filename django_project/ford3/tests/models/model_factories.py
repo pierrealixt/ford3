@@ -31,8 +31,8 @@ class ModelFactories:
             credits_after_completion=200,
             distance_learning=False,
             total_cost=100000,
-            campus_id=ModelFactories.get_campus_test_object(),
-            sub_field_of_study_id=(
+            campus=ModelFactories.get_campus_test_object(),
+            sub_field_of_study=(
                 ModelFactories.get_sub_field_of_study_test_object()),
             completion_rate=72,
             total_cost_comment='Way too much',
@@ -53,7 +53,7 @@ class ModelFactories:
         requirement_test_object_instance = Requirement.objects.create(
             id=new_id,
             description='Some long description that goes on...',
-            qualification_id=ModelFactories.get_qualification_test_object(),
+            qualification=ModelFactories.get_qualification_test_object(),
             assessment=True,
             interview=True,
             admission_point_score=24,
@@ -77,7 +77,7 @@ class ModelFactories:
     def get_campus_test_object(new_id=1):
         campus_test_object_instance = Campus.objects.create(
             id=new_id,
-            provider_id=ModelFactories.get_provider_test_object(),
+            provider=ModelFactories.get_provider_test_object(),
             name='Object Test Name',
             photo='campus/photo/12345.jpg',
             telephone='+27137441422',
@@ -92,7 +92,7 @@ class ModelFactories:
     def get_campus_event_test_object(new_id=1):
         campus_event_test_object_instance = CampusEvent.objects.create(
             id=new_id,
-            campus_id=ModelFactories.get_campus_test_object(),
+            campus=ModelFactories.get_campus_test_object(),
             name='Campus Event Test Name',
             date_start=datetime.date(2019, 3, 6),
             date_end=datetime.date(2019, 8, 9),
@@ -142,7 +142,7 @@ class ModelFactories:
             SubFieldOfStudy.objects.create(
                 id=new_id,
                 name='Object Test Name',
-                field_of_study_id=(
+                field_of_study=(
                     ModelFactories.get_field_of_study_test_object(1)),
             ))
 
@@ -162,7 +162,7 @@ class ModelFactories:
     def get_qualification_event_test_object(new_id=1):
         qualification_event_test_object = QualificationEvent.objects.create(
             id=new_id,
-            qualification_id=ModelFactories.get_qualification_test_object(),
+            qualification=ModelFactories.get_qualification_test_object(),
             name='Qualification Event Test Name',
             date_start=datetime.date(2019, 3, 6),
             date_end=datetime.date(2019, 8, 9),

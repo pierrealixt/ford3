@@ -151,7 +151,7 @@ class TestQualificationWizard(TestCase):
             requirement_form_data
         )
         requirements = Requirement.objects.filter(
-            qualification_id=self.qualification.id
+            qualification=self.qualification.id
         )
         self.assertTrue(requirements.exists())
         requirement = requirements[0]
@@ -172,7 +172,7 @@ class TestQualificationWizard(TestCase):
             qualification_event_data
         )
         events = QualificationEvent.objects.filter(
-            qualification_id=self.qualification.id
+            qualification=self.qualification.id
         )
         self.assertTrue(events.exists())
         event = events[0]

@@ -83,8 +83,8 @@ class QualificationFormWizardDataProcess(object):
             requirement_subjects, created = (
                 QualificationEntranceRequirementSubject.objects.
                 get_or_create(
-                    subject_id=subject,
-                    qualification_id=self.qualification,
+                    subject=subject,
+                    qualification=self.qualification,
                 )
             )
             try:
@@ -118,7 +118,7 @@ class QualificationFormWizardDataProcess(object):
                 continue
         if requirement_form_fields:
             Requirement.objects.create(
-                qualification_id=self.qualification,
+                qualification=self.qualification,
                 **requirement_fields
             )
 
@@ -142,7 +142,7 @@ class QualificationFormWizardDataProcess(object):
                 continue
         if qualification_event_fields:
             QualificationEvent.objects.create(
-                qualification_id=self.qualification,
+                qualification=self.qualification,
                 **qualification_event_fields
             )
 

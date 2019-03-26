@@ -4,10 +4,10 @@ from ford3.models.subject import Subject
 
 
 class QualificationEntranceRequirementSubject(models.Model):
-    qualification_id = models.ForeignKey(
+    qualification = models.ForeignKey(
         Qualification,
         on_delete=models.PROTECT)
-    subject_id = models.ForeignKey(
+    subject = models.ForeignKey(
         Subject,
         on_delete=models.PROTECT)
 

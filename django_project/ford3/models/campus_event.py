@@ -3,13 +3,8 @@ from ford3.models.campus import Campus
 
 
 class CampusEvent(models.Model):
-    id = models.IntegerField(
-        blank=False,
-        null=False,
-        unique=True,
-        help_text='Key of campus event',
-        primary_key=True)
-    campus_id = models.ForeignKey(
+
+    campus = models.ForeignKey(
         Campus,
         on_delete=models.CASCADE)
     name = models.CharField(
