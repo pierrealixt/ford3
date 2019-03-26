@@ -47,7 +47,7 @@ class TestSaqaScraper(unittest.TestCase):
         result = scrape_qualification_page(html)
         self.assertEqual(result, {
             'saqa_id': '94576',
-            'name': 'Advanced Certificate in Facilities Maintenance Management',
+            'name': 'Advanced Certificate in Facilities Maintenance Management', # noqa
             'type': 'Advanced Certificate',
             'field_study': 'Business, Commerce and Management Studies',
             'subfield_study': 'Generic Management'
