@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^site-admin/', admin.site.urls),
     url(r'^ford3/', include('ford3.urls')),
     url(r'^', include('base.urls')),
+    url(r'^', include('ford3.urls')),
     # url(r'^accounts/', include('allauth.urls')),
 ]
 

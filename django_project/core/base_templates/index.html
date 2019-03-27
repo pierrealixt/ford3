@@ -19,14 +19,16 @@
 	{#    Link Internal Stylesheet		#}
 	<link rel="stylesheet" type="text/css"
 		  href="{% static 'css/stylesheet.css' %}">
-
+	<link rel="stylesheet" type="text/css"
+		  href="{% static 'css/provider_form.css' %}">
+	<link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
 
 	<script src="{% static 'js/libs/jquery-3.3.1.min.js' %}"></script>
 
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
 			integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"
 			crossorigin="anonymous"></script>
-
+	<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
 	{% block head %} {% endblock %}
 
 </head>
@@ -37,18 +39,11 @@
 </nav>
 <div class="wrapper">
 
-
 	{% block side_navbar %}
 		{% include 'side_navbar.html' %} <!-- side_navbar.html -->
 	{% endblock %}
+	{% block body_content %} {% endblock %}
 
-	{% block body %}
-
-
-
-		<!-- TestContent -->
-		{% include 'test_widgets.html' %} <!-- test_widgets.html -->
-	{% endblock %}
 </div>
 </div>
 </body>
@@ -60,6 +55,5 @@
         $('[data-toggle="tooltip"]').tooltip()
     })
 </script>
-
 
 </html>

@@ -1,0 +1,147 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}
+	Provider Form
+{% endblock %}
+
+{% block body_content %}
+	<form action="/ProviderForm/" method="post">
+	{% csrf_token %}
+	<div class="col-12">
+		<div class="container">
+			<div class="row">
+				{{ form.name }}
+				<h1>Welcome, {{ form.name.value }} </h1>
+			</div>
+			<div class="row">
+				Thank you for registering your provider on the edugateway
+				platform.
+				Please fill in your provider details below.
+			</div>
+		</div>
+		<br>
+		<div class="container">
+			<div class="row edu-underline">
+				<h4>Provider Details</h4>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-4 npl">Provider Logo</div>
+				<div class="col-8">
+					<div class="provider-form-photo">
+
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				{{ form.provider_type.errors }}
+				<div class="col-4 npl centerv">
+					Provider Type:
+				</div>
+				{{ form.provider_type }}
+			</div>
+			<div class="row edu-underline">
+				<h4>Central Office Contact Details</h4>
+			</div>
+			<div class="row mt1">
+				{{ form.telephone.errors }}
+				<div class="col-4 centerv npl">
+					Tel. Number:
+				</div>
+				<div class="col-8">
+					{{ form.telephone }}
+				</div>
+			</div>
+			<div class="row mt1">
+				{{ form.admissions_contact_no.errors }}
+				<div class="col-4 centerv npl">
+					Admissions Contact Number:
+				</div>
+				<div class="col-8">
+					{{ form.admissions_contact_no }}
+				</div>
+			</div>
+
+
+			<div class="row mt1">
+				{{ form.email.errors }}
+				<div class="col-4 centerv npl">
+					Email:
+				</div>
+				<div class="col-8">
+					{{ form.email }}
+				</div>
+			</div>
+
+			<div class="row mt1">
+				<div class="col-4 npl">
+					Physical Address
+				</div>
+				<div class="col-8">
+					{{ form.physical_address_line_1.errors }}
+					{{ form.physical_address_line_2.errors }}
+					{{ form.physical_address_line_1 }}
+					{{ form.physical_address_line_2 }}
+					<div class="row">
+						<div class="col-lg-7 col-sm-12 mt1">
+							{{ form.physical_address_city.errors}}
+							{{ form.physical_address_city}}
+						</div>
+						<div class="col-lg-5 col-sm-12 mt1">
+							{{ form.postal_address.errors}}
+							{{ form.postal_address }}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row mt1">
+				<div class="col-4 centerv npl">
+					Confirm Address on Map:
+				</div>
+				<div class="col-8" id="map" class="map">
+					Insert Map here
+				</div>
+			</div>
+			<div class="row mt1 edu-underline">
+				<h4>Campuses</h4>
+			</div>
+			<div class="row mt1">
+				<div class="col-4 npl">
+					Number of Campuses
+				</div>
+				<div class="col-6" style="padding: 0.5rem; padding-left: 1rem;">
+					<input type="range" min="1" max="10" value="1"
+						   class="range-slider centerv" id="campus-count">
+				</div>
+				<div class="col-2">
+					<input name="number-of-campuses" id="number-of-campuses" class="number-of-campuses" value="1"/>
+				</div>
+			</div>
+			<div id="campus-names-input-wrapper">
+				<div class="row mt1">
+					<div class="col-4 centerv npl">
+						Name of Campus 1:
+					</div>
+					<div class="col-8">
+						<input name="campus_name_1" type="text" placeholder="•••••••••••••••••"/>
+					</div>
+				</div>
+			</div>
+			<div class="row mt1">
+				<div class="col-4"></div>
+				<div class="col-3">
+					<button type="submit" class="edu-button edu-button-blue">Submit</button>
+				</div>
+			</div>
+			<div class="row mt1">
+			</div>
+		</div>
+	</div>
+	</form>
+{% endblock body_content %}
+
+{% block footer %}
+	  <script type="text/javascript"
+            src="{% static 'js/provider_form.js' %}"></script>
+{% endblock %}

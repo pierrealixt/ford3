@@ -122,14 +122,15 @@ class ModelFactories:
     @staticmethod
     def get_provider_test_object(new_id=1):
         provider_test_object_instance = Provider.objects.create(
-            id=new_id,
             name='Object Test Name',
             website='www.mytest.com',
             logo_url='http://sometestplaceholder/logo.png',
             email='Test@test.com',
             admissions_contact_no='0137527576',
             postal_address='1200',
-            physical_address='Some long physical address',
+            physical_address_line_1='24 Test Street',
+            physical_address_line_2='TestVille',
+            physical_address_city='Testopalis',
             telephone='27821233322',
             provider_type='Technicon',
         )

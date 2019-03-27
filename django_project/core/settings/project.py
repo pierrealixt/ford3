@@ -44,6 +44,7 @@ PIPELINE['JAVASCRIPT']['project'] = {
     'source_filenames': (
         'js/csrf-ajax.js',
         'js/ford3.js',
+        'js/provider_form.js',
     ),
     'output_filename': 'js/project.js',
 }
@@ -55,6 +56,7 @@ PIPELINE['STYLESHEETS']['project'] = {
         'css/ford3.css',
         'css/form.css',
         'css/stylesheet.css',
+        'css/provider_form.css',
     ),
     'output_filename': 'css/project.css',
     'extra_context': {

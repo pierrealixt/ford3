@@ -508,13 +508,11 @@ input:checked + .slider:before {
 }
 
 .edu-button {
-    height: 5rem;
-    width: 10rem;
+    height: 2.5rem;
+    width: 100%;
     border-radius: 4px;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
-    padding-left: 3rem;
-    padding-right: 3rem;
     text-align: center;
     align-items: center;
     display: inline-grid;
@@ -587,6 +585,42 @@ input[type='text']:hover::placeholder {
 
 /* ----------------------------- END OF TEXT INPUTS ----------------------------- */
 
+/* ----------------------------- email INPUTS ----------------------------- */
+
+input[type='email'] {
+    padding: 0.5rem;
+    padding-left: 1.5rem;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--c-grey);
+    color: var(--c-grey-d);
+    width: 100%;
+    font-weight: 400;
+}
+
+input[type='email']::placeholder {
+    color: var(--c-grey-l);
+}
+
+input[type='email']:focus {
+    outline-color: var(--c-blue) !important;
+}
+
+input[type='email']:hover {
+    color: var(--c-grey-d);
+    border-color: var(--c-grey-d);
+}
+
+input[type='email']:hover::placeholder {
+    color: var(--c-grey);
+    border-color: var(--c-grey-d);
+
+}
+
+/* ----------------------------- END OF EMAIL INPUTS ----------------------------- */
+
+
 .round-block {
     height: 10vw;
     width: 10vw;
@@ -595,6 +629,9 @@ input[type='text']:hover::placeholder {
     color: grey;
 }
 
+.edu-underline {
+   border-bottom: 1px solid #d5d5d5
+}
 /* ----------------------------- ICONS ----------------------------- */
 
 .edu-icon {
