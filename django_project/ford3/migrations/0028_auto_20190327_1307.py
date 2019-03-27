@@ -48,7 +48,4 @@ class Migration(migrations.Migration):
             name='postal_address_street_name',
             field=models.CharField(max_length=255, null=True),
         ),
-        migrations.DeleteModel(
-            name='Address',
-        ),
     ]
