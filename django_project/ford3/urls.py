@@ -14,7 +14,7 @@ from ford3.forms.campus import (
     CampusDetailForm,
     CampusLocationForm,
     CampusImportantDatesForm,
-    # CampusQualificationsForm
+    CampusQualificationsForm
 )
 from ford3.views.campus_wizard import CampusFormWizard
 
@@ -33,7 +33,7 @@ campus_wizard = CampusFormWizard.as_view(
         CampusDetailForm,
         CampusLocationForm,
         CampusImportantDatesForm,
-        # CampusQualificationsForm
+        CampusQualificationsForm
     ]
 )
 

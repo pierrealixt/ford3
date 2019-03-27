@@ -17,6 +17,9 @@ class CampusForm(forms.Form):
 
 class CampusDetailForm(CampusForm):
 
+    photo = forms.FileField(
+        required=False)
+
     telephone = forms.CharField(
         label='Tel. Number:',
         required=False)
@@ -68,3 +71,9 @@ class CampusImportantDatesForm(CampusForm):
             attrs={'class': 'col-md-4'}
         )
     )
+
+
+class CampusQualificationsForm(CampusForm):
+    qualification_ids = forms.CharField(
+        widget=forms.HiddenInput(),
+        required=False)
