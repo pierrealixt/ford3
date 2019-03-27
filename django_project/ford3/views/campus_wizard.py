@@ -1,4 +1,7 @@
+import os
 from django.shortcuts import Http404, get_object_or_404
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
 from formtools.wizard.views import CookieWizardView
 from ford3.models import (
     Campus
@@ -8,6 +11,8 @@ from ford3.models import (
 class CampusFormWizard(CookieWizardView):
 
     template_name = 'campus_form.html'
+    file_storage = FileSystemStorage(
+        location=os.path.join(settings.MEDIA_ROOT, 'photos'))
 
     @property
     def campus(self):
@@ -33,4 +38,5 @@ class CampusFormWizard(CookieWizardView):
         return context
 
     def done(self, form_list, **kwargs):
-        pass
+        for form in form_list:
+            print(form.cleaned_data)
