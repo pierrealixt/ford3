@@ -36,7 +36,7 @@ class TestProviderForm(SeleniumTestCase):
         # Which they enter as
         inputbox.send_keys('0821233444')
 
-        # They are asked for their admission no.
+        # They are asked for their admission contact no.
         inputbox = self.driver.find_element_by_name('admissions_contact_no')
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
@@ -46,17 +46,14 @@ class TestProviderForm(SeleniumTestCase):
         # Which they enter as
         inputbox.send_keys('0137441422')
 
-        # They are asked for their admission no.
         inputbox = self.driver.find_element_by_name('physical_address_line_1')
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
             'Address Line 1'
         )
 
-        # Which they enter as
         inputbox.send_keys('SomeStreet 28')
 
-        # They are asked for their admission no.
         inputbox = self.driver.find_element_by_name('physical_address_line_2')
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
@@ -66,7 +63,7 @@ class TestProviderForm(SeleniumTestCase):
         # Which they enter as
         inputbox.send_keys('Extension 9')
 
-        # They are asked for their admission no.
+        # They are asked for their city.
         inputbox = self.driver.find_element_by_name('physical_address_city')
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
@@ -76,7 +73,6 @@ class TestProviderForm(SeleniumTestCase):
         # Which they enter as
         inputbox.send_keys('Nelspruit')
 
-        # They are asked for their admission no.
         inputbox = self.driver.find_element_by_name('postal_address')
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
@@ -98,11 +94,13 @@ class TestProviderForm(SeleniumTestCase):
         # Enter their Email Address
         inputbox.send_keys('provider_test@fakedomain.com')
 
+        # They are asked for a campus name.
+        inputbox = self.driver.find_element_by_name('campus_name_1')
 
+        # Enter their Email Address
+        inputbox.send_keys('Somecampus')
 
 
         # They submit their data by clicking on the submit button
         submit_button = self.driver.find_element_by_class_name('edu-button')
         submit_button.click()
-
-        # Since they entered too many digits the form returns an error message

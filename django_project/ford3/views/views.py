@@ -45,7 +45,7 @@ def provider_form(request):
                 with transaction.atomic():
                     for idx in range(number_of_campuses):
                         campus_name = request.POST[f'campus_name_{idx +  1}']
-                        Campus.objects.create(provider_id=new_provider,
+                        Campus.objects.create(provider=new_provider,
                                               name=campus_name)
             except IntegrityError:
                 return render(request, 'provider_form.html', {'form': form})
