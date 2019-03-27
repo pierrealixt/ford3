@@ -7,13 +7,14 @@
     <link rel="stylesheet" type="text/css"
           href="{% static 'css/wizard_form.css' %}">
     <link rel="stylesheet" type="text/css"
+          href="{% static 'css/campus_form.css' %}">          
+    <link rel="stylesheet" type="text/css"
           href="{% static 'css/libs/jquery-ui-1.12.1-custom/jquery-ui.min.css' %}">
 {% endblock %}
 
 {% block body %}
-
     <div class="container">
-        <h1>{{ campus }} Campus Details</h1>
+        <h2>{{ campus }} Campus Details</h2>
         <div class="row">
             <div class="col-lg-12">
                 <ul class="nav-wizard-steps nav nav-pills nav-fill">
@@ -40,6 +41,43 @@
                         {% else %}
                             {% crispy wizard.form wizard.form.helper %}
                         {% endif %}
+
+                        {% if wizard.steps.step1 == 4 %}
+                            <div class='row'>
+                                <div class='col-md-5'>
+                                    <h5>All qualifications in {{ campus }} campus</h5>
+                                    <ul id='campus-qualifications-list'>
+                                    </ul>
+                                </div>
+                                <div class='col-md-2'>
+                                    <button type='button'
+                                            class='left-arrow-button'
+                                            data-action='add-qualif'>
+                                        add
+                                    </button>
+                                    <button type='button'
+                                            class='right-arrow-button'
+                                            data-action='remove-qualif'>
+                                        remove
+                                    </button>                                    
+
+                                </div>
+                                <div class='col-md-5'>
+                                    <h5>All qualifications</h5>
+                                    <input type='text' id='search_qualif' />
+                                    <ul id='saqa-qualifications-list'>
+                                    {% for qualif in saqa_qualifications %}
+                                        <li data-saqa-id="{{ qualif.saqa_id }}">{{ qualif.name }} ({{ qualif.saqa_id }})</li>
+                                    {% endfor %}
+                                    </ul>
+                                </div>                                
+                            </div>
+
+
+<style>
+
+</style>
+                        {% endif %}                        
                     </div>
                     <div class="row form-actions">
                         <div class="col-md-4">
@@ -79,7 +117,13 @@
 {% block footer %}
     <script type="text/javascript"
             src="{% static 'js/libs/jquery-ui-1.12.1-custom/jquery-ui.min.js' %}"></script>
-    <script type="text/javascript"
-            src="{% static 'js/qualification_form.js' %}"></script>
+    {% if wizard.steps.step1 == 3 %}
+        <script type="text/javascript"
+                src="{% static 'js/datepicker.js' %}"></script>
+    {% endif %}
+    {% if wizard.steps.step1 == 4 %}
+        <script type="text/javascript"
+                src="{% static 'js/campus_form_qualifications.js' %}"></script>
+    {% endif %}
 
 {% endblock %}

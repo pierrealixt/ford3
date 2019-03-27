@@ -45,5 +45,8 @@ urlpatterns = [
     ),
     url(r'^ProviderForm/$', views.provider_form, name='provider_form'),
     url(r'^TestWidgets/$', views.widget_examples, name='test_widgets'),
-    path('campus/<int:campus_id>/edit', campus_wizard, name='campus_form')
+    path(
+        'providers/<int:provider_id>/campus/<int:campus_id>/edit',
+        campus_wizard,
+        name='campus_form')
 ]
