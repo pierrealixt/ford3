@@ -1,0 +1,566 @@
+[
+  {
+    "model": "ford3.FieldOfStudy",
+    "pk": 1,
+    "fields": {
+      "name": "Agriculture & Nature Conservation"
+    }
+  },
+  {
+    "model": "ford3.FieldOfStudy",
+    "pk": 2,
+    "fields": {
+      "name": "Culture & Arts"
+    }
+  },
+  {
+    "model": "ford3.FieldOfStudy",
+    "pk": 3,
+    "fields": {
+      "name": "Business, Commerce and Management"
+    }
+  },
+  {
+    "model": "ford3.FieldOfStudy",
+    "pk": 4,
+    "fields": {
+      "name": "Communication Studies & Language"
+    }
+  },
+  {
+    "model": "ford3.FieldOfStudy",
+    "pk": 5,
+    "fields": {
+      "name": "Education, Training & Development"
+    }
+  },
+  {
+    "model": "ford3.FieldOfStudy",
+    "pk": 6,
+    "fields": {
+      "name": "Manufacturing, Engineering and Technology"
+    }
+  },
+  {
+    "model": "ford3.FieldOfStudy",
+    "pk": 7,
+    "fields": {
+      "name": "Human & Social Studies"
+    }
+  },
+  {
+    "model": "ford3.FieldOfStudy",
+    "pk": 8,
+    "fields": {
+      "name": "Law, Military Science & Security"
+    }
+  },
+  {
+    "model": "ford3.FieldOfStudy",
+    "pk": 9,
+    "fields": {
+      "name": "Health Sciences & Social Services"
+    }
+  },
+  {
+    "model": "ford3.FieldOfStudy",
+    "pk": 10,
+    "fields": {
+      "name": "Mathematical, Physical, Computer & Life Sciences"
+    }
+  },
+  {
+    "model": "ford3.FieldOfStudy",
+    "pk": 11,
+    "fields": {
+      "name": "Services"
+    }
+  },
+  {
+    "model": "ford3.FieldOfStudy",
+    "pk": 12,
+    "fields": {
+      "name": "Physical Planning & Construction"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Primary Agriculture",
+      "field_of_study_id": 1
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Secondary Agriculture",
+      "field_of_study_id": 1
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Nature Conservation",
+      "field_of_study_id": 1
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Forestry and Wood Technology",
+      "field_of_study_id": 1
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Horticulture",
+      "field_of_study_id": 1
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Design Studies",
+      "field_of_study_id": "2"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Visual Arts",
+      "field_of_study_id": "2"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Performing Arts",
+      "field_of_study_id": "2"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Cultural Studies",
+      "field_of_study_id": "2"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Music",
+      "field_of_study_id": "2"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Sport",
+      "field_of_study_id": "2"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Film, Television and Video",
+      "field_of_study_id": "2"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Finance, Economic & Accounting",
+      "field_of_study_id": "3"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Generic Management",
+      "field_of_study_id": "3"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Human Resources",
+      "field_of_study_id": "3"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Marketing",
+      "field_of_study_id": "3"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Purchasing",
+      "field_of_study_id": "3"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Procurement",
+      "field_of_study_id": "3"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Office Administration",
+      "field_of_study_id": "3"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Public Administration",
+      "field_of_study_id": "3"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Project Management",
+      "field_of_study_id": "3"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Public Relations",
+      "field_of_study_id": "3"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Communication",
+      "field_of_study_id": "4"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Information Studies",
+      "field_of_study_id": "4"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Language",
+      "field_of_study_id": "4"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Literature",
+      "field_of_study_id": "4"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Schooling",
+      "field_of_study_id": "5"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Higher Education & Training",
+      "field_of_study_id": "5"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Early Childhood Development",
+      "field_of_study_id": "5"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Adult Learning",
+      "field_of_study_id": "5"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Engineering and Related Design",
+      "field_of_study_id": "6"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Manufacturing and Assembly",
+      "field_of_study_id": "6"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Fabrication and Extraction",
+      "field_of_study_id": "6"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Environmental Relations",
+      "field_of_study_id": "7"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "General Social Science",
+      "field_of_study_id": "7"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Industrial & Organisational Governance and Human Resource Development",
+      "field_of_study_id": "7"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "People/ Human Centred Development",
+      "field_of_study_id": "7"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Public Policy, Politics & Democratic Citizenship",
+      "field_of_study_id": "7"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Religious & Ethical Foundations of Society",
+      "field_of_study_id": "7"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Rural & Agrarian Studies",
+      "field_of_study_id": "7"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Traditions, History & Legacies",
+      "field_of_study_id": "7"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Urban & Regional Studies",
+      "field_of_study_id": "7"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Safety in Society",
+      "field_of_study_id": "8"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Justice in Society",
+      "field_of_study_id": "8"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Sovereignty of the State",
+      "field_of_study_id": "8"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Preventive Health",
+      "field_of_study_id": "9"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Promotive Health & Developmental Services Curative Health",
+      "field_of_study_id": "9"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Rehabilitative Services",
+      "field_of_study_id": "9"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Mathematical Sciences",
+      "field_of_study_id": "10"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Physical Sciences",
+      "field_of_study_id": "10"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Life Sciences",
+      "field_of_study_id": "10"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Information Technology & Computer Sciences Earth & Space Sciences",
+      "field_of_study_id": "10"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Environmental Sciences",
+      "field_of_study_id": "10"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Hospitality, Tourism, Travel, Gaming and Leisure Transport, Operations & Logistics",
+      "field_of_study_id": "11"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Personal Care",
+      "field_of_study_id": "11"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Wholesale & Retail",
+      "field_of_study_id": "11"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Consumer Services",
+      "field_of_study_id": "11"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Physical Planning, Design and Management Building Construction",
+      "field_of_study_id": "12"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Civil Engineering Construction",
+      "field_of_study_id": "12"
+    }
+  },
+  {
+    "model": "ford3.SubFieldOfStudy",
+    "pk": null,
+    "fields": {
+      "name": "Electrical Infrastructure Construction",
+      "field_of_study_id": "12"
+    }
+  }
+]
