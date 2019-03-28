@@ -63,11 +63,11 @@ class CampusFormWizard(CookieWizardView):
         return context
 
     def done(self, form_list, **kwargs):
+        QUALIFICATION_TITLES_FORM_STEP = 3
 
         i = 0
         for form in form_list:
-            if i == 3:
-                print(form.cleaned_data)
+            if i == QUALIFICATION_TITLES_FORM_STEP:
                 self.campus.save_qualifications(form.cleaned_data)
             else:
                 self.campus.save_form_data(form.cleaned_data)
