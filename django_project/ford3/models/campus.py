@@ -101,4 +101,4 @@ class Campus(models.Model):
             qualif.save()
 
     def __str__(self):
-        return self.name
+        return f'{self.name} campus'
