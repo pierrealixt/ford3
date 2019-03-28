@@ -1,12 +1,38 @@
-# coding=utf-8
-
-from django.conf import settings
-from django.shortcuts import render, redirect, render_to_response
+import json
+from django.shortcuts import (
+    render,
+    redirect,
+    get_object_or_404,
+    render_to_response
+)
 from django.db import transaction, IntegrityError
+from django.http import HttpResponse
 from ford3.models.provider import Provider
 from ford3.models.campus import Campus
 from ford3.forms.provider_form import ProviderForm
-from formtools.wizard.views import CookieWizardView
+from ford3.models.saqa_qualification import SAQAQualification
+
+
+def json_response(results):
+    return HttpResponse(
+        json.dumps({
+            'results': results}),
+        content_type='application/json')
+
+
+def saqa_qualifications(request):
+    if request.method != 'GET':
+        return json_response([])
+
+    query = request.GET.get('q', None)
+
+    if query is None or len(query) == 0:
+        return json_response([])
+
+    results = SAQAQualification.search(query)
+
+    return json_response(results)
+
 
 
 class CampusWizard(CookieWizardView):
