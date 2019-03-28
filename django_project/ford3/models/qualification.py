@@ -1,5 +1,4 @@
 from django.db import models
-from ford3.models.campus import Campus
 from ford3.models.occupation import Occupation
 from ford3.models.saqa_qualification import SAQAQualification
 from ford3.models.subject import Subject
@@ -11,7 +10,7 @@ class Qualification(models.Model):
         Subject,
         through='QualificationEntranceRequirementSubject')
     campus = models.ForeignKey(
-        Campus,
+        'ford3.campus',
         on_delete=models.CASCADE)
     saqa_qualification = models.ForeignKey(
         SAQAQualification,
