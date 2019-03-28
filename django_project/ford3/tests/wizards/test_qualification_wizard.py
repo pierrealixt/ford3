@@ -22,7 +22,6 @@ class TestQualificationWizard(TestCase):
     wizard_form_data = {
         'short_description': 'short_description',
         'long_description': 'long_description',
-        'nqf_level': None,
         'distance_learning': '',
         'full_time': '',
         'part_time': '',

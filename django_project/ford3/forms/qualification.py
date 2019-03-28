@@ -4,7 +4,7 @@ from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
 from ford3.models import (
     Interest,
     Occupation,
-    Subject
+    Subject,
 )
 
 
@@ -36,11 +36,6 @@ class QualificationDetailForm(QualificationForm):
         required=False,
         widget=forms.Textarea,
         max_length=500
-    )
-    nqf_level = forms.IntegerField(
-        label='NQF Level on completion:',
-        help_text='*Populated from SAQA',
-        required=False
     )
     distance_learning = forms.TypedChoiceField(
         label='Distance Learning:',

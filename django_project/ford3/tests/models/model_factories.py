@@ -13,6 +13,7 @@ from ford3.models.subject import Subject
 from ford3.models.campus_event import CampusEvent
 from ford3.models.qualification_event import QualificationEvent
 from ford3.models.interest import Interest
+from ford3.models.saqa_qualification import SAQAQualification
 
 
 class ModelFactories:
@@ -20,11 +21,9 @@ class ModelFactories:
     def get_qualification_test_object(new_id=1):
         qualification_test_object_instance = Qualification.objects.create(
             id=new_id,
-            saqa_id=4,
             name='Object Test Name',
             short_description='Some short description',
             long_description='Some very long description that just goes on...',
-            nqf_level=6,
             duration_in_months=12,
             full_time=True,
             part_time=False,
@@ -32,8 +31,8 @@ class ModelFactories:
             distance_learning=False,
             total_cost=100000,
             campus=ModelFactories.get_campus_test_object(),
-            sub_field_of_study=(
-                ModelFactories.get_sub_field_of_study_test_object()),
+            saqa_qualification=(
+                ModelFactories.get_saqa_qualification_test_object()),
             completion_rate=72,
             total_cost_comment='Way too much',
             critical_skill=False,
@@ -179,3 +178,16 @@ class ModelFactories:
         )
 
         return interest_test_object
+
+    @staticmethod
+    def get_saqa_qualification_test_object(new_id=1):
+        saqa_qualification_test_object = SAQAQualification.objects.create(
+            id=new_id,
+            name='SAQAQualification name',
+            nqf_level='1',
+            saqa_id='12345',
+            sub_field_of_study=(
+                ModelFactories.get_sub_field_of_study_test_object()),
+        )
+
+        return saqa_qualification_test_object
