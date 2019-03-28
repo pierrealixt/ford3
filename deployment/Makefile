@@ -391,6 +391,9 @@ test:
 coverage-test:
 	@docker-compose exec uwsgi coverage run manage.py test
 
+import-saqa-qualifications:
+	@docker-compose exec uwsgi python manage.py import_saqa_qualifications
+
 # --------------- help --------------------------------
 
 help:
