@@ -45,21 +45,6 @@ class CampusFormWizard(CookieWizardView):
         context['campus'] = self.campus
         context['provider'] = self.provider
 
-        if self.steps.current == '3':
-            context.update({'saqa_qualifications': [
-                {
-                    'saqa_id': 1000,
-                    'name': 'Bachelor in Art',
-                    'field_of_study': 'Arts',
-                    'subfield_of_study': '...'
-                },
-                {
-                    'saqa_id': 1001,
-                    'name': 'Bachelor in Computer Science',
-                    'field_of_study': 'Technology',
-                    'subfield_of_study': '...'
-                },
-            ]})
         return context
 
     def done(self, form_list, **kwargs):
@@ -72,4 +57,7 @@ class CampusFormWizard(CookieWizardView):
             else:
                 self.campus.save_form_data(form.cleaned_data)
             i += 1
-        return redirect('/')
+        return redirect(
+            '/ford3/providers/{provider_id}/campus/{campus_id}'.format(
+                provider_id=self.provider.id,
+                campus_id=self.campus.id))
