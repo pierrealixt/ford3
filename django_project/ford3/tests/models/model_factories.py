@@ -82,8 +82,12 @@ class ModelFactories:
             telephone='+27137441422',
             email='test@campus.com',
             max_students_per_year='42',
-            physical_address='24 Test Street, Extension Test, TestVille',
-            postal_address='Email us rather')
+            physical_address_street_name='24 Test Street',
+            physical_address_city='TestVille',
+            physical_address_postal_code='93460',
+            postal_address_street_name='PO Box 1000',
+            postal_address_city='Cape Town',
+            postal_address_postal_code='93460')
 
         return campus_test_object_instance
 
@@ -102,7 +106,6 @@ class ModelFactories:
     @staticmethod
     def get_field_of_study_test_object(new_id=1):
         field_of_study_test_object_instance = FieldOfStudy.objects.create(
-            id=new_id,
             name='Object Test Name'
         )
 
@@ -121,6 +124,7 @@ class ModelFactories:
     @staticmethod
     def get_provider_test_object(new_id=1):
         provider_test_object_instance = Provider.objects.create(
+            id=new_id,
             name='Object Test Name',
             website='www.mytest.com',
             logo_url='http://sometestplaceholder/logo.png',
@@ -182,10 +186,9 @@ class ModelFactories:
     @staticmethod
     def get_saqa_qualification_test_object(new_id=1):
         saqa_qualification_test_object = SAQAQualification.objects.create(
-            id=new_id,
             name='SAQAQualification name',
             nqf_level='1',
-            saqa_id='12345',
+            saqa_id=12345,
             sub_field_of_study=(
                 ModelFactories.get_sub_field_of_study_test_object()),
         )

@@ -1,9 +1,7 @@
 # coding=utf-8
-from django.conf.urls import url
 from django.urls import path
-from ford3.forms import CampusDetailsForm
-from ford3.views.views import CampusWizard
 from ford3.views import views
+from django.conf.urls import url
 from ford3.forms.qualification import (
     QualificationDetailForm,
     QualificationDurationFeesForm,
@@ -12,6 +10,14 @@ from ford3.forms.qualification import (
     QualificationImportantDatesForm,
 )
 from ford3.views.qualification_wizard import QualificationFormWizard
+from ford3.forms.campus import (
+    CampusDetailForm,
+    CampusLocationForm,
+    CampusImportantDatesForm,
+    CampusQualificationsForm
+)
+from ford3.views.campus_wizard import CampusFormWizard
+
 
 qualification_wizard = QualificationFormWizard.as_view(
     [
@@ -23,15 +29,33 @@ qualification_wizard = QualificationFormWizard.as_view(
     ],
 )
 
+campus_wizard = CampusFormWizard.as_view(
+    [
+        CampusDetailForm,
+        CampusLocationForm,
+        CampusImportantDatesForm,
+        CampusQualificationsForm
+    ]
+)
+
 urlpatterns = [
     url(
         r'^qualification-form/$',
         qualification_wizard,
         name='qualification_form'
     ),
-    path('campus/', CampusWizard.as_view([
-        ('Details', CampusDetailsForm),
-    ])),
     url(r'^ProviderForm/$', views.provider_form, name='provider_form'),
-    url(r'^TestWidgets/$', views.widget_examples, name='test_widgets')
+    url(r'^TestWidgets/$', views.widget_examples, name='test_widgets'),
+    path(
+        'providers/<int:provider_id>/campus/<int:campus_id>/edit',
+        campus_wizard,
+        name='campus_form'),
+    path(
+        'providers/<int:provider_id>/campus/<int:campus_id>',
+        views.show_campus,
+        name='campus'),
+    path(
+        'saqa_qualifications',
+        views.saqa_qualifications,
+        name='saqa_qualifications')
 ]

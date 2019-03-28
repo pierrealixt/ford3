@@ -24,3 +24,24 @@ class SAQAQualification(models.Model):
 
     def __str__(self):
         return self.name
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'saqa_id': self.saqa_id,
+            'name': self.name
+        }
+
+    def search(query):
+        try:
+            query = int(query)
+            results = SAQAQualification.objects.filter(
+                saqa_id=query)
+        except ValueError:
+            # query is not an integer
+            results = SAQAQualification.objects.filter(
+                name__icontains=query)
+
+        results = [obj.as_dict() for obj in results]
+
+        return results

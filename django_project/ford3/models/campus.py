@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
-
 from ford3.models.provider import Provider
+from ford3.models.qualification import Qualification
+from ford3.models.saqa_qualification import SAQAQualification
 
 
 class Campus(models.Model):
@@ -40,13 +41,42 @@ class Campus(models.Model):
         null=True,
         unique=False,
         help_text='')
-    physical_address = models.CharField(
+    physical_address_street_name = models.CharField(
         blank=False,
         null=True,
         unique=False,
         help_text='',
         max_length=255)
-    postal_address = models.CharField(
+
+    physical_address_city = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
+
+    physical_address_postal_code = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
+
+    postal_address_street_name = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
+
+    postal_address_city = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
+
+    postal_address_postal_code = models.CharField(
         blank=False,
         null=True,
         unique=False,
@@ -55,5 +85,20 @@ class Campus(models.Model):
 
     pass
 
+    def save_form_data(self, form_data):
+        for key, value in form_data.items():
+            setattr(self, key, value)
+        self.save()
+
+    def save_qualifications(self, form_data):
+        for saqa_id in form_data['saqa_ids'].split(' '):
+
+            saqa_qualif = SAQAQualification.objects.get(saqa_id=saqa_id)
+
+            qualif = Qualification(
+                saqa_qualification=saqa_qualif,
+                campus=self)
+            qualif.save()
+
     def __str__(self):
-        return self.name
+        return f'{self.name} campus'

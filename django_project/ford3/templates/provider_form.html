@@ -4,7 +4,7 @@
 	Provider Form
 {% endblock %}
 
-{% block body_content %}
+{% block body %}
 	<form action="/ProviderForm/" method="post">
 	{% csrf_token %}
 	<div class="col-12">
@@ -131,7 +131,7 @@
 		</div>
 	</div>
 	</form>
-{% endblock body_content %}
+{% endblock body %}
 
 {% block footer %}
 	  <script type="text/javascript"
