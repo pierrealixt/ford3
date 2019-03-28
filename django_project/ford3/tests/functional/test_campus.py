@@ -60,7 +60,7 @@ class TestCampusForm(SeleniumTestCase):
     #     self.assertIn('Email', html)
     #     self.assertIn('Maximum number of Students per year in campus', html)
 
-    #     next_step_button = self.driver.find_elements(By.LINK_TEXT, 'Next')
+        # next_step_button = self.driver.find_elements(By.LINK_TEXT, 'Next')
     #     next_step_button.click()
 
     #     html = self.driver.page_source
