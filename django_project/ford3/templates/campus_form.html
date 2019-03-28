@@ -49,12 +49,14 @@
                                     <ul id='campus-qualifications-list'>
                                     </ul>
                                 </div>
-                                <div class='col-md-2'>
+                                <div class='col-md-2 text-center'>
                                     <button type='button'
                                             class='left-arrow-button'
                                             data-action='add-qualif'>
                                         add
                                     </button>
+                                    <br />
+                                    <br />
                                     <button type='button'
                                             class='right-arrow-button'
                                             data-action='remove-qualif'>
@@ -64,12 +66,20 @@
                                 </div>
                                 <div class='col-md-5'>
                                     <h5>All qualifications</h5>
-                                    <input type='text' id='search_qualif' />
-                                    <ul id='saqa-qualifications-list'>
-                                    {% for qualif in saqa_qualifications %}
-                                        <li data-saqa-id="{{ qualif.saqa_id }}">{{ qualif.name }} ({{ qualif.saqa_id }})</li>
-                                    {% endfor %}
-                                    </ul>
+                                    <div class='row'>
+                                        <div class='col-md-10'>
+                                            <input type='text' data-action='search-qualif' />
+                                        </div>
+                                        <div class='col-md-2'>
+                                            <button type='button'
+                                                    data-action='clear-qualifs'>
+                                                clear
+                                            </button>
+                                        </div>
+                                        <div class='col-md-12'>
+                                            <ul id='saqa-qualifications-list'></ul>
+                                        </div>
+                                    </div>
                                 </div>                                
                             </div>
 
