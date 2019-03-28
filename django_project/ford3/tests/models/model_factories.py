@@ -106,7 +106,6 @@ class ModelFactories:
     @staticmethod
     def get_field_of_study_test_object(new_id=1):
         field_of_study_test_object_instance = FieldOfStudy.objects.create(
-            id=new_id,
             name='Object Test Name'
         )
 
@@ -187,10 +186,9 @@ class ModelFactories:
     @staticmethod
     def get_saqa_qualification_test_object(new_id=1):
         saqa_qualification_test_object = SAQAQualification.objects.create(
-            id=new_id,
             name='SAQAQualification name',
             nqf_level='1',
-            saqa_id='12345',
+            saqa_id=12345,
             sub_field_of_study=(
                 ModelFactories.get_sub_field_of_study_test_object()),
         )
