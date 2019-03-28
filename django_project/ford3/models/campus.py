@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
-
 from ford3.models.provider import Provider
+from ford3.models.qualification import Qualification
+from ford3.models.saqa_qualification import SAQAQualification
 
 
 class Campus(models.Model):
@@ -90,7 +91,14 @@ class Campus(models.Model):
         self.save()
 
     def save_qualifications(self, form_data):
-        print(form_data)
+        for saqa_id in form_data['saqa_ids'].split(' '):
+
+            saqa_qualif = SAQAQualification.objects.get(saqa_id=saqa_id)
+
+            qualif = Qualification(
+                saqa_qualification=saqa_qualif,
+                campus=self)
+            qualif.save()
 
     def __str__(self):
         return self.name
