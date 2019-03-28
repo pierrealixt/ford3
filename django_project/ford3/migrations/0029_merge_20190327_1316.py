@@ -6,7 +6,6 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ford3', '0027_merge_20190327_1030'),
         ('ford3', '0028_auto_20190327_1307'),
     ]
 
