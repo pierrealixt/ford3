@@ -17,8 +17,8 @@ class CampusForm(forms.Form):
 
 class CampusDetailForm(CampusForm):
 
-    photo = forms.FileField(
-        required=False)
+    # photo = forms.FileField(
+    #     required=False)
 
     telephone = forms.CharField(
         label='Tel. Number:',
