@@ -1,5 +1,5 @@
 import os
-from django.shortcuts import Http404, get_object_or_404
+from django.shortcuts import redirect, Http404, get_object_or_404
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from formtools.wizard.views import CookieWizardView
@@ -63,5 +63,13 @@ class CampusFormWizard(CookieWizardView):
         return context
 
     def done(self, form_list, **kwargs):
+
+        i = 0
         for form in form_list:
-            print(form.cleaned_data)
+            if i == 3:
+                print(form.cleaned_data)
+                self.campus.save_qualifications(form.cleaned_data)
+            else:
+                self.campus.save_form_data(form.cleaned_data)
+            i += 1
+        return redirect('/')

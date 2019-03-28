@@ -84,5 +84,13 @@ class Campus(models.Model):
 
     pass
 
+    def save_form_data(self, form_data):
+        for key, value in form_data.items():
+            setattr(self, key, value)
+        self.save()
+
+    def save_qualifications(self, form_data):
+        print(form_data)
+
     def __str__(self):
         return self.name
