@@ -103,6 +103,6 @@ class CampusImportantDatesForm(CampusForm):
 
 
 class CampusQualificationsForm(CampusForm):
-    qualification_ids = forms.CharField(
+    saqa_ids = forms.CharField(
         widget=forms.HiddenInput(),
         required=False)

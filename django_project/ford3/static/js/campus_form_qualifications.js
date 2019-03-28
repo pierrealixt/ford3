@@ -19,6 +19,26 @@ const getSelectedQualificationsFromList = (list) => {
   return list.querySelectorAll('li.selected')
 }
 
+const getSaqaQualificationsInputElem = () => {
+  return document.getElementById('id_3-saqa_ids')
+}
+
+const addSaqaQualification = (saqaId) => {
+  let saqaIds = getSaqaQualificationsInputElem().value.split(' ')
+  saqaIds.push(saqaId)
+  getSaqaQualificationsInputElem().value = saqaIds.join(' ')
+}
+
+const removeSaqaQualification = (saqaId) => {
+  let saqaIds = getSaqaQualificationsInputElem().value.split(' ')
+
+  saqaIds = saqaIds.filter(function (value, index, arr) {
+    return value !== saqaId
+  })
+
+  getSaqaQualificationsInputElem().value = saqaIds.join(' ')
+}
+
 const setToggleEvent = (elem) => {
   elem.addEventListener('click', function (evt) {
     evt.target.classList.toggle('selected')
@@ -55,6 +75,9 @@ const setClickEventToAddButton = () => {
       campusQualifListElem.appendChild(clonedNode)
 
       setToggleEvent(clonedNode)
+
+      let saqaId = selectedQualifElem.dataset['saqa-id']
+      addSaqaQualification(saqaId)
     })
   })
 }
@@ -73,6 +96,9 @@ const setClickEventToRemoveButton = () => {
       qualifElem.style.display = 'list-item'
 
       campusQualifListElem.removeChild(selectedQualifElem)
+
+      let saqaId = selectedQualifElem.dataset['saqa-id']
+      removeSaqaQualification(saqaId)
     })
   })
 }
