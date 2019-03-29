@@ -2,10 +2,14 @@
 import unittest
 
 from ford3.tests.functional.utils import SeleniumTestCase, selenium_flag_ready
+from ford3.tests.models.model_factories import ModelFactories
 
 
 
 class TestProviderForm(SeleniumTestCase):
+
+    def setUp(self):
+        self.new_provider = ModelFactories.get_provider_test_object()
 
     @unittest.skipUnless(
         selenium_flag_ready(),
@@ -14,7 +18,8 @@ class TestProviderForm(SeleniumTestCase):
 
         # User has created a basic account and now needs to add
         # provider form details and have been redirected to the provider form.
-        provider_form_url = self.live_server_url + '/ProviderForm/#'
+        provider_form_url = self.live_server_url + '/providers/{}/edit'.format(
+            self.new_provider.id)
         self.driver.get(provider_form_url)
         html = self.driver.page_source
         self.assertTrue(html.startswith('<html'))

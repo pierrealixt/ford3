@@ -1,11 +1,9 @@
 {% extends 'index.html' %}
 {% load static %}
-{% block title %}
-	Provider Form
-{% endblock %}
 
 {% block body %}
-	<form action="/ProviderForm/" method="post">
+
+	<form action="/providers/{{ provider_id }}/edit" method="post">
 	{% csrf_token %}
 	<div class="col-12">
 		<div class="container">
