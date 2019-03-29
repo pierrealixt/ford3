@@ -11,7 +11,8 @@ from ford3.models import (
     Occupation,
     Subject,
     SecondaryInstitutionType,
-    QualificationEvent
+    QualificationEvent,
+    SAQAQualification
 )
 
 
@@ -39,3 +40,4 @@ admin.site.register(Occupation)
 admin.site.register(Subject)
 admin.site.register(SecondaryInstitutionType)
 admin.site.register(QualificationEvent)
+admin.site.register(SAQAQualification)
