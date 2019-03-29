@@ -1,14 +1,18 @@
+import datetime
 from django.test import TestCase
 from ford3.tests.models.model_factories import ModelFactories
-from ford3.models.qualification import Qualification
 from ford3.models.saqa_qualification import SAQAQualification
 
 
 class TestCampus(TestCase):
 
+    def setUp(self):
+        self.campus = ModelFactories.get_campus_test_object(
+            new_id=420)
+
     def test_campus_description(self):
-        new_campus = ModelFactories.get_campus_test_object(1)
-        self.assertEqual(new_campus.__str__(), 'Object Test Name campus')
+        # new_campus = ModelFactories.get_campus_test_object(1)
+        self.assertEqual(self.campus.__str__(), 'Object Test Name campus')
 
     def test_save_details_form_data(self):
         """
@@ -16,9 +20,6 @@ class TestCampus(TestCase):
         """
         self.provider = ModelFactories.get_provider_test_object(
             new_id=42)
-
-        self.campus = ModelFactories.get_campus_test_object(
-            new_id=420)
 
         details_form_data = {
             'telephone': '0606551967',
@@ -33,14 +34,44 @@ class TestCampus(TestCase):
         self.assertEqual(self.campus.max_students_per_year, 1042)
 
     def test_save_location_form_data(self):
+        # form_data = {
+        #     'physical_address_street_name': 'street name',
+        #     'physical_address_city': 'gournay',
+        #     'physical_address_postal_code': '93460',
+        #     'is_physical_addr_same_as_postal_addr': True
+        # }
         pass
 
-    def test_save_dates_form_data(self):
-        pass
+    def test_save_events_form_data(self):
+        form_data = {
+            'event_type': 'Open day',
+            'event_date': datetime.date(2019, 3, 30),
+            'event_http_link': 'http://event42.com'
+        }
+
+        # campus should not have events yet.
+        self.assertQuerysetEqual(self.campus.events, [])
+
+        # save events
+        self.campus.save_events(form_data)
+
+        # campus should have one event
+        self.assertEqual(len(self.campus.events), 1)
+
+    def test_save_empty_event_form_data(self):
+        form_data = {
+            'event_type': '',
+            'event_date': None,
+            'event_http_link': ''
+        }
+
+        self.assertEqual(len(self.campus.events), 0)
+
+        self.campus.save_events(form_data)
+
+        self.assertEqual(len(self.campus.events), 0)
 
     def test_save_qualifications(self):
-        campus = ModelFactories.get_campus_test_object(
-            new_id=420)
 
         # create two SAQA Qualifications
         saqas = [
@@ -61,23 +92,19 @@ class TestCampus(TestCase):
         }
 
         # campus should not have qualifications yet.
-        campus_qualifications = Qualification.objects.filter(
-            campus__id=campus.id)
-        self.assertQuerysetEqual(campus_qualifications, [])
+        self.assertQuerysetEqual(self.campus.qualifications, [])
 
         # save qualifications
-        campus.save_qualifications(form_data)
+        self.campus.save_qualifications(form_data)
 
         # campus should have 2 qualifications.
-        campus_qualifications = Qualification.objects.filter(
-            campus__id=campus.id).order_by('id')
-        self.assertEqual(len(campus_qualifications), 2)
+        self.assertEqual(len(self.campus.qualifications), 2)
 
         for i in range(2):
             self.assertEqual(
-                campus_qualifications[i].saqa_qualification.saqa_id,
+                self.campus.qualifications[i]['saqa_qualification__saqa_id'],
                 saqas[i].saqa_id)
 
             self.assertEqual(
-                campus_qualifications[i].saqa_qualification.name,
+                self.campus.qualifications[i]['saqa_qualification__name'],
                 saqas[i].name)
