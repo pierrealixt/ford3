@@ -8,17 +8,28 @@
         <div class='col-md-12'>
             <h3>{{ campus }}</h3>
 
-            <h4>1. Campus Information</h4>
             <div class='row'>
-                <div class='col-md-5'>
-                    <p>Tel. Number: {{ campus.telephone }}</p>
-                    <p>Max number of Students per year in Campus: {{ campus.max_students_per_year }}</p>
-                </div>
-                <div class='col-md-5'>
-                    <p>Physical address: {{ campus.physical_address_street_name }}, {{ campus.physical_address_city }} {{ campus.physical_address_postal_code }}</p>
+                <div class='col-md-10'>
+                    <h4>1. Campus Information</h4>
                 </div>
                 <div class='col-md-2'>
                     <a class="edu-button edu-button-orange" href='/ford3/providers/{{ provider_id }}/campus/{{ campus.id }}/edit'>Edit</a>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-md-4'>
+                    <p>Tel. Number: {{ campus.telephone }}</p>
+                    <p>Max number of Students per year in Campus: {{ campus.max_students_per_year }}</p>
+                </div>
+                <div class='col-md-4'>
+                    <p>Physical address: {{ campus.physical_address_street_name }}, {{ campus.physical_address_city }} {{ campus.physical_address_postal_code }}</p>
+                </div>
+                <div class='col-md-4'>
+                    <ul>
+                    {% for event in campus.events %}
+                        <li>{{ event.name }} - {{ event.date_start }}</li>
+                    {% endfor %}
+                    </ul>
                 </div>
             </div>
 
@@ -28,7 +39,7 @@
             <div class='row'>
                 <div class='col-md-12'>
                     <ul>
-                    {% for qualification in qualifications %}
+                    {% for qualification in campus.qualifications %}
                         <li>
                             <a href='/ford3/providers/{{ provider.id }}/campus/{{ campus.id }}/qualifications/{{ qualification.id }}/edit'>
                                 {{ qualification.saqa_qualification__name }} (SAQA_ID: {{ qualification.saqa_qualification__saqa_id }})

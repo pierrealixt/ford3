@@ -69,35 +69,27 @@ class CampusLocationForm(CampusForm):
 
 
 class CampusImportantDatesForm(CampusForm):
-    date_start = forms.DateField(
-        label='Application period start:',
-        required=False,
-        widget=forms.DateInput(
-            attrs={'class': 'col-md-4'}
-        )
-    )
-
-    date_end = forms.DateField(
-        label='Application period end:',
-        required=False,
-        widget=forms.DateInput(
-            attrs={'class': 'col-md-4'}
-        )
-    )
-
-    other_event = forms.CharField(
-        label='Other event [if any]:',
+    event_type = forms.CharField(
+        label='Event type',
         required=False,
         widget=forms.TextInput(
-            attrs={'placeholder': 'Title, eg, Exhibition'}
+            attrs={'placeholder': 'Open day, ...'}
         )
     )
 
     event_date = forms.DateField(
-        label='Event Date:',
+        label='Event date:',
         required=False,
         widget=forms.DateInput(
             attrs={'class': 'col-md-4'}
+        )
+    )
+
+    event_http_link = forms.CharField(
+        label='Link to event:',
+        required=False,
+        widget=forms.TextInput(
+            attrs={'placeholder': 'http://...'}
         )
     )
 

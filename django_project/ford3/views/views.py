@@ -10,7 +10,6 @@ from django.db.models import F
 from django.http import HttpResponse
 from ford3.models.provider import Provider
 from ford3.models.campus import Campus
-from ford3.models.qualification import Qualification
 from ford3.forms.provider_form import ProviderForm
 from ford3.models.saqa_qualification import SAQAQualification
 
@@ -37,18 +36,11 @@ def saqa_qualifications(request):
 
 
 def show_campus(request, provider_id, campus_id):
-    qualif_query = Qualification.objects.filter(
-        campus__id=campus_id).values(
-            'id',
-            'saqa_qualification__name',
-            'saqa_qualification__saqa_id')
-
     context = {
         'campus': get_object_or_404(
             Campus,
             id=campus_id),
-        'provider_id': provider_id,
-        'qualifications': list(qualif_query)
+        'provider_id': provider_id
     }
 
     return render(request, 'campus.html', context)
@@ -117,7 +109,7 @@ def show_provider(request, provider_id):
     form_data['campus_list'] = list(campus_data)
     form_data['provider_name'] = str(provider_name)
     return render(request, 'provider_landing_page.html',
-                  {'form_data' : form_data})
+                  {'form_data': form_data})
 
 
 def widget_examples(request):
