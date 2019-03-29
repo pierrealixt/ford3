@@ -39,11 +39,6 @@ campus_wizard = CampusFormWizard.as_view(
 )
 
 urlpatterns = [
-    url(
-        r'^qualification-form/$',
-        qualification_wizard,
-        name='qualification_form'
-    ),
     path('providers/<int:provider_id>/',
          views.show_provider,
          name='show_provider'),
@@ -62,6 +57,9 @@ urlpatterns = [
         'saqa_qualifications',
         views.saqa_qualifications,
         name='saqa_qualifications'),
-
+    path(
+        'providers/<int:provider_id>/campus/<int:campus_id>/qualifications/<int:qualification_id>/edit',
+        qualification_wizard,
+        name='qualification_form'),
     url(r'^test_widgets/$', views.widget_examples, name='test_widgets'),
 ]
