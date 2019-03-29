@@ -41,7 +41,7 @@
                     <ul>
                     {% for qualification in campus.qualifications %}
                         <li>
-                            <a href='/ford3/providers/{{ provider.id }}/campus/{{ campus.id }}/qualifications/{{ qualification.id }}/edit'>
+                            <a href='/ford3/providers/{{ provider_id }}/campus/{{ campus.id }}/qualifications/{{ qualification.id }}/edit'>
                                 {{ qualification.saqa_qualification__name }} (SAQA_ID: {{ qualification.saqa_qualification__saqa_id }})
                             </a>
                         </li>

@@ -202,7 +202,7 @@ class QualificationFormWizard(CookieWizardView):
         Get qualification from id
         :return: qualification object
         """
-        qualification_id = self.request.GET.get('id', None)
+        qualification_id = self.kwargs['qualification_id']
         if not qualification_id:
             raise Http404()
         return get_object_or_404(
