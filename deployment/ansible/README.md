@@ -152,4 +152,13 @@ You have to actually build the docker container and run it, before it
 is actually being used by Project Interpreter. Typically you want to do
 something like `make build up web` to build and start the ssh container.
 
+## Possible Problems
+
+• If, upon running the project after the restart, pycharm displays the 
+runtime configuration, it is likely due to the project not having an 
+interpreter selected **even if it appears to be selected**. To rectify 
+this, simply re-select the interpreter from the dropdown.
+
+
+
 

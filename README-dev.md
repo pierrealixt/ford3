@@ -147,8 +147,7 @@ I made a general overview screencast describing this process here:
 
 ## Running Tests
 
-Tim write stuff here....
-
+See /django_project/ford3/tests/functional/README.md for setting up selenium.
 
 ## Developer FAQ
 
