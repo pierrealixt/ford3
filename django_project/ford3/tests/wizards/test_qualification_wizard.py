@@ -15,7 +15,6 @@ from ford3.views.qualification_wizard import QualificationFormWizardDataProcess
     STATICFILES_STORAGE='pipeline.storage.NonPackagingPipelineStorage',
     PIPELINE_ENABLED=False)
 class TestQualificationWizard(TestCase):
-    wizard_url = '/ford3/qualification-form/?id=1'
     wizard_step_1_data = {
         'session_contact_wizard-current_step': '0',
     }
@@ -54,6 +53,15 @@ class TestQualificationWizard(TestCase):
         self.qualification = ModelFactories.get_qualification_test_object(
             new_id=1
         )
+
+        self.wizard_url = '/'.join([
+            '/ford3/providers/{}'.format(
+                self.qualification.campus.provider.id),
+            'campus/{}'.format(
+                self.qualification.campus.id),
+            'qualifications/{}/edit'.format(
+                self.qualification.id)])
+
         self.subject_1 = ModelFactories.get_subject_test_object(
             new_id=1
         )
