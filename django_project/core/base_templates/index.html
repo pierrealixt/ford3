@@ -38,7 +38,16 @@
 	{% block side_navbar %}
 		{% include 'side_navbar.html' %} <!-- side_navbar.html -->
 	{% endblock %}
-	{% block body %} {% endblock %}
+	{% block body %} 
+		<div class='container'>
+			<div class='row'>
+				<div class='col-md-12 text-center'>
+					<h1>This is the public landing page</h1>
+					<a href='/site-admin'>Administration</a>
+				</div>
+			</div>
+		</div>
+	{% endblock %}
 
 </div>
 </div>
