@@ -1,4 +1,5 @@
 from django.db import models
+from ford3.models.campus import Campus
 
 
 class Provider(models.Model):
@@ -80,3 +81,11 @@ class Provider(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def campus(self):
+        campus_query = Campus.objects.filter(
+            provider__id=self.id).order_by('id').values(
+                'id',
+                'name')
+        return list(campus_query)

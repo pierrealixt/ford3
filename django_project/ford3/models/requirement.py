@@ -1,11 +1,10 @@
 from django.db import models
-from ford3.models.qualification import Qualification
 from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
 
 
 class Requirement(models.Model):
     qualification = models.ForeignKey(
-        Qualification,
+        'ford3.qualification',
         on_delete=models.CASCADE)
 
     description = models.CharField(
