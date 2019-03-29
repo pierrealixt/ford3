@@ -7,13 +7,13 @@
 		<div class="col-12 side-bar-title" id="provider-name">
 			False Bay College
 		</div>
-		<div class="row">
+		<div class='col-md-12'>
 			<ul>
-				<li class="selected">Fish Hoek</li>
-				<li>Mitchell's Plain</li>
-				<li>Khayelitsha</li>
-				<li>Muizenberg</li>
-				<li>Westlake</li>
+				{% for campus in provider.campus %}
+					<li>
+						<a href='/ford3/providers/{{ provider.id }}/campus/{{ campus.id }}'>{{ campus.name }}</a>
+					</li>
+				{% endfor %}
 			</ul>
 		</div>
 	</div>

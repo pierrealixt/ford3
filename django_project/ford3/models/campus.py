@@ -1,5 +1,4 @@
 from django.contrib.gis.db import models
-from ford3.models.provider import Provider
 from ford3.models.qualification import Qualification
 from ford3.models.saqa_qualification import SAQAQualification
 from ford3.models.campus_event import CampusEvent
@@ -7,7 +6,7 @@ from ford3.models.campus_event import CampusEvent
 
 class Campus(models.Model):
     provider = models.ForeignKey(
-        Provider,
+        'ford3.provider',
         on_delete=models.CASCADE)
     name = models.CharField(
         blank=False,

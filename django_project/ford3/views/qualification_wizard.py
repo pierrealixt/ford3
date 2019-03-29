@@ -5,7 +5,9 @@ from ford3.models import (
     Requirement,
     Subject,
     QualificationEntranceRequirementSubject,
-    QualificationEvent
+    QualificationEvent,
+    Provider,
+    Campus
 )
 from ford3.forms.qualification import (
     QualificationDetailForm,
@@ -197,6 +199,34 @@ class QualificationFormWizard(CookieWizardView):
     template_name = 'qualification_form.html'
 
     @property
+    def provider(self):
+        """
+        Get provider from id
+        :return: provider object
+        """
+        provider_id = self.kwargs['provider_id']
+        if not provider_id:
+            raise Http404()
+        return get_object_or_404(
+            Provider,
+            id=provider_id
+        )
+
+    @property
+    def campus(self):
+        """
+        Get campus from id
+        :return: campus object
+        """
+        campus_id = self.kwargs['campus_id']
+        if not campus_id:
+            raise Http404()
+        return get_object_or_404(
+            Campus,
+            id=campus_id
+        )
+
+    @property
     def qualification(self):
         """
         Get qualification from id
@@ -225,6 +255,8 @@ class QualificationFormWizard(CookieWizardView):
             'Interest & Jobs',
             'Important Dates',
         ]
+        context['qualification'] = self.qualification
+        context['provider'] = self.qualification.campus.provider
         return context
 
     def done(self, form_list, **kwargs):
@@ -237,4 +269,10 @@ class QualificationFormWizard(CookieWizardView):
         qualification_data_process.process_data(
             form_data
         )
-        return redirect('/')
+
+        url = '/'.join([
+            '/ford3/providers/{}'.format(self.provider.id),
+            'campus/{}'.format(self.campus.id),
+            'qualifications/{}'.format(self.qualification.id)
+            ])
+        return redirect(url)

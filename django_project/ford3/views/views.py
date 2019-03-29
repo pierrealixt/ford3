@@ -8,10 +8,13 @@ from django.shortcuts import (
 from django.db import transaction, IntegrityError
 from django.db.models import F
 from django.http import HttpResponse
-from ford3.models.provider import Provider
-from ford3.models.campus import Campus
+from ford3.models import (
+    Campus,
+    Provider,
+    Qualification,
+    SAQAQualification
+)
 from ford3.forms.provider_form import ProviderForm
-from ford3.models.saqa_qualification import SAQAQualification
 
 
 def json_response(results):
@@ -36,11 +39,12 @@ def saqa_qualifications(request):
 
 
 def show_campus(request, provider_id, campus_id):
+    campus = get_object_or_404(
+        Campus,
+        id=campus_id)
     context = {
-        'campus': get_object_or_404(
-            Campus,
-            id=campus_id),
-        'provider_id': provider_id
+        'campus': campus,
+        'provider': campus.provider
     }
 
     return render(request, 'campus.html', context)
@@ -110,6 +114,17 @@ def show_provider(request, provider_id):
     form_data['provider_name'] = str(provider_name)
     return render(request, 'provider_landing_page.html',
                   {'form_data': form_data})
+
+
+def show_qualification(request, provider_id, campus_id, qualification_id):
+    qualification = get_object_or_404(
+        Qualification,
+        id=qualification_id)
+    context = {
+        'qualification': qualification,
+        'provider': qualification.campus.provider
+    }
+    return render(request, 'qualification.html', context)
 
 
 def widget_examples(request):

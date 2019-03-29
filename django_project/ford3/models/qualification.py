@@ -1,13 +1,11 @@
 from django.db import models
-from ford3.models.occupation import Occupation
 from ford3.models.saqa_qualification import SAQAQualification
-from ford3.models.subject import Subject
-from ford3.models.interest import Interest
+from ford3.models.requirement import Requirement
 
 
 class Qualification(models.Model):
     subjects = models.ManyToManyField(
-        Subject,
+        'ford3.subject',
         through='QualificationEntranceRequirementSubject')
     campus = models.ForeignKey(
         'ford3.campus',
@@ -17,10 +15,10 @@ class Qualification(models.Model):
         null=True,
         on_delete=models.PROTECT)
     occupations = models.ManyToManyField(
-        Occupation,
+        'ford3.occupation',
         blank=True)
     interests = models.ManyToManyField(
-        Interest,
+        'ford3.interest',
         blank=True)
     name = models.CharField(
         blank=False,
@@ -94,4 +92,11 @@ class Qualification(models.Model):
         default=False)
 
     def __str__(self):
-        return self.name
+        return self.saqa_qualification.name
+
+    @property
+    def requirements(self):
+
+        requirement_query = Requirement.objects.filter(
+            qualification__id=self.id).order_by('id').values()
+        return list(requirement_query)
