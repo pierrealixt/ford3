@@ -123,6 +123,8 @@ class Campus(models.Model):
         event.save()
 
     def save_qualifications(self, form_data):
+        if len(form_data['saqa_ids']) == 0:
+            return
         for saqa_id in form_data['saqa_ids'].split(' '):
 
             saqa_qualif = SAQAQualification.objects.get(saqa_id=saqa_id)

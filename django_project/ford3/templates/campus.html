@@ -39,7 +39,7 @@
             <div class='row'>
                 <div class='col-md-12'>
                     <ul>
-                    {% for qualification in qualifications %}
+                    {% for qualification in campus.qualifications %}
                         <li>
                             <a href='/ford3/providers/{{ provider.id }}/campus/{{ campus.id }}/qualifications/{{ qualification.id }}/edit'>
                                 {{ qualification.saqa_qualification__name }} (SAQA_ID: {{ qualification.saqa_qualification__saqa_id }})
