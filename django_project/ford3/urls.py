@@ -58,7 +58,10 @@ urlpatterns = [
         views.saqa_qualifications,
         name='saqa_qualifications'),
     path(
-        'providers/<int:provider_id>/campus/<int:campus_id>/qualifications/<int:qualification_id>/edit',
+        '/'.join([
+            'providers/<int:provider_id>',
+            'campus/<int:campus_id>',
+            'qualifications/<int:qualification_id>/edit']),
         qualification_wizard,
         name='qualification_form'),
     url(r'^test_widgets/$', views.widget_examples, name='test_widgets'),
