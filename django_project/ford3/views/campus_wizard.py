@@ -48,15 +48,24 @@ class CampusFormWizard(CookieWizardView):
         return context
 
     def done(self, form_list, **kwargs):
-        QUALIFICATION_TITLES_FORM_STEP = 3
+        steps = {
+            'DETAILS': 0,
+            'LOCATION': 1,
+            'DATES': 2,
+            'QUALIFICATION_TITLES': 3
+        }
 
         i = 0
         for form in form_list:
-            if i == QUALIFICATION_TITLES_FORM_STEP:
-                self.campus.save_qualifications(form.cleaned_data)
-            else:
+            if i == steps['DETAILS'] or i == steps['LOCATION']:
                 self.campus.save_form_data(form.cleaned_data)
+            elif i == steps['DATES']:
+                print(form.cleaned_data)
+                self.campus.save_events(form.cleaned_data)
+            elif i == steps['QUALIFICATION_TITLES']:
+                self.campus.save_qualifications(form.cleaned_data)
             i += 1
+
         return redirect(
             '/ford3/providers/{provider_id}/campus/{campus_id}'.format(
                 provider_id=self.provider.id,

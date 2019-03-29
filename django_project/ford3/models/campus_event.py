@@ -1,11 +1,10 @@
 from django.db import models
-from ford3.models.campus import Campus
 
 
 class CampusEvent(models.Model):
 
     campus = models.ForeignKey(
-        Campus,
+        'ford3.campus',
         on_delete=models.CASCADE)
     name = models.CharField(
         blank=False,
