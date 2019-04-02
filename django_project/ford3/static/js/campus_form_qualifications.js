@@ -24,7 +24,7 @@ const getSelectedQualificationsFromList = (list) => {
 }
 
 const getSaqaQualificationsInputElem = () => {
-  return document.getElementById('id_3-saqa_ids')
+  return document.getElementById('id_campus-qualifications-saqa_ids')
 }
 
 const addSaqaQualification = (saqaId) => {
@@ -100,7 +100,7 @@ const setClickEventToRemoveButton = () => {
 
       campusQualifListElem.removeChild(selectedQualifElem)
 
-      let saqaId = selectedQualifElem.dataset['saqa-id']
+      let saqaId = selectedQualifElem.dataset['saqaId']
       removeSaqaQualification(saqaId)
     })
   })

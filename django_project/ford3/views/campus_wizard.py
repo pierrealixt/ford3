@@ -3,6 +3,7 @@ from django.shortcuts import redirect, Http404, get_object_or_404
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from django.urls import reverse
+from django.forms.models import model_to_dict
 from formtools.wizard.views import CookieWizardView
 from ford3.models import (
     Campus,
@@ -11,7 +12,6 @@ from ford3.models import (
 
 
 class CampusFormWizard(CookieWizardView):
-
     template_name = 'campus_form.html'
     file_storage = FileSystemStorage(
         location=os.path.join(settings.MEDIA_ROOT, 'photos'))
@@ -45,8 +45,19 @@ class CampusFormWizard(CookieWizardView):
         ]
         context['campus'] = self.campus
         context['provider'] = self.provider
-
         return context
+
+    def get_form_initial(self, step):
+        # For 'Details' and 'Location' forms
+        initial_dict = model_to_dict(self.campus)
+
+        # For 'Qualification Titles' form
+        saqa_ids = ' '.join([
+            str(s['saqa_qualification__saqa_id'])
+            for s in self.campus.qualifications])
+
+        initial_dict.update({'saqa_ids': saqa_ids})
+        return initial_dict
 
     def done(self, form_list, **kwargs):
         steps = {
