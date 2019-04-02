@@ -80,7 +80,7 @@ const setClickEventToAddButton = () => {
 
       setToggleEvent(clonedNode)
 
-      let saqaId = selectedQualifElem.dataset['saqa-id']
+      let saqaId = selectedQualifElem.dataset['saqaId']
       addSaqaQualification(saqaId)
     })
   })
