@@ -6,4 +6,4 @@ class TestQualification(TestCase):
 
     def test_qualification_name(self):
         new_qualification = ModelFactories.get_qualification_test_object()
-        self.assertEqual(new_qualification.__str__(), 'Object Test Name')
+        self.assertEqual(str(new_qualification), 'SAQAQualification name')
