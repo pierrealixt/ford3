@@ -20,13 +20,18 @@
                 <ul class="nav-wizard-steps nav nav-pills nav-fill">
                     {% for form_name in form_name_list %}
                         <li class="nav-item">
+                        {% if forloop.counter == wizard.steps.step1 %}
+                            <div class="step-active"> {{ forloop.counter }}</div>
+                        {% elif forloop.counter < wizard.steps.step1 %}
+                            <img src="{% static 'images/ui/checked.png' %}" class="step-checked"/>
+                        {% endif %}
                             <a class="nav-link
                             {% if forloop.counter == wizard.steps.step1 %}
                                 active
                             {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}" href="#">
                                 <h4 class="list-group-item-heading">
-                                    Step {{ forloop.counter }}</h4>
-                                <p class="list-group-item-text">{{ form_name }}</p>
+                                    {{ form_name }}</h4>
+                                <p class="list-group-item-text"></p>
                             </a>
                         </li>
                     {% endfor %}
@@ -44,39 +49,38 @@
 
                         {% if wizard.steps.step1 == 4 %}
                             <div class='row'>
-                                <div class='col-md-5'>
-                                    <h5>All qualifications in {{ campus }} campus</h5>
+                                <div class='col-md-5 campus-all-qualifications'>
+                                    <h5 class="text-center">All qualifications in {{ campus }} campus</h5>
                                     <ul id='campus-qualifications-list'>
                                     </ul>
                                 </div>
-                                <div class='col-md-2 text-center'>
+                                <div class='col-md-2 text-center' style="margin-top: 150px;">
+                                        <p class="qualif-texts">add</p>
                                     <button type='button'
                                             class='left-arrow-button'
                                             data-action='add-qualif'>
-                                        add
                                     </button>
                                     <br />
                                     <br />
                                     <button type='button'
                                             class='right-arrow-button'
                                             data-action='remove-qualif'>
-                                        remove
-                                    </button>                                    
+                                    </button>
+                                    <p class="qualif-texts">remove</p>
 
                                 </div>
                                 <div class='col-md-5'>
                                     <h5>All qualifications</h5>
-                                    <div class='row'>
-                                        <div class='col-md-10'>
-                                            <input type='text' data-action='search-qualif' />
-                                        </div>
-                                        <div class='col-md-2'>
+                                    <div class='row saqa-all-qualifications'>
+                                        <div class='col-md-12' style="box-shadow: 0 2px 2px rgba(0, 0, 0, 0.24), 0 0 2px rgba(0, 0, 0, 0.12);height: 40px">
+                                            <input type='text' data-action='search-qualif' class="search-qualifications" value="Search Qualifications" style="width: 80%;"/>
                                             <button type='button'
                                                     data-action='clear-qualifs'>
                                                 clear
                                             </button>
+
                                         </div>
-                                        <div class='col-md-12'>
+                                        <div class='col-md-12' style="padding-right: 0px;">
                                             <ul id='saqa-qualifications-list'></ul>
                                         </div>
                                     </div>
@@ -94,14 +98,14 @@
                             {% if wizard.steps.prev %}
                                 <button class="edu-button edu-button-blue"
                                         name="wizard_goto_step" type="submit"
-                                        value="{{ wizard.steps.prev }}">Prev
-                                    step
+                                        value="{{ wizard.steps.prev }}">
+                                    Back
                                 </button>
                             {% endif %}
                         </div>
                         <div class="col-md-4">
                             <p class="form-steps-count">
-                                Step {{ wizard.steps.step1 }}
+                                Page {{ wizard.steps.step1 }}
                                 of {{ wizard.steps.count }}
                             </p>
                         </div>

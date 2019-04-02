@@ -1,3 +1,74 @@
+body {
+  font-family: Lato;
+}
 .selected {
-    background: red;
+    background: #83cbd1;
+    color: #ffffff;
+}
+button.left-arrow-button {
+  background-image: url('../images/ui/add_button.svg');
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-color: #ffffff;
+  height: 5px;
+  border: none;
+  width: 61px;
+  height: 48px;
+}
+button.right-arrow-button {
+  background-image: url('../images/ui/remove_button.png');
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-color: #ffffff;
+  height: 5px;
+  border: none;
+  width: 61px;
+  height: 48px;
+}
+.qualif-texts {
+  color: #7acdcf;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.campus-all-qualifications {
+  /* Style for "Rectangle" */
+  width: 437px;
+  height: 563px;
+  border-radius: 4px;
+  border: 1px solid #aaaaaa;
+}
+
+.saqa-all-qualifications {
+  /* Style for "Rectangle" */
+  width: 465px;
+  height: 479px;
+  border: 1px solid #aaaaaa;
+}
+.search-qualifications {
+  background-image: url('../images/ui/zoom.svg');
+  background-repeat: no-repeat;
+  background-position: 1%;
+  border: none !important;
+  padding-left: 2rem !important;
+
+}
+#saqa-qualifications-list, #campus-qualifications-list {
+  width: 100%;
+  height: 370px;
+  list-style: none;
+  color: #464746;
+  line-height: 27px;
+  padding-left: 0.1rem;
+  overflow-y: auto;
+}
+#campus-qualifications-list {
+  height: 480px;
+}
+#saqa-qualifications-list a:link, #campus-qualifications-list a:link {
+  color: #464746;
+}
+button.edu-button-blue {
+  font-size: 20px;
 }
