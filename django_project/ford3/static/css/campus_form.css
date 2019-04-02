@@ -8,7 +8,7 @@ body {
 }
 
 button.left-arrow-button {
-  background-image: url('../images/ui/add_button.svg');
+  background-image: url('../images/ui/left-arrow.svg');
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-color: #ffffff;
@@ -19,7 +19,7 @@ button.left-arrow-button {
 }
 
 button.right-arrow-button {
-  background-image: url('../images/ui/remove_button.png');
+  background-image: url('../images/ui/right-arrow.png');
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-color: #ffffff;
@@ -37,15 +37,10 @@ button.right-arrow-button {
 }
 
 .campus-all-qualifications {
-  width: 437px;
-  height: 563px;
-  border-radius: 4px;
   border: 1px solid #aaaaaa;
 }
 
 .saqa-all-qualifications {
-  width: 465px;
-  height: 479px;
   border: 1px solid #aaaaaa;
 }
 
