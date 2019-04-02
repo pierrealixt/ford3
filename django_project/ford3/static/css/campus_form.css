@@ -67,9 +67,13 @@ button.right-arrow-button {
 }
 
 #saqa-qualifications-list a:link, #campus-qualifications-list a:link {
-  color: #464746;
+  color: darkred;
+  text-decoration: underline;
 }
 
 button.edu-button-blue {
+  font-size: 20px;
+}
+.btn-default {
   font-size: 20px;
 }

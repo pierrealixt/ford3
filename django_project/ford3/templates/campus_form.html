@@ -14,12 +14,9 @@
 
 {% block body %}
     <div class="container">
-        <div class='row'>
-            <h2>{{ campus }} Campus Details</h2>
-        </div>
+        <h2>{{ campus }} Campus Details</h2>
         <div class="row">
-            <div class="col-md-12">
-                <div class='row'>
+            <div class="col-lg-12">
                     <ul class="nav-wizard-steps nav nav-pills nav-fill">
                         {% for form_name in form_name_list %}
                             <li class="nav-item">
@@ -39,7 +36,7 @@
                             </li>
                         {% endfor %}
                     </ul>
-                </div>
+
                 <form action="" method="post">{% csrf_token %}
                     <div class="form-group">
                         {{ wizard.management_form }}
@@ -51,7 +48,6 @@
                         {% endif %}
 
                         {% if wizard.steps.step1 == 4 %}
-                            <div class='row'>
                                 <div class='col-md-5 campus-all-qualifications float-md-left'>
                                     <h5 class="text-center pt-2">All qualifications in {{ campus }} campus</h5>
                                     <ul id='campus-qualifications-list'>
@@ -77,21 +73,21 @@
                                             <input type='text' data-action='search-qualif' class="search-qualifications" value="Search Qualifications" />
                                         </div>
                                         <div class="col-md-2 pt-2 float-md-right">
-                                            <button type='button' class="btn-danger"
+                                            <button type='button' class="btn-danger btn-default"
                                                     data-action='clear-qualifs'>
-                                                clear
+                                                clear&nbsp;
                                             </button>
                                         </div>
                                     <div class='col-md-12 float-left pl-1'>
                                         <ul id='saqa-qualifications-list'></ul>
                                     </div>
                                 </div>
-                            </div>
 <style>
 
 </style>
                         {% endif %}                        
                     </div>
+                <div class="clearfix"></div>
                     <div class="row form-actions">
                         <div class="col-md-4">
                             {% if wizard.steps.prev %}
