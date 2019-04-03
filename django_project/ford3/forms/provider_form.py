@@ -25,7 +25,7 @@ class ProviderForm(forms.models.ModelForm):
                   'physical_address_line_2',
                   'physical_address_city',
                   'postal_address',
-        )
+                  )
         widgets = {
             'name' : forms.fields.HiddenInput(),
             'provider_type' : forms.fields.Select(

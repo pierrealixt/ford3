@@ -100,7 +100,7 @@ class TestProviderForm(SeleniumTestCase):
         inputbox.send_keys('provider_test@fakedomain.com')
 
         # They are asked for a campus name.
-        inputbox = self.driver.find_element_by_name('campus_name_1')
+        inputbox = self.driver.find_element_by_name('campus_name')
 
         # Enter their Email Address
         inputbox.send_keys('Somecampus')

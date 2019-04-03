@@ -93,41 +93,46 @@
 					</div>
 				</div>
 			</div>
-			<div class="row mt1 edu-underline">
-				<h4>Campuses</h4>
-			</div>
-			<div class="row mt1">
-				<div class="col-4 npl">
-					Number of Campuses
-				</div>
-				<div class="col-6" style="padding: 0.5rem; padding-left: 1rem;">
-					<input type="range" min="1" max="10" value="1"
-						   class="range-slider centerv" id="campus-count">
-				</div>
-				<div class="col-2">
-					<input name="number-of-campuses" id="number-of-campuses" class="number-of-campuses" value="1"/>
-				</div>
-			</div>
-			<div id="campus-names-input-wrapper">
-				<div class="row mt1">
-					<div class="col-4 centerv npl">
-						Name of Campus 1:
-					</div>
-					<div class="col-8">
-						<input name="campus_name_1" type="text" placeholder="•••••••••••••••••"/>
+			{% if is_new_provider %}
+
+				<div class="row mt1 edu-underline">
+					<div class="col-8"><h4>Campuses</h4></div>
+					<div class="col-4">
+						<div id="add-campus-name"
+						     class="edu-button edu-button-orange">Add Campus
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row mt1">
-				<div class="col-4"></div>
-				<div class="col-3">
-					<button type="submit" class="edu-button edu-button-blue">Submit</button>
+				<div id="campus-names-input-wrapper">
+					<div class="row mt1">
+						<div class="col-4 centerv npl">
+							Campus Name
+						</div>
+						<div class="col-7">
+							<input name="campus_name" required
+							       class="campus_name"
+							       type="text"
+							       placeholder="•••••••••••••••••"/>
+						</div>
+						<div class="col-1">
+							<div class="remove-campus-button">
+								<div class="remove-campus-button-inner ">X</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-			<div class="row mt1">
+			{% endif %}
+		</div>
+		<div class="row mt1">
+
+			<div class="col-12">
+				<button type="submit"
+				        class="edu-button edu-button-blue">Submit
+				</button>
 			</div>
 		</div>
 	</div>
+		</div>
 	</form>
 {% endblock body %}
 

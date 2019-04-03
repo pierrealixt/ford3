@@ -101,3 +101,19 @@
     -o-animation: fadein 2s; /* Opera < 12.1 */
     animation: fadein 2s;
 }
+
+.remove-campus-button-inner {
+    line-height: 2.7rem;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.remove-campus-button {
+    background-color: var(--c-orange);
+    border-radius: 50%;
+    width: 2.75rem;
+    height: 2.75rem;
+    text-align: center;
+    cursor: pointer;
+}

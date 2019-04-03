@@ -89,3 +89,7 @@ class Provider(models.Model):
                 'id',
                 'name')
         return list(campus_query)
+
+    @property
+    def is_new_provider(self):
+        return len(self.campus) == 0
