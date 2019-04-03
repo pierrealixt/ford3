@@ -14,29 +14,29 @@
 
 {% block body %}
     <div class="container">
-        <h2>{{ campus }} Campus Details</h2>
         <div class="row">
-            <div class="col-lg-12">
-                    <ul class="nav-wizard-steps nav nav-pills nav-fill">
-                        {% for form_name in form_name_list %}
-                            <li class="nav-item">
+            <div class="col-md-12">
+                <h2>{{ campus }} Campus Details</h2>
+            </div>
+            <div class='col-md-12'>
+                <ul class="nav-wizard-steps nav nav-pills nav-fill">
+                    {% for form_name in form_name_list %}
+                        <li class="nav-item">
+                            <a class="nav-link
                             {% if forloop.counter == wizard.steps.step1 %}
-                                <div class="step-active"> {{ forloop.counter }}</div>
-                            {% elif forloop.counter < wizard.steps.step1 %}
-                                <img src="{% static 'images/ui/checked.png' %}" class="step-checked"/>
-                            {% endif %}
-                                <a class="nav-link
-                                {% if forloop.counter == wizard.steps.step1 %}
-                                    active
-                                {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}" href="#">
-                                    <h4 class="list-group-item-heading">
-                                        {{ form_name }}</h4>
-                                    <p class="list-group-item-text"></p>
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-
+                                active
+                            {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}" href="#">
+                                <h4 class="list-group-item-heading">
+                                    Step {{ forloop.counter }}</h4>
+                                <p class="list-group-item-text">{{ form_name }}</p>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-md-12'>
                 <form action="" method="post">{% csrf_token %}
                     <div class="form-group">
                         {{ wizard.management_form }}
@@ -48,46 +48,47 @@
                         {% endif %}
 
                         {% if wizard.steps.step1 == 4 %}
-                                <div class='col-md-5 campus-all-qualifications float-md-left'>
-                                    <h5 class="text-center pt-2">All qualifications in {{ campus }} campus</h5>
-                                    <ul id='campus-qualifications-list'>
-                                    </ul>
-                                </div>
-                                <div class='col-md-2 text-center pt-5 mt-5 float-md-left'>
-                                        <p class="qualif-texts">add</p>
-                                    <button type='button'
-                                            class='left-arrow-button'
-                                            data-action='add-qualif'>
-                                    </button>
-                                    <br />
-                                    <br />
-                                    <button type='button'
-                                            class='right-arrow-button'
-                                            data-action='remove-qualif'>
-                                    </button>
-                                    <p class="qualif-texts">remove</p>
-                                </div>
-                                <div class='col-md-5 saqa-all-qualifications float-md-left'>
-                                    <h5 class="text-center pt-2">All qualifications</h5>
-                                        <div class='col-md-10 pl-1 pt-2 float-md-left border-bottom'>
-                                            <input type='text' data-action='search-qualif' class="search-qualifications" value="Search Qualifications" />
-                                        </div>
-                                        <div class="col-md-2 pt-2 float-md-right">
-                                            <button type='button' class="btn-danger btn-default"
-                                                    data-action='clear-qualifs'>
-                                                clear&nbsp;
-                                            </button>
-                                        </div>
-                                    <div class='col-md-12 float-left pl-1'>
+                        <div class='row no-gutters'>
+                            <div class='col-md-5 campus-all-qualifications'>
+                                <h5 class="text-center">All qualifications in {{ campus }} campus</h5>
+                                <ul id='campus-qualifications-list'>
+                                </ul>
+                            </div>
+                            <div class='col-md-2 text-center'>
+                                    <p class="qualif-texts">add</p>
+                                <button type='button'
+                                        class='arrow-button left-arrow-button'
+                                        data-action='add-qualif'>
+                                </button>
+                                <br />
+                                <br />
+                                <button type='button'
+                                        class='arrow-button right-arrow-button'
+                                        data-action='remove-qualif'>
+                                </button>
+                                <p class="qualif-texts">remove</p>
+                            </div>
+                            <div class='col-md-5 saqa-all-qualifications'>
+                                <h5 class="text-center">All qualifications</h5>
+                                <div class='row'>
+                                    <div class='col-md-9'>
+                                        <input type='text' data-action='search-qualif' class="search-qualifications"    placeholder="Search Qualifications" />
+                                    </div>
+                                    <div class="col-md-3">
+                                    <button type='button' class="btn-danger btn-default"
+                                                data-action='clear-qualifs'>
+                                            clear
+                                        </button>
+                                    </div>
+                                    <hr class='col-md-10' />
+                                    <div class='col-md-12'>
                                         <ul id='saqa-qualifications-list'></ul>
                                     </div>
                                 </div>
-<style>
-
-</style>
+                            </div>
+                        </div>
                         {% endif %}                        
                     </div>
-                <div class="clearfix"></div>
                     <div class="row form-actions">
                         <div class="col-md-4">
                             {% if wizard.steps.prev %}
