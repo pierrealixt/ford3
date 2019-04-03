@@ -7,8 +7,7 @@ body {
     color: #ffffff;
 }
 
-button.left-arrow-button {
-  background-image: url('../images/ui/left-arrow.svg');
+button.arrow-button {
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-color: #ffffff;
@@ -16,17 +15,15 @@ button.left-arrow-button {
   border: none;
   width: 61px;
   height: 48px;
+  cursor: pointer;
+}
+
+button.left-arrow-button {
+  background-image: url('../images/ui/left-arrow.svg');  
 }
 
 button.right-arrow-button {
   background-image: url('../images/ui/right-arrow.png');
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  background-color: #ffffff;
-  height: 5px;
-  border: none;
-  width: 61px;
-  height: 48px;
 }
 
 .qualif-texts {
