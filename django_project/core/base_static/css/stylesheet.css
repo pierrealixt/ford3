@@ -101,11 +101,13 @@ h4 {
 
 .edu-button-grey:hover {
     background-color: var(--c-grey-l);
+    text-decoration: none;
 }
 
 .edu-button-grey:focus {
     outline-color: var(--c-grey-l);
 }
+
 
 
 /*  ----------------------------- SWITCH CSS - modified https://www.w3schools.com/howto/howto_css_switch.asp  ----------------------------- */
@@ -696,4 +698,48 @@ input[type='email']:hover::placeholder {
     background-repeat: no-repeat;
     background-size: contain;
     display: inline-flex;
+}
+
+/* -- provider page --- */
+.campus-card {
+    width: 299px;
+    height: 375px;
+    border-radius: 13px;
+    background-image: linear-gradient(to right, #7acdcf 0%, #47b4b6 100%);
+}
+
+.campus-card h5 {
+    color:  white;
+    text-align: center;
+}
+
+.campus-completion-rate {
+    background:  url('../images/ui/circle-completion.svg');
+    width:  194px;
+    height:  202px;
+    margin:  0 auto;
+    color: white;
+    text-align: center;
+    padding-top: 42px;
+}
+
+.campus-completion-rate span {
+    font-size: 42px;
+}
+
+.campus-card li {
+    font-size: 10px;
+    color: #ffffff;
+    font-weight: 400;
+    width:  122px;
+    font-family: Lato;
+    opacity:  .75;
+}
+
+.campus-card .progress {
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 7px;
+}
+.campus-card .progress-bar {
+    background-color: #ffffff;
 }
