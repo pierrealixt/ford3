@@ -394,6 +394,13 @@ coverage-test:
 import-saqa-qualifications:
 	@docker-compose exec uwsgi python manage.py import_saqa_qualifications
 
+load-initial-data:
+	@docker-compose exec uwsgi python manage.py loaddata occupation.json
+	@docker-compose exec uwsgi python manage.py loaddata subject.json
+	@docker-compose exec uwsgi python manage.py loaddata interest.json
+	@docker-compose exec uwsgi python manage.py import_saqa_qualifications -f
+
+
 # --------------- help --------------------------------
 
 help:
