@@ -14,9 +14,11 @@
 
 {% block body %}
     <div class="container">
-        <h2>{{ campus }} Campus Details</h2>
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-md-12">
+                <h2>{{ campus }} Campus Details</h2>
+            </div>
+            <div class='col-md-12'>
                 <ul class="nav-wizard-steps nav nav-pills nav-fill">
                     {% for form_name in form_name_list %}
                         <li class="nav-item">
@@ -31,7 +33,10 @@
                         </li>
                     {% endfor %}
                 </ul>
-
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-md-12'>
                 <form action="" method="post">{% csrf_token %}
                     <div class="form-group">
                         {{ wizard.management_form }}
@@ -43,50 +48,45 @@
                         {% endif %}
 
                         {% if wizard.steps.step1 == 4 %}
-                            <div class='row'>
-                                <div class='col-md-5'>
-                                    <h5>All qualifications in {{ campus }} campus</h5>
-                                    <ul id='campus-qualifications-list'>
-                                    </ul>
-                                </div>
-                                <div class='col-md-2 text-center'>
-                                    <button type='button'
-                                            class='left-arrow-button'
-                                            data-action='add-qualif'>
-                                        add
-                                    </button>
-                                    <br />
-                                    <br />
-                                    <button type='button'
-                                            class='right-arrow-button'
-                                            data-action='remove-qualif'>
-                                        remove
-                                    </button>                                    
-
-                                </div>
-                                <div class='col-md-5'>
-                                    <h5>All qualifications</h5>
-                                    <div class='row'>
-                                        <div class='col-md-10'>
-                                            <input type='text' data-action='search-qualif' />
-                                        </div>
-                                        <div class='col-md-2'>
-                                            <button type='button'
-                                                    data-action='clear-qualifs'>
-                                                clear
-                                            </button>
-                                        </div>
-                                        <div class='col-md-12'>
-                                            <ul id='saqa-qualifications-list'></ul>
-                                        </div>
-                                    </div>
-                                </div>                                
+                        <div class='row no-gutters'>
+                            <div class='col-md-5 campus-all-qualifications'>
+                                <h5 class="text-center">All qualifications in {{ campus }} campus</h5>
+                                <ul id='campus-qualifications-list'>
+                                </ul>
                             </div>
-
-
-<style>
-
-</style>
+                            <div class='col-md-2 text-center'>
+                                    <p class="qualif-texts">add</p>
+                                <button type='button'
+                                        class='arrow-button left-arrow-button'
+                                        data-action='add-qualif'>
+                                </button>
+                                <br />
+                                <br />
+                                <button type='button'
+                                        class='arrow-button right-arrow-button'
+                                        data-action='remove-qualif'>
+                                </button>
+                                <p class="qualif-texts">remove</p>
+                            </div>
+                            <div class='col-md-5 saqa-all-qualifications'>
+                                <h5 class="text-center">All qualifications</h5>
+                                <div class='row'>
+                                    <div class='col-md-9'>
+                                        <input type='text' data-action='search-qualif' class="search-qualifications"    placeholder="Search Qualifications" />
+                                    </div>
+                                    <div class="col-md-3">
+                                    <button type='button' class="btn-danger btn-default"
+                                                data-action='clear-qualifs'>
+                                            clear
+                                        </button>
+                                    </div>
+                                    <hr class='col-md-10' />
+                                    <div class='col-md-12'>
+                                        <ul id='saqa-qualifications-list'></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         {% endif %}                        
                     </div>
                     <div class="row form-actions">
@@ -94,14 +94,14 @@
                             {% if wizard.steps.prev %}
                                 <button class="edu-button edu-button-blue"
                                         name="wizard_goto_step" type="submit"
-                                        value="{{ wizard.steps.prev }}">Prev
-                                    step
+                                        value="{{ wizard.steps.prev }}">
+                                    Back
                                 </button>
                             {% endif %}
                         </div>
                         <div class="col-md-4">
                             <p class="form-steps-count">
-                                Step {{ wizard.steps.step1 }}
+                                Page {{ wizard.steps.step1 }}
                                 of {{ wizard.steps.count }}
                             </p>
                         </div>
