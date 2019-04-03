@@ -6,20 +6,81 @@
 
 {% block body %}
 	<div class="container">
-		<div class="row">
-			<h3>Provider: {{ form_data.provider_name }}</h3>
+		<div class="row no-gutters">
+			<div class='col-md-9'>
+				<h3>{{ form_data.provider_name }}</h3>
+				<h4>Campuses</h4>
+				<hr />
+			</div>
+			<div class='col-md-3'>
+				<a href='' class='edu-button edu-button-orange'>Add a campus</a>				
+			</div>
 		</div>
-		<div class="row">
-			<h3>Please select a campus to maintain</h3>
+
+		<div class='row justify-content-center no-gutters'>
+			{% for each_campus in form_data.campus_list %}
+				<div class='col-md-4 card mb-5 border-0'>
+					<div class='campus-card mx-auto'>
+						<div class='card-body'>
+							<h5 class='card-title'>{{ each_campus.campus_name }}</h5>
+
+							<div class='campus-completion-rate'>
+								<p>
+									<span>20%</span>
+									<br />
+									complete
+								</p>
+							</div>
+
+							<ul class='list-inline mt-2'>
+								<li class='list-inline-item'>
+									Campus Information
+									<br />
+									<div class='row m-0 p-0'>
+										<div class='col-md-9 p-0'>
+											<div class="progress">
+		  										<div class="progress-bar" role="progressbar" style="width: 40%"aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										</div>
+										<div class='col-md-2 offset-md-1 p-0 m-1'>
+											40%
+										</div>
+									</div>
+
+								</li>
+								<li class='list-inline-item'>
+									Qualification Information
+									<br />
+									<div class='row m-0 p-0'>
+										<div class='col-md-9 p-0'>
+											<div class="progress">
+		  										<div class="progress-bar" role="progressbar" style="width: 40%"aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										</div>
+										<div class='col-md-2 offset-md-1 p-0 m-1'>
+											40%
+										</div>
+									</div>
+								</li>
+							</ul>								
+
+							<a href='' class='edu-button edu-button-grey align-bottom'>Edit</a>
+
+							
+						</div>
+					</div>
+				</div>
+			{% endfor %}
 		</div>
-		{% for each_campus in form_data.campus_list %}
+
+<!-- 		{% for each_campus in form_data.campus_list %}
 			<div class="col-4">
 				<button class='edu-button edu-button-blue'
 				        onclick="window.location=window.location.href + 'campus/{{ each_campus.campus_id }}';">
 					{{ each_campus.campus_name }}
 				</button>
 			</div>
-		{% endfor %}
+		{% endfor %} -->
 
 	</div>
 {% endblock %}
