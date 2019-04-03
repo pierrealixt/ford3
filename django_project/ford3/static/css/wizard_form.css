@@ -8,26 +8,20 @@
 }
 
 .form-steps-count {
-    padding-top: 15px;
+    padding-top: 35px;
     vertical-align: middle;
-    font-size: 24px;
 }
 
 .helptext {
     font-size: 10pt;
 }
 
-.nav-item {
-    border: 1px solid #d5d5d5;
-}
-
 .nav-link {
     padding-top: 20px;
-    float: left;
 }
 
 .nav-item, .nav-link {
-    font-size: 0.8rem;
+    border-radius: 0 !important;
 }
 
 .disabled h4 {
@@ -36,12 +30,12 @@
 
 .nav-link.disabled {
     color: #d5d5d5 !important;
-    /* border: 1px solid #d5d5d5; */
+    border: 1px solid #d5d5d5;
 }
 
 .nav-link.done {
     color: #7ed321 !important;
-    /*border: 1px solid #7ed321; */
+    border: 1px solid #7ed321;
 }
 
 .nav-link.done h4 {
@@ -51,7 +45,7 @@
 .nav-link.active {
     background-color: white !important;
     color: #7dccd0 !important;
-    /* border: 1px solid #7dccd0; */
+    border: 1px solid #7dccd0;
 }
 
 .form-check-inline {
@@ -97,26 +91,4 @@
 
 .multiple-select-square.gray.odd {
     background-color: #d5d5d5;
-}
-
-.step-checked {
-    width: 42px;
-    height: 42px;
-    margin-top: 10px;
-    margin-left: 5px;
-    float: left;
-}
-
-.step-active {
-    background-image: url('../images/ui/oval.png');
-    background-repeat: no-repeat;
-    height: 5px;
-    border: none;
-    width: 42px;
-    height: 42px;
-    color: #ffffff;
-    float: left;
-    font-size: 24px;
-    margin-top: 10px;
-    margin-left: 5px;
 }
