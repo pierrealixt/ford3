@@ -13,16 +13,16 @@
 				<hr />
 			</div>
 			<div class='col-md-3'>
-				<a href='' class='edu-button edu-button-orange'>Add a campus</a>				
+				<a href='' class='edu-button edu-button-orange'>Add a campus</a>
 			</div>
 		</div>
 
 		<div class='row justify-content-center no-gutters'>
-			{% for each_campus in form_data.campus_list %}
+			{% for campus in provider.campus %}
 				<div class='col-md-4 card mb-5 border-0'>
 					<div class='campus-card mx-auto'>
 						<div class='card-body'>
-							<h5 class='card-title'>{{ each_campus.campus_name }}</h5>
+							<h5 class='card-title'>{{ campus.name }}</h5>
 
 							<div class='campus-completion-rate'>
 								<p>
@@ -62,32 +62,20 @@
 										</div>
 									</div>
 								</li>
-							</ul>								
+							</ul>
 
 							<a href='' class='edu-button edu-button-grey align-bottom'>Edit</a>
 
-							
+
 						</div>
 					</div>
 				</div>
 			{% endfor %}
 		</div>
 
-<!-- 		{% for each_campus in form_data.campus_list %}
-			<div class="col-4">
-				<button class='edu-button edu-button-blue'
-				        onclick="window.location=window.location.href + 'campus/{{ each_campus.campus_id }}';">
-					{{ each_campus.campus_name }}
-				</button>
-			</div>
-		{% endfor %} -->
-
-	</div>
 {% endblock %}
 
 {% block footer %}
-    <script type="text/javascript"
-            src="{% static 'js/sidebar.js' %}"></script>
     <script type="text/javascript"
             src="{% static 'js/provider.js' %}"></script>
 {% endblock %}

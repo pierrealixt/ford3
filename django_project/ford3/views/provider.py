@@ -64,16 +64,22 @@ def edit_provider(request, provider_id):
 
 
 def show_provider(request, provider_id):
+    context = {}
     form_data = {}
     campus_query = Campus.objects.filter(provider__id=provider_id).annotate(
         campus_name=F('name'),
         campus_id=F('id'),
         provider_name=F('provider__name')
     )
-    campus_data = campus_query.values('campus_name', 'campus_id')
+    campus_data = campus_query.values('name', 'id')
     provider_name = campus_query.values('provider_name')[0]['provider_name']
 
     form_data['campus_list'] = list(campus_data)
     form_data['provider_name'] = str(provider_name)
-    return render(request, 'provider.html',
-                  {'form_data': form_data})
+
+    context['form_data'] = form_data
+    context['provider'] = {
+        'campus': campus_data,
+        'id': provider_id
+    }
+    return render(request, 'provider.html', context)

@@ -109,7 +109,6 @@ h4 {
 }
 
 
-
 /*  ----------------------------- SWITCH CSS - modified https://www.w3schools.com/howto/howto_css_switch.asp  ----------------------------- */
 
 /* The switch - the box around the slider */
@@ -678,6 +677,15 @@ input[type='email']:hover::placeholder {
     padding-left: 3rem;
 }
 
+nav#sidebar ul li a {
+    color: inherit;
+}
+
+nav#sidebar ul li a:hover {
+    text-decoration: none;
+}
+
+
 .open-edu-logo {
     width: 30%;
     min-width: 110px;
@@ -742,4 +750,9 @@ input[type='email']:hover::placeholder {
 }
 .campus-card .progress-bar {
     background-color: #ffffff;
+}
+
+.noplr {
+    padding-left: 0;
+    padding-right: 0;
 }
