@@ -103,6 +103,12 @@ class Campus(models.Model):
                 'saqa_qualification__saqa_id')
         return list(qualif_query)
 
+    @property
+    def saqa_ids(self):
+        return [
+            str(s['saqa_qualification__saqa_id'])
+            for s in self.qualifications]
+
     def save_form_data(self, form_data):
         for key, value in form_data.items():
             setattr(self, key, value)
@@ -124,7 +130,11 @@ class Campus(models.Model):
     def save_qualifications(self, form_data):
         if len(form_data['saqa_ids']) == 0:
             return
-        for saqa_id in form_data['saqa_ids'].split(' '):
+
+        # symmetric difference
+        ids = set(self.saqa_ids) ^ set(form_data['saqa_ids'].split(' '))
+
+        for saqa_id in ids:
 
             saqa_qualif = SAQAQualification.objects.get(saqa_id=saqa_id)
 
@@ -132,6 +142,16 @@ class Campus(models.Model):
                 saqa_qualification=saqa_qualif,
                 campus=self)
             qualif.save()
+
+    def delete_qualifications(self, form_data):
+        # ids missing in form_data must be deleted
+        ids = set(form_data['saqa_ids'].split(' ')) ^ set(self.saqa_ids)
+        ids = [saqa_id for saqa_id in ids if len(saqa_id) > 0]
+
+        for saqa_id in ids:
+            qualif = Qualification.objects.filter(
+                saqa_qualification__saqa_id=saqa_id)
+            qualif.delete()
 
     def __str__(self):
         return f'{self.name} campus'

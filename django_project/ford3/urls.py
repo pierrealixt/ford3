@@ -29,14 +29,14 @@ qualification_wizard = QualificationFormWizard.as_view(
     ],
 )
 
-campus_wizard = CampusFormWizard.as_view(
-    [
-        CampusDetailForm,
-        CampusLocationForm,
-        CampusImportantDatesForm,
-        CampusQualificationsForm
-    ]
-)
+CAMPUS_FORMS = [
+    ('campus-details', CampusDetailForm),
+    ('campus-location', CampusLocationForm),
+    ('campus-dates', CampusImportantDatesForm),
+    ('campus-qualifications', CampusQualificationsForm)
+]
+
+campus_wizard = CampusFormWizard.as_view(CAMPUS_FORMS)
 
 urlpatterns = [
     path('providers/<int:provider_id>/',

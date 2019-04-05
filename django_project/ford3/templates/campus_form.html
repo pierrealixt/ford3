@@ -52,6 +52,11 @@
                             <div class='col-md-5 campus-all-qualifications'>
                                 <h5 class="text-center">All qualifications in {{ campus }} campus</h5>
                                 <ul id='campus-qualifications-list'>
+                                    {% for qualification in campus.qualifications %}
+                                    <li data-saqa-id='{{ qualification.saqa_qualification__saqa_id }}'>
+                                        <a href='http://regqs.saqa.org.za/viewQualification.php?id={{ qualification.saqa_qualification__id }}' target='_blank'>({{ qualification.saqa_qualification__saqa_id }})</a> {{ qualification.saqa_qualification__name }}
+                                    </li>
+                                    {% endfor %}
                                 </ul>
                             </div>
                             <div class='col-md-2 text-center'>
@@ -108,7 +113,8 @@
                         <div class="col-md-4">
                             <button class="edu-button edu-button-blue"
                                     type="submit"
-                                    value="submit">
+                                    value="submit"
+                                    id='my-next-button'>
                                 {% if wizard.steps.next %}
                                     Next
                                 {% else %}

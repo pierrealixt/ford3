@@ -100,11 +100,69 @@ class TestCampus(TestCase):
         # campus should have 2 qualifications.
         self.assertEqual(len(self.campus.qualifications), 2)
 
-        for i in range(2):
-            self.assertEqual(
-                self.campus.qualifications[i]['saqa_qualification__saqa_id'],
-                saqas[i].saqa_id)
+    def test_save_qualifications_duplicate(self):
+        """ It should not save a duplicate qualification.
+        """
 
-            self.assertEqual(
-                self.campus.qualifications[i]['saqa_qualification__name'],
-                saqas[i].name)
+        saqas = [
+            ModelFactories.get_saqa_qualification_test_object(),
+            SAQAQualification.objects.create(
+                name='Hello World',
+                nqf_level='42',
+                saqa_id=42,
+                sub_field_of_study=(
+                    ModelFactories.get_sub_field_of_study_test_object(
+                        new_id=42)),
+            )
+        ]
+
+        # build form data
+        form_data = {
+            'saqa_ids': '{}'.format(saqas[0].saqa_id)
+        }
+        # save two times with same saqa_ids
+        self.campus.save_qualifications(form_data)
+        self.campus.save_qualifications(form_data)
+
+        self.assertEqual(len(self.campus.qualifications), 1)
+
+        form_data = {
+            'saqa_ids': '{} {}'.format(saqas[0].saqa_id, saqas[1].saqa_id)
+        }
+
+        # save with a new saqa_id
+        self.campus.save_qualifications(form_data)
+
+        self.assertEqual(len(self.campus.qualifications), 2)
+
+    def test_delete_qualifications(self):
+        saqas = [
+            ModelFactories.get_saqa_qualification_test_object(),
+            SAQAQualification.objects.create(
+                name='Hello World',
+                nqf_level='42',
+                saqa_id=42,
+                sub_field_of_study=(
+                    ModelFactories.get_sub_field_of_study_test_object(
+                        new_id=42)),
+            )
+        ]
+
+        # build form data
+        form_data = {
+            'saqa_ids': '{} {}'.format(saqas[0].saqa_id, saqas[1].saqa_id)
+        }
+        self.campus.save_qualifications(form_data)
+        self.assertEqual(len(self.campus.qualifications), 2)
+
+        form_data = {
+            'saqa_ids': '{}'.format(saqas[1].saqa_id)
+        }
+
+        # it should remove the first saqa
+        self.campus.delete_qualifications(form_data)
+
+        self.assertEqual(len(self.campus.qualifications), 1)
+        self.assertEqual(
+            self.campus.qualifications[0]['saqa_qualification__saqa_id'],
+            42)
