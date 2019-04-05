@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, Http404, get_object_or_404
+from django.urls import reverse
 from formtools.wizard.views import CookieWizardView
 from ford3.models import (
     Qualification,
@@ -270,9 +271,7 @@ class QualificationFormWizard(CookieWizardView):
             form_data
         )
 
-        url = '/'.join([
-            '/ford3/providers/{}'.format(self.provider.id),
-            'campus/{}'.format(self.campus.id),
-            'qualifications/{}'.format(self.qualification.id)
-            ])
+        url = reverse(
+            'show-qualification',
+            args=(self.provider.id, self.campus.id, self.qualification.id))
         return redirect(url)

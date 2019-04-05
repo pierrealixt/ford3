@@ -1,9 +1,7 @@
-# coding utf-8
 import unittest
-
 from ford3.tests.functional.utils import SeleniumTestCase, selenium_flag_ready
 from ford3.tests.models.model_factories import ModelFactories
-
+from django.urls import reverse
 
 
 class TestProviderForm(SeleniumTestCase):
@@ -18,9 +16,11 @@ class TestProviderForm(SeleniumTestCase):
 
         # User has created a basic account and now needs to add
         # provider form details and have been redirected to the provider form.
-        provider_form_url = self.live_server_url + '/providers/{}/edit'.format(
-            self.new_provider.id)
-        self.driver.get(provider_form_url)
+        provider_form_url = reverse(
+            'edit-provider',
+            args=(str(self.new_provider.id)))
+
+        self.driver.get(f'{self.live_server_url}{provider_form_url}')
         html = self.driver.page_source
         self.assertTrue(html.startswith('<html'))
         self.assertIn('FORD3', self.driver.title)
@@ -87,8 +87,6 @@ class TestProviderForm(SeleniumTestCase):
         # Which they enter as
         inputbox.send_keys('1200')
 
-
-
         # They are asked for their email.
         inputbox = self.driver.find_element_by_name('email')
         self.assertEqual(
@@ -104,7 +102,6 @@ class TestProviderForm(SeleniumTestCase):
 
         # Enter their Email Address
         inputbox.send_keys('Somecampus')
-
 
         # They submit their data by clicking on the submit button
         submit_button = self.driver.find_element_by_class_name('edu-button')

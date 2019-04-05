@@ -13,7 +13,7 @@
                     <h4>1. Campus Information</h4>
                 </div>
                 <div class='col-md-2'>
-                    <a class="edu-button edu-button-orange" href='/ford3/providers/{{ provider.id }}/campus/{{ campus.id }}/edit'>Edit</a>
+                    <a class="edu-button edu-button-orange" href="{% url 'edit-campus' provider_id=provider.id campus_id=campus.id %}">Edit</a>
                 </div>
             </div>
             <div class='row'>
@@ -56,8 +56,8 @@
                                     <td>N/A</td>
                                     <td>N/A</td>
                                     <td>
-                                        <a class="edu-button edu-button-orange" href='/ford3/providers/{{ provider.id }}/campus/{{ campus.id }}/qualifications/{{ qualification.id }}'>Show</a>
-                                        <a class="edu-button edu-button-orange" href='/ford3/providers/{{ provider.id }}/campus/{{ campus.id }}/qualifications/{{ qualification.id }}/edit'>Edit</a>
+                                        <a class="edu-button edu-button-orange" href="{% url 'show-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Show</a>
+                                        <a class="edu-button edu-button-orange" href="{% url 'edit-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Edit</a>
                                     </td>
                                 </tr>
                             {% endfor %}        

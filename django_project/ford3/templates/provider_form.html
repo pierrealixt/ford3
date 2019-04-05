@@ -3,7 +3,8 @@
 
 {% block body %}
 	<div class="container">
-		<form action="/providers/{{ provider_id }}/edit" method="post">
+
+		<form action="{% url 'edit-provider' provider_id %}" method="post">
 		{% csrf_token %}
 		<div class="row">
 			<div class="col-12">

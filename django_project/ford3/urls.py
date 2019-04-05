@@ -41,35 +41,35 @@ campus_wizard = CampusFormWizard.as_view(
 urlpatterns = [
     path('providers/<int:provider_id>/',
          show_provider,
-         name='show_provider'),
+         name='show-provider'),
     path('providers/<int:provider_id>/edit',
          edit_provider,
-         name='provider_form'),
+         name='edit-provider'),
     path(
         'providers/<int:provider_id>/campus/<int:campus_id>/edit',
         campus_wizard,
-        name='campus_form'),
+        name='edit-campus'),
     path(
         'providers/<int:provider_id>/campus/<int:campus_id>',
         views.show_campus,
-        name='campus'),
+        name='show-campus'),
     path(
         'saqa_qualifications',
         views.saqa_qualifications,
-        name='saqa_qualifications'),
+        name='search-saqa-qualifications'),
     path(
         '/'.join([
             'providers/<int:provider_id>',
             'campus/<int:campus_id>',
             'qualifications/<int:qualification_id>/edit']),
         qualification_wizard,
-        name='qualification_form'),
+        name='edit-qualification'),
     path(
         '/'.join([
             'providers/<int:provider_id>',
             'campus/<int:campus_id>',
             'qualifications/<int:qualification_id>']),
         views.show_qualification,
-        name='qualification'),
+        name='show-qualification'),
     url(r'^test_widgets/$', views.widget_examples, name='test_widgets'),
 ]

@@ -1,4 +1,5 @@
 import datetime
+from django.urls import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
 from ford3.tests.models.model_factories import ModelFactories
@@ -54,13 +55,12 @@ class TestQualificationWizard(TestCase):
             new_id=1
         )
 
-        self.wizard_url = '/'.join([
-            '/ford3/providers/{}'.format(
-                self.qualification.campus.provider.id),
-            'campus/{}'.format(
-                self.qualification.campus.id),
-            'qualifications/{}/edit'.format(
-                self.qualification.id)])
+        self.wizard_url = reverse(
+            'edit-qualification',
+            args=(
+                self.qualification.campus.provider.id,
+                self.qualification.campus.id,
+                self.qualification.id))
 
         self.subject_1 = ModelFactories.get_subject_test_object(
             new_id=1
