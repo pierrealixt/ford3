@@ -13,7 +13,7 @@
                     <h4>1. Details</h4>
                 </div>
                 <div class='col-md-2'>
-                    <a class="edu-button edu-button-orange" href='/ford3/providers/{{ qualification.campus.provider.id }}/campus/{{ qualification.campus.id }}/qualifications/{{ qualification.id }}/edit'>Edit</a>
+                    <a class="edu-button edu-button-orange" href="{% url 'edit-qualification' provider_id=qualification.campus.provider.id campus_id=qualification.campus.id qualification_id=qualification.id %}">Edit</a>
                 </div>
             </div>
             <div class='row'>

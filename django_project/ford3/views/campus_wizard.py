@@ -2,6 +2,7 @@ import os
 from django.shortcuts import redirect, Http404, get_object_or_404
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+from django.urls import reverse
 from formtools.wizard.views import CookieWizardView
 from ford3.models import (
     Campus,
@@ -66,7 +67,5 @@ class CampusFormWizard(CookieWizardView):
                 self.campus.save_qualifications(form.cleaned_data)
             i += 1
 
-        return redirect(
-            '/ford3/providers/{provider_id}/campus/{campus_id}'.format(
-                provider_id=self.provider.id,
-                campus_id=self.campus.id))
+        url = reverse('show-campus', args=(self.provider.id, self.campus.id))
+        return redirect(url)

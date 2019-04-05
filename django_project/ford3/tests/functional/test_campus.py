@@ -1,16 +1,6 @@
 import unittest
 from ford3.tests.functional.utils import SeleniumTestCase, selenium_flag_ready
-# from ford3.tests.models.model_factories import ModelFactories
-# from selenium.webdriver.common.by import By
-
-
-def build_campus_form_url(base_url, provider_id, campus_id):
-    return '/'.join([
-        base_url,
-        'providers/{}'.format(provider_id),
-        'campus/{}'.format(campus_id),
-        'edit'
-    ])
+from django.urls import reverse
 
 
 class TestCampusForm(SeleniumTestCase):
@@ -24,15 +14,12 @@ class TestCampusForm(SeleniumTestCase):
         It should return 404
         """
 
-        provider_id = 1042
-        campus_id = 2042
+        provider_id = '1042'
+        campus_id = '2042'
 
-        campus_form_url = build_campus_form_url(
-            self.live_server_url,
-            provider_id,
-            campus_id)
+        campus_form_url = reverse('show-campus', args=(provider_id, campus_id))
 
-        self.driver.get(campus_form_url)
+        self.driver.get(f'{self.live_server_url}{campus_form_url}')
         html = self.driver.page_source
 
         self.assertIn('404', html)
