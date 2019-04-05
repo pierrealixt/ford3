@@ -106,3 +106,9 @@ class TestProviderForm(SeleniumTestCase):
         # They submit their data by clicking on the submit button
         submit_button = self.driver.find_element_by_class_name('edu-button')
         submit_button.click()
+
+    def test_show_provider(self):
+        provider_form_url = reverse(
+            'show-provider',
+            args=(str(self.new_provider.id)))
+        self.assertEqual(provider_form_url, f'/ford3/providers/{self.new_provider.id}')

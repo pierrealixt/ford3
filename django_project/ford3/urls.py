@@ -39,7 +39,7 @@ CAMPUS_FORMS = [
 campus_wizard = CampusFormWizard.as_view(CAMPUS_FORMS)
 
 urlpatterns = [
-    path('providers/<int:provider_id>/',
+    path('providers/<int:provider_id>',
          show_provider,
          name='show-provider'),
     path('providers/<int:provider_id>/edit',
