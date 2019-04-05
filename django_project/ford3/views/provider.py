@@ -50,7 +50,7 @@ def edit_provider(request, provider_id):
                 return render(request, 'provider_form.html', {'form': form})
             redirect_url = reverse(
                 'show-provider',
-                args=(str(new_provider.id)))
+                args=[str(new_provider.id)])
             return redirect(redirect_url)
     else:
         provider = get_object_or_404(
