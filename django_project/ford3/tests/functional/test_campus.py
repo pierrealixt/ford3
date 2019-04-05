@@ -104,8 +104,6 @@ class TestCampusFormDataBinding(SeleniumTestCase):
         next_step_button = self.driver.find_element_by_id('my-next-button')
         next_step_button.click()
 
-        print(self.driver.page_source)
-
         qualif_list_ul = self.driver.find_element_by_id(
             'campus-qualifications-list')
         qualif_li = qualif_list_ul.find_elements(By.TAG_NAME, 'li')

@@ -100,15 +100,6 @@ class TestCampus(TestCase):
         # campus should have 2 qualifications.
         self.assertEqual(len(self.campus.qualifications), 2)
 
-        for i in range(2):
-            self.assertEqual(
-                self.campus.qualifications[i]['saqa_qualification__saqa_id'],
-                saqas[i].saqa_id)
-
-            self.assertEqual(
-                self.campus.qualifications[i]['saqa_qualification__name'],
-                saqas[i].name)
-
     def test_save_qualifications_duplicate(self):
         """ It should not save a duplicate qualification.
         """
