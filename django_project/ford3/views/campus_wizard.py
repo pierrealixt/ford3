@@ -76,6 +76,7 @@ class CampusFormWizard(CookieWizardView):
                 self.campus.save_events(form.cleaned_data)
             elif i == steps['QUALIFICATION_TITLES']:
                 self.campus.save_qualifications(form.cleaned_data)
+                self.campus.delete_qualifications(form.cleaned_data)
             i += 1
 
         url = reverse('show-campus', args=(self.provider.id, self.campus.id))
