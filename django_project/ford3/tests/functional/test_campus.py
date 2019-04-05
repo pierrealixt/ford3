@@ -32,17 +32,15 @@ class TestCampusFormDataBinding(SeleniumTestCase):
             new_id=420)
 
         campus_form_url = reverse(
-            'show-campus', args=(
+            'edit-campus', args=(
                 self.provider.id,
                 self.campus.id))
 
         self.campus_form_url = f'{self.live_server_url}{campus_form_url}'
-        print(self.campus_form_url)
 
     def test_form_details(self):
         """The form 'Step 1 - Details' should be populated with the correct values.
         """
-        pass
         form = ['telephone', 'email', 'max_students_per_year']
 
         self.driver.get(self.campus_form_url)
