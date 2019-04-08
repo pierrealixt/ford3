@@ -15,6 +15,7 @@ body {
 
 html, body, .wrapper {
     min-height: 100% !important;
+    height: auto !important; /* cross-browser */
     height: 100%;
 }
 
