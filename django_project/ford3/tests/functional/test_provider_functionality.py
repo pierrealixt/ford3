@@ -111,4 +111,6 @@ class TestProviderForm(SeleniumTestCase):
         provider_form_url = reverse(
             'show-provider',
             args=(str(self.new_provider.id)))
-        self.assertEqual(provider_form_url, f'/ford3/providers/{self.new_provider.id}')
+        self.assertEqual(
+            provider_form_url,
+            f'/ford3/providers/{self.new_provider.id}')

@@ -37,7 +37,11 @@ def show_campus(request, provider_id, campus_id):
     campus = get_object_or_404(
         Campus,
         id=campus_id)
+    form_data = {
+        'provider_name': campus.provider.name
+    }
     context = {
+        'form_data': form_data,
         'campus': campus,
         'provider': campus.provider
     }

@@ -5,13 +5,19 @@
 			</div>
 		</div>
 		<div class="col-12 side-bar-title" id="provider-name">
-			{{ form_data.provider_name }}
+            {% url 'show-provider' provider.id as show_provider %}
+            {% if show_provider %}
+			    <a href="{{ show_provider }}">{{ form_data.provider_name }}</a>
+            {% endif %}
 		</div>
 		<div class='col-md-12 noplr'>
 			<ul>
-				{% for campus in provider.campus %}
+                {% for campus in provider.campus %}
 					<li>
-							<a href='/ford3/providers/{{ provider.id }}/campus/{{ campus.id }}'>{{ campus.name }}</a>
+                        {% url 'show-campus' provider.id campus.id as show_campus %}
+                        {% if show_campus %}
+                            <a href="{{ show_campus }}">{{ campus.name }}</a>
+                        {% endif %}
 					</li>
 				{% endfor %}
 			</ul>
