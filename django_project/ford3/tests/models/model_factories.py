@@ -124,7 +124,6 @@ class ModelFactories:
     @staticmethod
     def get_provider_test_object(new_id=1):
         provider_test_object_instance = Provider.objects.create(
-            id=new_id,
             name='Object Test Name',
             website='www.mytest.com',
             logo_url='http://sometestplaceholder/logo.png',
