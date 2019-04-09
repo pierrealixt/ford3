@@ -4,6 +4,10 @@ $(document).ready(function() {
 
 function innitiateRemoveCampusButtons() {
     $('.remove-campus-button').click(function() {
+        if($('.campus_name').length <= 1) {
+            alert("At least one campus should be filled");
+            return false;
+        }
         this_button_parrent_parent = $(this).parent().parent();
         this_button_parrent_parent.remove();
     })
