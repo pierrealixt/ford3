@@ -46,7 +46,6 @@
                         {% else %}
                             {% crispy wizard.form wizard.form.helper %}
                         {% endif %}
-
                         {% if wizard.steps.step1 == 4 %}
                         <div class='row no-gutters'>
                             <div class='col-md-5 campus-all-qualifications'>
@@ -94,6 +93,16 @@
                         </div>
                         {% endif %}                        
                     </div>
+                        {% if wizard.steps.step1 == 3 %}
+	                        <div class="row">
+								<div class="col-md-8"></div>
+	                            <div class="col-md-4">
+			                        <div id="add-campus-event" class="edu-button edu-button-orange">
+			                            Add event
+			                        </div>
+	                            </div>
+	                        </div>
+                        {% endif %}
                     <div class="row form-actions">
                         <div class="col-md-4">
                             {% if wizard.steps.prev %}
@@ -136,6 +145,7 @@
     {% if wizard.steps.step1 == 3 %}
         <script type="text/javascript"
                 src="{% static 'js/datepicker.js' %}"></script>
+	            <script type="text/javascript" src="{% static 'js/campus_event.js' %}"></script>
     {% endif %}
     {% if wizard.steps.step1 == 4 %}
         <script type="text/javascript"

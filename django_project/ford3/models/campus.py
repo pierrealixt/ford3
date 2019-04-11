@@ -91,7 +91,8 @@ class Campus(models.Model):
             campus__id=self.id).values(
                 'date_start',
                 'name',
-                'http_link')
+                'http_link',
+                'date_end')
         return list(event_query)
 
     @property
@@ -114,18 +115,12 @@ class Campus(models.Model):
             setattr(self, key, value)
         self.save()
 
-    def save_events(self, form_data):
-        if len(form_data['event_type']) == 0 \
-           and form_data['event_date'] is None:
+    def save_events(self, campus_events):
+        if len(campus_events) == 0:
             return
-
-        event = CampusEvent(
-            campus=self,
-            name=form_data['event_type'],
-            date_start=form_data['event_date'],
-            date_end=form_data['event_date'],
-            http_link=form_data['event_http_link'])
-        event.save()
+        for each_campus_event in campus_events:
+            each_campus_event.campus = self
+            each_campus_event.save()
 
     def save_qualifications(self, form_data):
         if len(form_data['saqa_ids']) == 0:

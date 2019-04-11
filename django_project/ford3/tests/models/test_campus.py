@@ -1,4 +1,3 @@
-import datetime
 from django.test import TestCase
 from ford3.tests.models.model_factories import ModelFactories
 from ford3.models.saqa_qualification import SAQAQualification
@@ -43,33 +42,23 @@ class TestCampus(TestCase):
         pass
 
     def test_save_events_form_data(self):
-        form_data = {
-            'event_type': 'Open day',
-            'event_date': datetime.date(2019, 3, 30),
-            'event_http_link': 'http://event42.com'
-        }
+
+        campus_events = [ModelFactories.get_campus_event_test_object()]
 
         # campus should not have events yet.
         self.assertQuerysetEqual(self.campus.events, [])
 
         # save events
-        self.campus.save_events(form_data)
+        self.campus.save_events(campus_events)
 
         # campus should have one event
         self.assertEqual(len(self.campus.events), 1)
 
-    def test_save_empty_event_form_data(self):
-        form_data = {
-            'event_type': '',
-            'event_date': None,
-            'event_http_link': ''
-        }
-
+    def test_save_single_event(self):
         self.assertEqual(len(self.campus.events), 0)
-
-        self.campus.save_events(form_data)
-
-        self.assertEqual(len(self.campus.events), 0)
+        campus_events = [ModelFactories.get_campus_event_test_object()]
+        self.campus.save_events(campus_events)
+        self.assertEqual(len(self.campus.events), 1)
 
     def test_save_qualifications(self):
 

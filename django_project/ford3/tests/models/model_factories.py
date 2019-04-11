@@ -75,7 +75,6 @@ class ModelFactories:
     @staticmethod
     def get_campus_test_object(new_id=1):
         campus_test_object_instance = Campus.objects.create(
-            id=new_id,
             provider=ModelFactories.get_provider_test_object(),
             name='Object Test Name',
             photo='campus/photo/12345.jpg',
@@ -94,7 +93,6 @@ class ModelFactories:
     @staticmethod
     def get_campus_event_test_object(new_id=1):
         campus_event_test_object_instance = CampusEvent.objects.create(
-            id=new_id,
             campus=ModelFactories.get_campus_test_object(),
             name='Campus Event Test Name',
             date_start=datetime.date(2019, 3, 6),

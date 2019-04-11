@@ -3,7 +3,7 @@ import logging
 
 from contextlib import contextmanager
 from django.conf import settings
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 
@@ -15,7 +15,7 @@ def selenium_flag_ready():
     return settings.SELENIUM_DRIVER and settings.SELENIUM_UNIT_TEST_FLAG
 
 
-class SeleniumTestCase(LiveServerTestCase):
+class SeleniumTestCase(StaticLiveServerTestCase):
 
     host = settings.SELENIUM_TEST_HOSTNAME
     port = settings.SELENIUM_TEST_PORT

@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from django.shortcuts import redirect, Http404, get_object_or_404
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
@@ -7,6 +8,7 @@ from django.forms.models import model_to_dict
 from formtools.wizard.views import CookieWizardView
 from ford3.models import (
     Campus,
+    CampusEvent,
     Provider
 )
 
@@ -15,6 +17,7 @@ class CampusFormWizard(CookieWizardView):
     template_name = 'campus_form.html'
     file_storage = FileSystemStorage(
         location=os.path.join(settings.MEDIA_ROOT, 'photos'))
+    new_campus_events = []
 
     @property
     def campus(self):
@@ -72,12 +75,55 @@ class CampusFormWizard(CookieWizardView):
             if i == steps['DETAILS'] or i == steps['LOCATION']:
                 self.campus.save_form_data(form.cleaned_data)
             elif i == steps['DATES']:
-                print(form.cleaned_data)
-                self.campus.save_events(form.cleaned_data)
+                self.campus.save_events(self.new_campus_events)
             elif i == steps['QUALIFICATION_TITLES']:
                 self.campus.save_qualifications(form.cleaned_data)
                 self.campus.delete_qualifications(form.cleaned_data)
             i += 1
-
         url = reverse('show-campus', args=(self.provider.id, self.campus.id))
         return redirect(url)
+
+    def add_events(self, step_data, current_form):
+        new_name = step_data['campus-dates-event_name']
+        new_date_start = step_data['campus-dates-date_start']
+        new_date_end = step_data['campus-dates-date_end']
+        new_http_link = step_data['campus-dates-http_link']
+        # Count how many names were submitted and create new_events
+        number_of_new_events = len(new_name)
+        if len(new_name) == 1 and new_name[0] == '':
+            return False
+        for i in range(0, number_of_new_events):
+            new_campus_event = CampusEvent()
+            new_campus_event.name = new_name[i]
+            new_date_start_i = new_date_start[i]
+            new_date_start_formatted = (
+                datetime.strptime(new_date_start_i, '%m/%d/%Y')
+            ).strftime('%Y-%m-%d')
+            new_date_end_i = new_date_end[i]
+            new_date_end_formatted = (
+                datetime.strptime(new_date_end_i, '%m/%d/%Y')
+            ).strftime('%Y-%m-%d')
+            new_campus_event.date_start = new_date_start_formatted
+            new_campus_event.date_end = new_date_end_formatted
+            new_campus_event.http_link = new_http_link[i]
+            self.new_campus_events.append(new_campus_event)
+
+    def render(self, form=None, **kwargs):
+        form = form or self.get_form()
+        context = self.get_context_data(form=form, **kwargs)
+        current_step = context['view'].storage.current_step
+        step_before = 'campus-location'
+        step_after = 'campus-qualifications'
+        # Currently this simply clears the events forcing the user to re-enter
+        # TODO: Generate events from stored self.new_campus_events
+        if current_step == 'campus-dates':
+            self.new_campus_events = []
+
+        if current_step == step_before or current_step == step_after:
+            try:
+                self.add_events(
+                    context['view'].storage.data['step_data']['campus-dates'],
+                    form)
+            except KeyError:
+                pass
+        return self.render_to_response(context)

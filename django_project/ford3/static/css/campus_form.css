@@ -74,3 +74,21 @@ button.edu-button-blue {
 .btn-default {
   font-size: 20px;
 }
+
+.remove-campus-event-button-inner {
+    line-height: 2.7rem;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.remove-campus-event-button {
+    background-color: var(--c-orange);
+    border-radius: 50%;
+    width: 2.75rem;
+    height: 2.75rem;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    top: -0.25rem;
+}
