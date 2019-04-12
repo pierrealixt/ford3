@@ -394,6 +394,9 @@ coverage-test:
 import-saqa-qualifications:
 	@docker-compose exec uwsgi python manage.py import_saqa_qualifications
 
+create-provinces-group:
+	@docker-compose exec uwsgi python manage.py loaddata provinces_group.json
+
 load-initial-data:
 	@docker-compose exec uwsgi python manage.py loaddata occupation.json
 	@docker-compose exec uwsgi python manage.py loaddata subject.json
