@@ -72,8 +72,10 @@ class CampusFormWizard(CookieWizardView):
 
         i = 0
         for form in form_list:
-            if i == steps['DETAILS'] or i == steps['LOCATION']:
+            if i == steps['DETAILS']:
                 self.campus.save_form_data(form.cleaned_data)
+            elif i == steps['LOCATION']:
+                self.campus.save_postal_data(form.cleaned_data)
             elif i == steps['DATES']:
                 self.campus.save_events(self.new_campus_events)
             elif i == steps['QUALIFICATION_TITLES']:

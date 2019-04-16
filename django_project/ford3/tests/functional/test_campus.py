@@ -55,7 +55,8 @@ class TestCampusFormDataBinding(SeleniumTestCase):
         """The form 'Step 2 - Location' should be populated with the correct values.
         """
         form = [
-            'physical_address_street_name',
+            'physical_address_line_1',
+            'physical_address_line_2',
             'physical_address_city',
             'physical_address_postal_code'
         ]

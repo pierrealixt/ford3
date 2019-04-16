@@ -41,7 +41,13 @@ class Campus(models.Model):
         null=True,
         unique=False,
         help_text='')
-    physical_address_street_name = models.CharField(
+    physical_address_line_1 = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
+    physical_address_line_2 = models.CharField(
         blank=False,
         null=True,
         unique=False,
@@ -62,7 +68,20 @@ class Campus(models.Model):
         help_text='',
         max_length=255)
 
-    postal_address_street_name = models.CharField(
+    postal_address_differs = models.BooleanField(
+        blank=False,
+        null=True,
+        default=False,
+        help_text='')
+
+    postal_address_line_1 = models.CharField(
+        blank=False,
+        null=True,
+        unique=False,
+        help_text='',
+        max_length=255)
+
+    postal_address_line_2 = models.CharField(
         blank=False,
         null=True,
         unique=False,
@@ -109,6 +128,51 @@ class Campus(models.Model):
         return [
             str(s['saqa_qualification__saqa_id'])
             for s in self.qualifications]
+
+    def save_postal_data(self, form_data):
+        postal_address_differs = form_data.get(
+            'postal_address_differs', '')
+        physical_address_line_1 = form_data.get(
+                'physical_address_line_1', '')
+        physical_address_line_2 = form_data.get(
+            'physical_address_line_2', '')
+        physical_address_city = form_data.get(
+            'physical_address_city', '')
+        physical_address_postal_code = form_data.get(
+            'physical_address_postal_code', '')
+        if not postal_address_differs:
+            postal_address_line_1 = physical_address_line_1
+            postal_address_line_2 = physical_address_line_2
+            postal_address_city = physical_address_city
+            postal_address_postal_code = physical_address_postal_code
+        else:
+            postal_address_line_1 = form_data.get(
+                'postal_address_line_1', '')
+            postal_address_line_2 = form_data.get(
+                'postal_address_line_2', '')
+            postal_address_city = form_data.get(
+                'postal_address_city', '')
+            postal_address_postal_code = form_data.get(
+                'postal_address_postal_code', '')
+        setattr(self,
+                'physical_address_line_1', physical_address_line_1)
+        setattr(self,
+                'physical_address_line_2', physical_address_line_2)
+        setattr(self,
+                'physical_address_city', physical_address_city)
+        setattr(self,
+                'physical_address_postal_code', physical_address_postal_code)
+        setattr(self,
+                'postal_address_line_1', postal_address_line_1)
+        setattr(self,
+                'postal_address_line_2', postal_address_line_2)
+        setattr(self,
+                'postal_address_city', postal_address_city)
+        setattr(self,
+                'postal_address_postal_code', postal_address_postal_code)
+        setattr(self,
+                'postal_address_differs', postal_address_differs)
+        self.save()
 
     def save_form_data(self, form_data):
         for key, value in form_data.items():
