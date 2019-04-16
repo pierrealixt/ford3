@@ -1,7 +1,6 @@
-import datetime
 from django.urls import reverse
 from django.test import TestCase
-from django.test.utils import override_settings
+from django.test.utils import override_settings  # noqa
 from ford3.tests.models.model_factories import ModelFactories
 from ford3.models.qualification import Qualification
 from ford3.models.qualification_entrance_requirement_subject import (
@@ -12,9 +11,9 @@ from ford3.models.requirement import Requirement
 from ford3.views.qualification_wizard import QualificationFormWizardDataProcess
 
 
-@override_settings(
-    STATICFILES_STORAGE='pipeline.storage.NonPackagingPipelineStorage',
-    PIPELINE_ENABLED=False)
+# @override_settings(
+#     STATICFILES_STORAGE='pipeline.storage.NonPackagingPipelineStorage',
+#     PIPELINE_ENABLED=False)
 class TestQualificationWizard(TestCase):
     wizard_step_1_data = {
         'session_contact_wizard-current_step': '0',
@@ -42,32 +41,18 @@ class TestQualificationWizard(TestCase):
         'critical_skill': '',
         'green_occupation': '',
         'high_demand_occupation': '',
-        'date_start': None,
-        'date_end': None,
-        'other_event': '',
-        'event_date': None,
         'subject_list': '1,2',
         'minimum_score_list': '-1,2'
     }
 
     def setUp(self):
-        self.qualification = ModelFactories.get_qualification_test_object(
-            new_id=1
-        )
-
+        self.qualification = ModelFactories.get_qualification_test_object()
         self.wizard_url = reverse(
             'edit-qualification',
             args=(
                 self.qualification.campus.provider.id,
                 self.qualification.campus.id,
                 self.qualification.id))
-
-        self.subject_1 = ModelFactories.get_subject_test_object(
-            new_id=1
-        )
-        self.subject_2 = ModelFactories.get_subject_test_object(
-            new_id=2
-        )
         self.qualification_data_process = QualificationFormWizardDataProcess(
             qualification=self.qualification
         )
@@ -127,12 +112,19 @@ class TestQualificationWizard(TestCase):
                 qualification_value = None
             if wizard_form_data == '':
                 wizard_form_data = None
+
             self.assertEqual(
                 qualification_value,
                 wizard_form_data
             )
 
     def test_add_subjects_to_qualification(self):
+        self.subject_1 = ModelFactories.get_subject_test_object()
+        self.subject_2 = ModelFactories.get_subject_test_object()
+        new_subject_list = '{subject1},{subject2}'.format(
+            subject1=self.subject_1.id,
+            subject2=self.subject_2.id)
+        self.wizard_form_data['subject_list'] = new_subject_list
         self.qualification_data_process.add_subjects(
             form_data=self.wizard_form_data
         )
@@ -169,22 +161,15 @@ class TestQualificationWizard(TestCase):
             )
 
     def test_add_qualification_events(self):
-        qualification_event_data = {
-            'date_start': datetime.date(2018, 1, 1),
-            'date_end': datetime.date(2019, 1, 1),
-            'other_event': 'event',
-            'event_date': datetime.date(2020, 1, 1)
-        }
-        self.qualification_data_process.add_qualification_event(
-            qualification_event_data
+
+        new_qualification_event = (
+            ModelFactories.get_qualification_event_test_object())
+
+        self.qualification.add_events(
+            [new_qualification_event]
         )
         events = QualificationEvent.objects.filter(
             qualification=self.qualification.id
         )
         self.assertTrue(events.exists())
-        event = events[0]
-        for key, value in qualification_event_data.items():
-            self.assertEqual(
-                value,
-                getattr(event, key)
-            )
+        self.assertTrue(events.count(), 1)

@@ -8,6 +8,8 @@
           href="{% static 'css/wizard_form.css' %}">
     <link rel="stylesheet" type="text/css"
           href="{% static 'css/libs/jquery-ui-1.12.1-custom/jquery-ui.min.css' %}">
+	    <link rel="stylesheet" type="text/css"
+          href="{% static 'css/qualification_form.css' %}">
 {% endblock %}
 
 {% block body %}
@@ -31,6 +33,7 @@
                             </a>
                         </li>
                     {% endfor %}
+
                 </ul>
 
                 <form action="" method="post">{% csrf_token %}
@@ -43,6 +46,11 @@
                             {% crispy wizard.form wizard.form.helper %}
                         {% endif %}
                     </div>
+	                {% if wizard.steps.step1 == 5 %}
+	                    <div id="add-qualification-event" class="edu-button edu-button-orange">
+	                        Add event
+	                    </div>
+	                {% endif %}
                     <div class="row form-actions">
                         <div class="col-md-4">
                             {% if wizard.steps.prev %}
@@ -62,7 +70,8 @@
                         <div class="col-md-4">
                             <button class="edu-button edu-button-blue"
                                     type="submit"
-                                    value="submit">
+                                    value="submit"
+                                    id="my-next-button">
                                 {% if wizard.steps.next %}
                                     Next
                                 {% else %}
@@ -72,6 +81,7 @@
                         </div>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>

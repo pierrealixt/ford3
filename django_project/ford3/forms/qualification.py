@@ -165,21 +165,22 @@ class QualificationRequirementsForm(QualificationForm):
         required=False,
         widget=forms.Select(
             attrs={'class': 'col-md-4 subject-list'}
-        )
+        ),
     )
 
     subject_list = forms.CharField(
         required=False,
         widget=forms.HiddenInput(
             attrs={'id': 'subject-list'}
-        )
+        ),
     )
 
     minimum_score_list = forms.CharField(
         required=False,
         widget=forms.HiddenInput(
             attrs={'id': 'minimum-score-list'}
-        )
+        ),
+        initial='0',
     )
 
 
@@ -242,34 +243,32 @@ class QualificationInterestsAndJobsForm(QualificationForm):
 
 
 class QualificationImportantDatesForm(QualificationForm):
+    name = forms.CharField(
+        label='Event name',
+        required=True,
+        widget=forms.TextInput(
+            attrs={'placeholder': 'eg. Applications'}
+        )
+    )
     date_start = forms.DateField(
-        label='Application period start:',
-        required=False,
+        label='Starting date',
+        required=True,
         widget=forms.DateInput(
-            attrs={'class': 'col-md-4'}
+            attrs={'class': 'col-md-4', 'placeholder': 'mm/dd/yyyy'}
+
         )
     )
-
     date_end = forms.DateField(
-        label='Application period end:',
-        required=False,
+        label='Ending date',
+        required=True,
         widget=forms.DateInput(
-            attrs={'class': 'col-md-4'}
+            attrs={'class': 'col-md-4', 'placeholder': 'mm/dd/yyyy'}
         )
     )
-
-    other_event = forms.CharField(
-        label='Other event [if any]:',
+    http_link = forms.CharField(
+        label='Link to event:',
         required=False,
         widget=forms.TextInput(
-            attrs={'placeholder': 'Title, eg, Exhibition'}
-        )
-    )
-
-    event_date = forms.DateField(
-        label='Event Date:',
-        required=False,
-        widget=forms.DateInput(
-            attrs={'class': 'col-md-4'}
+            attrs={'placeholder': 'http://...'}
         )
     )

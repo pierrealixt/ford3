@@ -20,7 +20,6 @@ class ModelFactories:
     @staticmethod
     def get_qualification_test_object(new_id=1):
         qualification_test_object_instance = Qualification.objects.create(
-            id=new_id,
             name='Object Test Name',
             short_description='Some short description',
             long_description='Some very long description that just goes on...',
@@ -50,7 +49,6 @@ class ModelFactories:
     @staticmethod
     def get_requirement_test_object(new_id=1):
         requirement_test_object_instance = Requirement.objects.create(
-            id=new_id,
             description='Some long description that goes on...',
             qualification=ModelFactories.get_qualification_test_object(),
             assessment=True,
@@ -112,7 +110,6 @@ class ModelFactories:
     @staticmethod
     def get_occupation_test_object(new_id=1):
         occupation_test_object_instance = Occupation.objects.create(
-            id=new_id,
             name='Object Test Name',
             description='Some long description that goes on...'
         )
@@ -141,7 +138,6 @@ class ModelFactories:
     def get_sub_field_of_study_test_object(new_id=1):
         sub_field_of_study_test_object_instance = (
             SubFieldOfStudy.objects.create(
-                id=new_id,
                 name='Object Test Name',
                 field_of_study=(
                     ModelFactories.get_field_of_study_test_object(1)),
@@ -152,7 +148,6 @@ class ModelFactories:
     @staticmethod
     def get_subject_test_object(new_id=1):
         subject_field_of_study_test_object = Subject.objects.create(
-            id=new_id,
             name='Object Test Name',
             description='Some long description that goes on'
         )
@@ -162,7 +157,6 @@ class ModelFactories:
     @staticmethod
     def get_qualification_event_test_object(new_id=1):
         qualification_event_test_object = QualificationEvent.objects.create(
-            id=new_id,
             qualification=ModelFactories.get_qualification_test_object(),
             name='Qualification Event Test Name',
             date_start=datetime.date(2019, 3, 6),
@@ -174,7 +168,6 @@ class ModelFactories:
     @staticmethod
     def get_interest_test_object(new_id=1):
         interest_test_object = Interest.objects.create(
-            id=new_id,
             name='Interest name'
         )
 
