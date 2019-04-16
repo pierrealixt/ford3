@@ -11,6 +11,7 @@
     color: #fff;
     transition: all 0.3s;
     margin-left: -250px;
+    height: 105vh;
 }
 
 #sidebar.active {
@@ -83,4 +84,12 @@
 .side-bar-title a {
     color: #ffffff;
     text-decoration: underline;
+}
+
+.side-bar-kartoza-icon {
+    height: 2rem;
+    position: fixed;
+    width: 250px;
+    background-position: center;
+    bottom: 0;
 }

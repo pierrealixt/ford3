@@ -666,6 +666,11 @@ input[type='email']:hover::placeholder {
     background-repeat: no-repeat;
 }
 
+.edu-icon-powered-by-kartoza {
+    background-image: url('../images/powered_by_kartoza.png');
+    background-repeat: no-repeat;
+}
+
 /* ----------------------------- END ICONS ----------------------------- */
 /* ----------------------------- TOP OVERHEAD BAR ----------------------------- */
 
