@@ -3,8 +3,7 @@
 
 {% block body %}
 	<div class="container">
-
-		<form action="{% url 'edit-provider' provider_id %}" method="post">
+		<form action="{% url 'edit-provider' provider_id %}" method="post" enctype="multipart/form-data">
 		{% csrf_token %}
 		<div class="row">
 			<div class="col-12">
@@ -24,10 +23,18 @@
 			</div>
 			<br>
 			<div class="row">
-				<div class="col-4 npl">Provider Logo</div>
+				<div class="col-4 npl">
+                    Provider Logo
+                    {% if form.provider_logo %}
+                        <p class="form_provider_logo">{{ form.provider_logo }}</p>
+                    {% endif %}
+                    {{ form.provider_logo.errors }}
+                </div>
 				<div class="col-8">
 					<div class="provider-form-photo">
-
+                        {% if form.instance.provider_logo %}
+                        <img src="{{ form.instance.provider_logo.url }}" />
+                        {% endif %}
 					</div>
 				</div>
 			</div>

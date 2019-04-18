@@ -16,7 +16,7 @@ from ford3.models import (
 @transaction.atomic
 def edit_provider(request, provider_id):
     if request.method == 'POST':
-        form = ProviderForm(request.POST)
+        form = ProviderForm(request.POST, request.FILES)
         if form.is_valid():
             new_provider = Provider.objects.filter(pk=provider_id).first()
             provider_type = form.cleaned_data['provider_type']
@@ -26,9 +26,16 @@ def edit_provider(request, provider_id):
                 form.cleaned_data['physical_address_line_1'])
             physical_address_line_2 = (
                 form.cleaned_data['physical_address_line_2'])
-            physical_address_city = form.cleaned_data['physical_address_city']
-            postal_address = form.cleaned_data['postal_address']
-            admissions_contact_no = form.cleaned_data['admissions_contact_no']
+            physical_address_city = (
+                form.cleaned_data['physical_address_city'])
+            postal_address = (
+                form.cleaned_data['postal_address'])
+            admissions_contact_no = (
+                form.cleaned_data['admissions_contact_no'])
+            provider_logo = form.cleaned_data['provider_logo']
+            # use case: user does not upload logo, then use old logo
+            if not form.cleaned_data['provider_logo']:
+                provider_logo = new_provider.provider_logo
             new_provider.provider_type = provider_type
             new_provider.telephone = telephone
             new_provider.email = email
@@ -37,6 +44,7 @@ def edit_provider(request, provider_id):
             new_provider.physical_address_city = physical_address_city
             new_provider.postal_address = postal_address
             new_provider.admissions_contact_no = admissions_contact_no
+            new_provider.provider_logo = provider_logo
             new_provider.save()
             campus_list = request.POST.getlist('campus_name')
             number_of_campuses = len(campus_list)
@@ -52,6 +60,19 @@ def edit_provider(request, provider_id):
                 'show-provider',
                 args=[str(new_provider.id)])
             return redirect(redirect_url)
+        # form is not valid
+        else:
+            provider = Provider.objects.filter(pk=provider_id).first()
+            # since the upload fail, use old logo
+            form.instance.provider_logo = provider.provider_logo
+            context = {
+                'form': form,
+                'provider_id': provider_id,
+                'provider': provider,
+                'is_new_provider': provider.is_new_provider
+
+            }
+            return render(request, 'provider_form.html', context)
     else:
         provider = get_object_or_404(
             Provider,
@@ -64,6 +85,7 @@ def edit_provider(request, provider_id):
             'provider': provider,
             'is_new_provider': provider.is_new_provider,
         }
+
         return render(request, 'provider_form.html', context)
 
 
@@ -83,7 +105,8 @@ def show_provider(request, provider_id):
     campus_query = Campus.objects.filter(provider__id=provider_id).annotate(
         campus_name=F('name'),
         campus_id=F('id'),
-        provider_name=F('provider__name')
+        provider_name=F('provider__name'),
+        provider_logo=F('provider__provider_logo')
     )
     campus_data = campus_query.values('name', 'id')
     provider_name = campus_query.values('provider_name')[0]['provider_name']
@@ -94,6 +117,11 @@ def show_provider(request, provider_id):
     context['form_data'] = form_data
     context['provider'] = {
         'campus': campus_data,
-        'id': provider_id
+        'id': provider_id,
     }
+    # make sure logo has been uploaded before set the context
+    # otherwise, let it empty
+    if provider.provider_logo:
+        context['provider_logo'] = provider.provider_logo.url
+
     return render(request, 'provider.html', context)

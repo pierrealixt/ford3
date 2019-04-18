@@ -20,3 +20,4 @@ Unidecode
 selenium==3.141.0
 django-extensions==2.1.6
 django-test-without-migrations==0.6
+django-hashedfilenamestorage

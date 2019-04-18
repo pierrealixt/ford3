@@ -45,6 +45,11 @@ def show_campus(request, provider_id, campus_id):
         'campus': campus,
         'provider': campus.provider
     }
+    # make sure logo has been uploaded before set the context
+    # otherwise, let it empty
+    if campus.provider.provider_logo:
+        context['provider_logo'] = campus.provider.provider_logo.url
+
     return render(request, 'campus.html', context)
 
 
@@ -54,7 +59,8 @@ def show_qualification(request, provider_id, campus_id, qualification_id):
         id=qualification_id)
     context = {
         'qualification': qualification,
-        'provider': qualification.campus.provider
+        'provider': qualification.campus.provider,
+        'provider_logo': qualification.campus.provider.provider_logo.url
     }
     return render(request, 'qualification.html', context)
 

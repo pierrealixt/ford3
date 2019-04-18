@@ -75,6 +75,22 @@
     margin-right: auto;
 }
 
+.img-provider-photo {
+    width: 10rem;
+    height: 10rem;
+    max-width: 180px;
+    min-width: 100px;
+    border-radius: 50%;
+    background-color: white;
+    max-height: 180px;
+    min-height: 100px;
+    margin-top: 0;
+    margin-bottom: 0;
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .side-bar-title {
     text-align: center;
     font-size: 1.125rem;

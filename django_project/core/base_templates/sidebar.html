@@ -2,6 +2,9 @@
 	<div class="container-fluid noplr">
 		<div class="col-12">
 			<div id="provider-photo" class="provider-photo">
+                {% if provider_logo %}
+                    <img src="{{ provider_logo }}" class="img-provider-photo"/>
+                {% endif %}
 			</div>
 		</div>
 		<div class="col-12 side-bar-title" id="provider-name">

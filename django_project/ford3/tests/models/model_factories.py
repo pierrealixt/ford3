@@ -123,7 +123,7 @@ class ModelFactories:
         provider_test_object_instance = Provider.objects.create(
             name='Object Test Name',
             website='www.mytest.com',
-            logo_url='http://sometestplaceholder/logo.png',
+            provider_logo='http://sometestplaceholder/logo.png',
             email='Test@test.com',
             admissions_contact_no='0137527576',
             postal_address='1200',

@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.syndication',
     'django.contrib.gis',
+    'django_hashedfilenamestorage',
 )
 
 # A sample logging configuration. The only tangible logging

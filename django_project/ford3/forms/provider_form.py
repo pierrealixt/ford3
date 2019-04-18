@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from ford3.models.provider import Provider
 
 
@@ -25,6 +26,7 @@ class ProviderForm(forms.models.ModelForm):
                   'physical_address_line_2',
                   'physical_address_city',
                   'postal_address',
+                  'provider_logo',
                   )
         widgets = {
             'name' : forms.fields.HiddenInput(),
@@ -53,3 +55,11 @@ class ProviderForm(forms.models.ModelForm):
             'telephone': {'required': EMPTY_TEL_ERROR},
             'email' : {'required': EMPTY_EMAIL_ERROR}
         }
+
+
+    def clean_provider_logo(self):
+        provider_logo = self.cleaned_data.get('provider_logo', False)
+        if provider_logo:
+            if provider_logo.size > 100 * 1024:
+                raise ValidationError("Max file size is 100Kb")
+            return provider_logo
