@@ -48,6 +48,10 @@ class CampusFormWizard(CookieWizardView):
         ]
         context['campus'] = self.campus
         context['provider'] = self.provider
+        form_data = {
+            'provider_name': self.provider.name
+        }
+        context['form_data'] = form_data
         return context
 
     def get_form_initial(self, step):
