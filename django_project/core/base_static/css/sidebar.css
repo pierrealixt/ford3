@@ -100,6 +100,11 @@
 .side-bar-title a {
     color: #ffffff;
     text-decoration: underline;
+    color: #ffffff;
+    font-family: Lato;
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration-line: none;
 }
 
 .side-bar-kartoza-icon {
