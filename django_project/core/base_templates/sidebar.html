@@ -8,9 +8,8 @@
 			</div>
 		</div>
 		<div class="col-12 side-bar-title" id="provider-name">
-            {% url 'show-provider' provider.id as show_provider %}
-            {% if show_provider %}
-			    <a href="{{ show_provider }}">{{ form_data.provider_name }}</a>
+            {% if provider %}
+			    <a href="{% url 'show-provider' provider.id %}">{{ provider.name }}</a>
             {% endif %}
 		</div>
 		<div class='col-md-12 noplr'>

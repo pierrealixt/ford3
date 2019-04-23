@@ -232,7 +232,7 @@ class QualificationFormWizard(CookieWizardView):
             'Important Dates',
         ]
         context['qualification'] = self.qualification
-        context['provider'] = self.qualification.campus.provider
+        context['provider'] = self.provider
         # make sure logo has been uploaded before set the context
         # otherwise, let it empty
         if self.qualification.campus.provider.provider_logo:
@@ -256,6 +256,7 @@ class QualificationFormWizard(CookieWizardView):
         qualification_data_process.process_data(
             form_data
         )
+
         url = reverse(
             'show-qualification',
             args=(self.provider.id, self.campus.id, self.qualification.id))

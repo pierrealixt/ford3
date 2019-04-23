@@ -118,6 +118,7 @@ def show_provider(request, provider_id):
     context['provider'] = {
         'campus': campus_data,
         'id': provider_id,
+        'name': provider_name,
     }
     # make sure logo has been uploaded before set the context
     # otherwise, let it empty
