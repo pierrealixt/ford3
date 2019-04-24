@@ -23,30 +23,26 @@ html, body, .wrapper {
 }
 
 h1 {
-    Font-family: Lato;
-    Font-size: 70px;
-    Font-weight: bold;
+    font-size: 70px;
+    font-weight: bold;
     color: var(--c-purple);
 }
 
 h2 {
-    Font-family: Lato;
-    Font-size: 55px;
-    Font-weight: bold;
+    font-size: 55px;
+    font-weight: bold;
     color: var(--c-purple);
 }
 
 h3 {
-    Font-family: Lato;
-    Font-size: 40px;
-    Font-weight: bold;
+    font-size: 40px;
+    font-weight: bold;
     color: var(--c-purple);
 }
 
 h4 {
-    Font-family: Lato;
-    Font-size: 24px;
-    Font-weight: bold;
+    font-size: 24px;
+    font-weight: bold;
     color: var(--c-blue);
 }
 
@@ -769,7 +765,6 @@ nav#sidebar ul li a:hover {
     color: #ffffff;
     font-weight: 400;
     width:  122px;
-    font-family: Lato;
     opacity:  .75;
 }
 
