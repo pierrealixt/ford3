@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
 body {
     --c-purple: #2C314F;
     --c-blue: #7ACDCF;
@@ -9,8 +10,10 @@ body {
     --c-grey: #AAAAAA;
     --c-grey-d: #464646;
     --c-purple-grey: #1B1D28;
+    --c-navy: #2a3056;
     --cg-blue-dblue: linear-gradient(to right, #7ACDCF, #47B4B6);
     --cg-orange-dorange: linear-gradient(to right, #FCB53B, #F99824);
+    font-family: 'Lato', sans-serif;
 }
 
 html, body, .wrapper {
@@ -106,6 +109,26 @@ h4 {
 }
 
 .edu-button-grey:focus {
+    outline-color: var(--c-grey-l);
+}
+
+.edu-button-navy {
+    color: var(--c-navy);
+    background-color: var(--c-smoke);
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 1.67px;
+    line-height: 20px;
+
+}
+
+.edu-button-navy:hover {
+    color: var(--c-navy);
+    background-color: var(--c-grey-l);
+    text-decoration: none;
+}
+
+.edu-button-navy:focus {
     outline-color: var(--c-grey-l);
 }
 
