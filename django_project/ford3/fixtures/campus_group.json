@@ -1,0 +1,10 @@
+[
+  {
+    "model": "auth.Group",
+    "pk": 2,
+    "fields": {
+      "name": "Campus",
+      "permissions": [9, 10, 50, 52, 69, 70, 71, 72]
+    }
+  }
+]
