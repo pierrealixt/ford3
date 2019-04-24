@@ -397,8 +397,12 @@ import-saqa-qualifications:
 create-provinces-group:
 	@docker-compose exec uwsgi python manage.py loaddata provinces_group.json
 
+create-providers-group:
+	@docker-compose exec uwsgi python manage.py loaddata providers_group.json
+
 create-campus-group:
 	@docker-compose exec uwsgi python manage.py loaddata campus_group.json
+
 
 load-initial-data:
 	@docker-compose exec uwsgi python manage.py loaddata occupation.json
