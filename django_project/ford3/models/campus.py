@@ -213,4 +213,4 @@ class Campus(models.Model):
             qualif.delete()
 
     def __str__(self):
-        return f'{self.name} campus'
+        return self.name
