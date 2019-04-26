@@ -715,12 +715,8 @@ input[type='email']:hover::placeholder {
 /* ----------------------------- TOP OVERHEAD BAR ----------------------------- */
 
 .navbar {
-/*     height: 3rem;
-    min-height: 50px;
-    max-height: 80px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     background-color: var(--c-purple);
-    /* padding-left: 3rem; */
 }
 
 .navbar p {
