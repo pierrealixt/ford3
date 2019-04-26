@@ -10,12 +10,7 @@
     background-color: var(--c-purple);
     color: #fff;
     transition: all 0.3s;
-    margin-left: -250px;
     height: 105vh;
-}
-
-#sidebar.active {
-    margin-left: 0px;
 }
 
 @media (max-width: 768px) {

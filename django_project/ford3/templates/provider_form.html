@@ -1,6 +1,10 @@
 {% extends 'index.html' %}
 {% load static %}
 
+	{% block side_navbar %}
+        {# don't show sidebar in this page #}
+	{% endblock %}
+
 {% block body %}
 	<div class="container">
 		<form action="{% url 'edit-provider' provider_id %}" method="post" enctype="multipart/form-data">
@@ -145,6 +149,4 @@
 {% block footer %}
 	  <script type="text/javascript"
             src="{% static 'js/provider_form.js' %}"></script>
-    <script type="text/javascript"
-            src="{% static 'js/provider.js' %}"></script>
 {% endblock %}
