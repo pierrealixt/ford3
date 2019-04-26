@@ -11,7 +11,7 @@ class TestCampus(TestCase):
 
     def test_campus_description(self):
         # new_campus = ModelFactories.get_campus_test_object(1)
-        self.assertEqual(self.campus.__str__(), 'Object Test Name campus')
+        self.assertEqual(self.campus.__str__(), 'Object Test Name')
 
     def test_save_details_form_data(self):
         """
