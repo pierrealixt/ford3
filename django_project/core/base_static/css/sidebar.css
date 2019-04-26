@@ -10,7 +10,6 @@
     background-color: var(--c-purple);
     color: #fff;
     transition: all 0.3s;
-    margin-left: -250px;
     height: 105vh;
 }
 

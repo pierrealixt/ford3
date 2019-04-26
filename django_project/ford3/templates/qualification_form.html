@@ -2,6 +2,10 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block side_navbar %}
+{% include 'sidebar.html' %}
+{% endblock %}
+
 {% block head %}
     {{ wizard.form.media }}
     <link rel="stylesheet" type="text/css"
