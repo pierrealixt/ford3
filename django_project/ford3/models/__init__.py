@@ -14,3 +14,4 @@ from ford3.models.campus_event import  * # noqa
 from ford3.models.qualification_event import * # noqa
 from ford3.models.interest import * # noqa
 from ford3.models.saqa_qualification import * # noqa
+from ford3.models.prospect import * # noqa
