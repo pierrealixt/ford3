@@ -822,3 +822,7 @@ nav#sidebar ul li a:hover {
     font-size: 42px;
 }
 
+.prospect-form .helptext {
+    font-size: 10px;
+    font-weight: 300!important;
+}
