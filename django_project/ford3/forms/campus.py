@@ -24,12 +24,14 @@ class CampusDetailForm(CampusForm):
         label='Telephone number:',
         required=False)
 
-    email = forms.CharField(
+    email = forms.EmailField(
         label='E-mail address:',
         required=False)
 
     max_students_per_year = forms.IntegerField(
-        label='Annual student capacity',
+        label='Annual student capacity:',
+        max_value=1000000,
+        min_value=0,
         required=False)
 
 
@@ -129,7 +131,7 @@ class CampusImportantDatesForm(CampusForm):
         )
     )
 
-    http_link = forms.CharField(
+    http_link = forms.URLField(
         label='Link to event:',
         required=False,
         widget=forms.TextInput(

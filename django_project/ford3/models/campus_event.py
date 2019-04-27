@@ -22,7 +22,7 @@ class CampusEvent(models.Model):
         null=False,
         unique=False,
         help_text='')
-    http_link = models.CharField(
+    http_link = models.URLField(
         blank=False,
         null=True,
         unique=False,
