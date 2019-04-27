@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Prospect(models.Model):
     name = models.CharField(
         help_text='Prospect first and last name',
