@@ -59,8 +59,12 @@
                                     <td>N/A</td>
                                     <td>N/A</td>
                                     <td>
-                                        <a class="edu-button edu-button-orange" href="{% url 'show-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Show</a>
-                                        <a class="edu-button edu-button-orange" href="{% url 'edit-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Edit</a>
+                                        <div class="row">
+                                            <a class="col-md-5 edu-button edu-button-orange noplr" href="{% url 'show-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Show</a>
+                                            <!-- spacer between buttons-->
+                                            &nbsp;
+                                            <a class="col-md-5 edu-button edu-button-orange noplr" href="{% url 'edit-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Edit</a>
+                                        </div>
                                     </td>
                                 </tr>
                             {% endfor %}        
