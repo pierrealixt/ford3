@@ -43,6 +43,10 @@ const removeSaqaQualification = (saqaId) => {
   getSaqaQualificationsInputElem().value = saqaIds.join(' ')
 }
 
+const getCampusQualificationText = () => {
+  return document.getElementsByClassName('qualif-texts')
+}
+
 const setToggleEvent = (elem) => {
   elem.addEventListener('click', function (evt) {
     if (evt.target.tagName !== 'A') { evt.target.classList.toggle('selected') }
@@ -54,6 +58,61 @@ const setClickEventToLi = () => {
   qualifElems.forEach(function (qualifElem) {
     setToggleEvent(qualifElem)
   })
+}
+
+//isEnabled true = disabled add button
+const toggleAddButton = (isEnabled) => {
+  const addButton = getAddQualificationButtonElement()
+  //qualificationText[0]= add button and qualificationText[1]= remove button
+  const qualificationText = getCampusQualificationText()
+  addButton.disabled = isEnabled
+  if(isEnabled) {
+    addButton.classList.remove("left-arrow-button")
+    addButton.classList.add("left-arrow-grey-button")
+    qualificationText[0].classList.add("disabled")
+  }
+  else {
+    addButton.classList.remove("left-arrow-grey-button")
+    addButton.classList.add("left-arrow-button")
+    qualificationText[0].classList.remove("disabled")
+  }
+}
+
+const toggleRemoveButton = (isEnabled) => {
+  const removeButton = getRemoveQualificationButtonElement()
+  //qualificationText[0]= add button and qualificationText[1]= remove button
+  removeButton.disabled = isEnabled
+  const qualificationText = getCampusQualificationText()
+  if(isEnabled) {
+    removeButton.classList.remove("right-arrow-button")
+    removeButton.classList.add("right-arrow-grey-button")
+    qualificationText[1].classList.add("disabled")
+  }
+  else {
+    removeButton.classList.add("right-arrow-button")
+    removeButton.classList.remove("right-arrow-grey-button")
+    qualificationText[1].classList.remove("disabled")
+  }
+
+}
+
+const checkSaqaList = () => {
+    const saqaList = getSaqaQualificationsListElement()
+    if (saqaList.length == 0 || saqaList.getElementsByTagName("li").length < 1) {
+        toggleAddButton(true);
+    }
+}
+
+const checkCampusList = () => {
+  const campusList = getCampusQualificationsListElement()
+  if(campusList.length == 0 || campusList.getElementsByTagName("li").length < 1) {
+    toggleRemoveButton(true)
+  }
+}
+
+const checkLists = () => {
+  checkSaqaList()
+  checkCampusList()
 }
 
 const setClickEventToAddButton = () => {
@@ -82,6 +141,8 @@ const setClickEventToAddButton = () => {
 
       let saqaId = selectedQualifElem.dataset['saqaId']
       addSaqaQualification(saqaId)
+      checkSaqaList()
+      toggleRemoveButton(false)
     })
   })
 }
@@ -102,6 +163,7 @@ const setClickEventToRemoveButton = () => {
 
       let saqaId = selectedQualifElem.dataset['saqaId']
       removeSaqaQualification(saqaId)
+      checkCampusList()
     })
   })
 }
@@ -118,6 +180,7 @@ const setClickEventToClearButton = () => {
     const saqaQualifListElem = getSaqaQualificationsListElement()
     saqaQualifListElem.querySelectorAll('li').forEach(function (li) {
       saqaQualifListElem.removeChild(li)
+    checkSaqaList()
     })
   })
 }
@@ -165,6 +228,7 @@ const ajaxSearchQualifications = (query) => {
     // Success!
       var data = JSON.parse(request.responseText)
       displaySaqaQualificationsResults(data['results'])
+      toggleAddButton(false)
     } else {
     // We reached our target server, but it returned an error
 
@@ -199,6 +263,7 @@ const setupEvents = () => {
 }
 
 (function () {
+  checkLists()
   setupEvents()
 })()
 
