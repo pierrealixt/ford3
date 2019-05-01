@@ -30,8 +30,12 @@
                             {% if forloop.counter == wizard.steps.step1 %}
                                 active
                             {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}" href="#">
-                                <h4 class="list-group-item-heading">
-                                    Step {{ forloop.counter }}</h4>
+                                <h4 class="list-group-item-heading
+                                {% if forloop.counter == wizard.steps.step1 %}
+                                    active
+                                {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
+                                    Step {{ forloop.counter }}
+                                </h4>
                                 <p class="list-group-item-text">{{ form_name }}</p>
                             </a>
                         </li>

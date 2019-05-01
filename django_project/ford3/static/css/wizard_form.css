@@ -34,18 +34,22 @@
 }
 
 .nav-link.done {
-    color: #7ed321 !important;
-    border: 1px solid #7ed321;
+    color: var(--c-blue-l) !important;
+    border: 1px solid var(--c-blue-l);
 }
 
 .nav-link.done h4 {
-    color: #7ed321 !important;
+    color: #7dccd0 !important;
 }
 
 .nav-link.active {
     background-color: white !important;
-    color: #7dccd0 !important;
-    border: 1px solid #7dccd0;
+    color: #7ed321 !important;
+    border: 1px solid #7ed321;
+}
+
+h4.list-group-item-heading.active {
+    color: #7ed321 !important;
 }
 
 .form-check-inline {
