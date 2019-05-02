@@ -15,15 +15,25 @@ class ProviderFormTest(TestCase):
                   'physical_address_line_1' : '',
                   'physical_address_line_2' : '',
                   'physical_address_city': '',
-                  'postal_address': '',
-            })
+                  'physical_address_postal_code': '',
+                  'postal_address_line_1' : '',
+                  'postal_address_line_2' : '',
+                  'postal_address_city': '',
+                  'postal_address_postal_code': '',
+                  })
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['telephone'], [EMPTY_TEL_ERROR])
         self.assertEqual(form.errors['physical_address_line_1'],
                          [EMPTY_MESSAGE_ERROR])
         self.assertEqual(form.errors['physical_address_city'],
                          [EMPTY_MESSAGE_ERROR])
-        self.assertEqual(form.errors['postal_address'],
+        self.assertEqual(form.errors['physical_address_postal_code'],
+                         [EMPTY_MESSAGE_ERROR])
+        self.assertEqual(form.errors['postal_address_line_1'],
+                         [EMPTY_MESSAGE_ERROR])
+        self.assertEqual(form.errors['postal_address_city'],
+                         [EMPTY_MESSAGE_ERROR])
+        self.assertEqual(form.errors['postal_address_postal_code'],
                          [EMPTY_MESSAGE_ERROR])
 
     def test_provider_page_uses_provider_form(self):
@@ -34,7 +44,7 @@ class ProviderFormTest(TestCase):
         form = ProviderForm(
             data={'telephone': '0821234123412341234',
                   'email': 'anemailwithouttheatsign',
-                  'postal_address': '12345'})
+                  'physical_address_postal_code': '12345'})
         self.assertFalse(form.is_valid())
         try:
             self.assertIn('Ensure this value has at most 12 characters',
@@ -44,7 +54,7 @@ class ProviderFormTest(TestCase):
                           ' being too long.')
         try:
             self.assertIn('Ensure this value has at most 4 characters',
-                          str(form.errors['postal_address'][0]))
+                          str(form.errors['physical_address_postal_code'][0]))
         except KeyError:
             self.fail(msg='No error raised for postal_address field'
                           ' being too long.')

@@ -67,8 +67,6 @@
 					{{ form.admissions_contact_no }}
 				</div>
 			</div>
-
-
 			<div class="row mt1">
 				{{ form.email.errors }}
 				<div class="col-4 centerv npl">
@@ -78,7 +76,6 @@
 					{{ form.email }}
 				</div>
 			</div>
-
 			<div class="row mt1">
 				<div class="col-4 npl">
 					Physical Address
@@ -94,12 +91,42 @@
 							{{ form.physical_address_city}}
 						</div>
 						<div class="col-lg-5 col-sm-12 mt1">
-							{{ form.postal_address.errors}}
-							{{ form.postal_address }}
+							{{ form.physical_address_postal_code.errors}}
+							{{ form.physical_address_postal_code }}
 						</div>
 					</div>
 				</div>
 			</div>
+			<div class="row mt1">
+				<div class="col-12 npl">
+					<label class="checkbox-container">The postal address differs from the physical address
+						{{  form.postal_address_differs }}
+						<span class="checkmark"></span>
+					</label>
+				</div>
+			</div>
+			<div id="postal_address_container" class="row mt1">
+				<div class="col-4 npl">
+					Postal Address
+				</div>
+				<div class="col-8">
+					{{ form.postal_address_line_1.errors }}
+					{{ form.postal_address_line_2.errors }}
+					{{ form.postal_address_line_1 }}
+					{{ form.postal_address_line_2 }}
+					<div class="row">
+						<div class="col-lg-7 col-sm-12 mt1">
+							{{ form.postal_address_city.errors}}
+							{{ form.postal_address_city}}
+						</div>
+						<div class="col-lg-5 col-sm-12 mt1">
+							{{ form.postal_address_postal_code.errors}}
+							{{ form.postal_address_postal_code }}
+						</div>
+					</div>
+				</div>
+			</div>
+
 			{% if is_new_provider %}
 
 				<div class="row mt1 edu-underline">
