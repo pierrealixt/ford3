@@ -21,6 +21,15 @@ class SAQAQualification(models.Model):
         blank=True,
         null=True,
         help_text="The NQF level SAQA has attributed to this qualification")
+    creator_provider = models.ForeignKey(
+        'ford3.provider',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE)
+    accredited = models.BooleanField(
+        default=True,
+        blank=False,
+        null=False)
 
     def __str__(self):
         return self.name
