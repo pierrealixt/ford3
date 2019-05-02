@@ -14,13 +14,8 @@ function innitiateRemoveCampusButtons() {
  }
 
 $(document).on("submit", "form", function(e) {
-    if (confirm('Submitting data. Continue?')) {
-        campus_name_elements = $('.campus_name').elements
+       campus_name_elements = $('.campus_name').elements
        return true;
-    }
-    else {
-       return false;
-    }
 })
 
 $('#add-campus-name').click(
