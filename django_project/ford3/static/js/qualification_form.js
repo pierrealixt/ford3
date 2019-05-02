@@ -106,8 +106,9 @@ $('#add-qualification-event').click(function () {
     }
 );
 
-
+let event_counter = 1;
  function addQualificationEvent(){
+        event_counter += 1;
         let name_div = document.getElementById('div_id_4-name');
         let start_date_div = document.getElementById('div_id_4-date_start');
         let end_date_div = document.getElementById('div_id_4-date_end');
@@ -135,8 +136,24 @@ $('#add-qualification-event').click(function () {
         form_group.appendChild(new_start_date_div);
         form_group.appendChild(new_end_date_div);
         form_group.appendChild(new_http_link_div);
+        let new_start_date_input = new_start_date_div.getElementsByTagName('input')[0];
+        updateElementID(new_start_date_input, event_counter);
+        $(new_start_date_input).removeClass('hasDatepicker');
+
+        $(new_start_date_input).datepicker();
+
+        let new_end_date_input = new_end_date_div.getElementsByTagName('input')[0];
+        updateElementID(new_end_date_input, event_counter);
+        $(new_end_date_input).removeClass('hasDatepicker');
+        $(new_end_date_input).datepicker();
+
         innitiateRemoveQualificationEventButtons();
 }
+
+function updateElementID(e, counter){
+             $(e).attr('id', $(e).attr('id') + '_' + counter.toString());
+}
+
 
  function clearElement(elementToClear) {
        $(elementToClear).find('input:text').val('');

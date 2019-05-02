@@ -1,5 +1,6 @@
-
+let campus_event_counter = 1
 function addCampusEvent(){
+    campus_event_counter += 1
     let name_div = document.getElementById(
         'div_id_campus-dates-event_name');
     let start_date_div = document.getElementById(
@@ -22,15 +23,29 @@ function addCampusEvent(){
     let form_group = (
         document.getElementsByClassName('form-group')[0]);
     new_remove_button_row.classlist += 'row';
-    // form_group.appendChild(new_hr);
+    let new_start_date_input = new_start_date_div.getElementsByTagName('input')[0];
+    let new_end_date_input = new_end_date_div.getElementsByTagName('input')[0];
     form_group.appendChild(new_remove_button_row)
     form_group.appendChild(new_name_div);
     form_group.appendChild(new_start_date_div);
     form_group.appendChild(new_end_date_div);
     form_group.appendChild(new_http_link_div);
+    
+    $(new_start_date_input).removeClass('hasDatepicker');
+    updateElementID(new_start_date_input, campus_event_counter);
+    $(new_start_date_input).datepicker();
+    $(new_end_date_input).removeClass('hasDatepicker');
+    updateElementID(new_end_date_input, campus_event_counter);
+    $(new_end_date_input).datepicker();
+    
     innitiateRemoveCampusEventButtons();
     onNameEditMakeOtherFieldsRequired();
     clearElement(new_name_div)
+
+}
+
+function updateElementID(e, counter){
+             $(e).attr('id', $(e).attr('id') + '_' + counter.toString());
 }
 
 function clearElement(elementToClear) {
