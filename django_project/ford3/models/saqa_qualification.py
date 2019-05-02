@@ -41,6 +41,31 @@ class SAQAQualification(models.Model):
             'name': self.name
         }
 
+
+    @classmethod
+    def create_non_accredited(self, name, creator_provider):
+        saqa_qualif = SAQAQualification(
+            name=name,
+            creator_provider=creator_provider,
+            accredited=False,
+            saqa_id=42)
+        saqa_qualif.save()
+
+        saqa_qualif.saqa_id = saqa_qualif.id
+
+        saqa_qualif.save()
+        return saqa_qualif
+
+
+    @classmethod
+    def create_accredited(self, name, saqa_id):
+        saqa_qualif = SAQAQualification(
+            name=name,
+            saqa_id=saqa_id)
+        saqa_qualif.save()
+
+        return saqa_qualif
+
     def search(query):
         try:
             query = int(query)
