@@ -42,10 +42,10 @@ let updateListSelected = (listSelectedHiddenInput, inputName) => {
     }
 };
 
+
 let subjectList = 1;
 let addSubject = (e, selectedValue = '', minimumScoreValue = '') => {
     // Function to add new subject
-    subjectList++;
     let $row = $(e).parent().parent().parent();
     let $clone = $row.clone();
     $row.parent().append($clone);
@@ -54,12 +54,50 @@ let addSubject = (e, selectedValue = '', minimumScoreValue = '') => {
     $subjectInput.val(selectedValue);
     let $minimumScoreInput = $clone.find('.subject-minimum-score');
     $minimumScoreInput.change(minimumScoreChangedHandler);
-    $clone.find('.col-form-label').html('Subject ' + subjectList + ':');
-    $clone.find('.subject-list').attr('name', '2-subject_' + subjectList);
+    $clone.find('.col-form-label').html('New Subject');
+    $clone.find('.subject-list').attr('name', '2-subject');
     $clone.find('.subject-minimum-score').val(minimumScoreValue);
-    $clone.find('.subject-minimum-score').attr('name', 'subject-minimum-score_' + subjectList);
-    $row.find('.add-subject-btn').remove();
+    $clone.find('.subject-minimum-score').attr('name', '2-subject-minimum-score');
+    let $row_button = $row.find('.add-subject-btn');
+    $row_button.addClass('remove-subject-btn').removeClass('add-subject-btn');
+    $row_button.attr('onclick', 'removeSubject(this)');
+    $row_button.html('Remove Subject');
 };
+
+
+$(document).ready(function() {
+    innitiateRemoveQualificationEventButtons();
+    let add_subject_button = $('.add-subject-btn');
+    add_subject_button.click().click();
+
+    if ($('.remove-qualification-event-button').length > 0) {
+        // Find my first four elements
+        let $first_form =  $('input[name=csrfmiddlewaretoken]').next();
+        let $name_input = $first_form.find('#id_4-name');
+        let $date_start_input = $first_form.find('#id_4-date_start');
+        let $date_end_input = $first_form.find('#id_4-date_end');
+        let $http_link_input = $first_form.find('#id_4-http_link');
+        $name_input.removeAttr('required');
+        $date_start_input.removeAttr('required');
+        $date_end_input.removeAttr('required');
+        $http_link_input.removeAttr('required');
+        // name_label.forEach(removeRequiredFromLabel)
+        removeRequiredFromLabel($name_input.labels());
+        removeRequiredFromLabel($date_start_input.labels());
+        removeRequiredFromLabel($date_end_input.labels());
+        removeRequiredFromLabel($http_link_input.labels());
+    }
+})
+
+function removeRequiredFromLabel(item)
+{
+    item[0].innerHTML = item[0].innerHTML.replace('*', '');
+}
+
+let removeSubject = (e) => {
+    let $row = $(e).parent().parent().parent();
+    $row.remove();
+}
 
 let subjectChangedHandler = (e) => {
     // Handler for Subject select changed event
@@ -160,16 +198,19 @@ function updateElementID(e, counter){
 };
 
  function innitiateRemoveQualificationEventButtons() {
-    $('.remove-qualification-event-button').click(function() {
-
-         for (let i = 0; i < 4; i++) {
-                var parent_div = this.parentElement.parentElement.parentElement;
-                if (parent_div.nextElementSibling != null) {
-                    parent_div.nextElementSibling.remove();
-                }
-        };
-        parent_div.remove();
-    })
+     $('.remove-qualification-event-button').click(function () {
+         // I need to always have at least one event (Applications)
+         if ($('.remove-qualification-event-button').length > 1) {
+             for (let i = 0; i < 4; i++) {
+                 var parent_div = this.parentElement.parentElement.parentElement;
+                 if (parent_div.nextElementSibling != null) {
+                     parent_div.nextElementSibling.remove();
+                 }
+             }
+             ;
+             parent_div.remove();
+         }
+     })
  }
 
  function getRemoveGroupRow() {
@@ -268,7 +309,6 @@ function updateElementID(e, counter){
         addSubject($input, selectedValue, minimumScoreValue);
     });
 })();
-
 
 
 

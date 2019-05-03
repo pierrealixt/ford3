@@ -45,6 +45,7 @@
                 </ul>
 
                 <form action="" method="post">{% csrf_token %}
+
                     <div class="form-group">
                         {{ wizard.management_form }}
                         {% if wizard.form.forms %}
@@ -53,11 +54,128 @@
                         {% else %}
                             {% crispy wizard.form wizard.form.helper %}
                         {% endif %}
-                    </div>
-	                {% if wizard.steps.step1 == 5 %}
-	                    <div id="add-qualification-event" class="edu-button edu-button-orange">
-	                        Add event
+                    {% if wizard.steps.step1 == 3 %}
+	                    <div>
+		                    {% for each_subject in subjects_list %}
+			                    <div id="div_id_2-subject" class="form-group row">
+				                    <label for="id_2-subject"
+				                           class="col-form-label col-md-3">
+					                    Subject {{ each_subject.index }}:
+				                    </label>
+				                    <div class="col-md-9 row">
+					                    <select name="2-subject" class="col-md-4 select form-control" id="id_2-subject">
+						                    <option value="{{ each_subject.id }}" selected="">{{ each_subject.name }}</option>
+					                    </select>
+						                    <div class="col-md-4">
+							                    <input type="number"
+							                           name="2-subject-minimum-score"
+							                           placeholder="Minimum Score"
+							                           class="textInput form-control subject-minimum-score"
+							                           value="{{ each_subject.minimum_score }}">
+						                    </div>
+						                    <div class="col-md-4">
+							                    <button type="button" class="remove-subject-btn btn btn-default" onclick="removeSubject(this)">Remove Subject</button>
+						                    </div>
+				                    </div>
+			                    </div>
+		                    {% endfor %}
 	                    </div>
+	                {% endif %}
+                    </div>
+
+	                {% if wizard.steps.step1 == 5 %}
+		                <div>
+			                {% for each_event in events_list %}
+				                <div>
+					                <div class="row">
+						                <div class="col-10">
+							                <hr>
+						                </div>
+						                <div class="col-1">
+							                <div class="remove-qualification-event-button">
+								                <div class="remove-qualification-button-inner ">X</div>
+							                </div>
+						                </div>
+					                </div>
+				                </div>
+				                <div id="div_id_4-name"
+				                     class="form-group row"><label
+						                for="id_4-name"
+						                class="col-form-label col-md-3 requiredField">
+					                Event name<span
+						                class="asteriskField">*</span>
+				                </label>
+					                <div class="col-md-9">
+						                <input type="text"
+						                       name="4-name"
+						                       placeholder="eg. Applications"
+						                       class="textinput textInput form-control"
+						                       required=""
+						                       id="id_4-name"
+						                       value="{{ each_event.name }}">
+					                </div>
+				                </div>
+				                <div id="div_id_4-date_start"
+				                     class="form-group row"><label
+						                for="id_4-date_start"
+						                class="col-form-label col-md-3 requiredField">
+					                Starting date<span
+						                class="asteriskField">*</span>
+				                </label>
+					                <div class="col-md-9">
+						                <input type="text"
+						                       name="4-date_start"
+						                       class="col-md-4 dateinput form-control hasDatepicker"
+						                       placeholder="mm/dd/yyyy"
+						                       required=""
+						                       id="id_4-date_start"
+						                       value="{{ each_event.date_start|date:'m/d/Y' }}">
+					                </div>
+				                </div>
+				                <div id="div_id_4-date_end"
+				                     class="form-group row"><label
+						                for="id_4-date_end"
+						                class="col-form-label col-md-3 requiredField">
+					                Ending date<span
+						                class="asteriskField">*</span>
+				                </label>
+					                <div class="col-md-9">
+						                <input type="text"
+						                       name="4-date_end"
+						                       class="col-md-4 dateinput form-control hasDatepicker"
+						                       placeholder="mm/dd/yyyy"
+						                       required=""
+						                       id="id_4-date_end"
+						                       value="{{ each_event.date_end|date:'m/d/Y' }}">
+					                </div>
+				                </div>
+				                <div id="div_id_4-http_link"
+				                     class="form-group row"><label
+						                for="id_4-http_link"
+						                class="col-form-label col-md-3">
+					                Link to event
+				                </label>
+					                <div class="col-md-9">
+						                <input type="text"
+						                       name="4-http_link"
+						                       placeholder="http://..."
+						                       class="textinput textInput form-control"
+						                       id="id_4-http_link"
+						                       value="{{ each_event.http_link }}">
+					                </div>
+				                </div>
+			                {% endfor %}
+		                </div>
+
+		                <div class="row">
+			                <div class="col-md-8"></div>
+			                <div class="col-md-4">
+				                <button id="add-qualification-event"
+				                        class="edu-button edu-button-orange">
+					                Add event
+				                </button>
+			                </div>
+		                </div>
 	                {% endif %}
                     <div class="row form-actions">
                         <div class="col-md-4">

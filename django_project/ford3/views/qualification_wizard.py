@@ -76,6 +76,9 @@ class QualificationFormWizardDataProcess(object):
         Add subjects to qualification
         :param form_data: dict of form data
         """
+        # Remove old subjects
+        QualificationEntranceRequirementSubject.objects.filter(
+            qualification=self.qualification).delete()
         subject_list = form_data['subject_list'].split(',')
         minimum_score_list = form_data['minimum_score_list'].split(',')
         for index, subject_value in enumerate(subject_list):
@@ -83,7 +86,7 @@ class QualificationFormWizardDataProcess(object):
                 subject = Subject.objects.get(
                     id=subject_value
                 )
-            except Subject.DoesNotExist:
+            except (Subject.DoesNotExist, ValueError):
                 continue
             requirement_subjects, created = (
                 QualificationEntranceRequirementSubject.objects.
@@ -103,29 +106,53 @@ class QualificationFormWizardDataProcess(object):
             )
             requirement_subjects.save()
 
-    def add_requirements(self, form_data):
+    def add_or_update_requirements(self, form_data):
         """
         Add requirements to qualification
         :param form_data: dict of form data
         """
-        requirement_fields = {}
-        requirement_form_fields = (
-            vars(QualificationRequirementsForm)['declared_fields']
-        )
-        for requirement_field in requirement_form_fields.keys():
-            try:
-                getattr(Requirement, requirement_field)
-                if form_data[requirement_field]:
-                    requirement_fields[requirement_field] = (
-                        form_data[requirement_field]
-                    )
-            except AttributeError:
-                continue
-        if requirement_form_fields:
-            Requirement.objects.create(
-                qualification=self.qualification,
-                **requirement_fields
+        # Check if there is already a requirements object
+        requirement_exists = True
+        existing_requirement: Requirement = self.qualification.requirement
+        try:
+            existing_requirement.qualification
+        except AttributeError:
+            requirement_exists = False
+        if requirement_exists:
+            existing_requirement.min_nqf_level = (
+                form_data['min_nqf_level'])
+            existing_requirement.interview = (
+                form_data['interview'])
+            existing_requirement.portfolio = (
+                form_data['portfolio'])
+            existing_requirement.portfolio_comment = (
+                form_data['portfolio_comment'])
+            existing_requirement.require_aps_score = (
+                form_data['require_aps_score'])
+            existing_requirement.aps_calculator_link = (
+                form_data['aps_calculator_link'])
+            existing_requirement.require_certain_subjects = (
+                form_data['require_certain_subjects'])
+            existing_requirement.save()
+        else:
+            requirement_fields = {}
+            requirement_form_fields = (
+                vars(QualificationRequirementsForm)['declared_fields']
             )
+            for requirement_field in requirement_form_fields.keys():
+                try:
+                    getattr(Requirement, requirement_field)
+                    if form_data[requirement_field]:
+                        requirement_fields[requirement_field] = (
+                            form_data[requirement_field]
+                        )
+                except AttributeError:
+                    continue
+            if requirement_form_fields:
+                Requirement.objects.create(
+                    qualification=self.qualification,
+                    **requirement_fields
+                )
 
     def process_data(self, form_data):
         """
@@ -165,14 +192,15 @@ class QualificationFormWizardDataProcess(object):
             self.qualification.occupations.add(occupation)
 
         # Subjects
-        self.add_subjects(form_data)
+        # self.add_subjects(form_data)
 
         # Add requirements
-        self.add_requirements(form_data)
+        self.add_or_update_requirements(form_data)
 
 
 class QualificationFormWizard(CookieWizardView):
     template_name = 'qualification_form.html'
+    initial_dict = {}
 
     @property
     def provider(self):
@@ -217,6 +245,7 @@ class QualificationFormWizard(CookieWizardView):
         )
 
     def get(self, *args, **kwargs):
+        self.set_initial_data()
         qualification = self.qualification
         if not qualification:
             raise Http404()
@@ -238,7 +267,12 @@ class QualificationFormWizard(CookieWizardView):
         if self.qualification.campus.provider.provider_logo:
             context['provider_logo'] = \
                 self.qualification.campus.provider.provider_logo.url
+        context['subjects_list'] = (
+            self.qualification.entrance_req_subjects_list)
+        context['events_list'] = self.qualification.qualification_events_list
         return context
+
+
 
     def done(self, form_list, **kwargs):
         form_data = dict()
@@ -247,6 +281,11 @@ class QualificationFormWizard(CookieWizardView):
                 context = self.get_context_data(form=form, **kwargs)
                 self.add_events(
                     context['view'].storage.data['step_data']['4'])
+            elif form.prefix == '2':
+                context = self.get_context_data(form=form, **kwargs)
+                self.add_required_subjects(
+                    context['view'].storage.data['step_data']['2'])
+                form_data.update(form.cleaned_data)
             else:
                 form_data.update(form.cleaned_data)
 
@@ -262,32 +301,111 @@ class QualificationFormWizard(CookieWizardView):
             args=(self.provider.id, self.campus.id, self.qualification.id))
         return redirect(url)
 
+    def add_required_subjects(self, step_data):
+        # Remove old subjects
+        QualificationEntranceRequirementSubject.objects.filter(
+            qualification__id=self.qualification.id).delete()
+        new_subject_values = step_data['2-subject']
+        new_minimum_scores = step_data['2-subject-minimum-score']
+        number_of_new_subjects = len(new_subject_values)
+        for i in range(0, number_of_new_subjects):
+            try:
+                subject = Subject.objects.filter(
+                    id=new_subject_values[i]).first()
+                new_subject = QualificationEntranceRequirementSubject()
+                new_subject.subject = subject
+                new_subject.qualification = self.qualification
+                new_subject.minimum_score = new_minimum_scores[i]
+                new_subject.save()
+            except (Subject.DoesNotExist, ValueError):
+                # ToDo: I need to alert the user one of the subjects could
+                #  not be saved
+                pass
+
     def add_events(self, step_data):
+        # Remove old events
+        QualificationEvent.objects.filter(
+            qualification__id=self.qualification.id).delete()
         new_name = step_data['4-name']
         new_date_start = step_data['4-date_start']
         new_date_end = step_data['4-date_end']
         new_http_link = step_data['4-http_link']
-        # Count how many names were submitted and create new_events
+        # Count how many names were submitted
         number_of_new_events = len(new_name)
-        if len(new_name) == 1 and new_name[0] == '':
-            return False
+        # Create new events
         for i in range(0, number_of_new_events):
-            new_qualification_event = QualificationEvent()
-            new_qualification_event.name = new_name[i]
-            new_date_start_i = new_date_start[i]
-            new_date_start_formatted = (
-                datetime.strptime(new_date_start_i, '%m/%d/%Y')
-            ).strftime('%Y-%m-%d')
-            new_date_end_i = new_date_end[i]
-            new_date_end_formatted = (
-                datetime.strptime(new_date_end_i, '%m/%d/%Y')
-            ).strftime('%Y-%m-%d')
-            new_qualification_event.date_start = new_date_start_formatted
-            new_qualification_event.date_end = new_date_end_formatted
-            new_qualification_event.http_link = new_http_link[i]
             try:
-                self.new_qualification_events.append(new_qualification_event)
-            except AttributeError:
-                self.new_qualification_events = []
-                self.new_qualification_events.append(new_qualification_event)
+                new_qualification_event = QualificationEvent()
+                new_qualification_event.name = new_name[i]
+                new_date_start_i = new_date_start[i]
+                new_date_start_formatted = (
+                    datetime.strptime(new_date_start_i, '%m/%d/%Y')
+                ).strftime('%Y-%m-%d')
+                new_date_end_i = new_date_end[i]
+                new_date_end_formatted = (
+                    datetime.strptime(new_date_end_i, '%m/%d/%Y')
+                ).strftime('%Y-%m-%d')
+                new_qualification_event.date_start = new_date_start_formatted
+                new_qualification_event.date_end = new_date_end_formatted
+                new_qualification_event.http_link = new_http_link[i]
+                try:
+                    self.new_qualification_events.append(
+                        new_qualification_event)
+                except AttributeError:
+                    self.new_qualification_events = []
+                    self.new_qualification_events.append(
+                        new_qualification_event)
+            # If there was a problem with the record, just don't save it
+            except ValueError:
+                pass
+
         self.qualification.add_events(self.new_qualification_events)
+
+    def set_initial_data(self):
+        try:
+            self.initial_dict['0'] = ({
+                'short_description': self.qualification.short_description,
+                'long_description': self.qualification.long_description,
+                'distance_learning': self.qualification.distance_learning
+            })
+        except (IndexError, AttributeError):
+            pass
+        try:
+            self.initial_dict['1'] = ({
+                'full_time': self.qualification.full_time,
+                'part_time': self.qualification.part_time,
+                'duration': self.qualification.duration_in_months,
+                'duration_type': 'month',
+                'total_cost': self.qualification.total_cost,
+                'total_cost_comment': self.qualification.total_cost_comment
+            })
+        except (IndexError, AttributeError):
+            pass
+        try:
+            self.initial_dict['2'] = ({
+                'min_nqf_level':
+                    self.qualification.requirement.min_nqf_level,
+                    'interview': self.qualification.requirement.interview,
+                'portfolio': self.qualification.requirement.portfolio,
+                'portfolio_comment':
+                    self.qualification.requirement.portfolio_comment,
+                'require_aps_score':
+                    self.qualification.requirement.require_aps_score,
+                'aps_calculator_link':
+                    self.qualification.requirement.aps_calculator_link,
+                'require_certain_subjects':
+                    self.qualification.requirement.require_certain_subjects
+            })
+        except (IndexError, AttributeError):
+            pass
+        try:
+            self.initial_dict['3'] = ({
+                'interest_list': self.qualification.interest_id_list,
+                'occupation_list': self.qualification.occupation_id_list,
+                'critical_skill': self.qualification.critical_skill,
+                'green_occupation': self.qualification.green_occupation,
+                'high_demand_occupation':
+                    self.qualification.high_demand_occupation
+            })
+        except (IndexError, AttributeError):
+            pass

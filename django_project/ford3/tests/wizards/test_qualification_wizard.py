@@ -146,7 +146,7 @@ class TestQualificationWizard(TestCase):
             'aps_calculator_link': 'http://test.com',
             'require_certain_subjects': False
         }
-        self.qualification_data_process.add_requirements(
+        self.qualification_data_process.add_or_update_requirements(
             requirement_form_data
         )
         requirements = Requirement.objects.filter(

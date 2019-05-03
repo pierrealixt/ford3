@@ -1,11 +1,10 @@
 from django.db import models
 
-from ford3.models.qualification import Qualification
 
 
 class QualificationEvent(models.Model):
     qualification = models.ForeignKey(
-        Qualification,
+        'Qualification',
         on_delete=models.CASCADE)
     name = models.CharField(
         blank=True,

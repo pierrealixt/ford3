@@ -21,15 +21,15 @@ class CampusDetailForm(CampusForm):
     #     required=False)
 
     telephone = forms.CharField(
-        label='Telephone number:',
+        label='Telephone number',
         required=False)
 
     email = forms.EmailField(
-        label='E-mail address:',
+        label='E-mail address',
         required=False)
 
     max_students_per_year = forms.IntegerField(
-        label='Annual student capacity:',
+        label='Annual student capacity',
         max_value=1000000,
         min_value=0,
         required=False)
@@ -37,7 +37,7 @@ class CampusDetailForm(CampusForm):
 
 class CampusLocationForm(CampusForm):
     physical_address_line_1 = forms.CharField(
-        label='Physical address:',
+        label='Physical address',
         required=False,
         widget=forms.TextInput(
             attrs={'placeholder': 'Line 1'}
@@ -75,7 +75,7 @@ class CampusLocationForm(CampusForm):
     )
 
     postal_address_line_1 = forms.CharField(
-        label='Postal address:',
+        label='Postal address',
         required=False,
         widget=forms.TextInput(
             attrs={'placeholder': 'Line 1'}
@@ -108,7 +108,7 @@ class CampusLocationForm(CampusForm):
 
 class CampusImportantDatesForm(CampusForm):
     event_name = forms.CharField(
-        label='Event name:',
+        label='Event name',
         required=False,
         widget=forms.TextInput(
             attrs={'placeholder': 'Open day, ...'}
@@ -116,7 +116,7 @@ class CampusImportantDatesForm(CampusForm):
     )
 
     date_start = forms.DateField(
-        label='Start date:',
+        label='Start date',
         required=False,
         widget=forms.DateInput(
             attrs={'class': 'col-md-4'}
@@ -124,7 +124,7 @@ class CampusImportantDatesForm(CampusForm):
     )
 
     date_end = forms.DateField(
-        label='End date:',
+        label='End date',
         required=False,
         widget=forms.DateInput(
             attrs={'class': 'col-md-4'}
@@ -132,7 +132,7 @@ class CampusImportantDatesForm(CampusForm):
     )
 
     http_link = forms.URLField(
-        label='Link to event:',
+        label='Link to event',
         required=False,
         widget=forms.TextInput(
             attrs={'placeholder': 'http://...'}
