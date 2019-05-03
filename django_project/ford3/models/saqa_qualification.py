@@ -48,9 +48,11 @@ class SAQAQualification(models.Model):
             name=name,
             creator_provider=creator_provider,
             accredited=False,
-            saqa_id=42)
+            saqa_id=0)
+        # use 0 instead of 42...
         saqa_qualif.save()
 
+        # we dont need to do this anymore
         saqa_qualif.saqa_id = saqa_qualif.id
 
         saqa_qualif.save()

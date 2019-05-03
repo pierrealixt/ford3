@@ -141,6 +141,9 @@ class CampusImportantDatesForm(CampusForm):
 
 
 class CampusQualificationsForm(CampusForm):
+
+
+    # it should store id instead of saqa_id
     saqa_ids = forms.CharField(
         widget=forms.HiddenInput(),
         required=False)
