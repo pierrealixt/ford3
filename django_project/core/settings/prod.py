@@ -1,9 +1,6 @@
 # coding=utf-8
 
 """Project level settings."""
-
-from os.path import exists, dirname, join
-
 from .project import *  # noqa
 
 try:
