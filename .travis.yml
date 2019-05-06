@@ -36,7 +36,8 @@ jobs:
       script:
         - pushd deployment
         - echo "Preparing Docker Stack"
-        - make build up wait-for-db generate-django-secret migrate collectstatic selenium-up
+        - make build up wait-for-db generate-django-secret migrate collectstatic
+        - make selenium-up
         - make status
         - echo "Docker stack ready"
         - echo "Preparing unittests"
