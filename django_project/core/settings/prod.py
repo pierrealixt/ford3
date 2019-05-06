@@ -23,9 +23,9 @@ ALLOWED_HOSTS = [
     'ford3.kartoza.com']
 
 # Pipeline - for production we want to compress resources
-PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
-PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
-PIPELINE['PIPELINE_ENABLED'] = True
+# PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
+# PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE['PIPELINE_ENABLED'] = False
 
 # Comment if you are not running behind proxy
 USE_X_FORWARDED_HOST = True
