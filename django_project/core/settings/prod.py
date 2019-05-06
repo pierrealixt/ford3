@@ -7,17 +7,21 @@ try:
     from .secret import *  # noqa
 except ImportError:
     import os
-    SENTRY_KEY = os.environ['SENTRY_KEY']
+    if 'SENTRY_KEY' in os.environ:
+        SENTRY_KEY = os.environ['SENTRY_KEY']
 
-if SENTRY_KEY:
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
+try:
+    if SENTRY_KEY:
+        import sentry_sdk
+        from sentry_sdk.integrations.django import DjangoIntegration
 
-    sentry_sdk.init(
-        dsn=SENTRY_KEY,
-        integrations=[DjangoIntegration()],
-        send_default_pii=True
-    )
+        sentry_sdk.init(
+            dsn=SENTRY_KEY,
+            integrations=[DjangoIntegration()],
+            send_default_pii=True
+        )
+except NameError:
+    pass
 
 
 
