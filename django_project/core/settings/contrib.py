@@ -5,7 +5,6 @@ INSTALLED_APPS = (
     'test_without_migrations',
     'grappelli',
     'formtools',
-    'raven.contrib.django.raven_compat'
 ) + INSTALLED_APPS
 
 INSTALLED_APPS += (
