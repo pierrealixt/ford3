@@ -4,7 +4,6 @@ from django.shortcuts import (
     get_object_or_404,
 )
 from django.db import transaction, IntegrityError
-from django.db.models import F
 from django.urls import reverse
 from ford3.forms.provider_form import ProviderForm
 from ford3.models import (
