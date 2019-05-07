@@ -67,13 +67,15 @@
                                     </li>
 
                                     {% for qualification in campus.qualifications %}
-                                    <li class='container' data-saqa-id='{{ qualification.saqa_qualification__saqa_id }}'>
+                                    <li class='container' data-saqa-id='{{ qualification.saqa_qualification__id }}'>
                                         <div class='row'>
                                             <div class='col-md-9 qualif-name'>
                                                 {{ qualification.saqa_qualification__name }}
                                             </div>
                                             <div class='col-md-3 qualif-saqa-id text-right'>
-                                                <a href='http://regqs.saqa.org.za/viewQualification.php?id={{ qualification.saqa_qualification__saqa_id }}' target='_blank'>{{ qualification.saqa_qualification__saqa_id }}</a>
+                                                {% if qualification.saqa_qualification__accredited %}
+                                                    <a href='http://regqs.saqa.org.za/viewQualification.php?id={{ qualification.saqa_qualification__saqa_id }}' target='_blank'>{{ qualification.saqa_qualification__saqa_id }}</a>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </li>
@@ -124,8 +126,12 @@
                                         </div>
                                     </div>
                                     <div class='tab-pane' id='create-qualif' role='tabpanel' aria-labelledby='create-qualif-tab'>
-                                        <input type='text' placeholder="Qualification's name">
-                                        <input type='submit' value='Create' />
+                                        <div id='create-qualif-form-error-alert' class="alert alert-danger d-none" role="alert">
+                                          
+                                        </div>                                        
+                                        <input type='text' placeholder="Qualification's name" data-action='create-qualif'>
+                                        <input type='hidden' id='provider-id' value='{{ campus.provider.id }}' />
+                                        <button type='button' class='btn-default' data-action='create-qualif'>create</button>
                                     </div>
                                 </div>
                             </div>

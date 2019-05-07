@@ -15,6 +15,18 @@ const getClearQualificationsButtonElement = () => {
   return document.querySelector('button[data-action="clear-qualifs"]')
 }
 
+const getCreateQualificationButtonElement = () => {
+  return document.querySelector('button[data-action="create-qualif"]')
+}
+
+const getCreateQualificationInputElement = () => {
+  return document.querySelector('input[data-action="create-qualif"]')
+}
+
+const getProviderIdInputElement = () => {
+  return document.getElementById('provider-id')
+}
+
 const getCampusQualificationsListElement = () => {
   return document.getElementById('campus-qualifications-list')
 }
@@ -25,6 +37,10 @@ const getSelectedQualificationsFromList = (list) => {
 
 const getSaqaQualificationsInputElem = () => {
   return document.getElementById('id_campus-qualifications-saqa_ids')
+}
+
+const getCreateQualificationFormErrorAlertElement = () => {
+  return document.getElementById('create-qualif-form-error-alert')
 }
 
 const addSaqaQualification = (saqaId) => {
@@ -163,7 +179,6 @@ const setClickEventToRemoveButton = () => {
     const campusQualifListElem = getCampusQualificationsListElement()
     let selectedQualifElems = getSelectedQualificationsFromList(campusQualifListElem)
 
-    console.log(selectedQualifElems)
     selectedQualifElems.forEach(function (selectedQualifElem) {
       let qualifElem = saqaQualifListElem.querySelector('li[data-saqa-id="' + selectedQualifElem.dataset['saqa-id'] + '"]')
       if (qualifElem) { qualifElem.style.display = 'list-item' }
@@ -220,31 +235,27 @@ const displaySaqaQualificationsResults = (results) => {
     let saqaNode = saqaNodeExample.cloneNode(true)
 
     // let saqaNode = document.createElement('li')
-    saqaNode.setAttribute('data-saqa-id', saqa.saqa_id)
+    saqaNode.setAttribute('data-saqa-id', saqa.id)
     saqaNode.querySelector('.qualif-name').innerHTML = saqa.name
     saqaNode.querySelector('.qualif-saqa-id').appendChild(buildSaqaQualificationLiContent(saqa))
     saqaNode.classList.remove('d-none')
-    console.log(saqaNode)
+
     list.appendChild(saqaNode)
 
-    // setToggleEvent(saqaNode)
+    setToggleEvent(saqaNode)
   })
 }
 
 const ajaxSearchQualifications = (query) => {
-  const url = '/ford3/saqa_qualifications?q=' + query
+  const url = '/ford3/saqa_qualifications/search/?q=' + query
   const request = new XMLHttpRequest()
   request.open('GET', url, true)
 
   request.onload = function () {
     if (request.status >= 200 && request.status < 400) {
-    // Success!
       var data = JSON.parse(request.responseText)
       displaySaqaQualificationsResults(data['results'])
       toggleAddButton(false)
-    } else {
-    // We reached our target server, but it returned an error
-
     }
   }
 
@@ -267,12 +278,70 @@ const setSearchEvent = () => {
   }
 }
 
+const getCSRFTokenFromCookies = () => {
+  let csrfToken
+
+  document.cookie.split(';').forEach((cookie) => {
+    const csrfRegex = RegExp('csrftoken')
+    if (csrfRegex.test(cookie.trim())) {
+      csrfToken = cookie.trim().split('=')[1]
+    }
+  })
+
+  return csrfToken
+}
+
+const ajaxCreateQualification = (data) => {
+  const url = '/ford3/saqa_qualifications/create/'
+  const request = new XMLHttpRequest()
+  request.open('POST', url, true)
+  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+  request.setRequestHeader('X-CSRFToken', getCSRFTokenFromCookies())
+
+  request.onload = function () {
+    if (request.status >= 200 && request.status < 400) {
+      const data = JSON.parse(request.responseText)
+      if (data.success) {
+        alert('yes!')
+      } else {
+        const alert = getCreateQualificationFormErrorAlertElement()
+        alert.innerHTML = data.error
+        alert.classList.remove('d-none')
+      }
+    }
+  }
+
+  request.send(data)
+}
+
+const createQualification = () => {
+  const qualificationName = getCreateQualificationInputElement().value
+  const providerId = getProviderIdInputElement().value
+  const data = `saqa_qualification_name=${qualificationName}&provider_id=${providerId}`
+  ajaxCreateQualification(data)
+}
+
+const clearCreateQualificationFormErrors = () => {
+  const alert = getCreateQualificationFormErrorAlertElement()
+  alert.innerHTML = ''
+  alert.classList.add('d-none')
+}
+
+const setCreateQualifEvent = () => {
+  const button = getCreateQualificationButtonElement()
+  button.addEventListener('click', (evt) => {
+    clearCreateQualificationFormErrors()
+    createQualification()
+  })
+}
+
 const setupEvents = () => {
   setClickEventToLi()
   setClickEventToAddButton()
   setClickEventToRemoveButton()
   setClickEventToClearButton()
   setSearchEvent()
+  setCreateQualifEvent()
 }
 
 (function () {

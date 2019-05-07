@@ -77,7 +77,7 @@ class TestCampus(TestCase):
 
         # build form data
         form_data = {
-            'saqa_ids': '{} {}'.format(saqas[0].saqa_id, saqas[1].saqa_id)
+            'saqa_ids': '{} {}'.format(saqas[0].id, saqas[1].id)
         }
 
         # campus should not have qualifications yet.
@@ -107,7 +107,7 @@ class TestCampus(TestCase):
 
         # build form data
         form_data = {
-            'saqa_ids': '{}'.format(saqas[0].saqa_id)
+            'saqa_ids': '{}'.format(saqas[0].id)
         }
         # save two times with same saqa_ids
         self.campus.save_qualifications(form_data)
@@ -116,7 +116,7 @@ class TestCampus(TestCase):
         self.assertEqual(len(self.campus.qualifications), 1)
 
         form_data = {
-            'saqa_ids': '{} {}'.format(saqas[0].saqa_id, saqas[1].saqa_id)
+            'saqa_ids': '{} {}'.format(saqas[0].id, saqas[1].id)
         }
 
         # save with a new saqa_id
@@ -125,6 +125,7 @@ class TestCampus(TestCase):
         self.assertEqual(len(self.campus.qualifications), 2)
 
     def test_delete_qualifications(self):
+
         saqas = [
             ModelFactories.get_saqa_qualification_test_object(),
             SAQAQualification.objects.create(
@@ -139,19 +140,27 @@ class TestCampus(TestCase):
 
         # build form data
         form_data = {
-            'saqa_ids': '{} {}'.format(saqas[0].saqa_id, saqas[1].saqa_id)
+            'saqa_ids': '{} {}'.format(saqas[0].id, saqas[1].id)
         }
         self.campus.save_qualifications(form_data)
         self.assertEqual(len(self.campus.qualifications), 2)
 
+        # add those two qualifications to another campus
+        self.other_campus = ModelFactories.get_campus_test_object(
+            new_id=421)
+        self.other_campus.save_qualifications(form_data)
+
         form_data = {
-            'saqa_ids': '{}'.format(saqas[1].saqa_id)
+            'saqa_ids': '{}'.format(saqas[1].id)
         }
 
-        # it should remove the first saqa
+        # it should remove the first saqa for the first campus.
         self.campus.delete_qualifications(form_data)
 
         self.assertEqual(len(self.campus.qualifications), 1)
         self.assertEqual(
             self.campus.qualifications[0]['saqa_qualification__saqa_id'],
             42)
+
+        # it should not remove qualifications for the second campus.
+        self.assertEqual(len(self.other_campus.qualifications), 2)

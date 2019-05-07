@@ -1,5 +1,6 @@
 from django.db import models
 from ford3.models.sub_field_of_study import SubFieldOfStudy
+from django.core.exceptions import ValidationError
 
 
 class SAQAQualification(models.Model):
@@ -14,7 +15,7 @@ class SAQAQualification(models.Model):
         help_text="The ID of the qualification as listed in the SAQA database")
     name = models.CharField(
         blank=False,
-        null=False,
+        null=True,
         help_text="The name of the qualification as approved by SAQA",
         max_length=255)
     nqf_level = models.IntegerField(
@@ -49,13 +50,9 @@ class SAQAQualification(models.Model):
             creator_provider=creator_provider,
             accredited=False,
             saqa_id=0)
-        # use 0 instead of 42...
-        saqa_qualif.save()
-
-        # we dont need to do this anymore
-        saqa_qualif.saqa_id = saqa_qualif.id
 
         saqa_qualif.save()
+
         return saqa_qualif
 
 
@@ -64,9 +61,28 @@ class SAQAQualification(models.Model):
         saqa_qualif = SAQAQualification(
             name=name,
             saqa_id=saqa_id)
+        
         saqa_qualif.save()
 
         return saqa_qualif
+
+    def save(self, *args, **kwargs):
+        print(self.name)
+        if len(self.name) == 0:
+            raise ValidationError({'saqa_qualification': 'Name is required.'})            
+
+        if self.accredited:
+            # make sure saqa_id and name are unique
+            pass
+        else:
+            # make sure creator_provider and name are unique
+            if SAQAQualification.objects.filter(
+                creator_provider=self.creator_provider,
+                name=self.name
+                ).exists():
+                raise ValidationError({'saqa_qualification': 'Non-accredited SAQA qualification name must be unique per provider.'})
+
+        super().save(*args, **kwargs)
 
     def search(query):
         try:

@@ -119,14 +119,16 @@ class Campus(models.Model):
         qualif_query = Qualification.objects.filter(
             campus__id=self.id).order_by('id').values(
                 'id',
+                'saqa_qualification__id',
                 'saqa_qualification__name',
-                'saqa_qualification__saqa_id')
+                'saqa_qualification__saqa_id',
+                'saqa_qualification__accredited')
         return list(qualif_query)
 
     @property
     def saqa_ids(self):
         return [
-            str(s['saqa_qualification__saqa_id'])
+            str(s['saqa_qualification__id'])
             for s in self.qualifications]
 
     def save_postal_data(self, form_data):
@@ -195,7 +197,7 @@ class Campus(models.Model):
 
         for saqa_id in ids:
 
-            saqa_qualif = SAQAQualification.objects.get(saqa_id=saqa_id)
+            saqa_qualif = SAQAQualification.objects.get(id=saqa_id)
 
             qualif = Qualification(
                 saqa_qualification=saqa_qualif,
@@ -209,7 +211,8 @@ class Campus(models.Model):
 
         for saqa_id in ids:
             qualif = Qualification.objects.filter(
-                saqa_qualification__saqa_id=saqa_id)
+                saqa_qualification__id=saqa_id,
+                campus=self)
             qualif.delete()
 
     def __str__(self):

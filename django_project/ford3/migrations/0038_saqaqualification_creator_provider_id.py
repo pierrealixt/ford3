@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ford3', '0037_merge_20190502_1010'),
+        ('ford3', '0037_merge_20190502_1114'),
     ]
 
     operations = [
