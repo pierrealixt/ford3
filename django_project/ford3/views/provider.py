@@ -4,7 +4,6 @@ from django.shortcuts import (
     get_object_or_404,
 )
 from django.db import transaction, IntegrityError
-from django.db.models import F
 from django.urls import reverse
 from ford3.forms.provider_form import ProviderForm
 from ford3.models import (
@@ -123,26 +122,10 @@ def show_provider(request, provider_id):
             args=[str(provider.id)])
         return redirect(redirect_url)
 
-    context = {}
-    form_data = {}
-    campus_query = Campus.objects.filter(provider__id=provider_id).annotate(
-        campus_name=F('name'),
-        campus_id=F('id'),
-        provider_name=F('provider__name'),
-        provider_logo=F('provider__provider_logo')
-    )
-    campus_data = campus_query.values('name', 'id')
-    provider_name = campus_query.values('provider_name')[0]['provider_name']
-
-    form_data['campus_list'] = list(campus_data)
-    form_data['provider_name'] = str(provider_name)
-
-    context['form_data'] = form_data
-    context['provider'] = {
-        'campus': campus_data,
-        'id': provider_id,
-        'name': provider_name,
+    context = {
+        'provider': provider
     }
+
     # make sure logo has been uploaded before set the context
     # otherwise, let it empty
     if provider.provider_logo:

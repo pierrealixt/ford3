@@ -114,7 +114,7 @@ class Provider(models.Model):
     @property
     def campus(self):
         campus_query = Campus.objects.filter(
-            provider__id=self.id).order_by('id').values(
+            provider__id=self.id).order_by('name').values(
                 'id',
                 'name')
         return list(campus_query)
