@@ -26,29 +26,20 @@ class TestSAQAQualification(TestCase):
 
 
         self.assertFalse(saqa_qualif.accredited)
-        self.assertEqual(saqa_qualif.id, saqa_qualif.saqa_id)
         self.assertEqual(saqa_qualif.creator_provider_id, provider.id)
         self.assertEqual(len(SAQAQualification.objects.all()), 1)
 
     def test_create_duplicate_non_accredited_saqa_qualification(self):
         provider = ModelFactories.get_provider_test_object()
 
-        saqa_qualif = SAQAQualification.create_non_accredited(
+        SAQAQualification.create_non_accredited(
             name='Non-official Bachelor of Arts',
             creator_provider=provider)
 
-        
-        # it should raise a ValidationError
-        with self.assertRaises(ValidationError) as context_manager:
-            saqa_qualif = SAQAQualification.create_non_accredited(
+        with self.assertRaises(ValidationError):
+            SAQAQualification.create_non_accredited(
                 name='Non-official Bachelor of Arts',
                 creator_provider=provider)
-        
-        the_exception = context_manager.exception
-        print(the_exception['saqa_qualification'])
-        # self.assertEqual([0], 'Non-accredited SAQA qualification name must be unique per provider')
-
-
 
     def test_create_accredited_saqa_qualification(self):
         self.assertEqual(len(SAQAQualification.objects.all()), 0)
