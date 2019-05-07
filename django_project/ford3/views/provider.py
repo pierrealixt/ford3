@@ -123,26 +123,6 @@ def show_provider(request, provider_id):
             args=[str(provider.id)])
         return redirect(redirect_url)
 
-    # context = {}
-    # form_data = {}
-    # campus_query = Campus.objects.filter(provider__id=provider_id).annotate(
-    #     campus_name=F('name'),
-    #     campus_id=F('id'),
-    #     provider_name=F('provider__name'),
-    #     provider_logo=F('provider__provider_logo')
-    # )
-    # campus_data = campus_query.values('name', 'id')
-    
-
-    # form_data['campus_list'] = list(campus_data)
-    # form_data['provider_name'] = str(provider_name)
-
-    # context['form_data'] = form_data
-    # context['provider'] = {
-    #     'campus': campus_data,
-    #     'id': provider_id,
-    #     'name': provider_name,
-    # }
     context = {
         'provider': provider
     }
