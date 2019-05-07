@@ -47,48 +47,50 @@ button.right-arrow-button:focus, button.right-arrow-button:active {
 }
 
 .qualif-texts {
-  color: #7acdcf;
   font-size: 18px;
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .qualif-texts.disabled {
-    color: #d5d5d5 !important;
+    color: var(--c-grey-l) !important;
 }
 
-
-.campus-all-qualifications {
-  border: 1px solid #aaaaaa;
+input[data-action='search-qualif'] {
+  border-radius: 0px !important;
 }
 
-.saqa-all-qualifications {
-  border: 1px solid #aaaaaa;
+input[data-action='create-qualif'] {
+  border-radius: 0px !important;
 }
 
-.search-qualifications {
-  background-image: url('../images/ui/zoom.svg');
-  background-repeat: no-repeat;
-  background-position: 1%;
-  border: none !important;
-  padding-left: 2rem !important;
+.campus-all-qualifications, .saqa-all-qualifications {
+  height: 480px;
 }
 
-#saqa-qualifications-list, #campus-qualifications-list {
-  width: 100%;
-  height: 370px;
+#campus-qualifications-list, #saqa-qualifications-list {
   list-style: none;
-  color: #464746;
-  line-height: 27px;
-  padding-left: 0.1rem;
   overflow-y: auto;
 }
 
 #campus-qualifications-list {
-  height: 480px;
+  height: 420px;
 }
 
-#saqa-qualifications-list a:link, #campus-qualifications-list a:link {
+#saqa-qualifications-list {
+  height: 240px;
+}
+
+#saqa-qualifications-list li, #campus-qualifications-list li {
+  min-height: 42px;
+  height: auto;
+}
+
+.qualif-li {
+  cursor: pointer;
+}
+
+.qualif-saqa-id a {
   color: darkred;
   text-decoration: underline;
 }
@@ -96,10 +98,36 @@ button.right-arrow-button:focus, button.right-arrow-button:active {
 button.edu-button-blue {
   font-size: 20px;
 }
-.btn-default {
-  font-size: 20px;
+
+
+.saqa-all-qualifications .nav-tabs {
+  border: none !important;
 }
 
+.saqa-all-qualifications .nav-link {
+  border: none !important;
+  padding: 0;
+  color: var(--c-purple) !important; 
+  font-weight: bold;
+  font-size: 1.25rem;  
+  line-height: 1.2;
+}
+
+.saqa-all-qualifications .nav-link:hover {
+  text-decoration: underline
+}
+
+.saqa-all-qualifications ul.nav, .campus-all-qualifications h5 {
+  height:  55px;
+  background: rgb(255,255,255) !important;
+  background: linear-gradient(360deg, rgba(255,255,255,1) 0%, rgba(213,213,213,1) 88%) !important;
+}
+.saqa-all-qualifications .nav-link.active {
+  background:  transparent !important;
+}
+
+
+/* --- */
 .remove-campus-event-button-inner {
     line-height: 2.7rem;
     color: white;

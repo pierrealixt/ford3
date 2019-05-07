@@ -43,7 +43,11 @@ const getCreateQualificationFormErrorAlertElement = () => {
   return document.getElementById('create-qualif-form-error-alert')
 }
 
-const addSaqaQualification = (saqaId) => {
+const getSearchFormErrorAlertElement = () => {
+  return document.getElementById('search-error-alert')
+}
+
+const populateForm = (saqaId) => {
   let saqaIds = getSaqaQualificationsInputElem().value.split(' ')
   saqaIds.push(saqaId)
   getSaqaQualificationsInputElem().value = saqaIds.join(' ')
@@ -122,14 +126,14 @@ const toggleRemoveButton = (isEnabled) => {
 
 const checkSaqaList = () => {
   const saqaList = getSaqaQualificationsListElement()
-  if (saqaList.length == 0 || saqaList.getElementsByTagName('li').length < 1) {
+  if (saqaList.length === 0 || saqaList.getElementsByTagName('li').length < 1) {
     toggleAddButton(true)
   }
 }
 
 const checkCampusList = () => {
   const campusList = getCampusQualificationsListElement()
-  if (campusList.length == 0 || campusList.getElementsByTagName('li').length < 1) {
+  if (campusList.length === 0 || campusList.getElementsByTagName('li').length < 1) {
     toggleRemoveButton(true)
   }
 }
@@ -137,6 +141,11 @@ const checkCampusList = () => {
 const checkLists = () => {
   checkSaqaList()
   checkCampusList()
+}
+
+const appendNodeToCampusQualificationsList = (node) => {
+  const firstNode = getCampusQualificationsListElement().querySelectorAll('li')[0]
+  getCampusQualificationsListElement().insertBefore(node, firstNode)
 }
 
 const setClickEventToAddButton = () => {
@@ -148,7 +157,7 @@ const setClickEventToAddButton = () => {
     const selectedQualifElems = getSelectedQualificationsFromList(saqaQualifListElem)
 
     selectedQualifElems.forEach(function (selectedQualifElem) {
-      // remove the selected class attached to the node
+    // remove the selected class attached to the node
       selectedQualifElem.classList.remove('selected')
 
       // clone the node
@@ -158,13 +167,13 @@ const setClickEventToAddButton = () => {
       selectedQualifElem.style.display = 'none'
 
       // append the cloned node to the campus qualifications list
-      const campusQualifListElem = getCampusQualificationsListElement()
-      campusQualifListElem.appendChild(clonedNode)
+
+      appendNodeToCampusQualificationsList(clonedNode)
 
       setToggleEvent(clonedNode)
 
       let saqaId = selectedQualifElem.dataset['saqaId']
-      addSaqaQualification(saqaId)
+      populateForm(saqaId)
       checkSaqaList()
       toggleRemoveButton(false)
     })
@@ -221,29 +230,45 @@ const buildSaqaQualificationLiContent = (saqa) => {
   return link
 }
 
+const buildLiElement = (saqa) => {
+  const saqaNodeExample = document.querySelector('.qualif-li-example')
+  let saqaNode = saqaNodeExample.cloneNode(true)
+
+  saqaNode.classList.remove('qualif-li-example')
+  saqaNode.classList.add('qualif-li')
+
+  saqaNode.setAttribute('data-saqa-id', saqa.id)
+  saqaNode.querySelector('.qualif-name').innerHTML = saqa.name
+  if (saqa.accredited) {
+    saqaNode.querySelector('.qualif-saqa-id').appendChild(buildSaqaQualificationLiContent(saqa))
+  }
+
+  saqaNode.classList.remove('d-none')
+
+  return saqaNode
+}
+
 const displaySaqaQualificationsResults = (results) => {
   const list = getSaqaQualificationsListElement()
   list.querySelectorAll('li').forEach(function (li) {
     list.removeChild(li)
   })
 
-  const saqaNodeExample = document.querySelector('.qualif-li')
+  if (results.length > 0) {
+    const providerId = getProviderIdInputElement().value
 
-  console.log(saqaNodeExample)
+    results.forEach(function (saqa) {
+      if (saqa.accredited || (!saqa.accredited && saqa.creator_provider_id === parseInt(providerId))) {
+        let saqaNode = buildLiElement(saqa)
 
-  results.forEach(function (saqa) {
-    let saqaNode = saqaNodeExample.cloneNode(true)
+        list.appendChild(saqaNode)
 
-    // let saqaNode = document.createElement('li')
-    saqaNode.setAttribute('data-saqa-id', saqa.id)
-    saqaNode.querySelector('.qualif-name').innerHTML = saqa.name
-    saqaNode.querySelector('.qualif-saqa-id').appendChild(buildSaqaQualificationLiContent(saqa))
-    saqaNode.classList.remove('d-none')
-
-    list.appendChild(saqaNode)
-
-    setToggleEvent(saqaNode)
-  })
+        setToggleEvent(saqaNode)
+      }
+    })
+  } else {
+    getSearchFormErrorAlertElement().classList.remove('d-none')
+  }
 }
 
 const ajaxSearchQualifications = (query) => {
@@ -270,6 +295,12 @@ const setSearchEvent = () => {
   let timeout = null
   const elem = getSearchQualifInputElem()
   elem.onkeyup = function (e) {
+    if (e.keyCode === 13) {
+      // Cancel the default action, if needed
+      e.preventDefault()
+      alert('enter pressed')
+    }
+    getSearchFormErrorAlertElement().classList.add('d-none')
     clearTimeout(timeout)
 
     timeout = setTimeout(function () {
@@ -302,7 +333,19 @@ const ajaxCreateQualification = (data) => {
     if (request.status >= 200 && request.status < 400) {
       const data = JSON.parse(request.responseText)
       if (data.success) {
-        alert('yes!')
+        const saqaNode = buildLiElement(data.saqa_qualification)
+
+        // add click event to node
+        setToggleEvent(saqaNode)
+
+        // append node to the campus qualification list
+        appendNodeToCampusQualificationsList(saqaNode)
+
+        // add the saqa id to the input
+        populateForm(data.saqa_qualification.id)
+
+        // reset the form
+        getCreateQualificationInputElement().value = ''
       } else {
         const alert = getCreateQualificationFormErrorAlertElement()
         alert.innerHTML = data.error
