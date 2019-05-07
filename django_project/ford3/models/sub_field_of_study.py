@@ -13,7 +13,7 @@ class SubFieldOfStudy(models.Model):
         blank=False,
         null=False,
         unique=False,
-        help_text='',
+        help_text="A short identifier for the sub field of study",
         max_length=255)
 
     pass

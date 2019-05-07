@@ -12,7 +12,7 @@ class Campus(models.Model):
         blank=False,
         null=False,
         unique=False,
-        help_text='',
+        help_text='The name of the campus',
         max_length=255)
     location = models.PointField(
       blank=True,
@@ -28,78 +28,78 @@ class Campus(models.Model):
         blank=False,
         null=True,
         unique=False,
-        help_text='',
+        help_text="The campus' telephone number",
         max_length=255)
     email = models.EmailField(
         blank=False,
         null=True,
         unique=False,
-        help_text='',
+        help_text="The campus' email",
         max_length=255)
     max_students_per_year = models.PositiveIntegerField(
         blank=False,
         null=True,
         unique=False,
-        help_text='')
+        help_text="Maximum number of students")
     physical_address_line_1 = models.CharField(
         blank=False,
         null=True,
         unique=False,
-        help_text='',
+        help_text="The campus' physical address details",
         max_length=255)
     physical_address_line_2 = models.CharField(
         blank=False,
         null=True,
         unique=False,
-        help_text='',
+        help_text="The campus' physical address details",
         max_length=255)
 
     physical_address_city = models.CharField(
         blank=False,
         null=True,
         unique=False,
-        help_text='',
+        help_text="The campus' physical address city",
         max_length=255)
 
     physical_address_postal_code = models.CharField(
         blank=False,
         null=True,
         unique=False,
-        help_text='',
+        help_text="The campus' physical address postal code",
         max_length=255)
 
     postal_address_differs = models.BooleanField(
         blank=False,
         null=True,
         default=False,
-        help_text='')
+        help_text="Is the postal address different from the physical address?")
 
     postal_address_line_1 = models.CharField(
         blank=False,
         null=True,
         unique=False,
-        help_text='',
+        help_text="The campus' postal address",
         max_length=255)
 
     postal_address_line_2 = models.CharField(
         blank=False,
         null=True,
         unique=False,
-        help_text='',
+        help_text="The campus' postal address",
         max_length=255)
 
     postal_address_city = models.CharField(
         blank=False,
         null=True,
         unique=False,
-        help_text='',
+        help_text="The campus' postal address city",
         max_length=255)
 
     postal_address_postal_code = models.CharField(
         blank=False,
         null=True,
         unique=False,
-        help_text='',
+        help_text="The campus' postal adress code",
         max_length=255)
 
     pass

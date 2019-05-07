@@ -6,7 +6,7 @@ class Interest(models.Model):
         blank=False,
         null=False,
         unique=False,
-        help_text='',
+        help_text="A short identifier for the interest",
         max_length=255)
 
     pass

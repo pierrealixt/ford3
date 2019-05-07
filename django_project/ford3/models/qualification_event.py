@@ -9,16 +9,16 @@ class QualificationEvent(models.Model):
     name = models.CharField(
         blank=True,
         null=True,
-        help_text='',
+        help_text="A short identifier for the event",
         max_length=255)
     date_start = models.DateField(
         blank=True,
         null=True,
-        help_text='')
+        help_text="When does this event start?")
     date_end = models.DateField(
         blank=True,
         null=True,
-        help_text='')
+        help_text="When does this event end?")
     event_date = models.DateField(
         blank=True,
         null=True
@@ -31,7 +31,8 @@ class QualificationEvent(models.Model):
     http_link = models.CharField(
         blank=True,
         null=True,
-        help_text='',
+        help_text="A link to a webpage with additional details regarding this "
+                  "event",
         max_length=255)
 
     def __unicode__(self):

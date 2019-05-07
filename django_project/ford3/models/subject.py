@@ -9,12 +9,13 @@ class Subject(models.Model):
     name = models.CharField(
         blank=False,
         null=False,
-        help_text='',
+        help_text="The name of the subject",
         max_length=255)
     description = models.CharField(
         blank=True,
         null=True,
-        help_text='',
+        help_text="A short description of what the learner can expect to "
+                  "learn whilst completing this subject",
         max_length=500)
 
     def __str__(self):

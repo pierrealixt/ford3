@@ -6,7 +6,7 @@ class FieldOfStudy(models.Model):
         blank=False,
         null=False,
         unique=False,
-        help_text='',
+        help_text="The field of study's name",
         max_length=255)
 
     pass

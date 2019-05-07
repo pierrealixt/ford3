@@ -11,16 +11,16 @@ class SAQAQualification(models.Model):
     saqa_id = models.IntegerField(
         blank=False,
         null=False,
-        help_text='')
+        help_text="The ID of the qualification as listed in the SAQA database")
     name = models.CharField(
         blank=False,
         null=False,
-        help_text='',
+        help_text="The name of the qualification as approved by SAQA",
         max_length=255)
     nqf_level = models.IntegerField(
         blank=True,
         null=True,
-        help_text='')
+        help_text="The NQF level SAQA has attributed to this qualification")
 
     def __str__(self):
         return self.name
