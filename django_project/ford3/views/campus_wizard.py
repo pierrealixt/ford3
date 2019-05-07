@@ -66,7 +66,7 @@ class CampusFormWizard(CookieWizardView):
 
         # For 'Qualification Titles' form
         saqa_ids = ' '.join([
-            str(s['saqa_qualification__saqa_id'])
+            str(s['saqa_qualification__id'])
             for s in self.campus.qualifications])
 
         initial_dict.update({'saqa_ids': saqa_ids})

@@ -29,9 +29,8 @@ def search(request):
 
 
 def create(request):
-    
     provider = Provider.objects.get(pk=request.POST['provider_id'])
-    
+
     try:
         saqa_qualification = SAQAQualification.create_non_accredited(
             name=request.POST['saqa_qualification_name'],
@@ -41,7 +40,7 @@ def create(request):
             json.dumps({
                 'success': False,
                 'error': ';'.join(ve.messages)}),
-            content_type='application/json')        
+            content_type='application/json')
 
     return HttpResponse(
         json.dumps({

@@ -36,10 +36,17 @@ class SAQAQualification(models.Model):
         return self.name
 
     def as_dict(self):
+        if self.creator_provider:
+            creator_provider_id = self.creator_provider.id
+        else:
+            creator_provider_id = None
+
         return {
             'id': self.id,
             'saqa_id': self.saqa_id,
-            'name': self.name
+            'name': self.name,
+            'accredited': self.accredited,
+            'creator_provider_id': creator_provider_id
         }
 
 
@@ -61,15 +68,14 @@ class SAQAQualification(models.Model):
         saqa_qualif = SAQAQualification(
             name=name,
             saqa_id=saqa_id)
-        
+
         saqa_qualif.save()
 
         return saqa_qualif
 
     def save(self, *args, **kwargs):
-        print(self.name)
         if len(self.name) == 0:
-            raise ValidationError({'saqa_qualification': 'Name is required.'})            
+            raise ValidationError({'saqa_qualification': 'Name is required.'})
 
         if self.accredited:
             # make sure saqa_id and name are unique
@@ -80,7 +86,9 @@ class SAQAQualification(models.Model):
                 creator_provider=self.creator_provider,
                 name=self.name
                 ).exists():
-                raise ValidationError({'saqa_qualification': 'Non-accredited SAQA qualification name must be unique per provider.'})
+                raise ValidationError(
+                    {'saqa_qualification': 'Non-accredited SAQA qualification \
+                    name must be unique per provider.'})
 
         super().save(*args, **kwargs)
 

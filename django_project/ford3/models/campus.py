@@ -189,6 +189,7 @@ class Campus(models.Model):
             each_campus_event.save()
 
     def save_qualifications(self, form_data):
+        print(form_data['saqa_ids'])
         if len(form_data['saqa_ids']) == 0:
             return
 

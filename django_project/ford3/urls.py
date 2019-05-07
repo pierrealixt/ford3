@@ -65,7 +65,7 @@ urlpatterns = [
     path(
         'saqa_qualifications/create/',
         saqa_qualifications.create,
-        name='create-saqa-qualification'),    
+        name='create-saqa-qualification'),
 
     path(
         '/'.join([
