@@ -25,18 +25,21 @@
 			{% for campus in provider.campus %}
 				<div class='col-md-4 card mb-5 border-0'>
 					<div class='campus-card mx-auto'>
-						<div class='card-body'>
+						<div class='card-body h-100'>
 							<h5 class='card-title'>{{ campus.name }}</h5>
+                            {# filler #}
+                            <div class="h-50"></div>
 
-							<div class='campus-completion-rate'>
+                            {# disabled for now #}
+							<!--div class='campus-completion-rate'>
 								<p>
 									<span>20%</span>
 									<br />
 									complete
 								</p>
-							</div>
+							</div-->
 
-							<ul class='list-inline mt-2'>
+							<!--ul class='list-inline mt-2'>
 								<li class='list-inline-item'>
 									Campus Information
 									<br />
@@ -66,8 +69,7 @@
 										</div>
 									</div>
 								</li>
-							</ul>
-
+							</ul-->
 							<a class="edu-button edu-button-navy align-bottom" href="{% url 'edit-campus' provider_id=provider.id campus_id=campus.id %}">Edit Campus</a>
 
 						</div>
