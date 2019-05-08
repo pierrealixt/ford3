@@ -264,9 +264,9 @@ class QualificationFormWizard(CookieWizardView):
         context['provider'] = self.provider
         # make sure logo has been uploaded before set the context
         # otherwise, let it empty
-        if self.qualification.campus.provider.provider_logo:
-            context['provider_logo'] = \
-                self.qualification.campus.provider.provider_logo.url
+        context['provider_logo'] = \
+            self.qualification.campus.provider.provider_logo.url \
+            if self.qualification.campus.provider.provider_logo else ""
         context['subjects_list'] = (
             self.qualification.entrance_req_subjects_list)
         context['events_list'] = self.qualification.qualification_events_list

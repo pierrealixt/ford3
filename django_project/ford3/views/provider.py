@@ -85,8 +85,14 @@ def edit_provider(request, provider_id):
         # form is not valid
         else:
             provider = Provider.objects.filter(pk=provider_id).first()
-            # since the upload fail, use old logo
-            form.instance.provider_logo = provider.provider_logo
+            # use uploaded logo if form submission failed
+            if form.cleaned_data['provider_logo']:
+                form.instance.provider_logo = \
+                    form.cleaned_data['provider_logo']
+            # otherwise, use old logo
+            else:
+                form.instance.provider_logo = provider.provider_logo
+
             context = {
                 'form': form,
                 'provider_id': provider_id,

@@ -48,6 +48,8 @@ class CampusFormWizard(CookieWizardView):
         ]
         context['campus'] = self.campus
         context['provider'] = self.provider
+        context['provider_logo'] = self.provider.provider_logo.url \
+            if self.provider.provider_logo else ""
         form_data = {
             'provider_name': self.provider.name
         }
