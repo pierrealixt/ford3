@@ -30,7 +30,7 @@
                 <div class='col-md-4'>
                     <ul>
                     {% for event in campus.events %}
-                        <li>{{ event.name }} - {{ event.date_start }}</li>
+                        <li><b>{{ event.name }}</b> <br /> {{ event.date_start }} - {{ event.date_end }}</li>
                     {% endfor %}
                     </ul>
                 </div>
