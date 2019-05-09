@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from collections import OrderedDict
 from django.shortcuts import redirect, Http404, get_object_or_404
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
@@ -36,7 +37,10 @@ class CampusFormWizard(CookieWizardView):
     def get(self, *args, **kwargs):
         if not self.campus or not self.provider:
             raise Http404()
-        return super(CampusFormWizard, self).get(*args, **kwargs)
+        if 'step' in self.request.GET:
+            return super().render_goto_step(self.request.GET['step'], **kwargs)
+        else:
+            return super(CampusFormWizard, self).get(*args, **kwargs)
 
     def get_context_data(self, form, **kwargs):
         context = super().get_context_data(form, **kwargs)
@@ -69,25 +73,20 @@ class CampusFormWizard(CookieWizardView):
         return initial_dict
 
     def done(self, form_list, **kwargs):
-        steps = {
-            'DETAILS': 0,
-            'LOCATION': 1,
-            'DATES': 2,
-            'QUALIFICATION_TITLES': 3
-        }
 
-        i = 0
-        for form in form_list:
-            if i == steps['DETAILS']:
-                self.campus.save_form_data(form.cleaned_data)
-            elif i == steps['LOCATION']:
-                self.campus.save_postal_data(form.cleaned_data)
-            elif i == steps['DATES']:
+        for form in kwargs['form_dict']:
+            cleaned_data = kwargs['form_dict'][form].cleaned_data
+
+            if form == 'campus-details':
+                self.campus.save_form_data(cleaned_data)
+            elif form == 'campus-location':
+                self.campus.save_postal_data(cleaned_data)
+            elif form == 'campus-dates':
                 self.campus.save_events(self.new_campus_events)
-            elif i == steps['QUALIFICATION_TITLES']:
-                self.campus.save_qualifications(form.cleaned_data)
-                self.campus.delete_qualifications(form.cleaned_data)
-            i += 1
+            elif form == 'campus-qualifications':
+                self.campus.save_qualifications(cleaned_data)
+                self.campus.delete_qualifications(cleaned_data)
+
         url = reverse('show-campus', args=(self.provider.id, self.campus.id))
         return redirect(url)
 
@@ -135,3 +134,40 @@ class CampusFormWizard(CookieWizardView):
             except KeyError:
                 pass
         return self.render_to_response(context)
+
+    def render_done(self, form, **kwargs):
+        """
+        This method gets called when all forms passed. The method should also
+        re-validate all steps to prevent manipulation. If any form fails to
+        validate, `render_revalidation_failure` should get called.
+        If everything is fine call `done`.
+        """
+
+        final_forms = OrderedDict()
+
+        if 'step' in self.request.GET:
+            form_list = [self.request.GET['step']]
+        else:
+            form_list = self.get_form_list()
+
+        # walk through the form list and try to validate the data again.
+        for form_key in form_list:
+            form_obj = self.get_form(
+                step=form_key,
+                data=self.storage.get_step_data(form_key),
+                files=self.storage.get_step_files(form_key)
+            )
+
+            if not form_obj.is_valid():
+                return self.render_revalidation_failure(
+                    form_key, form_obj, **kwargs)
+            final_forms[form_key] = form_obj
+
+        # render the done view and reset the wizard before returning the
+        # response. This is needed to prevent from rendering done with the
+        # same data twice.
+        done_response = self.done(
+            final_forms.values(), form_dict=final_forms, **kwargs)
+        self.storage.reset()
+
+        return done_response
