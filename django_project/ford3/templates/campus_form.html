@@ -119,6 +119,7 @@
                                         <div class='row mx-3'>
                                             <div class='col-md-9 px-0'>
                                                 <input type='text' data-action='search-qualif' class="h-100 p-3" placeholder="e.g: 36009, laws" />
+                                                <input type='hidden' id='search-qualif-url' value='{% url "search-saqa-qualifications" %}' />
                                             </div>
                                             <div class="col-md-3 px-0">
                                                 <button type='button' class="edu-button-orange h-100 w-100 border-0"
@@ -153,6 +154,7 @@
                                             <div class='col-md-9 px-0'>
                                                 <input type='text' placeholder="e.g: Master of Computer Science" data-action='create-qualif' class='h-100 p-3'>
                                                 <input type='hidden' id='provider-id' value='{{ campus.provider.id }}' />
+                                                <input type='hidden' id='create-qualif-url' value='{% url "create-saqa-qualification" %}' />
                                             </div>
                                             <div class='col-md-3 px-0'>
                                                 <button type='button' class='edu-button-blue h-100 w-100 border-0' data-action='create-qualif'>create</button>

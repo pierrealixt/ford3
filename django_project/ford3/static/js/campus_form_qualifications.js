@@ -47,6 +47,14 @@ const getSearchFormErrorAlertElement = () => {
   return document.getElementById('search-error-alert')
 }
 
+const getCreateQualificationUrl = () => {
+  return document.getElementById('create-qualif-url').value
+}
+
+const getSearchQualificationsUrl = () => {
+  return document.getElementById('search-qualif-url').value
+}
+
 const populateForm = (saqaId) => {
   let saqaIds = getSaqaQualificationsInputElem().value.split(' ')
   saqaIds.push(saqaId)
@@ -272,7 +280,7 @@ const displaySaqaQualificationsResults = (results) => {
 }
 
 const ajaxSearchQualifications = (query) => {
-  const url = '/ford3/saqa_qualifications/search/?q=' + query
+  const url = `${getSearchQualificationsUrl()}?q=${query}`
   const request = new XMLHttpRequest()
   request.open('GET', url, true)
 
@@ -323,7 +331,7 @@ const getCSRFTokenFromCookies = () => {
 }
 
 const ajaxCreateQualification = (data) => {
-  const url = '/ford3/saqa_qualifications/create/'
+  const url = getCreateQualificationUrl()
   const request = new XMLHttpRequest()
   request.open('POST', url, true)
   request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
