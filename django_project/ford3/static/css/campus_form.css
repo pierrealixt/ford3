@@ -18,32 +18,28 @@ button.arrow-button {
   cursor: pointer;
 }
 
-button.left-arrow-button {
-  background-image: url('../images/ui/left-arrow.svg');  
-}
-
-button.left-arrow-grey-button {
+.add-qualif-widget.disabled button {
   background-image: url('../images/ui/left-arrow-grey.png');
 }
 
-button.left-arrow-button:focus, button.left-arrow-button:active {
-    background-image: url('../images/ui/left-arrow-bold.png');
-    outline: none !important;
-    box-shadow: none;
+.add-qualif-widget button {
+  background-image: url('../images/ui/left-arrow.svg');
 }
 
-button.right-arrow-button {
-  background-image: url('../images/ui/right-arrow.png');
-}
-
-button.right-arrow-grey-button {
+.remove-qualif-widget.disabled button {
   background-image: url('../images/ui/right-arrow-grey.png');
 }
 
-button.right-arrow-button:focus, button.right-arrow-button:active {
-    background-image: url('../images/ui/right-arrow-bold.png');
-    outline: none !important;
-    box-shadow: none;
+.remove-qualif-widget button {
+  background-image: url('../images/ui/right-arrow.png');
+}
+
+.add-qualif-widget.disabled p, .remove-qualif-widget.disabled p {
+  color: var(--c-grey-l) !important;  
+}
+
+.add-qualif-widget button:focus, .remove-qualif-widget button:focus {
+    outline: 0 !important;
 }
 
 .qualif-texts {
@@ -52,9 +48,6 @@ button.right-arrow-button:focus, button.right-arrow-button:active {
   text-transform: uppercase;
 }
 
-.qualif-texts.disabled {
-    color: var(--c-grey-l) !important;
-}
 
 input[data-action='search-qualif'] {
   border-radius: 0px !important;
