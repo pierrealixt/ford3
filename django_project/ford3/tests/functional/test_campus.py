@@ -91,7 +91,7 @@ class TestCampusFormDataBinding(SeleniumTestCase):
         """
         saqa = ModelFactories.get_saqa_qualification_test_object()
         form_data = {
-            'saqa_ids': f'{saqa.saqa_id}'
+            'saqa_ids': f'{saqa.id}'
         }
         self.campus.save_qualifications(form_data)
 
@@ -106,13 +106,13 @@ class TestCampusFormDataBinding(SeleniumTestCase):
 
         qualif_list_ul = self.driver.find_element_by_id(
             'campus-qualifications-list')
-        qualif_li = qualif_list_ul.find_elements(By.TAG_NAME, 'li')
+        qualif_li = qualif_list_ul.find_elements(By.CLASS_NAME, 'qualif-li')
         self.assertEqual(len(qualif_li), 1)
 
         saqa_ids_elem = self.driver.find_element_by_id(
             'id_campus-qualifications-saqa_ids')
         saqa_ids_value = saqa_ids_elem.get_attribute('value')
-        self.assertEqual(saqa_ids_value, str(saqa.saqa_id))
+        self.assertEqual(saqa_ids_value, str(saqa.id))
 
     @unittest.skip('Skip for travis')
     def test_campus_page_add_events(self):

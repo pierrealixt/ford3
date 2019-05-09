@@ -4,7 +4,54 @@ from django.test import TestCase
 from ford3.tests.models.model_factories import ModelFactories
 
 
-class TestSaqaQualificationsView(TestCase):
+class TestCreateSaqaQualificationsView(TestCase):
+    def setUp(self):
+        self.url = reverse('create-saqa-qualification')
+        self.provider = ModelFactories.get_provider_test_object()
+        self.saqa_qualification_name = 'Master Degree in Wine and Champagne'
+
+        self.data = {
+            'saqa_qualification_name': self.saqa_qualification_name,
+            'provider_id': self.provider.id
+        }
+
+    def test_create_qualification(self):
+        response = self.client.post(self.url, self.data)
+
+        content = json.loads(response.content)
+
+        self.assertEqual(content['success'], True)
+        self.assertEqual(
+            content['saqa_qualification']['name'],
+            self.saqa_qualification_name)
+
+    def test_create_duplicate_qualification(self):
+        self.client.post(self.url, self.data)
+
+        # create with same data
+        response = self.client.post(self.url, self.data)
+        content = json.loads(response.content)
+
+        # it should fail
+        self.assertEqual(content['success'], False)
+        self.assertEqual(
+            content['error'],
+            'Non-accredited SAQA qualification name must be unique per provider.') # noqa
+
+    def test_create_qualification_with_empty_name(self):
+        data = {
+            'saqa_qualification_name': '',
+            'provider_id': self.provider.id
+        }
+
+        response = self.client.post(self.url, data)
+        content = json.loads(response.content)
+
+        self.assertEqual(content['success'], False)
+        self.assertEqual(content['error'], 'Name is required.')
+
+
+class TestSearchSaqaQualificationsView(TestCase):
     def setUp(self):
         self.saqa = ModelFactories.get_saqa_qualification_test_object()
 

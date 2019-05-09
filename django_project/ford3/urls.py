@@ -1,6 +1,9 @@
 # coding=utf-8
 from django.urls import path
-from ford3.views import views
+from ford3.views import (
+    views,
+    saqa_qualifications
+)
 from django.conf.urls import url
 from ford3.forms.qualification import (
     QualificationDetailForm,
@@ -53,10 +56,17 @@ urlpatterns = [
         'providers/<int:provider_id>/campus/<int:campus_id>',
         views.show_campus,
         name='show-campus'),
+
     path(
-        'saqa_qualifications',
-        views.saqa_qualifications,
+        'saqa_qualifications/search/',
+        saqa_qualifications.search,
         name='search-saqa-qualifications'),
+
+    path(
+        'saqa_qualifications/create/',
+        saqa_qualifications.create,
+        name='create-saqa-qualification'),
+
     path(
         '/'.join([
             'providers/<int:provider_id>',
