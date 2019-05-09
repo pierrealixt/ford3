@@ -1,5 +1,8 @@
-{% block content %}
-    <div class="row text-center" style="margin-top: 20%;">
+{% extends "index.html" %}
+
+{% block body %}
+<div class='row text-center'>
+    <div class='col-md-4 mx-auto'>
         <h1 class="text-muted">500</h1>
         <p class="lead">Ooops. Something broke....</p>
         <p class="lead text-muted">
@@ -11,4 +14,5 @@
             {% endif %}
         </p>
     </div>
+</div>
 {% endblock %}
