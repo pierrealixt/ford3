@@ -95,11 +95,6 @@ input[data-action='create-qualif'] {
   text-decoration: underline;
 }
 
-button.edu-button-blue {
-  font-size: 20px;
-}
-
-
 .saqa-all-qualifications .nav-tabs {
   border: none !important;
 }
@@ -119,8 +114,7 @@ button.edu-button-blue {
 
 .saqa-all-qualifications ul.nav, .campus-all-qualifications h5 {
   height:  55px;
-  background: rgb(255,255,255) !important;
-  background: linear-gradient(360deg, rgba(255,255,255,1) 0%, rgba(213,213,213,1) 88%) !important;
+  background:  var(--c-smoke);
 }
 .saqa-all-qualifications .nav-link.active {
   background:  transparent !important;
