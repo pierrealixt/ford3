@@ -30,14 +30,15 @@
 	{% block head %} {% endblock %}
 </head>
 <body id="page-top">
-	<nav class="navbar">
-		<div class='container'>
-			<p class="open-edu-logo"><span class='text-white'>Open</span><span class='text-blue'>Edu</span></p>
-		
-			<a class='text-white' href='/site-admin'>Administration</a>
-			<!-- <div class="question-mark-logo"></div> -->
-		</div>
-	</nav>
+    {% block navbar %}
+        <nav class="navbar">
+            <div class='container'>
+                <p class="open-edu-logo"><span class='text-white'>Open</span><span class='text-blue'>Edu</span></p>
+                <a class='text-white' href='/site-admin'>Administration</a>
+                <!-- <div class="question-mark-logo"></div> -->
+            </div>
+        </nav>
+    {% endblock %}
 	{% if form_submitted %}
 		<div class='bg-success text-center'>
 			<p class='text-white my-0 py-3'>Thank you {{ prospect.name }}, we will contact you shortly.</p>
