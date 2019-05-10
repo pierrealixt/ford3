@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
 body {
     --c-purple: #2C314F;
     --c-blue: #7ACDCF;
@@ -828,4 +828,31 @@ nav#sidebar ul li a:hover {
 .prospect-form .helptext {
     font-size: 10px;
     font-weight: 300!important;
+}
+
+/* table-borderless doesn't work well for bootstrap 3.
+   see https://stackoverflow.com/questions/18075794/bootstrap-table-without-stripe-borders/24830641#24830641 */
+.table-borderless > tbody > tr > td,
+.table-borderless > tbody > tr > th,
+.table-borderless > tfoot > tr > td,
+.table-borderless > tfoot > tr > th,
+.table-borderless > thead > tr > td,
+.table-borderless > thead > tr > th {
+    border: none;
+}
+
+.border-right {
+    border-right-color: black !important;
+}
+.table-borderless > tbody > tr > td {
+    background-color: var(--c-blue);
+
+}
+
+.table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n ) > th {
+   background-color: white;
+}
+
+.action-buttons {
+    font-size: 0.8rem;
 }
