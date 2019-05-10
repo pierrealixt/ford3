@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.conf import settings
 from django.shortcuts import render
-
+from sentry_sdk import capture_message
 # from django.conf.urls.static import static
 
 admin.autodiscover()
@@ -23,6 +23,8 @@ def handler500(request, template_name='500.html', *args, **kwargs):
     Templates: `500.html`
     Context: None
     """
+    capture_message("Page not found!", level="error")
+
     # You need to create a 500.html template.
     response = render(
         request,

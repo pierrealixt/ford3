@@ -1,6 +1,7 @@
 # coding=utf-8
 """Our custom error views."""
 from django.shortcuts import render
+from sentry_sdk import capture_message
 
 
 def custom_404(request, template_name='404.html', *args, **kwargs):
@@ -13,6 +14,9 @@ def custom_404(request, template_name='404.html', *args, **kwargs):
     :rtype: HttpResponse
 
     """
+
+    capture_message("Page not found!", level="error")
+
     response = render(
         request,
         template_name,
