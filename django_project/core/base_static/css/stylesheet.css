@@ -841,12 +841,15 @@ nav#sidebar ul li a:hover {
     border: none;
 }
 
+.table-borderless > thead > tr > th {
+    background-color: #7ACDCF;
+}
+
 .border-right {
     border-right-color: black !important;
 }
 .table-borderless > tbody > tr > td {
-    background-color: var(--c-blue);
-
+    background-color: #EFEEE9;
 }
 
 .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n ) > th {
