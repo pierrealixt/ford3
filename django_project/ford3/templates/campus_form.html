@@ -19,6 +19,7 @@
             <div class="col-md-12">
                 <h2>{{ campus }} Campus - {{ form_name_list|index:wizard.steps.step0 }}</h2>
             </div>
+            {% if multi_step_form %}
             <div class='col-md-12'>
                 <ul class="nav-wizard-steps nav nav-pills nav-fill">
                     {% for form_name in form_name_list %}
@@ -39,6 +40,7 @@
                     {% endfor %}
                 </ul>
             </div>
+            {% endif %}
         </div>
         <div class='row'>
             <div class='col-md-12'>
@@ -188,6 +190,7 @@
 	                            </div>
 	                        </div>
                         {% endif %}
+                    {% if multi_step_form %}
                     <div class="row form-actions">
                         <div class="col-md-4">
                             {% if wizard.steps.prev %}
@@ -213,6 +216,18 @@
                             </button>
                         </div>
                     </div>
+                    {% else %}
+                    <div class="row form-actions">
+                        <div class="col-md-4">
+                            <button class="edu-button edu-button-blue"
+                            type="submit"
+                            value="submit"
+                            id='my-next-button'>
+                            Submit
+                        </button>
+                    </div>
+                    </div>
+                    {% endif %}
                 </form>
             </div>
         </div>
