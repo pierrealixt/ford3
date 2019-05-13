@@ -842,14 +842,14 @@ nav#sidebar ul li a:hover {
 }
 
 .table-borderless > thead > tr > th {
-    background-color: #7ACDCF;
+    background-color: var(--c-blue);
 }
 
 .border-right {
     border-right-color: black !important;
 }
 .table-borderless > tbody > tr > td {
-    background-color: #EFEEE9;
+    background-color: var(--c-smoke);
 }
 
 .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n ) > th {
