@@ -11,6 +11,7 @@ class TestCampus(TestCase):
         self.campus = ModelFactories.get_campus_test_object(
             new_id=420)
 
+
     def test_campus_description(self):
         # new_campus = ModelFactories.get_campus_test_object(1)
         self.assertEqual(self.campus.__str__(), 'Object Test Name')
@@ -155,7 +156,6 @@ class TestCampus(TestCase):
         # it should not remove qualifications for the second campus.
         self.assertEqual(len(self.other_campus.qualifications), 2)
 
-
 class TestCreateCampus(TestCase):
     def test_create_empty_campus(self):
         with self.assertRaisesMessage(ValidationError, 'Name is required'):
@@ -203,3 +203,17 @@ class TestCreateCampus(TestCase):
             name='My Campus')
 
         self.assertEqual(Campus.objects.count(), 1)
+
+    def test_mark_campus_as_deleted(self):
+        self.provider = self.campus.provider
+        self.campus2 = ModelFactories.get_campus_test_object()
+        self.campus2.provider = self.provider
+        self.campus2.save()
+        self.assertTrue(self.campus)
+        self.assertFalse(self.campus.deleted)
+        self.assertEqual(len(self.provider.campus), 2)
+        self.campus.mark_campus_as_deleted()
+        self.assertTrue(self.campus)
+        self.assertTrue(self.campus.deleted)
+        self.assertEqual(len(self.provider.campus), 1)
+
