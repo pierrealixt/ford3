@@ -44,119 +44,113 @@
 			<p class='text-white my-0 py-3'>Thank you {{ prospect.name }}, we will contact you shortly.</p>
 		</div>
 	{% endif %}
-	<div class="wrapper">
+    {% block parent-body %}
+        <div class="wrapper">
+            <div class='body-wrapper'>
+                <div class='jumbotron text-center mb-0 text-white'>
+                    <div class='container'>
+                        <h1 class='text-white'>OpenEdu</h1>
+                        <p class='lead'>An open and free education resource database for South Africa</p>
+                    </div>
+                </div>
 
-	{% block side_navbar %}
-	{% endblock %}
+                <div class='bg-purple text-center py-3'>
+                    <h2 class='text-light h2-landing'>What is <span class='text-white'>Open</span><span class='text-blue'>Edu</span>?</h2>
+                </div>
 
-		<div class='body-wrapper'>
-			{% block body %} 
-			<div class='jumbotron text-center mb-0 text-white'>
-				<div class='container'>
-					<h1 class='text-white'>OpenEdu</h1>
-					<p class='lead'>An open and free education resource database for South Africa</p>
-				</div>
-			</div>
+                <div class='bg-light py-4'>
+                    <div class='container'>
+                        <div class='row'>
+                            <div class='col-md-4 text-center'>
+                                <img src="{% static 'images/landing-page/database.svg' %}" alt='Database' width='60px' class='my-2'>
+                                <p class='text-justify'>
+                                    <span class='font-weight-bold'><span class='text-purple'>Open</span><span class='text-blue'>Edu</span></span> is an initiative to provide a complete and well maintained database of higher education providers and the courses and qualifications that they offer.
+                                </p>
+                            </div>
+                            <div class='col-md-4 border-right border-left text-center'>
+                                <img src="{% static 'images/landing-page/dove.svg' %}" alt='Dove' width='60px' class='my-2'>
+                                <p class='text-justify'>
+                                    <span class='font-weight-bold'><span class='text-purple'>Open</span><span class='text-blue'>Edu</span></span> is non-commercial and unaffiliated to any particular service provider.
+                                </p>
+                            </div>
+                            <div class='col-md-4 text-center'>
+                                <img src="{% static 'images/landing-page/api.svg' %}" alt='API' width='60px' class='my-2'>
+                                <p class='text-justify'>
+                                    <span class='font-weight-bold'><span class='text-purple'>Open</span><span class='text-blue'>Edu</span></span> provides an open API (a platform that allows service providers to easily fetch and share the data we curate).
+                                </p>
 
-			<div class='bg-purple text-center py-3'>
-				<h2 class='text-light h2-landing'>What is <span class='text-white'>Open</span><span class='text-blue'>Edu</span>?</h2>
-			</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class='my-0 w-50 mx-auto' />
 
+                <div class='bg-light py-4'>
+                    <div class='container'>
+                        <div class='row text-justify'>
+                            <div class='col-md-6'>
+                                <h3 class='text-center'>Social Impact</h3>
+                                <p>Being able to discover further education opportunities is a critical need for learners planning their career paths. In turn, higher education opportunity data is a key resource to ensure that those who wish to provide career guidance facilities so learners have the information they need at their fingertips.</p>
+                            </div>
+                            <div class='col-md-6'>
+                                <h3 class='text-center'>Our Misson</h3>
+                                <p>Our goal is to enable an ecosystem of service providers who provide useful and current education career path guidance and advice to learners. We provide this service and data for free and without restriction in order to facilitate social upliftment through higher education.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-			<div class='bg-light py-4'>
-				<div class='container'>
-					<div class='row'>
-						<div class='col-md-4 text-center'>
-							<img src="{% static 'images/landing-page/database.svg' %}" alt='Database' width='60px' class='my-2'>
-							<p class='text-justify'>
-								<span class='font-weight-bold'><span class='text-purple'>Open</span><span class='text-blue'>Edu</span></span> is an initiative to provide a complete and well maintained database of higher education providers and the courses and qualifications that they offer.
-							</p>
-						</div>
-						<div class='col-md-4 border-right border-left text-center'>
-							<img src="{% static 'images/landing-page/dove.svg' %}" alt='Dove' width='60px' class='my-2'>
-							<p class='text-justify'>
-								<span class='font-weight-bold'><span class='text-purple'>Open</span><span class='text-blue'>Edu</span></span> is non-commercial and unaffiliated to any particular service provider. 
-							</p>
-						</div>
-						<div class='col-md-4 text-center'>
-							<img src="{% static 'images/landing-page/api.svg' %}" alt='API' width='60px' class='my-2'>
-							<p class='text-justify'>
-								<span class='font-weight-bold'><span class='text-purple'>Open</span><span class='text-blue'>Edu</span></span> provides an open API (a platform that allows service providers to easily fetch and share the data we curate).
-							</p>
+                <div class='bg-purple text-center py-3'>
+                    <h2 class='text-light h2-landing'>Who will benefit from <span class='text-white'>Open</span><span class='text-blue'>Edu</span>?</h2>
+                </div>
 
-						</div>
-					</div>
-				</div>
-			</div>
-			<hr class='my-0 w-50 mx-auto' />
+                <div class='bg-light py-4'>
+                    <div class='container'>
+                        <div class='row'>
+                            <div class='col-md-4 text-center'>
+                                <h5>Learners</h5>
+                                <img src="{% static 'images/landing-page/student.svg' %}" alt='Student' width='60px' class='my-2'>
+                                <p class='text-justify'>Find accurate and relevant information about further education opportunities so that you can plan your career path.</p>
+                            </div>
+                            <div class='col-md-4 border-left border-right text-center'>
+                                <h5>Educational institutions</h5>
+                                <img src="{% static 'images/landing-page/university.svg' %}" alt='Educational institutions' width='60px' class='my-2'>
 
-			<div class='bg-light py-4'>
-				<div class='container'>
-					<div class='row text-justify'>
-						<div class='col-md-6'>
-							<h3 class='text-center'>Social Impact</h3>
-							<p>Being able to discover further education opportunities is a critical need for learners planning their career paths. In turn, higher education opportunity data is a key resource to ensure that those who wish to provide career guidance facilities so learners have the information they need at their fingertips.</p>
-						</div>
-						<div class='col-md-6'>
-							<h3 class='text-center'>Our Misson</h3>
-							<p>Our goal is to enable an ecosystem of service providers who provide useful and current education career path guidance and advice to learners. We provide this service and data for free and without restriction in order to facilitate social upliftment through higher education.</p>
-						</div>
-					</div>
-				</div>
-			</div>
+                                <p class='text-justify'>Recruit more students by advertising your qualifications on the <span class='font-weight-bold'><span class='text-purple'>Open</span><span class='text-blue'>Edu</span></span> platform.</p>
+                            </div>
+                            <div class='col-md-4 text-center'>
+                                <h5>Service providers, Governments, NGO</h5>
+                                <img src="{% static 'images/landing-page/collaboration.svg' %}" alt="Service providers, Governments, NGO" width='60px' class='my-2'>
+                                <p class='text-justify'>Use the <span class='font-weight-bold'><span class='text-purple'>Open</span><span class='text-blue'>Edu</span></span> data and API to build meaningful applications for South African students.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <div class='bg-purple text-center py-3'>
+                    <h2 class='text-light h2-landing'>Want to learn more?</h2>
+                </div>
 
-			<div class='bg-purple text-center py-3'>
-				<h2 class='text-light h2-landing'>Who will benefit from <span class='text-white'>Open</span><span class='text-blue'>Edu</span>?</h2>
-			</div>
+                <div class='bg-light py-4'>
+                    <div class='container'>
+                        <div class='row'>
+                            <div class='col-md-5 mx-auto'>
+                                <p>Request a demo! Fill up the form below and we will contact you.</p>
+                                <form action='/' method='post' class='prospect-form'>
+                                    {% csrf_token %}
+                                    {{ prospect_form.as_p }}
+                                    <div class='text-center'>
+                                        <input type='submit' value='Submit' class='btn edu-button-blue'>
+                                    </div>
+                                </form>
 
-			<div class='bg-light py-4'>
-				<div class='container'>
-					<div class='row'>
-						<div class='col-md-4 text-center'>
-							<h5>Learners</h5>
-							<img src="{% static 'images/landing-page/student.svg' %}" alt='Student' width='60px' class='my-2'>
-							<p class='text-justify'>Find accurate and relevant information about further education opportunities so that you can plan your career path.</p>
-						</div>
-						<div class='col-md-4 border-left border-right text-center'>
-							<h5>Educational institutions</h5>
-							<img src="{% static 'images/landing-page/university.svg' %}" alt='Educational institutions' width='60px' class='my-2'>
-							
-							<p class='text-justify'>Recruit more students by advertising your qualifications on the <span class='font-weight-bold'><span class='text-purple'>Open</span><span class='text-blue'>Edu</span></span> platform.</p>
-						</div>
-						<div class='col-md-4 text-center'>
-							<h5>Service providers, Governments, NGO</h5>
-							<img src="{% static 'images/landing-page/collaboration.svg' %}" alt="Service providers, Governments, NGO" width='60px' class='my-2'>
-							<p class='text-justify'>Use the <span class='font-weight-bold'><span class='text-purple'>Open</span><span class='text-blue'>Edu</span></span> data and API to build meaningful applications for South African students.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class='bg-purple text-center py-3'>
-				<h2 class='text-light h2-landing'>Want to learn more?</h2>
-			</div>
-
-			<div class='bg-light py-4'>
-				<div class='container'>
-					<div class='row'>
-						<div class='col-md-5 mx-auto'>
-							<p>Request a demo! Fill up the form below and we will contact you.</p>
-							<form action='/' method='post' class='prospect-form'>
-								{% csrf_token %}
-								{{ prospect_form.as_p }}
-								<div class='text-center'>
-									<input type='submit' value='Submit' class='btn edu-button-blue'>
-								</div>
-							</form>
-							
-						</div>
-					</div>
-				</div>
-			</div>
-			{% endblock %}
-		</div>
-	</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
 </body>
 
 {% block footer %}

@@ -152,6 +152,9 @@ h5 {
     outline-color: var(--c-grey-l);
 }
 
+button.edu-button {
+    border:  none !important;
+}
 
 /*  ----------------------------- SWITCH CSS - modified https://www.w3schools.com/howto/howto_css_switch.asp  ----------------------------- */
 
