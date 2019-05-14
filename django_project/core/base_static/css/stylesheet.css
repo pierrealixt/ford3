@@ -68,6 +68,10 @@ h5 {
     color:  #ffff !important;
 }
 
+.text-darkred {
+    color:  darkred !important;
+}
+
 .edu-button {
     height: 5rem;
     width: 10rem;
@@ -135,11 +139,6 @@ h5 {
 .edu-button-navy {
     color: var(--c-navy);
     background-color: var(--c-smoke);
-    font-size: 20px;
-    font-weight: 900;
-    letter-spacing: 1.67px;
-    line-height: 20px;
-
 }
 
 .edu-button-navy:hover {
@@ -154,6 +153,13 @@ h5 {
 
 button.edu-button {
     border:  none !important;
+}
+
+.edu-button-addon {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 1.67px;
+    line-height: 20px;    
 }
 
 /*  ----------------------------- SWITCH CSS - modified https://www.w3schools.com/howto/howto_css_switch.asp  ----------------------------- */
@@ -845,14 +851,15 @@ nav#sidebar ul li a:hover {
 }
 
 .table-borderless > thead > tr > th {
-    background-color: var(--c-blue);
+    background-color: var(--c-smoke);
 }
 
-.border-right {
+/* .border-right {
     border-right-color: black !important;
-}
+} */
 .table-borderless > tbody > tr > td {
-    background-color: var(--c-smoke);
+    /* background-color: var(--c-grey-l); */
+    /* background-color: var(--c-smoke); */
 }
 
 .table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n ) > th {
