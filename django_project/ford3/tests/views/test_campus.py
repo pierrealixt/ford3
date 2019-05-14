@@ -24,7 +24,6 @@ class TestCreateCampusView(TestCase):
         response = self.client.post(self.url, self.data)
 
         self.assertIn(self.data['campus_name'], str(response.content))
-
         self.assertIn('Name is already taken.', str(response.content))
 
     def test_create_empty_campus(self):

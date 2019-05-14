@@ -28,7 +28,6 @@ class TestCampus(SeleniumTestCase):
         show_modal_button.click()
 
         form = self.driver.find_element_by_id('form-add-campus')
-
         campus_input = form.find_element_by_css_selector(
             'input[type="text"]')
         campus_input.send_keys(new_campus_name)
