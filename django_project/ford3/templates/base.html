@@ -1,0 +1,57 @@
+{% extends "index.html" %}
+{% load static %}
+
+{# navbar  #}
+{% block navbar %}
+<nav class="navbar pl-0">
+        <div class="open-edu-logo col-md-2 text-center px-0"><span class='text-white'>Open</span><span class='text-blue'>Edu</span></div>
+        <a class='text-white text-right mr-0' href='/site-admin'>Administration</a>
+        <!-- <div class="question-mark-logo"></div> -->
+</nav>
+{% endblock %}
+
+{% block parent-body %}
+	<div class="container-fluid">
+        <div class="row px-0">
+
+	{# sidebar #}
+    {# we need this block to disable the block in provider_form.html #}
+    {% block side_navbar %}
+    <nav id="sidebar" class="col-md-2 px-0">
+        <div class="container-fluid px-0">
+            <div class="col-12">
+                <div id="provider-photo" class="provider-photo">
+                    {% if provider_logo %}
+                        <img src="{{ provider_logo }}" class="img-provider-photo"/>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12 side-bar-title" id="provider-name">
+                {% if provider %}
+                    <a href="{% url 'show-provider' provider.id %}">{{ provider.name }}</a>
+                {% endif %}
+            </div>
+            <div class='col-md-12 px-0'>
+                <ul>
+                    {% for campus in provider.campus %}
+                        <li>
+                            {% url 'show-campus' provider.id campus.id as show_campus %}
+                            {% if show_campus %}
+                                <a href="{{ show_campus }}">{{ campus.name }}</a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+        <a href="http://www.kartoza.com" target="_blank"><div class="edu-icon-powered-by-kartoza side-bar-kartoza-icon"></div></a>
+    </nav>
+    {# end of sidebar #}
+    {% endblock %}
+
+    {# content #}
+    {% block body %}
+    {% endblock %}
+
+{% endblock %}

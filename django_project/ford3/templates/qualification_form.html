@@ -1,14 +1,6 @@
-{% extends "index.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
-
-{% block navbar %}
-	{% include 'navbar.html' %}
-{% endblock %}
-
-{% block side_navbar %}
-{% include 'sidebar.html' %}
-{% endblock %}
 
 {% block head %}
     {{ wizard.form.media }}
