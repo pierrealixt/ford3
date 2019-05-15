@@ -32,9 +32,9 @@
 		<div class='row justify-content-center no-gutters'>
 			{% for campus in provider.campus %}
 				<div class='col-md-4 card mb-5 border-0'>
-					<div class='campus-card mx-auto'>
+					<div class='campus-card mx-auto text-center'>
 						<div class='card-body h-100'>
-							<h5 class='card-title'>{{ campus.name }}</h5>
+							<h5 class='card-title'><a class='text-white' href="{% url 'show-campus' provider_id=provider.id campus_id=campus.id %}">{{ campus.name }}</a></h5>
                             {# disabled for now #}
 							<!--div class='campus-completion-rate'>
 								<p>
