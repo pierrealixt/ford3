@@ -823,8 +823,6 @@ nav#sidebar ul li a:hover {
     font-weight: 300!important;
 }
 
-/* table-borderless doesn't work well for bootstrap 3.
-   see https://stackoverflow.com/questions/18075794/bootstrap-table-without-stripe-borders/24830641#24830641 */
 .table-borderless > tbody > tr > td,
 .table-borderless > tbody > tr > th,
 .table-borderless > tfoot > tr > td,
@@ -836,5 +834,9 @@ nav#sidebar ul li a:hover {
 
 .table-borderless > thead > tr > th {
     background-color: var(--c-smoke);
+}
+
+.input-invalid {
+    border: 2px dashed red !important;
 }
 

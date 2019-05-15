@@ -120,10 +120,11 @@ class Campus(models.Model):
     def events(self):
         event_query = CampusEvent.objects.filter(
             campus__id=self.id).values(
-                'date_start',
+                'id',
                 'name',
-                'http_link',
-                'date_end')
+                'date_start',
+                'date_end',
+                'http_link')
         return list(event_query)
 
     @property

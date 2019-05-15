@@ -53,6 +53,53 @@
                         {% else %}
                             {% crispy wizard.form wizard.form.helper %}
                         {% endif %}
+
+                        {% if wizard.steps.step1 == 3 %}
+                            <div class='row'>
+                                <div class='col-md-6'>
+                                    {% for event in campus.events %}
+                                        <div class='event' data-event-id='{{ event.id }}'>
+                                            <label>Name</label>
+                                            <input required type='text' value='{{ event.name }}' name='name' disabled />
+                                            <label>Start date</label>
+                                            <input required type='text' class='mydatepicker' name='date_start' value='{{ event.date_start }}' disabled />
+                                            <label>End date</label>
+                                            <input required type='text' class='mydatepicker' name='date_end' value='{{ event.date_end }}' disabled />
+                                            <label>HTTP link</label>
+                                            <input type='text' value='{{ event.http_link }}' name='http_link'
+                                            disabled />
+                                            <button class='col-md-12 edu-button edu-button-navy' data-action='edit-event'>edit</button>
+                                            <button class='col-md-5 edu-button edu-button-navy d-none' data-action='update-event'>update</button>
+                                            <button class='col-md-5 edu-button edu-button-navy d-none' data-action='cancel-update-event'>cancel</button>
+                            
+                                        </div>
+                                        <hr />
+
+                                    {% endfor %}
+                                </div>
+                                <div class='col-md-6'>
+
+                                    <button class='edu-button edu-button-navy' data-action='add-event'>add an event</button>
+                                    <input id='create-campus-event-url' type='hidden' value='{% url "create-campus-event" campus_id=campus.id %}' />
+                                    <div>
+                                        <div id='new-event-example' class='d-none'>
+                                            <label>Name</label>
+                                            <input required type='text' name='name' />
+                                            <label>Start date</label>
+                                            <input required type='text' name='date_start' class='mydatepicker' />
+                                            <label>End date</label>
+                                            <input required type='text' name='date_end' class='mydatepicker' />
+                                            <label>HTTP link</label>
+                                            <input type='text' name='http_link' />
+                                            <button class='col-md-5 edu-button edu-button-navy d-none' data-action='create-event'>create</button>
+                                            <button class='col-md-5 edu-button edu-button-navy d-none' data-action='cancel-create-event'>cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+
                         {% if wizard.steps.step1 == 4 %}
                         <div class='row no-gutters'>
                             <div class='col-md-5 campus-all-qualifications border'>
@@ -180,16 +227,6 @@
                         </div>
                         {% endif %}                        
                     </div>
-                        {% if wizard.steps.step1 == 3 %}
-	                        <div class="row">
-								<div class="col-md-8"></div>
-	                            <div class="col-md-4">
-			                        <div id="add-campus-event" class="edu-button edu-button-orange">
-			                            Add event
-			                        </div>
-	                            </div>
-	                        </div>
-                        {% endif %}
                     {% if multi_step_form %}
                     <div class="row form-actions">
                         <div class="col-md-4">

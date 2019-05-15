@@ -75,6 +75,11 @@ urlpatterns = [
         saqa_qualifications.create,
         name='create-saqa-qualification'),
     path(
+        'campus/<int:campus_id>/events/create/',
+        saqa_qualifications.create,
+        name='create-campus-event'),
+
+    path(
         '/'.join([
             'providers/<int:provider_id>',
             'campus/<int:campus_id>',

@@ -1,110 +1,238 @@
-let campus_event_counter = 1
-function addCampusEvent(){
-    campus_event_counter += 1
-    let name_div = document.getElementById(
-        'div_id_campus-dates-event_name');
-    let start_date_div = document.getElementById(
-        'div_id_campus-dates-date_start');
-    let end_date_div = document.getElementById(
-        'div_id_campus-dates-date_end');
-    let http_link_div = document.getElementById(
-        'div_id_campus-dates-http_link');
-    let new_name_div = name_div.cloneNode(true);
-    let new_start_date_div = start_date_div.cloneNode(true);
-    let new_end_date_div = end_date_div.cloneNode(true);
-    let new_http_link_div = http_link_div.cloneNode(true);
-    clearElement(new_name_div);
-    clearElement(new_start_date_div);
-    clearElement(new_end_date_div);
-    clearElement(new_http_link_div);
-    // let new_hr = document.createElement('hr');
-    let new_remove_button_row = document.createElement('div');
-    new_remove_button_row.innerHTML = getRemoveGroupRow();
-    let form_group = (
-        document.getElementsByClassName('form-group')[0]);
-    new_remove_button_row.classlist += 'row';
-    let new_start_date_input = new_start_date_div.getElementsByTagName('input')[0];
-    let new_end_date_input = new_end_date_div.getElementsByTagName('input')[0];
-    form_group.appendChild(new_remove_button_row)
-    form_group.appendChild(new_name_div);
-    form_group.appendChild(new_start_date_div);
-    form_group.appendChild(new_end_date_div);
-    form_group.appendChild(new_http_link_div);
-    
-    $(new_start_date_input).removeClass('hasDatepicker');
-    updateElementID(new_start_date_input, campus_event_counter);
-    $(new_start_date_input).datepicker();
-    $(new_end_date_input).removeClass('hasDatepicker');
-    updateElementID(new_end_date_input, campus_event_counter);
-    $(new_end_date_input).datepicker();
-    
-    innitiateRemoveCampusEventButtons();
-    onNameEditMakeOtherFieldsRequired();
-    clearElement(new_name_div)
 
+const getNewEvent = () => {
+  return document.getElementById('new-event')
 }
 
-function updateElementID(e, counter){
-             $(e).attr('id', $(e).attr('id') + '_' + counter.toString());
+const getNewEventExample = () => {
+  return document.getElementById('new-event-example')
 }
 
-function clearElement(elementToClear) {
-       $(elementToClear).find('input:text').val('');
-};
-
-function innitiateRemoveCampusEventButtons() {
-    $('.remove-campus-event-button').click(function() {
-
-        for (let i = 0; i < 4; i++) {
-                var parent_div = this.parentElement.parentElement.parentElement;
-                parent_div.nextElementSibling.remove();
-        };
-        parent_div.remove();
-    })
- }
-
-function getRemoveGroupRow() {
-    let button_html = '<div class="remove-campus-event-button">' +
-        '<div class="remove-campus-button-inner ">X</div></div>'
-    let result = (  '<div class="row">' +
-                    '<div class="col-11"><hr/></div><div class="col-1">' +
-        button_html + '</div>')
-    return result
+const getAddEventButton = () => {
+  return document.querySelector('button[data-action="add-event"]')
 }
 
-
-
-function onNameEditMakeOtherFieldsRequired()
-{
-    $('[name=campus-dates-event_name]').each(function(index, nextElement) {
-        $(nextElement).change(function() {
-            // Check if my next element is not empty
-            if (!$(nextElement).val()) {
-                let nextInputParent = $(nextElement).parent().parent()
-                for (let i = 0; i < 3; i ++) {
-                    let nextInput = nextInputParent.next().find('input')
-                    nextInput.prop('required', false);
-                    nextInputParent = $(nextInput).parent().parent()
-                }
-
-            }
-            else {
-                let nextInputParent = $(nextElement).parent().parent()
-                for (let i = 0; i < 3; i ++) {
-                    let nextInput =nextInputParent.next().find('input')
-                    nextInput.prop('required', true);
-                    nextInputParent = $(nextInput).parent().parent()
-                }
-            }
-        })
-    });
+const getCreateEventButton = () => {
+  return getNewEvent().querySelector('button[data-action="create-event"]')
 }
 
-$(document).ready(function () {
-    onNameEditMakeOtherFieldsRequired();
-    $('#add-campus-event').click(function () {
-            addCampusEvent();
-        }
-    );
-})
+const getCancelCreateEventButton = () => {
+  return getNewEvent().querySelector('button[data-action="cancel-create-event"]')
+}
 
+const getEditEventButton = () => {
+  return document.querySelector('button[data-action="edit-event"]')
+}
+
+const getUpdateEventButton = () => {
+  return document.querySelector('button[data-action="update-event"]')
+}
+
+const getCancelUpdateEventButton = () => {
+  return document.querySelector('button[data-action="cancel-update-event"]')
+}
+
+const getCreateEventUrl = () => {
+  return document.getElementById('create-campus-event-url').value
+}
+
+const getEventFieldElem = (event, field) => {
+  return event.querySelector(`input[name="${field}"]`)
+}
+
+const getEventFieldValue = (event, field) => {
+  const fieldElem = getEventFieldElem(event, field)
+  if (fieldElem.required) {
+    if (fieldElem.value.length > 0) { return fieldElem.value } else { return false }
+  } else {
+    return fieldElem.value
+  }
+}
+
+const getEventInputElements = (eventElement) => {
+  return eventElement.querySelectorAll('input')
+}
+
+const displayNewEvent = () => {
+  const newEventExample = getNewEventExample()
+  const newEvent = newEventExample.cloneNode(true)
+  newEvent.id = 'new-event'
+  newEvent.classList.remove('d-none')
+  newEventExample.parentNode.appendChild(newEvent)
+  return newEvent
+}
+
+const fetchEventData = (eventElement) => {
+  return {
+    name: getEventFieldValue(eventElement, 'name'),
+    date_start: getEventFieldValue(eventElement, 'date_start'),
+    date_end: getEventFieldValue(eventElement, 'date_end'),
+    http_link: getEventFieldValue(eventElement, 'http_link')
+  }
+}
+
+const showError = (key, eventElement) => {
+  const elem = getEventFieldElem(eventElement, key)
+  elem.classList.add('input-invalid')
+}
+
+const hideError = (key, eventElement) => {
+  const elem = getEventFieldElem(eventElement, key)
+  elem.classList.remove('input-invalid')
+}
+
+const hideButton = (button) => {
+  button.classList.add('d-none')
+}
+
+const showButton = (button) => {
+  button.classList.remove('d-none')
+}
+
+const toggleInputsDisability = (inputs) => {
+  inputs.forEach((input) => {
+    input.disabled = !input.disabled
+  })
+}
+
+const validateEvent = (eventData, eventElement) => {
+  let formValid = true
+
+  Object.keys(eventData).forEach((key) => {
+    const value = eventData[key]
+    if (value === false) {
+      formValid = false
+      showError(key, eventElement)
+    } else {
+      hideError(key, eventElement)
+    }
+  })
+  return formValid
+}
+
+const ajaxCreateNewEvent = (event) => {
+  console.log('ajaxCreateNewEvent')
+  return
+  const url = `${getCreateEventUrl()}`
+  const request = new XMLHttpRequest()
+  request.open('POST', url, true)
+
+  request.onload = function () {
+    if (request.status >= 200 && request.status < 400) {
+    }
+  }
+
+  request.send()
+}
+
+const ajaxUpdateEvent = (event) => {
+  console.log('ajaxUpdateEvent')
+  console.log(event)
+}
+
+const setFocusToInput = (inputElement) => {
+  inputElement.focus()
+}
+
+const setClickEventToAddButton = () => {
+  getAddEventButton().addEventListener('click', function (evt) {
+    evt.preventDefault()
+    const eventElement = displayNewEvent()
+
+    const inputs = getEventInputElements(eventElement)
+    setFocusToInput(inputs[0])
+    setDatepicker()
+
+    hideButton(getAddEventButton())
+
+    console.log('am i here')
+
+    showButton(getCreateEventButton())
+    showButton(getCancelCreateEventButton())
+
+    setClickEventToCreateButton()
+    setClickEventToCancelCreateButton()
+  })
+}
+
+const setClickEventToCreateButton = () => {
+  getCreateEventButton().addEventListener('click', function (evt) {
+    evt.preventDefault()
+
+    const eventElement = getNewEvent()
+    const eventData = fetchEventData(eventElement)
+    if (validateEvent(eventData, eventElement)) {
+      ajaxCreateNewEvent(eventData)
+    }
+  })
+}
+
+const setClickEventToCancelCreateButton = () => {
+  getCancelCreateEventButton().addEventListener('click', function (evt) {
+    evt.preventDefault()
+
+    hideButton(getCreateEventButton())
+    hideButton(getCancelCreateEventButton())
+    showButton(getAddEventButton())
+    const eventElement = evt.target.parentNode
+    eventElement.parentNode.removeChild(eventElement)
+  })
+}
+
+const setClickEventToEditButton = () => {
+  getEditEventButton().addEventListener('click', function (evt) {
+    evt.preventDefault()
+    const eventElement = evt.target.parentNode
+    const inputs = getEventInputElements(eventElement)
+
+    toggleInputsDisability(inputs)
+
+    setDatepicker()
+    hideButton(getEditEventButton())
+    showButton(getUpdateEventButton())
+    showButton(getCancelUpdateEventButton())
+
+    setFocusToInput(inputs[0])
+    setClickEventToUpdateButton()
+    setClickEventToCancelUpdateButton()
+  })
+}
+
+const setClickEventToCancelUpdateButton = () => {
+  getCancelUpdateEventButton().addEventListener('click', function (evt) {
+    evt.preventDefault()
+    const eventElement = evt.target.parentNode
+    const inputs = getEventInputElements(eventElement)
+
+    toggleInputsDisability(inputs)
+
+    showButton(getEditEventButton())
+
+    hideButton(getUpdateEventButton())
+    hideButton(getCancelUpdateEventButton())
+  })
+}
+const setClickEventToUpdateButton = () => {
+  getUpdateEventButton().addEventListener('click', function (evt) {
+    evt.preventDefault()
+    const eventElement = evt.target.parentNode
+    const event = fetchEventData(eventElement)
+
+    if (validateEvent(event, eventElement)) {
+      event['id'] = eventElement.dataset['eventId']
+      ajaxUpdateEvent(event)
+    }
+  })
+}
+
+const setDatepicker = () => {
+  $('.mydatepicker').datepicker()
+}
+
+const setupEvents = () => {
+  setClickEventToAddButton()
+  setClickEventToEditButton()
+}
+
+(function () {
+  setupEvents()
+})()
