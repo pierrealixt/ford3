@@ -73,18 +73,17 @@ h5 {
 }
 
 .edu-button {
-    height: 5rem;
-    width: 10rem;
+    height: 2.5rem;
+    width: 100%;
     border-radius: 4px;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
-    padding-left: 3rem;
-    padding-right: 3rem;
     text-align: center;
     align-items: center;
     display: inline-grid;
     cursor: pointer;
 }
+
 
 .edu-button:active {
     box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
@@ -156,9 +155,8 @@ button.edu-button {
 }
 
 .edu-button-addon {
-    font-size: 20px;
+    font-size: 1rem;
     font-weight: 900;
-    letter-spacing: 1.67px;
     line-height: 20px;    
 }
 
@@ -561,16 +559,6 @@ input:checked + .slider:before {
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.25);
 }
 
-.edu-button {
-    height: 2.5rem;
-    width: 100%;
-    border-radius: 4px;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    text-align: center;
-    align-items: center;
-    display: inline-grid;
-}
 
 .edu-button:active {
     box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
@@ -729,6 +717,7 @@ input[type='email']:hover::placeholder {
 .navbar {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     background-color: var(--c-purple);
+    z-index: 42;
 }
 
 .navbar p {
@@ -854,18 +843,3 @@ nav#sidebar ul li a:hover {
     background-color: var(--c-smoke);
 }
 
-/* .border-right {
-    border-right-color: black !important;
-} */
-.table-borderless > tbody > tr > td {
-    /* background-color: var(--c-grey-l); */
-    /* background-color: var(--c-smoke); */
-}
-
-.table-striped > tbody > tr:nth-child(2n) > td, .table-striped > tbody > tr:nth-child(2n ) > th {
-   background-color: white;
-}
-
-.action-buttons {
-    font-size: 0.8rem;
-}

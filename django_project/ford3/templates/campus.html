@@ -21,7 +21,7 @@
                 <div class='col-md-12'>
                     <p><b>Telephone number</b> {{ campus.telephone|is_none }}</p>
                     <p><b>E-mail address</b> {{ campus.email|is_none }}</p>
-                    <p><b>Annual student capacity</b> {{ campus.max_students_per_year|is_number_none }}</p>
+                    <p><b>Annual student capacity</b> {{ campus.max_students_per_year|is_none }}</p>
                 </div>
             </div>
             <div class='row'>
@@ -35,21 +35,7 @@
             <div class='row'>
                 <div class='col-md-6 py-4'>
                     <p><b>Physical address</b></p>
-                    <p>{{ campus.physical_address_line_1|is_none }}</p>
-                    <p>{{ campus.physical_address_line_2|is_none }}</p>
-                    <p>{{ campus.physical_address_city|is_none }}</p>
-                    <p>{{ campus.physical_address_postal_code|is_none }}</p>
-                </div>
-                <div class="col-md-6 py-3">
-                    {% if campus.location %}
-                        {{ campus.location }}
-                    {% else %}
-                        <table class="table table-bordered h-100 w-50">
-                            <tr>
-                                <td class="align-middle text-center text-muted">No location yet</td>
-                            </tr>
-                        </table>
-                    {% endif %}
+                    <p>{{ campus.physical_address|is_none }}</p>
                 </div>
             </div>
 
@@ -63,13 +49,17 @@
             </div>
             
             <div class='row py-3'>
-                {% for event in campus.events %}
                 <div class='col-md-12'>
-                    <p>
-                    <b>{{ event.name }}:</b> {{ event.date_start }} - {{ event.date_end }} <a href="{{ event.http_link }}" target="_blank">{{ event.http_link }}</a>
-                </p>
+                    {% if campus.events|length == 0 %}
+                        <p class='text-muted'>No events yet</p>
+                    {% endif %}
+                    {% for event in campus.events %}
+                        <p>
+                            <b>{{ event.name }}:</b> {{ event.date_start }} - {{ event.date_end }} 
+                            <a href="{{ event.http_link }}" target="_blank">{{ event.http_link }}</a>
+                        </p>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
             
             <div class='row py-4'>
@@ -82,22 +72,22 @@
             </div>
 
             <div class='row no-gutters'>
-                <div class='col-md-12 mx-0'>
+                <div class='col-md-12'>
                     <table class='table table-borderless'>
                         <thead>
-                            <tr class='text-purple'>
-                                <th class="col-md-8 border-right align-middle text-center">Qualifications</th>
-                                <th class="col-md-4 align-middle text-center">Actions</th>
+                            <tr class='row text-purple no-gutters'>
+                                <th class="col-md-10 border-right align-middle text-center">Qualifications</th>
+                                <th class="col-md-2 align-middle text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for qualification in campus.qualifications %}
-                                <tr class="align-middle border-bottom">
-                                    <td class="col-md-10 border-right align-middle p-0">
-                                        <a href="{% url 'show-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">{{ qualification.saqa_qualification__name }} (SAQA_ID: {{ qualification.saqa_qualification__saqa_id }})</a>
+                                <tr class="row border-bottom no-gutters">
+                                    <td class="col-md-10 border-right align-middle">
+                                        <a style='' class='text-left' href="{% url 'show-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">{{ qualification.saqa_qualification__name }} (SAQA_ID: {{ qualification.saqa_qualification__saqa_id }})</a>
                                     </td>
-                                    <td class="col-md-2 align-middle action-buttons py-0">
-                                            <a class="edu-button edu-button-navy edu-button-addon " href="{% url 'edit-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Edit</a>
+                                    <td class=" col-md-2 align-middle">
+                                        <a class="edu-button edu-button-navy edu-button-addon w-100" href="{% url 'edit-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Edit</a>
                                     </td>
                                 </tr>
                             {% endfor %}        
@@ -113,10 +103,4 @@
 {% endblock %}
 
 {% block footer %}
-<script type='text/javascript'>
-let sidebar = document.getElementById('sidebar')
-sidebar.classList.toggle('active')
-</script>
-
-
 {% endblock %}
