@@ -5,6 +5,11 @@ from ford3.models.saqa_qualification import SAQAQualification
 from ford3.models.campus_event import CampusEvent
 
 
+
+class ActiveCampusManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted=False)
+
 class Campus(models.Model):
     provider = models.ForeignKey(
         'ford3.provider',
@@ -108,6 +113,9 @@ class Campus(models.Model):
         null=False,
         default=False,
         help_text="Campus has been deleted")
+
+    objects = models.Manager()
+    active_objects = ActiveCampusManager()
 
     def save(self, *args, **kwargs):
         if self.id is None:
@@ -248,7 +256,7 @@ class Campus(models.Model):
                 campus=self)
             qualif.delete()
 
-    def mark_campus_as_deleted(self):
+    def soft_delete(self):
         self.deleted = True
         self.save()
 

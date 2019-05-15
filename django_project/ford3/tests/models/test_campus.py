@@ -156,6 +156,23 @@ class TestCampus(TestCase):
         # it should not remove qualifications for the second campus.
         self.assertEqual(len(self.other_campus.qualifications), 2)
 
+    def test_soft_delete_campus(self):
+        self.provider = self.campus.provider
+        self.campus2 = ModelFactories.get_campus_test_object()
+        self.campus2.provider = self.provider
+        self.campus2.save()
+
+        self.assertTrue(self.campus)
+        self.assertFalse(self.campus.deleted)
+        self.assertEqual(len(self.provider.campus), 2)
+
+        self.campus.soft_delete()
+
+        self.assertTrue(self.campus)
+        self.assertTrue(self.campus.deleted)
+        self.assertEqual(len(self.provider.campus), 1)
+
+
 class TestCreateCampus(TestCase):
     def test_create_empty_campus(self):
         with self.assertRaisesMessage(ValidationError, 'Name is required'):
@@ -203,17 +220,3 @@ class TestCreateCampus(TestCase):
             name='My Campus')
 
         self.assertEqual(Campus.objects.count(), 1)
-
-    def test_mark_campus_as_deleted(self):
-        self.provider = self.campus.provider
-        self.campus2 = ModelFactories.get_campus_test_object()
-        self.campus2.provider = self.provider
-        self.campus2.save()
-        self.assertTrue(self.campus)
-        self.assertFalse(self.campus.deleted)
-        self.assertEqual(len(self.provider.campus), 2)
-        self.campus.mark_campus_as_deleted()
-        self.assertTrue(self.campus)
-        self.assertTrue(self.campus.deleted)
-        self.assertEqual(len(self.provider.campus), 1)
-
