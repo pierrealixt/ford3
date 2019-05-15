@@ -44,6 +44,7 @@ class CampusFormWizard(CookieWizardView):
 
     def get_context_data(self, form, **kwargs):
         context = super().get_context_data(form, **kwargs)
+        context['multi_step_form'] = True
         context['form_name_list'] = [
             'Details',
             'Location',
@@ -58,6 +59,10 @@ class CampusFormWizard(CookieWizardView):
             'provider_name': self.provider.name
         }
         context['form_data'] = form_data
+        
+        if 'step' in self.request.GET:
+            context['multi_step_form'] = False
+
         return context
 
     def get_form_initial(self, step):
@@ -73,7 +78,6 @@ class CampusFormWizard(CookieWizardView):
         return initial_dict
 
     def done(self, form_list, **kwargs):
-
         for form in kwargs['form_dict']:
             cleaned_data = kwargs['form_dict'][form].cleaned_data
 
@@ -82,7 +86,7 @@ class CampusFormWizard(CookieWizardView):
             elif form == 'campus-location':
                 self.campus.save_postal_data(cleaned_data)
             elif form == 'campus-dates':
-                self.campus.save_events(self.new_campus_events)
+                self.campus.save_events(cleaned_data)
             elif form == 'campus-qualifications':
                 self.campus.save_qualifications(cleaned_data)
                 self.campus.delete_qualifications(cleaned_data)
@@ -115,25 +119,46 @@ class CampusFormWizard(CookieWizardView):
             new_campus_event.http_link = new_http_link[i]
             self.new_campus_events.append(new_campus_event)
 
-    def render(self, form=None, **kwargs):
-        form = form or self.get_form()
-        context = self.get_context_data(form=form, **kwargs)
-        current_step = context['view'].storage.current_step
-        step_before = 'campus-location'
-        step_after = 'campus-qualifications'
-        # Currently this simply clears the events forcing the user to re-enter
-        # TODO: Generate events from stored self.new_campus_events
-        if current_step == 'campus-dates':
-            self.new_campus_events = []
+    def render_next_step(self, form, **kwargs):
+        """
+        This method gets called when the next step/form should be rendered.
+        `form` contains the last/current form.
+        """
+        # get the form instance based on the data from the storage backend
+        # (if available).
 
-        if current_step == step_before or current_step == step_after:
-            try:
-                self.add_events(
-                    context['view'].storage.data['step_data']['campus-dates'],
-                    form)
-            except KeyError:
-                pass
-        return self.render_to_response(context)
+
+        if 'step' in self.request.GET:
+            return self.render_done(form, **kwargs)
+        else:
+            return super().render_next_step(form, **kwargs)
+
+    # def render(self, form=None, **kwargs):
+    #     # print('am i here? render')
+    #     form = form or self.get_form()
+    #     context = self.get_context_data(form=form, **kwargs)
+        
+
+    #     current_step = context['view'].storage.current_step
+       
+    #     # Currently this simply clears the events forcing the user to re-enter
+    #     # TODO: Generate events from stored self.new_campus_events
+    #     if current_step == 'campus-dates':
+    #         self.new_campus_events = []
+
+    #     # if context['multi_step_form'] is False:
+    #     #         print('hello i render')
+    #             # return self.render_done(form, **kwargs)
+    #         # if context['current_form'] == 'campus-dates':
+                
+        
+    #         # try:
+    #         #     self.add_events(
+    #         #         context['view'].storage.data['step_data']['campus-dates'],
+    #         #         form)
+    #         # except KeyError:
+    #         #     pass
+    #     return self.render_to_response(context)
 
     def render_done(self, form, **kwargs):
         """
@@ -142,7 +167,6 @@ class CampusFormWizard(CookieWizardView):
         validate, `render_revalidation_failure` should get called.
         If everything is fine call `done`.
         """
-
         final_forms = OrderedDict()
 
         if 'step' in self.request.GET:
