@@ -80,15 +80,20 @@
                     <table class='table table-borderless'>
                         <thead>
                             <tr class='row text-purple no-gutters'>
-                                <th class="col-md-10 border-right align-middle text-center">Qualifications</th>
+                                <th class="col-md-8 border-right align-middle text-center">Qualifications</th>
+                                <th class="col-md-2 align-middle text-center">Last edited</th>
                                 <th class="col-md-2 align-middle text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for qualification in campus.qualifications %}
                                 <tr class="row border-bottom no-gutters">
-                                    <td class="col-md-10 border-right align-middle">
+                                    <td class="col-md-8 border-right align-middle">
                                         <a style='' class='text-left' href="{% url 'show-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">{{ qualification.saqa_qualification__name }} (SAQA_ID: {{ qualification.saqa_qualification__saqa_id }})</a>
+                                    </td>
+                                    <td class=" col-md-2 border-right align-middle">
+                                        {{ qualification.edited_at }}
+
                                     </td>
                                     <td class=" col-md-2 align-middle">
                                         <a class="edu-button edu-button-navy edu-button-addon w-100" href="{% url 'edit-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Edit</a>

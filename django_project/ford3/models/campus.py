@@ -134,7 +134,8 @@ class Campus(models.Model):
                 'saqa_qualification__id',
                 'saqa_qualification__name',
                 'saqa_qualification__saqa_id',
-                'saqa_qualification__accredited')
+                'saqa_qualification__accredited',
+                'edited_at')
         return list(qualif_query)
 
     @property

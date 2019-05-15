@@ -102,14 +102,8 @@ class Qualification(models.Model):
                   "in high demand?",
         default=False)
     created_at = models.DateTimeField(
-        blank=True,
-        null=True,
-        help_text="When this record was created",
         auto_now_add=True)
     edited_at = models.DateTimeField(
-        blank=True,
-        null=True,
-        help_text="The last time this record was edited",
         auto_now=True)
 
 
