@@ -761,11 +761,6 @@ nav#sidebar ul li a:hover {
     background-image: linear-gradient(to right, #7acdcf 0%, #47b4b6 100%);
 }
 
-.campus-card h5 {
-    color:  white;
-    text-align: center;
-}
-
 .campus-completion-rate {
     background:  url('../images/ui/circle-completion.svg');
     width:  194px;
