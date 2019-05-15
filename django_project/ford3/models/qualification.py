@@ -101,6 +101,11 @@ class Qualification(models.Model):
         help_text="Are the occupations this qualification prepares you for "
                   "in high demand?",
         default=False)
+    created_at = models.DateTimeField(
+        auto_now_add=True)
+    edited_at = models.DateTimeField(
+        auto_now=True)
+
 
     def __str__(self):
         return self.saqa_qualification.name

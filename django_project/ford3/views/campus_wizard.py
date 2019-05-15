@@ -59,7 +59,7 @@ class CampusFormWizard(CookieWizardView):
             'provider_name': self.provider.name
         }
         context['form_data'] = form_data
-        
+
         if 'step' in self.request.GET:
             context['multi_step_form'] = False
 
@@ -137,11 +137,10 @@ class CampusFormWizard(CookieWizardView):
     #     # print('am i here? render')
     #     form = form or self.get_form()
     #     context = self.get_context_data(form=form, **kwargs)
-        
+
 
     #     current_step = context['view'].storage.current_step
-       
-    #     # Currently this simply clears the events forcing the user to re-enter
+
     #     # TODO: Generate events from stored self.new_campus_events
     #     if current_step == 'campus-dates':
     #         self.new_campus_events = []
@@ -150,15 +149,16 @@ class CampusFormWizard(CookieWizardView):
     #     #         print('hello i render')
     #             # return self.render_done(form, **kwargs)
     #         # if context['current_form'] == 'campus-dates':
-                
-        
+
+
     #         # try:
     #         #     self.add_events(
-    #         #         context['view'].storage.data['step_data']['campus-dates'],
+    # context['view'].storage.data['step_data']['campus-dates'],
     #         #         form)
     #         # except KeyError:
     #         #     pass
     #     return self.render_to_response(context)
+
 
     def render_done(self, form, **kwargs):
         """
