@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
 body {
     --c-purple: #2C314F;
     --c-blue: #7ACDCF;
@@ -68,19 +68,22 @@ h5 {
     color:  #ffff !important;
 }
 
+.text-darkred {
+    color:  darkred !important;
+}
+
 .edu-button {
-    height: 5rem;
-    width: 10rem;
+    height: 2.5rem;
+    width: 100%;
     border-radius: 4px;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
-    padding-left: 3rem;
-    padding-right: 3rem;
     text-align: center;
     align-items: center;
     display: inline-grid;
     cursor: pointer;
 }
+
 
 .edu-button:active {
     box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
@@ -135,11 +138,6 @@ h5 {
 .edu-button-navy {
     color: var(--c-navy);
     background-color: var(--c-smoke);
-    font-size: 20px;
-    font-weight: 900;
-    letter-spacing: 1.67px;
-    line-height: 20px;
-
 }
 
 .edu-button-navy:hover {
@@ -154,6 +152,12 @@ h5 {
 
 button.edu-button {
     border:  none !important;
+}
+
+.edu-button-addon {
+    font-size: 1rem;
+    font-weight: 900;
+    line-height: 20px;    
 }
 
 /*  ----------------------------- SWITCH CSS - modified https://www.w3schools.com/howto/howto_css_switch.asp  ----------------------------- */
@@ -555,16 +559,6 @@ input:checked + .slider:before {
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.25);
 }
 
-.edu-button {
-    height: 2.5rem;
-    width: 100%;
-    border-radius: 4px;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    text-align: center;
-    align-items: center;
-    display: inline-grid;
-}
 
 .edu-button:active {
     box-shadow: inset 1px 1px 6px rgba(0, 0, 0, 0.4);
@@ -723,6 +717,7 @@ input[type='email']:hover::placeholder {
 .navbar {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     background-color: var(--c-purple);
+    z-index: 42;
 }
 
 .navbar p {
@@ -832,3 +827,19 @@ nav#sidebar ul li a:hover {
     font-size: 10px;
     font-weight: 300!important;
 }
+
+/* table-borderless doesn't work well for bootstrap 3.
+   see https://stackoverflow.com/questions/18075794/bootstrap-table-without-stripe-borders/24830641#24830641 */
+.table-borderless > tbody > tr > td,
+.table-borderless > tbody > tr > th,
+.table-borderless > tfoot > tr > td,
+.table-borderless > tfoot > tr > th,
+.table-borderless > thead > tr > td,
+.table-borderless > thead > tr > th {
+    border: none;
+}
+
+.table-borderless > thead > tr > th {
+    background-color: var(--c-smoke);
+}
+
