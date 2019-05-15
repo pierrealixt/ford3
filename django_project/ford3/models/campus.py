@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.core.exceptions import ValidationError
 from ford3.models.qualification import Qualification
 from ford3.models.saqa_qualification import SAQAQualification
 from ford3.models.campus_event import CampusEvent
@@ -102,7 +103,18 @@ class Campus(models.Model):
         help_text="The campus' postal adress code",
         max_length=255)
 
-    pass
+
+    def save(self, *args, **kwargs):
+        if self.id is None:
+            if len(self.name) == 0:
+                raise ValidationError({'campus': 'Name is required.'})
+
+            if Campus.objects.filter(
+                provider_id=self.provider.id,
+                name__iexact=self.name).exists():
+                raise ValidationError({'campus': 'Name is already taken.'})
+
+        super().save(*args, **kwargs)
 
     @property
     def events(self):

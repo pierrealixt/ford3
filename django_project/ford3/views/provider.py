@@ -1,8 +1,7 @@
 from django.shortcuts import (
     render,
     redirect,
-    get_object_or_404,
-)
+    get_object_or_404)
 from django.db import transaction, IntegrityError
 from django.urls import reverse
 from ford3.forms.provider_form import ProviderForm
@@ -13,7 +12,7 @@ from ford3.models import (
 
 
 @transaction.atomic
-def edit_provider(request, provider_id):
+def edit(request, provider_id):
     if request.method == 'POST':
         form = ProviderForm(request.POST, request.FILES)
         if form.is_valid():
@@ -117,7 +116,7 @@ def edit_provider(request, provider_id):
         return render(request, 'provider_form.html', context)
 
 
-def show_provider(request, provider_id):
+def show(request, provider_id):
     provider = get_object_or_404(
         Provider,
         id=provider_id
@@ -131,7 +130,6 @@ def show_provider(request, provider_id):
     context = {
         'provider': provider
     }
-
     # make sure logo has been uploaded before set the context
     # otherwise, let it empty
     if provider.provider_logo:

@@ -6,6 +6,62 @@ from selenium.webdriver.common.by import By
 from ford3.models import Campus, CampusEvent
 
 
+
+class TestCampus(SeleniumTestCase):
+
+    def setUp(self):
+        self.campus = ModelFactories.get_campus_test_object()
+
+        provider_url = reverse(
+            'show-provider',
+            args=[str(self.campus.provider.id)])
+
+        self.driver.get(f'{self.live_server_url}{provider_url}')
+
+    def test_create_campus(self):
+        new_campus_name = 'New campus name'
+
+        self.assertNotIn(new_campus_name, self.driver.page_source)
+
+        show_modal_button = self.driver.find_element_by_id(
+            'open-add-campus-modal')
+        show_modal_button.click()
+
+        form = self.driver.find_element_by_id('form-add-campus')
+        campus_input = form.find_element_by_css_selector(
+            'input[type="text"]')
+        campus_input.send_keys(new_campus_name)
+
+        submit = form.find_element_by_tag_name('button')
+        submit.click()
+
+        self.assertIn(new_campus_name, self.driver.page_source)
+
+    def test_create_duplicate_campus(self):
+        new_campus_name = self.campus.name
+
+        show_modal_button = self.driver.find_element_by_id(
+            'open-add-campus-modal')
+        show_modal_button.click()
+
+        form = self.driver.find_element_by_id('form-add-campus')
+
+        campus_input = form.find_element_by_css_selector('input[type="text"]')
+        campus_input.send_keys(new_campus_name)
+
+        submit = form.find_element_by_tag_name('button')
+        submit.click()
+
+        self.assertIn(new_campus_name, self.driver.page_source)
+
+        form = self.driver.find_element_by_id('form-add-campus')
+        error = form.find_element_by_id('campus-error')
+
+        self.assertEqual(
+            error.get_attribute('innerHTML'),
+            'Name is already taken.')
+
+
 class TestCampusForm(SeleniumTestCase):
     @unittest.skipUnless(
         selenium_flag_ready(),

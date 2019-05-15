@@ -1,6 +1,8 @@
 from django.test import TestCase
-from ford3.tests.models.model_factories import ModelFactories
+from django.core.exceptions import ValidationError
+from ford3.models.campus import Campus
 from ford3.models.saqa_qualification import SAQAQualification
+from ford3.tests.models.model_factories import ModelFactories
 
 
 class TestCampus(TestCase):
@@ -17,9 +19,6 @@ class TestCampus(TestCase):
         """
         Test saving the first form of the Campus wizard: details
         """
-        self.provider = ModelFactories.get_provider_test_object(
-            new_id=42)
-
         details_form_data = {
             'telephone': '0606551967',
             'email': 'email@kartoza.com',
@@ -31,15 +30,6 @@ class TestCampus(TestCase):
         self.assertEqual(self.campus.telephone, '0606551967')
         self.assertEqual(self.campus.email, 'email@kartoza.com')
         self.assertEqual(self.campus.max_students_per_year, 1042)
-
-    def test_save_location_form_data(self):
-        # form_data = {
-        #     'physical_address_street_name': 'street name',
-        #     'physical_address_city': 'gournay',
-        #     'physical_address_postal_code': '93460',
-        #     'is_physical_addr_same_as_postal_addr': True
-        # }
-        pass
 
     def test_save_events_form_data(self):
 
@@ -164,3 +154,52 @@ class TestCampus(TestCase):
 
         # it should not remove qualifications for the second campus.
         self.assertEqual(len(self.other_campus.qualifications), 2)
+
+
+class TestCreateCampus(TestCase):
+    def test_create_empty_campus(self):
+        with self.assertRaisesMessage(ValidationError, 'Name is required'):
+            campus = Campus()
+            campus.save()
+
+
+    def test_create_duplicate_campus(self):
+        provider = ModelFactories.get_provider_test_object()
+
+        campus = Campus(
+            name='My Campus',
+            provider=provider)
+        campus.save()
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            'Name is already taken'):
+            campus_2 = Campus(
+                name='My Campus',
+                provider=provider)
+            campus_2.save()
+
+        provider_2 = ModelFactories.get_provider_test_object()
+        campus_3 = Campus(
+            name='My Campus',
+            provider=provider_2)
+        campus_3.save()
+
+        self.assertEqual(campus.name, 'My Campus')
+        self.assertEqual(campus_3.name, 'My Campus')
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            'Name is already taken'):
+            campus_4 = Campus(
+                name='my campus',
+                provider=provider)
+            campus_4.save()
+
+    def test_create_campus(self):
+        provider = ModelFactories.get_provider_test_object()
+
+        provider.campus_set.create(
+            name='My Campus')
+
+        self.assertEqual(Campus.objects.count(), 1)

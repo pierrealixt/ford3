@@ -20,7 +20,11 @@ from ford3.forms.campus import (
     CampusQualificationsForm
 )
 from ford3.views.campus_wizard import CampusFormWizard
-from ford3.views.provider import show_provider, edit_provider
+from ford3.views import (
+    campus,
+    provider
+)
+
 
 qualification_wizard = QualificationFormWizard.as_view(
     [
@@ -43,10 +47,10 @@ campus_wizard = CampusFormWizard.as_view(CAMPUS_FORMS)
 
 urlpatterns = [
     path('providers/<int:provider_id>',
-         show_provider,
+         provider.show,
          name='show-provider'),
     path('providers/<int:provider_id>/edit',
-         edit_provider,
+         provider.edit,
          name='edit-provider'),
     path(
         'providers/<int:provider_id>/campus/<int:campus_id>/edit',
@@ -54,8 +58,12 @@ urlpatterns = [
         name='edit-campus'),
     path(
         'providers/<int:provider_id>/campus/<int:campus_id>',
-        views.show_campus,
+        campus.show,
         name='show-campus'),
+    path(
+        'providers/<int:provider_id>/campus/create/',
+        campus.create,
+        name='create-campus'),
 
     path(
         'saqa_qualifications/search/',
@@ -66,7 +74,6 @@ urlpatterns = [
         'saqa_qualifications/create/',
         saqa_qualifications.create,
         name='create-saqa-qualification'),
-
     path(
         '/'.join([
             'providers/<int:provider_id>',
