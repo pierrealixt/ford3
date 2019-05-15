@@ -138,14 +138,13 @@ class Campus(models.Model):
             and self.physical_address_city is None \
             and self.physical_address_postal_code is None:
             return None
-        
+
         return f'''
             {self.physical_address_line_1}
             {self.physical_address_line_2}
             {self.physical_address_city}
             {self.physical_address_postal_code}
-        '''
-    
+        '''    
 
     def save_postal_data(self, form_data):
         postal_address_differs = form_data.get(
