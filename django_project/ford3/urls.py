@@ -2,7 +2,8 @@
 from django.urls import path
 from ford3.views import (
     views,
-    saqa_qualifications
+    saqa_qualifications,
+    campus_events
 )
 from django.conf.urls import url
 from ford3.forms.qualification import (
@@ -56,6 +57,10 @@ urlpatterns = [
         'providers/<int:provider_id>/campus/<int:campus_id>',
         views.show_campus,
         name='show-campus'),
+    path(
+        'campus/<int:campus_id>/events',
+        campus_events.create,
+        name='create-campus-event'),
 
     path(
         'saqa_qualifications/search/',
