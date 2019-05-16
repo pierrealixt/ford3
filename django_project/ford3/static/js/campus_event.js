@@ -1,10 +1,6 @@
 
-const getNewEvent = () => {
-  return document.getElementById('new-event')
-}
-
-const getNewEventExample = () => {
-  return document.getElementById('new-event-example')
+const getFormEvent = () => {
+  return document.getElementById('form-event')
 }
 
 const getEvents = () => {
@@ -12,28 +8,23 @@ const getEvents = () => {
 }
 
 const getEventsList = () => {
-  return document.getElementById('events-list')
+  return document.querySelector('#events-list ul')
 }
 
 const getEventExample = () => {
-  return document.getElementById('event-example')
+  return document.querySelector('#events-list li.event-example')
 }
 
 const getCreateEventButton = () => {
-  return getNewEvent().querySelector('button[data-action="create-event"]')
+  return getFormEvent().querySelector('button[data-action="create-event"]')
 }
 
 const getEditEventButtons = () => {
   return document.querySelectorAll('button[data-action="edit-event"]')
 }
 
-const getEditEventButton = (elem) => {
-  return elem.querySelector('button[data-action="edit-event"]')
-}
-
-const getUpdateEventButton = (elem) => {
-  console.log(elem)
-  return elem.querySelector('button[data-action="update-event"]')
+const getUpdateEventButton = () => {
+  return getFormEvent().querySelector('button[data-action="update-event"]')
 }
 
 const getCreateOrUpdateEventUrl = () => {
@@ -44,8 +35,8 @@ const getEventFieldElem = (event, field) => {
   return event.querySelector(`input[name="${field}"]`)
 }
 
-const getFormErrorAlertElem = (elem) => {
-  return elem.querySelector('div[data-role="new-event-form-error"]')
+const getFormErrorAlertElem = () => {
+  return document.querySelector('div[data-role="new-event-form-error"]')
 }
 
 const getEventFieldValue = (event, field) => {
@@ -61,6 +52,10 @@ const getEventInputElements = (eventElement) => {
   return eventElement.querySelectorAll('input')
 }
 
+const findEvent = (eventId) => {
+  return document.querySelector(`li[data-event-id="${eventId}"]`)
+}
+
 const getCSRFTokenFromCookies = () => {
   let csrfToken
 
@@ -72,15 +67,6 @@ const getCSRFTokenFromCookies = () => {
   })
 
   return csrfToken
-}
-
-const displayNewEvent = () => {
-  const newEventExample = getNewEventExample()
-  const newEvent = newEventExample.cloneNode(true)
-  newEvent.id = 'new-event'
-  newEvent.classList.remove('d-none')
-  newEventExample.parentNode.appendChild(newEvent)
-  return newEvent
 }
 
 const fetchEventData = (eventElement) => {
@@ -108,12 +94,6 @@ const hideElement = (element) => {
 
 const showElement = (element) => {
   element.classList.remove('d-none')
-}
-
-const toggleInputsDisability = (inputs) => {
-  inputs.forEach((input) => {
-    input.disabled = !input.disabled
-  })
 }
 
 const resetInputs = (inputs) => {
@@ -145,19 +125,50 @@ const validateEvent = (eventData, eventElement) => {
   return formValid
 }
 
+const reloadEvent = (eventData) => {
+  const oldEvent = findEvent(eventData.id)
+
+  const eventExample = getEventExample()
+  const event = eventExample.cloneNode(true)
+
+  populateEvent(event, eventData)
+  showElement(event)
+
+  getEventsList().insertBefore(event, oldEvent)
+
+  oldEvent.parentNode.removeChild(oldEvent)
+}
+
 const insertEvent = (eventData) => {
   const eventExample = getEventExample()
   const eventElement = eventExample.cloneNode(true)
 
-  const firstNode = getEventsList().querySelectorAll('div')[0]
+  const firstNode = getEventsList().querySelectorAll('li')[0]
   getEventsList().insertBefore(eventElement, firstNode)
 
   return eventElement
 }
 
+const populateEvent = (eventElement, eventData) => {
+  eventElement.dataset['eventId'] = eventData.id
+
+  eventElement.querySelectorAll('span').forEach((span) => {
+    const role = span.dataset['role']
+    let value = eventData[role]
+
+    if (role === 'http_link') {
+      let a = span.querySelector('a')
+      a.href = value
+      a.innerHTML = value
+    } else {
+      span.innerHTML = value
+    }
+  })
+}
+
 const resetForm = () => {
-  const formEventElement = getNewEvent()
-  const formInputs = getEventInputElements(formEventElement)
+  const formElement = getFormEvent()
+  const formInputs = getEventInputElements(formElement)
   resetInputs(formInputs)
 }
 
@@ -167,6 +178,25 @@ const eventToPostData = (event) => {
     data.push(`${key}=${event[key]}`)
   })
   return data.join('&')
+}
+
+const setFocusToInput = (inputElement) => {
+  inputElement.focus()
+}
+
+const getEventData = (eventElement) => {
+  let eventData = {}
+  eventElement.querySelectorAll('span').forEach((span) => {
+    const role = span.dataset['role']
+    let value = span.innerHTML
+    if (role === 'http_link') {
+      value = span.querySelector('a').innerHTML
+    }
+
+    eventData[role] = value
+  })
+
+  return eventData
 }
 
 const ajaxCreateEvent = (event) => {
@@ -188,13 +218,12 @@ const ajaxCreateEvent = (event) => {
         const eventData = data.campus_event
         const eventElement = insertEvent(eventData)
 
-        const inputs = getEventInputElements(eventElement)
-        populateInputs(inputs, eventData)
-        eventElement.dataset['eventId'] = eventData.id
-
+        populateEvent(eventElement, eventData)
         showElement(eventElement)
 
         resetForm()
+
+        setClickToEditButtons()
       } else {
         const alert = getFormErrorAlertElem()
         alert.innerHTML = data.error_msg
@@ -219,25 +248,18 @@ const ajaxUpdateEvent = (event, eventElement) => {
     if (request.status >= 200 && request.status < 400) {
       const data = JSON.parse(request.responseText)
       if (data.success) {
-        hideElement(getFormErrorAlertElem(eventElement))
-        // showElement(getFormSuccessAlertElem())
-
         const eventData = data.campus_event
-        // const eventElement = insertEvent(eventData)
+        resetForm()
 
-        const inputs = getEventInputElements(eventElement)
-        populateInputs(inputs, eventData)
-        toggleInputsDisability(inputs)
-        // eventElement.dataset['eventId'] = eventData.id
+        reloadEvent(eventData)
 
-        // showElement(eventElement)
+        hideElement(getFormErrorAlertElem())
+        hideElement(getUpdateEventButton())
+        showElement(getCreateEventButton())
 
-        // resetForm()
-
-        showElement(getEditEventButton(eventElement))
-        hideElement(getUpdateEventButton(eventElement))
+        setClickToEditButtons()
       } else {
-        const alert = getFormErrorAlertElem(eventElement)
+        const alert = getFormErrorAlertElem()
         alert.innerHTML = data.error_msg
         showElement(alert)
       }
@@ -247,15 +269,11 @@ const ajaxUpdateEvent = (event, eventElement) => {
   request.send(data)
 }
 
-const setFocusToInput = (inputElement) => {
-  inputElement.focus()
-}
-
-const setClickEventToCreateButton = () => {
+const setClickToCreateButton = () => {
   getCreateEventButton().addEventListener('click', function (evt) {
     evt.preventDefault()
 
-    const eventElement = getNewEvent()
+    const eventElement = getFormEvent()
     const eventData = fetchEventData(eventElement)
     if (validateEvent(eventData, eventElement)) {
       ajaxCreateEvent(eventData)
@@ -263,30 +281,31 @@ const setClickEventToCreateButton = () => {
   })
 }
 
-const setClickEventToEditButton = () => {
-  console.log(getEditEventButtons().length)
-
+const setClickToEditButtons = () => {
   getEditEventButtons().forEach((button) => {
     button.addEventListener('click', function (evt) {
       evt.preventDefault()
+
       const eventElement = evt.target.parentNode
-      const inputs = getEventInputElements(eventElement)
+      const eventData = getEventData(eventElement)
 
-      toggleInputsDisability(inputs)
+      getFormEvent().dataset['eventId'] = eventElement.dataset['eventId']
 
-      setDatepicker()
-      hideElement(button)
-      showElement(getUpdateEventButton(eventElement))
-
+      const inputs = getEventInputElements(getFormEvent())
+      populateInputs(inputs, eventData)
       setFocusToInput(inputs[0])
-      setClickEventToUpdateButton(eventElement)
+
+      hideElement(getCreateEventButton())
+      showElement(getUpdateEventButton())
     })
   })
 }
 
-const setClickEventToUpdateButton = (eventElement) => {
-  getUpdateEventButton(eventElement).addEventListener('click', function (evt) {
+const setClickToUpdateButton = () => {
+  getUpdateEventButton().addEventListener('click', function (evt) {
     evt.preventDefault()
+
+    const eventElement = getFormEvent()
     const event = fetchEventData(eventElement)
 
     if (validateEvent(event, eventElement)) {
@@ -301,9 +320,10 @@ const setDatepicker = () => {
 }
 
 const setupEvents = () => {
-  setClickEventToCreateButton()
+  setClickToCreateButton()
+  setClickToUpdateButton()
   setDatepicker()
-  if (getEvents().length > 0) { setClickEventToEditButton() }
+  if (getEvents().length > 0) { setClickToEditButtons() }
 }
 
 (function () {

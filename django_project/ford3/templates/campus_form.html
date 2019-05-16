@@ -46,63 +46,48 @@
             <div class='col-md-12'>
                         {% if wizard.steps.step1 == 3 %}
                             <div class='row'>
-                                <div id='event-example' class='d-none' data-event-id=''>
-                                    <label>Name</label>
-                                    <input required type='text' value='' name='name' disabled />
-                                    <label>Start date</label>
-                                    <input required type='text' class='mydatepicker' name='date_start' value='' disabled />
-                                    <label>End date</label>
-                                    <input required type='text' class='mydatepicker' name='date_end' value='' disabled />
-                                    <label>HTTP link</label>
-                                    <input type='text' value='' name='http_link'
-                                    disabled />
-                                    <button class='col-md-12 edu-button edu-button-navy' data-action='edit-event'>edit</button>
-                                    <button class='col-md-5 edu-button edu-button-navy d-none' data-action='update-event'>update</button>
-                                    <button class='col-md-5 edu-button edu-button-navy d-none' data-action='cancel-update-event'>cancel</button>
-                                </div>
-
-                                <div class='col-md-6'>
-                                    
-                                    <!-- <button class='edu-button edu-button-navy' data-action='add-event'>add an event</button> -->
+                                <div class='col-md-6'>                                    
                                     <input id='create-or-update-campus-event-url' type='hidden' value='{% url "create-or-update-campus-event" campus_id=campus.id %}' />
-                                    <div>
-                                        <div id='new-event'>
-                                            <label>Name</label>
-                                            <input required type='text' name='name' />
-                                            <label>Start date</label>
-                                            <input required type='text' name='date_start' class='mydatepicker' />
-                                            <label>End date</label>
-                                            <input required type='text' name='date_end' class='mydatepicker' />
-                                            <label>HTTP link</label>
-                                            <input type='text' name='http_link' />
-                                            <div data-role='new-event-form-error' class='alert alert-danger d-none'></div>
-                                            <button class='col-md-12 edu-button edu-button-navy' data-action='create-event'>create</button>
-                                            <!-- <button class='col-md-5 edu-button edu-button-navy' data-action='cancel-create-event'>cancel</button> -->
-                                        </div>
+                                    
+                                    <div id='form-event'> 
+                                        <label>Name</label>
+                                        <input required type='text' name='name' />
+                                        <label>Start date</label>
+                                        <input required type='text' name='date_start' class='mydatepicker' />
+                                        <label>End date</label>
+                                        <input required type='text' name='date_end' class='mydatepicker' />
+                                        <label>HTTP link</label>
+                                        <input type='text' name='http_link' />
+                                        <div data-role='new-event-form-error' class='alert alert-danger d-none'></div>
+                                        <button class='col-md-12 edu-button edu-button-navy' data-action='create-event'>create</button>
+                                        <button class='col-md-12 edu-button edu-button-navy d-none' data-action='update-event'>update</button>
+                                        <button class='col-md-5 edu-button edu-button-navy d-none' data-action='cancel-update-event'>cancel</button>
                                     </div>
-
                                 </div>
                                 <div id='events-list' class='col-md-6'>
-                                    {% for event in campus.events %}
-                                        <div class='event' data-event-id='{{ event.id }}'>
-                                            <label>Name</label>
-                                            <input required type='text' value='{{ event.name }}' name='name' disabled />
-                                            <label>Start date</label>
-                                            <input required type='text' class='mydatepicker' name='date_start' value='{{ event.date_start|date:"Y-m-d" }}' disabled />
-                                            <label>End date</label>
-                                            <input required type='text' class='mydatepicker' name='date_end' value='{{ event.date_end|date:"Y-m-d" }}' disabled />
-                                            <label>HTTP link</label>
-                                            <input type='text' value='{{ event.http_link }}' name='http_link'
-                                            disabled />
-                                            <div data-role='new-event-form-error' class='alert alert-danger d-none'></div>
+                                    <ul>
+                                        <li class='event-example d-none' data-event-id=''>
+                                            <span data-role='name'></span>
+                                            <br />
+                                            <span data-role='date_start'></span>
+                                            <span data-role='date_end'></span>
+                                            <br />
+                                            <span data-role='http_link'><a href=''></a></span>
                                             <button class='col-md-12 edu-button edu-button-navy' data-action='edit-event'>edit</button>
-                                            <button class='col-md-5 edu-button edu-button-navy d-none' data-action='update-event'>update</button>
-                                            <button class='col-md-5 edu-button edu-button-navy d-none' data-action='cancel-update-event'>cancel</button>
-                            
-                                        </div>
+                                        </li>  
+                                    {% for event in campus.events %}
+                                        <li class='event' data-event-id='{{ event.id }}'>
+                                            <span data-role='name'>{{ event.name }}</span>
+                                            <br />
+                                            <span data-role='date_start'>{{ event.date_start|date:"Y-m-d" }}</span>
+                                            <span data-role='date_end'>{{ event.date_end|date:"Y-m-d" }}</span>
+                                            <br />
+                                            <span data-role='http_link'><a href='{{ event.http_link }}'>{{ event.http_link }}</a></span>
+                                            <button class='col-md-12 edu-button edu-button-navy' data-action='edit-event'>edit</button>
+                                        </li>
                                         <hr />
-
                                     {% endfor %}
+                                    </ul>
                                 </div>
 
                             </div>
@@ -273,7 +258,14 @@
                         </div>
                     </div>
                     {% else %}
-                    {% if wizard.steps.step1 != 3 %}
+                    {% if wizard.steps.step1 == 3 %}
+                    <div class="row form-actions">
+                            <div class="col-md-4">
+                                <a href="{% url 'show-campus' provider_id=provider.id campus_id=campus.id %}" class="edu-button edu-button-blue"
+                                    id='my-next-button'>Back to campus</a>
+                            </div>
+                        </div>
+                    {% else %}
                         <div class="row form-actions">
                             <div class="col-md-4">
                                 <button class="edu-button edu-button-blue"
