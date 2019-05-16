@@ -95,8 +95,8 @@ class ModelFactories:
         campus_event_test_object_instance = CampusEvent.objects.create(
             campus=ModelFactories.get_campus_test_object(),
             name='Campus Event Test Name',
-            date_start=datetime.date(2019, 3, 6),
-            date_end=datetime.date(2019, 8, 9),
+            date_start=datetime.date(2999, 3, 6),
+            date_end=datetime.date(2999, 8, 9),
             http_link='http://www.google.com')
 
         return campus_event_test_object_instance

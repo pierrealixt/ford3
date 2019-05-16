@@ -58,10 +58,9 @@ urlpatterns = [
         views.show_campus,
         name='show-campus'),
     path(
-        'campus/<int:campus_id>/events',
-        campus_events.create,
-        name='create-campus-event'),
-
+        'campus/<int:campus_id>/events/',
+        campus_events.create_or_update,
+        name='create-or-update-campus-event'),
     path(
         'saqa_qualifications/search/',
         saqa_qualifications.search,
