@@ -131,22 +131,34 @@ class Qualification(models.Model):
 
     @property
     def interest_id_list(self) -> List[int]:
-        result = []
         interest_query = Interest.objects.filter(
             qualification__id=self.id).order_by('id').values('id')
         interest_query_list = list(interest_query)
-        for each_item in interest_query_list:
-            result.append(each_item['id'])
+        result = [each_item['id'] for each_item in interest_query_list]
+        return result
+
+    @property
+    def interest_name_list(self) -> List[int]:
+        interest_query = Interest.objects.filter(
+            qualification__id=self.id).order_by('id').values('name')
+        interest_query_list = list(interest_query)
+        result = [each_item['name'] for each_item in interest_query_list]
         return result
 
     @property
     def occupation_id_list(self) -> List[int]:
-        result = []
         occupation_query = Occupation.objects.filter(
             qualification__id=self.id).order_by('id').values('id')
         occupation_query_list = list(occupation_query)
-        for each_item in occupation_query_list:
-            result.append(each_item['id'])
+        result = [each_item['id'] for each_item in occupation_query_list]
+        return result
+
+    @property
+    def occupation_name_list(self) -> List[int]:
+        occupation_query = Occupation.objects.filter(
+            qualification__id=self.id).order_by('id').values('name')
+        occupation_query_list = list(occupation_query)
+        result = [each_item['name'] for each_item in occupation_query_list]
         return result
 
     @property

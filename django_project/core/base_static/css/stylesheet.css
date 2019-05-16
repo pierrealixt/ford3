@@ -96,8 +96,10 @@ h5 {
 }
 
 .edu-button-blue:hover {
+    color: white;
     background-image: none;
     background-color: var(--c-blue-d);
+    text-decoration: none;
 }
 
 .edu-button-blue:focus {
@@ -672,7 +674,7 @@ input[type='email']:hover::placeholder {
 }
 
 .edu-underline {
-   border-bottom: 1px solid #d5d5d5
+   border-bottom: 1px solid var(--c-grey-l)
 }
 /* ----------------------------- ICONS ----------------------------- */
 
@@ -789,11 +791,6 @@ nav#sidebar ul li a:hover {
 }
 .campus-card .progress-bar {
     background-color: #ffffff;
-}
-
-.noplr {
-    padding-left: 0;
-    padding-right: 0;
 }
 
 .body-wrapper {
