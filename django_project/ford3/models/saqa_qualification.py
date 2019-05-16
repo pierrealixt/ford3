@@ -56,7 +56,6 @@ class SAQAQualification(models.Model):
             'creator_provider_id': creator_provider_id
         }
 
-
     @classmethod
     def create_non_accredited(self, name, creator_provider):
         saqa_qualif = SAQAQualification(
@@ -69,7 +68,6 @@ class SAQAQualification(models.Model):
 
         return saqa_qualif
 
-
     @classmethod
     def create_accredited(self, name, saqa_id):
         saqa_qualif = SAQAQualification(
@@ -79,6 +77,15 @@ class SAQAQualification(models.Model):
         saqa_qualif.save()
 
         return saqa_qualif
+
+    @classmethod
+    def get_or_create_accredited(self, saqa_dict):
+        try:
+            return SAQAQualification.objects.get(saqa_id=saqa_dict['saqa_id'])
+        except SAQAQualification.DoesNotExist:
+            return self.create_accredited(
+                saqa_dict['name'],
+                saqa_dict['saqa_id'])
 
     def save(self, *args, **kwargs):
         if len(self.name) == 0:
@@ -91,8 +98,7 @@ class SAQAQualification(models.Model):
             # make sure creator_provider and name are unique
             if SAQAQualification.objects.filter(
                 creator_provider=self.creator_provider,
-                name=self.name
-                ).exists():
+                    name=self.name).exists():
                 raise ValidationError(
                     {'saqa_qualification': 'Non-accredited SAQA qualification \
                     name must be unique per provider.'})
