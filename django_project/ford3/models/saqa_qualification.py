@@ -1,9 +1,16 @@
 from django.db import models
 from ford3.models.sub_field_of_study import SubFieldOfStudy
+from ford3.models.field_of_study import FieldOfStudy
 from django.core.exceptions import ValidationError
 
 
 class SAQAQualification(models.Model):
+    field_of_study = models.ForeignKey(
+        FieldOfStudy,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT)
+
     sub_field_of_study = models.ForeignKey(
         SubFieldOfStudy,
         null=True,
