@@ -1,4 +1,6 @@
+from datetime import datetime
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 class CampusEvent(models.Model):
@@ -23,7 +25,7 @@ class CampusEvent(models.Model):
         unique=False,
         help_text='The date on which the event ends')
     http_link = models.URLField(
-        blank=False,
+        blank=True,
         null=True,
         unique=False,
         help_text='A link to a web page containing additional details '
@@ -32,3 +34,13 @@ class CampusEvent(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.date_start > self.date_end:
+            raise ValidationError('The start date must be before the end date')
+        if isinstance(self.date_end, str):
+            self.date_end = datetime.strptime(self.date_end, '%Y-%m-%d').date()
+        if self.date_end < datetime.now().date():
+            raise ValidationError('The start date may not be in the past')
+
+        super().save(*args, **kwargs)
