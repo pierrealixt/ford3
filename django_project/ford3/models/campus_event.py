@@ -38,11 +38,9 @@ class CampusEvent(models.Model):
     def save(self, *args, **kwargs):
         if self.date_start > self.date_end:
             raise ValidationError('The start date must be before the end date')
-        print(type(self.date_end))
         if isinstance(self.date_end, str):
             self.date_end = datetime.strptime(self.date_end, '%Y-%m-%d').date()
         if self.date_end < datetime.now().date():
             raise ValidationError('The start date may not be in the past')
 
         super().save(*args, **kwargs)
-

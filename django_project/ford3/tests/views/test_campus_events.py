@@ -11,7 +11,8 @@ from ford3.tests.models.model_factories import ModelFactories
 class TestCreateCampusEventView(TestCase):
     def setUp(self):
         self.campus = ModelFactories.get_campus_test_object()
-        self.url = reverse('create-or-update-campus-event', args=[str(self.campus.id)])
+        self.url = reverse('create-or-update-campus-event',
+                           args=[str(self.campus.id)])
         self.data = {
                     'name': 'TestName',
                     'date_start': '2999-10-14',
@@ -55,7 +56,7 @@ class TestCreateCampusEventView(TestCase):
         self.client.post(self.url, self.data)
         self.assertEqual(len(self.campus.events), 0)
 
-    def test_create_event_invalid_date_start(self):
+    def test_create_event_invalid_date_end(self):
         self.data['date_end'] = 'I am invalid'
         self.client.post(self.url, self.data)
         self.assertEqual(len(self.campus.events), 0)

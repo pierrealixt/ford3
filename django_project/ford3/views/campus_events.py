@@ -1,7 +1,5 @@
 import json
-from datetime import datetime
 from django.http import HttpResponse
-from django.forms.models import model_to_dict
 from django.core.exceptions import ValidationError
 from ford3.models.campus_event import CampusEvent
 from ford3.models.campus import Campus

@@ -216,8 +216,5 @@ class Campus(models.Model):
                 campus=self)
             qualif.delete()
 
-    def save_event(self, form_data):
-        i = 0
-
     def __str__(self):
         return self.name
