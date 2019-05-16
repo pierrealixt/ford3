@@ -3,6 +3,21 @@ from django.test import TestCase
 from ford3.tests.models.model_factories import ModelFactories
 
 
+class TestCampusView(TestCase):
+    def setUp(self):
+        self.campus = ModelFactories.get_campus_test_object()
+        self.show_campus_url = reverse(
+            'show-campus', 
+            args=[
+                str(self.campus.provider.id),
+                str(self.campus.id)])
+    def test_show_deleted_campus(self):
+        
+        self.campus.soft_delete()
+
+        response = self.client.get(self.show_campus_url)
+        self.assertEqual(response.status_code, 404)
+
 class TestCreateCampusView(TestCase):
 
     def setUp(self):

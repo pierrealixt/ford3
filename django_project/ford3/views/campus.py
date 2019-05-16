@@ -14,7 +14,7 @@ from ford3.models import (
 
 def show(request, provider_id, campus_id):
     campus = get_object_or_404(
-        Campus,
+        Campus.active_objects,
         id=campus_id)
     form_data = {
         'provider_name': campus.provider.name
