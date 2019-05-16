@@ -226,7 +226,7 @@ class QualificationFormWizard(CookieWizardView):
         if not campus_id:
             raise Http404()
         return get_object_or_404(
-            Campus,
+            Campus.active_objects,
             id=campus_id
         )
 

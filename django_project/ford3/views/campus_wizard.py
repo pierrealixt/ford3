@@ -24,7 +24,7 @@ class CampusFormWizard(CookieWizardView):
     def campus(self):
         campus_id = self.kwargs['campus_id']
         return get_object_or_404(
-            Campus,
+            Campus.active_objects,
             id=campus_id)
 
     @property
