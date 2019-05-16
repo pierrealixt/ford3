@@ -24,6 +24,8 @@ class TestCreateCampusEventView(TestCase):
         response = self.client.post(self.url, self.data)
         body = json.loads(response.content)
         self.assertEqual(body['success'], True)
+        print(body['campus_event'])
+        self.assertEqual(body['campus_event']['id'], self.campus.events[0]['id'])
         self.assertEqual(len(self.campus.events), 1)
 
     def test_create_event_empty_name(self):
@@ -48,7 +50,10 @@ class TestCreateCampusEventView(TestCase):
 
     def test_create_event_invalid_http_link(self):
         self.data['http_link'] = 'I am invalid'
-        self.client.post(self.url, self.data)
+        response = self.client.post(self.url, self.data)
+        body = json.loads(response.content)
+        self.assertFalse(body['success'])
+        self.assertIn('Enter a valid URL.', ','.join(body['error_msg']))
         self.assertEqual(len(self.campus.events), 0)
 
     def test_create_event_invalid_date_start(self):

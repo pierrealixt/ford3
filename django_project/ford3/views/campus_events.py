@@ -23,6 +23,7 @@ def update(request):
             campus_event_to_update.date_start = request.POST['date_start']
             campus_event_to_update.date_end = request.POST['date_end']
             campus_event_to_update.http_link = request.POST['http_link']
+            campus_event_to_update.full_clean()
             campus_event_to_update.save()
             campus_event_to_update_dict = (
                 get_campus_event_dictionary(campus_event_to_update))
@@ -46,18 +47,19 @@ def create(request, campus_id):
     new_campus_event.date_end = request.POST['date_end']
     new_campus_event.http_link = request.POST['http_link']
     new_campus_event.campus = Campus.objects.get(pk=campus_id)
-    new_campus_event_dict = get_campus_event_dictionary(new_campus_event)
+
     try:
         new_campus_event.full_clean()
         new_campus_event.save()
+        new_campus_event_dict = get_campus_event_dictionary(new_campus_event)
         response = json.dumps({
             'success': True,
             'campus_event': new_campus_event_dict,
         })
     except ValidationError as error:
         response = json.dumps({
-            'success': 'False',
-            'error_msg': ''.join(error.messages)
+            'success': False,
+            'error_msg': error.messages
         })
 
     return HttpResponse(response)
@@ -65,6 +67,7 @@ def create(request, campus_id):
 
 def get_campus_event_dictionary(campus_event):
     new_campus_event_dict = {
+        'id': campus_event.id,
         'name': campus_event.name,
         'date_start': str(campus_event.date_start),
         'date_end': str(campus_event.date_end),

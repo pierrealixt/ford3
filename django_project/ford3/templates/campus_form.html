@@ -17,7 +17,7 @@
     <div class="container mt-3">
         <div class="row">
             <div class="col-md-12">
-                <h2>{{ campus }} Campus - {{ form_name_list|index:wizard.steps.step0 }}</h2>
+                <h2>{{ campus }} - {{ form_name_list|index:wizard.steps.step0 }}</h2>
             </div>
             {% if multi_step_form %}
             <div class='col-md-12'>
@@ -44,30 +44,57 @@
         </div>
         <div class='row'>
             <div class='col-md-12'>
-                <form action="" method="post">{% csrf_token %}
-                    <div class="form-group">
-                        {{ wizard.management_form }}
-                        {% if wizard.form.forms %}
-                            {{ wizard.form.management_form }}
-                            {% crispy wizard.form wizard.form.helper %}
-                        {% else %}
-                            {% crispy wizard.form wizard.form.helper %}
-                        {% endif %}
-
                         {% if wizard.steps.step1 == 3 %}
                             <div class='row'>
+                                <div id='event-example' class='d-none' data-event-id=''>
+                                    <label>Name</label>
+                                    <input required type='text' value='' name='name' disabled />
+                                    <label>Start date</label>
+                                    <input required type='text' class='mydatepicker' name='date_start' value='' disabled />
+                                    <label>End date</label>
+                                    <input required type='text' class='mydatepicker' name='date_end' value='' disabled />
+                                    <label>HTTP link</label>
+                                    <input type='text' value='' name='http_link'
+                                    disabled />
+                                    <button class='col-md-12 edu-button edu-button-navy' data-action='edit-event'>edit</button>
+                                    <button class='col-md-5 edu-button edu-button-navy d-none' data-action='update-event'>update</button>
+                                    <button class='col-md-5 edu-button edu-button-navy d-none' data-action='cancel-update-event'>cancel</button>
+                                </div>
+
                                 <div class='col-md-6'>
+                                    
+                                    <!-- <button class='edu-button edu-button-navy' data-action='add-event'>add an event</button> -->
+                                    <input id='create-or-update-campus-event-url' type='hidden' value='{% url "create-or-update-campus-event" campus_id=campus.id %}' />
+                                    <div>
+                                        <div id='new-event'>
+                                            <label>Name</label>
+                                            <input required type='text' name='name' />
+                                            <label>Start date</label>
+                                            <input required type='text' name='date_start' class='mydatepicker' />
+                                            <label>End date</label>
+                                            <input required type='text' name='date_end' class='mydatepicker' />
+                                            <label>HTTP link</label>
+                                            <input type='text' name='http_link' />
+                                            <div data-role='new-event-form-error' class='alert alert-danger d-none'></div>
+                                            <button class='col-md-12 edu-button edu-button-navy' data-action='create-event'>create</button>
+                                            <!-- <button class='col-md-5 edu-button edu-button-navy' data-action='cancel-create-event'>cancel</button> -->
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div id='events-list' class='col-md-6'>
                                     {% for event in campus.events %}
                                         <div class='event' data-event-id='{{ event.id }}'>
                                             <label>Name</label>
                                             <input required type='text' value='{{ event.name }}' name='name' disabled />
                                             <label>Start date</label>
-                                            <input required type='text' class='mydatepicker' name='date_start' value='{{ event.date_start }}' disabled />
+                                            <input required type='text' class='mydatepicker' name='date_start' value='{{ event.date_start|date:"Y-m-d" }}' disabled />
                                             <label>End date</label>
-                                            <input required type='text' class='mydatepicker' name='date_end' value='{{ event.date_end }}' disabled />
+                                            <input required type='text' class='mydatepicker' name='date_end' value='{{ event.date_end|date:"Y-m-d" }}' disabled />
                                             <label>HTTP link</label>
                                             <input type='text' value='{{ event.http_link }}' name='http_link'
                                             disabled />
+                                            <div data-role='new-event-form-error' class='alert alert-danger d-none'></div>
                                             <button class='col-md-12 edu-button edu-button-navy' data-action='edit-event'>edit</button>
                                             <button class='col-md-5 edu-button edu-button-navy d-none' data-action='update-event'>update</button>
                                             <button class='col-md-5 edu-button edu-button-navy d-none' data-action='cancel-update-event'>cancel</button>
@@ -77,28 +104,20 @@
 
                                     {% endfor %}
                                 </div>
-                                <div class='col-md-6'>
 
-                                    <button class='edu-button edu-button-navy' data-action='add-event'>add an event</button>
-                                    <input id='create-campus-event-url' type='hidden' value='{% url "create-campus-event" campus_id=campus.id %}' />
-                                    <div>
-                                        <div id='new-event-example' class='d-none'>
-                                            <label>Name</label>
-                                            <input required type='text' name='name' />
-                                            <label>Start date</label>
-                                            <input required type='text' name='date_start' class='mydatepicker' />
-                                            <label>End date</label>
-                                            <input required type='text' name='date_end' class='mydatepicker' />
-                                            <label>HTTP link</label>
-                                            <input type='text' name='http_link' />
-                                            <button class='col-md-5 edu-button edu-button-navy d-none' data-action='create-event'>create</button>
-                                            <button class='col-md-5 edu-button edu-button-navy d-none' data-action='cancel-create-event'>cancel</button>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         {% endif %}
 
+
+                <form action="" method="post">{% csrf_token %}
+                    <div class="form-group">
+                        {{ wizard.management_form }}
+                        {% if wizard.form.forms %}
+                            {{ wizard.form.management_form }}
+                            {% crispy wizard.form wizard.form.helper %}
+                        {% else %}
+                            {% crispy wizard.form wizard.form.helper %}
+                        {% endif %}
 
                         {% if wizard.steps.step1 == 4 %}
                         <div class='row no-gutters'>
@@ -254,16 +273,16 @@
                         </div>
                     </div>
                     {% else %}
-                    <div class="row form-actions">
-                        <div class="col-md-4">
-                            <button class="edu-button edu-button-blue"
-                            type="submit"
-                            value="submit"
-                            id='my-next-button'>
-                            Submit
-                        </button>
-                    </div>
-                    </div>
+                    {% if wizard.steps.step1 != 3 %}
+                        <div class="row form-actions">
+                            <div class="col-md-4">
+                                <button class="edu-button edu-button-blue"
+                                    type="submit"
+                                    value="submit"
+                                    id='my-next-button'>Submit</button>
+                            </div>
+                        </div>
+                    {% endif %}    
                     {% endif %}
                 </form>
             </div>

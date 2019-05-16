@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 from collections import OrderedDict
 from django.shortcuts import redirect, Http404, get_object_or_404
 from django.core.files.storage import FileSystemStorage
@@ -9,7 +8,6 @@ from django.forms.models import model_to_dict
 from formtools.wizard.views import CookieWizardView
 from ford3.models import (
     Campus,
-    CampusEvent,
     Provider
 )
 
@@ -44,6 +42,12 @@ class CampusFormWizard(CookieWizardView):
 
     def get_context_data(self, form, **kwargs):
         context = super().get_context_data(form, **kwargs)
+        context['form_name_list'] = [
+            'Details',
+            'Location',
+            'Events',
+            'Qualifications'
+        ]
 
         context['campus'] = self.campus
         context['provider'] = self.provider
@@ -54,6 +58,7 @@ class CampusFormWizard(CookieWizardView):
         }
         context['form_data'] = form_data
 
+        context['multi_step_form'] = True
         if 'step' in self.request.GET:
             context['multi_step_form'] = False
 

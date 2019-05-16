@@ -47,20 +47,25 @@ CAMPUS_FORMS = [
 campus_wizard = CampusFormWizard.as_view(CAMPUS_FORMS)
 
 urlpatterns = [
-    path('providers/<int:provider_id>',
+    path('providers/<int:provider_id>/',
          provider.show,
          name='show-provider'),
-    path('providers/<int:provider_id>/edit',
+    path('providers/<int:provider_id>/edit/',
          provider.edit,
          name='edit-provider'),
     path(
-        'providers/<int:provider_id>/campus/<int:campus_id>/edit',
+        'providers/<int:provider_id>/campus/<int:campus_id>/edit/',
         campus_wizard,
         name='edit-campus'),
     path(
-        'providers/<int:provider_id>/campus/<int:campus_id>',
+        'providers/<int:provider_id>/campus/<int:campus_id>/',
         campus.show,
         name='show-campus'),
+    path(
+        'providers/<int:provider_id>/campus/create/',
+        campus.create,
+        name='create-campus'),
+
     path(
         'campus/<int:campus_id>/events/',
         campus_events.create_or_update,
@@ -75,22 +80,17 @@ urlpatterns = [
         saqa_qualifications.create,
         name='create-saqa-qualification'),
     path(
-        'campus/<int:campus_id>/events/create/',
-        saqa_qualifications.create,
-        name='create-campus-event'),
-
-    path(
         '/'.join([
             'providers/<int:provider_id>',
             'campus/<int:campus_id>',
-            'qualifications/<int:qualification_id>/edit']),
+            'qualifications/<int:qualification_id>/edit/']),
         qualification_wizard,
         name='edit-qualification'),
     path(
         '/'.join([
             'providers/<int:provider_id>',
             'campus/<int:campus_id>',
-            'qualifications/<int:qualification_id>']),
+            'qualifications/<int:qualification_id>/']),
         views.show_qualification,
         name='show-qualification'),
     url(r'^test_widgets/$', views.widget_examples, name='test_widgets'),

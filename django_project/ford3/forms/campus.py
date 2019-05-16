@@ -16,7 +16,6 @@ class CampusForm(forms.Form):
 
 
 class CampusDetailForm(CampusForm):
-
     # photo = forms.FileField(
     #     required=False)
 
