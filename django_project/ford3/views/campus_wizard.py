@@ -10,7 +10,8 @@ from formtools.wizard.views import CookieWizardView
 from ford3.models import (
     Campus,
     CampusEvent,
-    Provider
+    Provider,
+    FieldOfStudy
 )
 
 
@@ -59,6 +60,9 @@ class CampusFormWizard(CookieWizardView):
             'provider_name': self.provider.name
         }
         context['form_data'] = form_data
+
+        context['fos'] = FieldOfStudy.objects.all().order_by('name').exclude(name='Undefined')
+        # .values('id', 'name')
 
         if 'step' in self.request.GET:
             context['multi_step_form'] = False

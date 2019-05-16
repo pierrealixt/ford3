@@ -22,7 +22,8 @@ from ford3.forms.campus import (
 from ford3.views.campus_wizard import CampusFormWizard
 from ford3.views import (
     campus,
-    provider
+    provider,
+    sub_field_of_study
 )
 
 
@@ -88,5 +89,9 @@ urlpatterns = [
             'qualifications/<int:qualification_id>']),
         views.show_qualification,
         name='show-qualification'),
+    path(
+        'sfos/<int:fos_id>/index/',
+        sub_field_of_study.index,
+        name='list-sfos'),
     url(r'^test_widgets/$', views.widget_examples, name='test_widgets'),
 ]

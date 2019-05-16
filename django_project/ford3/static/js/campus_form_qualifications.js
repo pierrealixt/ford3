@@ -19,8 +19,16 @@ const getCreateQualificationButtonElement = () => {
   return document.querySelector('button[data-action="create-qualif"]')
 }
 
-const getCreateQualificationInputElement = () => {
-  return document.querySelector('input[data-action="create-qualif"]')
+const getCreateQualificationNameElement = () => {
+  return document.querySelector('input[data-role="qualif-name"]')
+}
+
+const getCreateQualificationFosElement = () => {
+  return document.querySelector('select[data-role="qualif-fos"]')
+}
+
+const getCreateQualificationSubFosElement = () => {
+  return document.querySelector('select[data-role="qualif-sfos"]')
 }
 
 const getProviderIdInputElement = () => {
@@ -53,6 +61,10 @@ const getCreateQualificationUrl = () => {
 
 const getSearchQualificationsUrl = () => {
   return document.getElementById('search-qualif-url').value
+}
+
+const getListSfosUrl = () => {
+  return document.getElementById('list-sfos').value
 }
 
 const getListById = (listId) => {
@@ -174,9 +186,20 @@ const displaySaqaQualificationsResults = (results) => {
 }
 
 const createQualification = () => {
-  const qualificationName = getCreateQualificationInputElement().value
+  const qualificationName = getCreateQualificationNameElement().value
+  const fosId = getCreateQualificationFosElement().value
   const providerId = getProviderIdInputElement().value
-  const data = `saqa_qualification_name=${qualificationName}&provider_id=${providerId}`
+  let data = {
+    'saqa_qualification': {
+      'name': qualificationName,
+      'provider_id': providerId,
+      'fos_id': fosId
+    }
+  }
+  const sfosId = getCreateQualificationSubFosElement().value
+  if (sfosId) {
+    data['saqa_qualification']['sfos_id'] = sfosId
+  }
   ajaxCreateQualification(data)
 }
 
@@ -193,7 +216,7 @@ const ajaxSearchQualifications = (query) => {
 
   request.onload = function () {
     if (request.status >= 200 && request.status < 400) {
-      var data = JSON.parse(request.responseText)
+      const data = JSON.parse(request.responseText)
       displaySaqaQualificationsResults(data['results'])
     }
   }
@@ -205,7 +228,7 @@ const ajaxCreateQualification = (data) => {
   const url = getCreateQualificationUrl()
   const request = new XMLHttpRequest()
   request.open('POST', url, true)
-  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+  request.setRequestHeader('Content-Type', 'application/json')
   request.setRequestHeader('X-CSRFToken', getCSRFTokenFromCookies())
 
   request.onload = function () {
@@ -224,7 +247,7 @@ const ajaxCreateQualification = (data) => {
         populateForm(data.saqa_qualification.id)
 
         // reset the form
-        getCreateQualificationInputElement().value = ''
+        getCreateQualificationNameElement().value = ''
       } else {
         const alert = getCreateQualificationFormErrorAlertElement()
         alert.innerHTML = data.error
@@ -233,7 +256,35 @@ const ajaxCreateQualification = (data) => {
     }
   }
 
-  request.send(data)
+  console.log(JSON.stringify(data))
+  request.send(JSON.stringify(data))
+}
+
+const ajaxGetSfos = (fosId) => {
+  const url = getListSfosUrl().replace('0', fosId)
+  const request = new XMLHttpRequest()
+  request.open('GET', url, true)
+
+  request.onload = function () {
+    if (request.status >= 200 && request.status < 400) {
+      const data = JSON.parse(request.responseText)
+      console.log(data)
+      const selectElem = getCreateQualificationSubFosElement()
+      const option = document.createElement('option')
+      option.value = '0'
+      option.innerHTML = '--Choose a sub-field of study or not--'
+      selectElem.appendChild(option)
+      data['results'].forEach((result) => {
+        const option = document.createElement('option')
+        option.value = result['id']
+        option.innerHTML = result['name']
+        selectElem.appendChild(option)
+      })
+      selectElem.classList.remove('d-none')
+    }
+  }
+
+  request.send()
 }
 
 const setSearchEvent = () => {
@@ -252,6 +303,17 @@ const setSearchEvent = () => {
       if (elem.value.length > 3) { ajaxSearchQualifications(elem.value) }
     }, 842)
   }
+}
+
+const setOnChangeFosEvent = () => {
+  getCreateQualificationFosElement().addEventListener('change', function (evt) {
+    const fosId = getCreateQualificationFosElement().value
+    const selectElem = getCreateQualificationSubFosElement()
+    selectElem.querySelectorAll('option').forEach((option) => {
+      selectElem.removeChild(option)
+    })
+    ajaxGetSfos(fosId)
+  })
 }
 
 const setCreateQualifEvent = () => {
@@ -356,6 +418,7 @@ const setupEvents = () => {
   setClickEventToClearButton()
   setSearchEvent()
   setCreateQualifEvent()
+  setOnChangeFosEvent()
 }
 
 (function () {
