@@ -40,7 +40,7 @@ def create(request):
     except FieldOfStudy.DoesNotExist:
         return JsonResponse({
             'success': False,
-            'error': 'Field of Study is invalid.'})
+            'error': 'Field of study is invalid.'})
 
     except MultiValueDictKeyError:
         return HttpResponseBadRequest()
