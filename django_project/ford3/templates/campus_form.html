@@ -240,20 +240,28 @@
 {% endblock %}
 
 {% block footer %}
-    <script type="text/javascript"
-            src="{% static 'js/libs/jquery-ui-1.12.1-custom/jquery-ui.min.js' %}"></script>
-	{%  if wizard.steps.step1 == 2 %}
-		<script type="text/javascript" src="{% static 'js/campus.js' %}"></script>
-	{%  endif %}
-    {% if wizard.steps.step1 == 3 %}
-        <script type="text/javascript"
-                src="{% static 'js/datepicker.js' %}"></script>
-	            <script type="text/javascript" src="{% static 'js/campus_event.js' %}"></script>
-    {% endif %}
-    {% if wizard.steps.step1 == 4 %}
-        <script type="text/javascript"
-                src="{% static 'js/campus_form_qualifications.js' %}"></script>
-    {% endif %}
+<script type="text/javascript"
+        src="{% static 'js/libs/jquery-ui-1.12.1-custom/jquery-ui.min.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+  $(window).keydown(function (event) {
+    if (event.keyCode === 13) {
+      event.preventDefault()
+      return false
+    }
+  })
+})
+</script>
+{%  if wizard.steps.step1 == 2 %}
+	<script type="text/javascript" src="{% static 'js/campus.js' %}"></script>
+{%  endif %}
+{% if wizard.steps.step1 == 3 %}
+    <script type="text/javascript" src="{% static 'js/datepicker.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/campus_event.js' %}"></script>
+{% endif %}
+{% if wizard.steps.step1 == 4 %}
+    <script type="text/javascript" src="{% static 'js/campus_form_qualifications.js' %}"></script>
+{% endif %}
 
 
 {% endblock %}

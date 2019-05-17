@@ -289,11 +289,6 @@ const setSearchEvent = () => {
   let timeout = null
   const elem = getSearchQualifInputElem()
   elem.onkeyup = function (e) {
-    if (e.keyCode === 13) {
-      // Cancel the default action, if needed
-      e.preventDefault()
-      alert('enter pressed')
-    }
     getSearchFormErrorAlertElement().classList.add('d-none')
     clearTimeout(timeout)
 
