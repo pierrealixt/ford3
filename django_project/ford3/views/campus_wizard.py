@@ -94,8 +94,6 @@ class CampusFormWizard(CookieWizardView):
                 self.campus.save_form_data(cleaned_data)
             elif form == 'campus-location':
                 self.campus.save_postal_data(cleaned_data)
-            elif form == 'campus-dates':
-                self.campus.save_events(cleaned_data)
             elif form == 'campus-qualifications':
                 self.campus.save_qualifications(cleaned_data)
                 self.campus.delete_qualifications(cleaned_data)
@@ -110,7 +108,6 @@ class CampusFormWizard(CookieWizardView):
         """
         # get the form instance based on the data from the storage backend
         # (if available).
-
 
         if 'step' in self.request.GET:
             return self.render_done(form, **kwargs)

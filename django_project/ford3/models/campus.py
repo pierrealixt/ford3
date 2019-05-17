@@ -205,13 +205,6 @@ class Campus(models.Model):
             setattr(self, key, value)
         self.save()
 
-    def save_events(self, campus_events):
-        if len(campus_events) == 0:
-            return
-        for each_campus_event in campus_events:
-            each_campus_event.campus = self
-            each_campus_event.save()
-
     def save_qualifications(self, form_data):
         if len(form_data['saqa_ids']) == 0:
             return
