@@ -58,8 +58,12 @@ class SAQAQualification(models.Model):
         }
 
     @classmethod
-    def create_non_accredited(self, data, creator_provider):
-        fos = FieldOfStudy.objects.get(pk=data['fos_id'])
+    def create_non_accredited(self, data):
+        creator_provider = Provider.objects.get(
+            pk=data['provider_id'])
+
+        fos = FieldOfStudy.objects.get(
+            pk=data['fos_id'])
 
         saqa_qualif = SAQAQualification(
             name=data['name'],
@@ -69,7 +73,8 @@ class SAQAQualification(models.Model):
             field_of_study=fos)
 
         if 'sfos_id' in data:
-            sfos = SubFieldOfStudy.objects.get(pk=data['sfos_id'])
+            # sfos = SubFieldOfStudy.objects.get(pk=data['sfos_id'])
+            sfos = fos.subfieldofstudy_set.get(pk=data['sfos_id'])
             saqa_qualif.sub_field_of_study = sfos
 
         saqa_qualif.save()

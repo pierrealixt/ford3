@@ -2,15 +2,13 @@ from datetime import datetime
 from django.shortcuts import redirect, Http404, get_object_or_404
 from django.urls import reverse
 from formtools.wizard.views import CookieWizardView
-from ford3.models import (
-    Qualification,
-    Requirement,
-    Subject,
-    QualificationEntranceRequirementSubject,
-    QualificationEvent,
-    Provider,
-    Campus
-)
+from ford3.models.qualification import Qualification
+from ford3.models.requirement import Requirement
+from ford3.models.subject import Subject
+from ford3.models.qualification_entrance_requirement_subject import QualificationEntranceRequirementSubject # noqa
+from ford3.models.qualification_event import QualificationEvent
+from ford3.models.provider import Provider
+from ford3.models.campus import Campus
 from ford3.forms.qualification import (
     QualificationDetailForm,
     QualificationDurationFeesForm,

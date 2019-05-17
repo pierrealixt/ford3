@@ -2,10 +2,8 @@ import json
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.core.exceptions import ValidationError
 from django.utils.datastructures import MultiValueDictKeyError
-from ford3.models import (
-    SAQAQualification,
-    FieldOfStudy
-)
+from ford3.models.saqa_qualification import SAQAQualification
+from ford3.models.field_of_study import FieldOfStudy
 
 
 def json_response(results):

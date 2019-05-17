@@ -7,12 +7,10 @@ from django.conf import settings
 from django.urls import reverse
 from django.forms.models import model_to_dict
 from formtools.wizard.views import CookieWizardView
-from ford3.models import (
-    Campus,
-    CampusEvent,
-    Provider,
-    FieldOfStudy
-)
+from ford3.models.campus import Campus
+from ford3.models.campus_event import CampusEvent
+from ford3.models.provider import Provider
+from ford3.models.field_of_study import FieldOfStudy
 
 
 class CampusFormWizard(CookieWizardView):
@@ -61,8 +59,7 @@ class CampusFormWizard(CookieWizardView):
         }
         context['form_data'] = form_data
 
-        context['fos'] = FieldOfStudy.objects.all().order_by('name').exclude(name='Undefined')
-        # .values('id', 'name')
+        context['fos'] = FieldOfStudy.objects.all()
 
         if 'step' in self.request.GET:
             context['multi_step_form'] = False
