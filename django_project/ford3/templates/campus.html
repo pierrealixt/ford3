@@ -47,7 +47,7 @@
                     <a href="{% url 'edit-campus' provider_id=provider.id campus_id=campus.id  %}?step=campus-dates" class='edu-button edu-button-orange p-0'>Edit</a>
                 </div>
             </div>
-            
+
             <div class='row py-3'>
                 <div class='col-md-12'>
                     {% if campus.events|length == 0 %}
@@ -55,17 +55,17 @@
                     {% endif %}
                     {% for event in campus.events %}
                         <p>
-                            <b>{{ event.name }}:</b> {{ event.date_start }} - {{ event.date_end }} 
+                            <b>{{ event.name }}:</b> {{ event.date_start }} - {{ event.date_end }}
                             <a href="{{ event.http_link }}" target="_blank">{{ event.http_link }}</a>
                         </p>
                     {% endfor %}
                     </ul>
-                    
+
                 </div>
             </div>
             <div class='row'>
             </div>
-            
+
             <div class='row py-4'>
                 <div class='col-md-10'>
                     <h4 class='mt-3 pb-2 edu-underline'>4. Available qualifications</h4>
@@ -99,7 +99,7 @@
                                         <a class="edu-button edu-button-navy edu-button-addon w-100" href="{% url 'edit-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Edit</a>
                                     </td>
                                 </tr>
-                            {% endfor %}        
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

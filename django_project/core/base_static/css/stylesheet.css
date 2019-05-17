@@ -72,6 +72,15 @@ h5 {
     color:  darkred !important;
 }
 
+a.edu-button {
+    color: white;
+}
+
+a.edu-button:hover {
+    color: white;
+    text-decoration-line: unset;
+}
+
 .edu-button {
     height: 2.5rem;
     width: 100%;
@@ -128,14 +137,20 @@ h5 {
     background-color: var(--c-smoke);
 }
 
+a.edu-button-grey {
+    color: black !important;
+}
+
 .edu-button-grey:hover {
     background-color: var(--c-grey-l);
     text-decoration: none;
+    color: black;
 }
 
 .edu-button-grey:focus {
     outline-color: var(--c-grey-l);
 }
+
 
 .edu-button-navy {
     color: var(--c-navy);
@@ -143,6 +158,17 @@ h5 {
 }
 
 .edu-button-navy:hover {
+    color: var(--c-navy);
+    background-color: var(--c-grey-l);
+    text-decoration: none;
+}
+
+a.edu-button-navy {
+    color: var(--c-navy);
+    background-color: var(--c-smoke);
+}
+
+a.edu-button-navy:hover {
     color: var(--c-navy);
     background-color: var(--c-grey-l);
     text-decoration: none;
@@ -820,8 +846,6 @@ nav#sidebar ul li a:hover {
     font-weight: 300!important;
 }
 
-/* table-borderless doesn't work well for bootstrap 3.
-   see https://stackoverflow.com/questions/18075794/bootstrap-table-without-stripe-borders/24830641#24830641 */
 .table-borderless > tbody > tr > td,
 .table-borderless > tbody > tr > th,
 .table-borderless > tfoot > tr > td,
@@ -833,5 +857,9 @@ nav#sidebar ul li a:hover {
 
 .table-borderless > thead > tr > th {
     background-color: var(--c-smoke);
+}
+
+.input-invalid {
+    border: 1px solid red !important;
 }
 

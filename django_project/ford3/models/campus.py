@@ -1,7 +1,6 @@
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
-
-
+from ford3.models.campus_event import CampusEvent
 
 
 class Campus(models.Model):
@@ -102,7 +101,6 @@ class Campus(models.Model):
         help_text="The campus' postal adress code",
         max_length=255)
 
-
     def save(self, *args, **kwargs):
         if self.id is None:
             if len(self.name) == 0:
@@ -110,18 +108,21 @@ class Campus(models.Model):
 
             if Campus.objects.filter(
                 provider_id=self.provider.id,
-                name__iexact=self.name).exists():
+                    name__iexact=self.name).exists():
                 raise ValidationError({'campus': 'Name is already taken.'})
 
         super().save(*args, **kwargs)
 
     @property
     def events(self):
-        return list(self.campusevent_set.all().values(
-            'date_start',
-            'name',
-            'http_link',
-            'date_end'))
+        event_query = CampusEvent.active_objects.filter(
+            campus__id=self.id).order_by('id').values(
+                'id',
+                'name',
+                'date_start',
+                'date_end',
+                'http_link')
+        return list(event_query)
 
     @property
     def qualifications(self):
@@ -143,8 +144,8 @@ class Campus(models.Model):
     def physical_address(self):
         if self.physical_address_line_1 is None \
             and self.physical_address_line_2 is None \
-            and self.physical_address_city is None \
-            and self.physical_address_postal_code is None:
+                and self.physical_address_city is None \
+                and self.physical_address_postal_code is None:
             return None
 
         return f'''

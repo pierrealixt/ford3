@@ -95,8 +95,8 @@ class ModelFactories:
         campus_event_test_object_instance = CampusEvent.objects.create(
             campus=ModelFactories.get_campus_test_object(),
             name='Campus Event Test Name',
-            date_start=datetime.date(2019, 3, 6),
-            date_end=datetime.date(2019, 8, 9),
+            date_start=datetime.date(2999, 3, 6),
+            date_end=datetime.date(2999, 8, 9),
             http_link='http://www.google.com')
 
         return campus_event_test_object_instance
@@ -123,7 +123,7 @@ class ModelFactories:
         provider_test_object_instance = Provider.objects.create(
             name='Object Test Name',
             website='www.mytest.com',
-            provider_logo='http://sometestplaceholder/logo.png',
+            # provider_logo='http://sometestplaceholder/logo.png',
             email='Test@test.com',
             admissions_contact_no='0137527576',
             physical_address_postal_code='1200',

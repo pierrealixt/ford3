@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 from collections import OrderedDict
 from django.shortcuts import redirect, Http404, get_object_or_404
 from django.core.files.storage import FileSystemStorage
@@ -8,7 +7,6 @@ from django.urls import reverse
 from django.forms.models import model_to_dict
 from formtools.wizard.views import CookieWizardView
 from ford3.models.campus import Campus
-from ford3.models.campus_event import CampusEvent
 from ford3.models.provider import Provider
 from ford3.models.field_of_study import FieldOfStudy
 
@@ -43,13 +41,14 @@ class CampusFormWizard(CookieWizardView):
 
     def get_context_data(self, form, **kwargs):
         context = super().get_context_data(form, **kwargs)
-        context['multi_step_form'] = True
+
         context['form_name_list'] = [
             'Details',
             'Location',
-            'Important Dates',
-            'Qualification Titles'
+            'Events',
+            'Qualifications'
         ]
+
         context['campus'] = self.campus
         context['provider'] = self.provider
         context['provider_logo'] = self.provider.provider_logo.url \
@@ -59,6 +58,7 @@ class CampusFormWizard(CookieWizardView):
         }
         context['form_data'] = form_data
 
+        context['multi_step_form'] = True
         context['fos'] = FieldOfStudy.objects.all()
 
         if 'step' in self.request.GET:
@@ -70,12 +70,20 @@ class CampusFormWizard(CookieWizardView):
         # For 'Details' and 'Location' forms
         initial_dict = model_to_dict(self.campus)
 
+        # events
+        event_ids = ' '.join([
+            str(event['id'])
+            for event in self.campus.events])
+
         # For 'Qualification Titles' form
         saqa_ids = ' '.join([
             str(s['saqa_qualification__id'])
             for s in self.campus.qualifications])
 
-        initial_dict.update({'saqa_ids': saqa_ids})
+        initial_dict.update({
+            'saqa_ids': saqa_ids,
+            'event_ids': event_ids
+        })
         return initial_dict
 
     def done(self, form_list, **kwargs):
@@ -95,31 +103,6 @@ class CampusFormWizard(CookieWizardView):
         url = reverse('show-campus', args=(self.provider.id, self.campus.id))
         return redirect(url)
 
-    def add_events(self, step_data, current_form):
-        new_name = step_data['campus-dates-event_name']
-        new_date_start = step_data['campus-dates-date_start']
-        new_date_end = step_data['campus-dates-date_end']
-        new_http_link = step_data['campus-dates-http_link']
-        # Count how many names were submitted and create new_events
-        number_of_new_events = len(new_name)
-        if len(new_name) == 1 and new_name[0] == '':
-            return False
-        for i in range(0, number_of_new_events):
-            new_campus_event = CampusEvent()
-            new_campus_event.name = new_name[i]
-            new_date_start_i = new_date_start[i]
-            new_date_start_formatted = (
-                datetime.strptime(new_date_start_i, '%m/%d/%Y')
-            ).strftime('%Y-%m-%d')
-            new_date_end_i = new_date_end[i]
-            new_date_end_formatted = (
-                datetime.strptime(new_date_end_i, '%m/%d/%Y')
-            ).strftime('%Y-%m-%d')
-            new_campus_event.date_start = new_date_start_formatted
-            new_campus_event.date_end = new_date_end_formatted
-            new_campus_event.http_link = new_http_link[i]
-            self.new_campus_events.append(new_campus_event)
-
     def render_next_step(self, form, **kwargs):
         """
         This method gets called when the next step/form should be rendered.
@@ -133,33 +116,6 @@ class CampusFormWizard(CookieWizardView):
             return self.render_done(form, **kwargs)
         else:
             return super().render_next_step(form, **kwargs)
-
-    # def render(self, form=None, **kwargs):
-    #     # print('am i here? render')
-    #     form = form or self.get_form()
-    #     context = self.get_context_data(form=form, **kwargs)
-
-
-    #     current_step = context['view'].storage.current_step
-
-    #     # TODO: Generate events from stored self.new_campus_events
-    #     if current_step == 'campus-dates':
-    #         self.new_campus_events = []
-
-    #     # if context['multi_step_form'] is False:
-    #     #         print('hello i render')
-    #             # return self.render_done(form, **kwargs)
-    #         # if context['current_form'] == 'campus-dates':
-
-
-    #         # try:
-    #         #     self.add_events(
-    # context['view'].storage.data['step_data']['campus-dates'],
-    #         #         form)
-    #         # except KeyError:
-    #         #     pass
-    #     return self.render_to_response(context)
-
 
     def render_done(self, form, **kwargs):
         """
