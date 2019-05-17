@@ -209,23 +209,8 @@ class QualificationInterestsAndJobsForm(QualificationForm):
         )
     )
 
-    # occupation_list = forms.ModelMultipleChoiceField(
-    #     label=(
-    #         'Choose up to five occupations that '
-    #         'this qualification could prepare you for'
-    #     ),
-    #     queryset=Occupation.objects.all(),
-    #     required=False,
-    #     widget=forms.SelectMultiple(
-    #         attrs={
-    #             'data-background-color': 'gray',
-    #             'data-max-selected': '5'
-    #         }
-    #     )
-    # )
-
     occupations_ids = forms.CharField(
-        widget=forms.TextInput(),
+        widget=forms.HiddenInput(),
         required=False)
 
     critical_skill = forms.TypedChoiceField(

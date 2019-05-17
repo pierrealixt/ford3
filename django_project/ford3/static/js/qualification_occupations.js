@@ -35,6 +35,10 @@ const getSearchOccupationsInput = () => {
   return document.getElementById('search-occupations')
 }
 
+const getNoResultAlert = () => {
+  return document.getElementById('search-no-result')
+}
+
 const buildAlphabet = () => {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz'
   const alphabetList = getTheAlphabet()
@@ -50,37 +54,16 @@ const buildAlphabet = () => {
 }
 
 const toggleLetter = (newLetter, oldLetter) => {
-  newLetter.classList.add('selected')
-  oldLetter.classList.remove('selected')
+  if (newLetter) { newLetter.classList.add('selected') }
+  if (oldLetter) { oldLetter.classList.remove('selected') }
 }
 
-const setClickToLetters = () => {
-  getLetters().forEach((liLetter) => {
-    liLetter.addEventListener('click', function (evt) {
-      const clickedLetter = evt.target
-      toggleLetter(clickedLetter, getSelectedLetter())
-
-      ajaxFetchOccupations(clickedLetter.innerHTML)
-    })
-  })
+const hideElement = (elem) => {
+  elem.classList.add('d-none')
 }
 
-const setSearch = () => {
-  let timeout = null
-  const elem = getSearchOccupationsInput()
-  elem.onkeyup = function (e) {
-    // getSearchFormErrorAlertElement().classList.add('d-none')
-    clearTimeout(timeout)
-
-    timeout = setTimeout(function () {
-      if (elem.value.length > 4) { ajaxFetchOccupations(elem.value) }
-    }, 842)
-  }
-}
-
-const setupEvents = () => {
-  setClickToLetters()
-  setSearch()
+const showElement = (elem) => {
+  elem.classList.remove('d-none')
 }
 
 const toggleOccupationId = (occupationId) => {
@@ -95,31 +78,133 @@ const toggleOccupationId = (occupationId) => {
   getFormOccupationsInput().value = ids.join(' ')
 }
 
-const toggleOccupationSelection = (occupation) => {
-  occupation.classList.toggle('selected-occupation')
+const getOccupation = (occupationId) => {
+  return getOccupationsList().querySelector(`li[data-occupation-id="${occupationId}"]`)
 }
 
-const prout = (occupation) => {
-  const li = document.createElement('li')
-  li.dataset['occupationId'] = occupation.dataset['occupationId']
-  li.innerHTML = occupation.innerHTML
+const toggleOccupationStateInResultList = (occupationId) => {
+  const occupation = getOccupation()
+  if (occupation) {
+    occupation.classList.toggle('selected-occupation')
+  }
+}
 
-  getSelectedOccupationsList().appendChild(li)
+const setClickToLetters = () => {
+  getLetters().forEach((liLetter) => {
+    liLetter.addEventListener('click', function (evt) {
+      resetSearch()
+
+      const clickedLetter = evt.target
+      toggleLetter(clickedLetter, getSelectedLetter())
+
+      ajaxFetchOccupations(clickedLetter.innerHTML)
+    })
+  })
+}
+
+const resetSearch = () => {
+  getSearchOccupationsInput().value = ''
+}
+
+const setSearch = () => {
+  let timeout = null
+  const elem = getSearchOccupationsInput()
+  elem.onkeyup = function (e) {
+    hideElement(getNoResultAlert())
+    clearTimeout(timeout)
+
+    toggleLetter(null, getSelectedLetter())
+    timeout = setTimeout(function () {
+      if (elem.value.length > 2) {
+        ajaxFetchOccupations(elem.value)
+      }
+    }, 842)
+  }
+}
+
+const setupEvents = () => {
+  setClickToLetters()
+  setSearch()
+}
+
+const removeOccupationFromSelectionList = (occupationId) => {
+  const li = getSelectedOccupationsList().querySelector(`li[data-occupation-id="${occupationId}"]`)
+  getSelectedOccupationsList().removeChild(li)
+}
+
+const removeSelectedClassFromOccupation = (occupationId) => {
+  const occupation = getOccupation()
+  if (occupation) {
+    occupation.classList.remove('selected-occupation')
+  }
+}
+
+const addSelectedClassToOccupation = (occupationId) => {
+  const occupation = getOccupation()
+  console.log(occupation)
+  if (occupation) {
+    occupation.classList.add('selected-occupation')
+  }
+}
+
+const addOccupationStateInSelectionList = (occupationId) => {
+  const occupation = getOccupation(occupationId)
+  const newLi = document.createElement('li')
+  newLi.dataset['occupationId'] = occupation.dataset['occupationId']
+  newLi.innerHTML = occupation.innerHTML
+  newLi.classList.add('h-100')
+  const spanDel = document.createElement('span')
+  spanDel.innerHTML = 'X'
+  newLi.appendChild(spanDel)
+
+  getSelectedOccupationsList().appendChild(newLi)
+  // spanDel.addEventListener('click', function (evt) {
+  //   const occupation = evt.target.parentNode
+  //   const occupationId = occupation.dataset['occupationId']
+
+  //   toggleOccupationId(occupationId)
+
+  //   toggleOccupationStateInSelectionList(occupationId)
+  //   toggleOccupationStateInResultList(occupationId)
+  // })
 }
 
 const setClickToOccupationLi = () => {
   getOccupationsList().querySelectorAll('li').forEach(occupationLi => {
     occupationLi.addEventListener('click', function (evt) {
       const occupation = evt.target
-
-      prout(occupation)
-
-      toggleOccupationSelection(occupation)
-
       const occupationId = occupation.dataset['occupationId']
+      if (isOccupationSelected(occupationId)) {
+        console.log('selected')
+        // yes it is already selected
+        // remove from selection list
+        removeOccupationFromSelectionList(occupationId)
+        // remove selected class
+        removeSelectedClassFromOccupation(occupationId)
+      } else {
+        console.log('not selected')
+        // no it is not
+        addOccupationStateInSelectionList(occupationId)
+        addSelectedClassToOccupation(occupationId)
+      }
+
+      // add or remove id from input
       toggleOccupationId(occupationId)
     })
   })
+}
+
+const buildLiElem = (item) => {
+  const li = document.createElement('li')
+  li.dataset['occupationId'] = item.id
+  li.dataset['toggle'] = 'tooltip'
+  li.dataset['placement'] = 'top'
+  li.title = item.name
+  li.innerHTML = item.name
+  if (isOccupationSelected(item.id)) {
+    li.classList.add('selected-occupation')
+  }
+  return li
 }
 
 const displayResults = (data) => {
@@ -128,21 +213,21 @@ const displayResults = (data) => {
   })
 
   const itemsPerColumn = 7
-  const columnsCount = Math.round(data.results.length / itemsPerColumn)
+  let columnsCount
+  if (data.results.length < itemsPerColumn) {
+    columnsCount = data.results.length
+  } else {
+    columnsCount = Math.round(data.results.length / itemsPerColumn)
+  }
 
   for (let i = 0; i < columnsCount; i++) {
     const column = document.createElement('ul')
-    column.classList.add('occupation-column', 'border')
+    column.classList.add('occupation-column')
     getOccupationsList().appendChild(column)
 
     const items = data.results.splice(0, itemsPerColumn)
     items.forEach(item => {
-      const li = document.createElement('li')
-      li.dataset['occupationId'] = item.id
-      li.innerHTML = item.name
-      if (isOccupationSelected(item.id)) {
-        li.classList.add('selected-occupation')
-      }
+      const li = buildLiElem(item)
       column.appendChild(li)
     })
   }
@@ -157,7 +242,15 @@ const ajaxFetchOccupations = (query) => {
   request.onload = function () {
     if (request.status >= 200 && request.status < 400) {
       const data = JSON.parse(request.responseText)
-      displayResults(data)
+      if (data.results.length > 0) {
+        showElement(getOccupationsList())
+        hideElement(getNoResultAlert())
+
+        displayResults(data)
+      } else {
+        showElement(getNoResultAlert())
+        hideElement(getOccupationsList())
+      }
     }
   }
 
