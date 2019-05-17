@@ -183,11 +183,11 @@ class QualificationFormWizardDataProcess(object):
             self.qualification.interests.add(interest)
 
         # Update occupations
-        occupations = form_data['occupation_list']
-        for occupation in self.qualification.occupations.all():
-            self.qualification.occupations.remove(occupation)
-        for occupation in occupations:
-            self.qualification.occupations.add(occupation)
+        occupations = form_data['occupation_ids']
+        # for occupation in self.qualification.occupations.all():
+        #     self.qualification.occupations.remove(occupation)
+        # for occupation in occupations:
+        #     self.qualification.occupations.add(occupation)
 
         # Subjects
         # self.add_subjects(form_data)

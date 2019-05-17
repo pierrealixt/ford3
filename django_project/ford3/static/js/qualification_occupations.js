@@ -82,13 +82,6 @@ const getOccupation = (occupationId) => {
   return getOccupationsList().querySelector(`li[data-occupation-id="${occupationId}"]`)
 }
 
-const toggleOccupationStateInResultList = (occupationId) => {
-  const occupation = getOccupation()
-  if (occupation) {
-    occupation.classList.toggle('selected-occupation')
-  }
-}
-
 const setClickToLetters = () => {
   getLetters().forEach((liLetter) => {
     liLetter.addEventListener('click', function (evt) {
@@ -132,21 +125,34 @@ const removeOccupationFromSelectionList = (occupationId) => {
   getSelectedOccupationsList().removeChild(li)
 }
 
-const removeSelectedClassFromOccupation = (occupationId) => {
-  const occupation = getOccupation()
-  if (occupation) {
-    occupation.classList.remove('selected-occupation')
-  }
+const removeSelectedClassFromOccupation = (occupation) => {
+  occupation.classList.remove('selected-occupation')
 }
 
-const addSelectedClassToOccupation = (occupationId) => {
-  const occupation = getOccupation()
-  console.log(occupation)
-  if (occupation) {
-    occupation.classList.add('selected-occupation')
-  }
+const addSelectedClassToOccupation = (occupation) => {
+  occupation.classList.add('selected-occupation')
 }
 
+const setClickRemoveOccupationSelectionList = (span) => {
+  span.addEventListener('click', function (evt) {
+    const occupation = evt.target.parentNode
+    const occupationId = occupation.dataset['occupationId']
+
+    if (isOccupationSelected(occupationId)) {
+      // yes it is already selected
+      // remove from selection list
+      removeOccupationFromSelectionList(occupationId)
+      // remove selected class
+      const tempOcc = getOccupation(occupationId)
+      if (tempOcc) {
+        // only if the occupation is visible
+        removeSelectedClassFromOccupation(tempOcc)
+      }
+    }
+
+    toggleOccupationId(occupationId)
+  })
+}
 const addOccupationStateInSelectionList = (occupationId) => {
   const occupation = getOccupation(occupationId)
   const newLi = document.createElement('li')
@@ -158,15 +164,7 @@ const addOccupationStateInSelectionList = (occupationId) => {
   newLi.appendChild(spanDel)
 
   getSelectedOccupationsList().appendChild(newLi)
-  // spanDel.addEventListener('click', function (evt) {
-  //   const occupation = evt.target.parentNode
-  //   const occupationId = occupation.dataset['occupationId']
-
-  //   toggleOccupationId(occupationId)
-
-  //   toggleOccupationStateInSelectionList(occupationId)
-  //   toggleOccupationStateInResultList(occupationId)
-  // })
+  setClickRemoveOccupationSelectionList(spanDel)
 }
 
 const setClickToOccupationLi = () => {
@@ -175,17 +173,17 @@ const setClickToOccupationLi = () => {
       const occupation = evt.target
       const occupationId = occupation.dataset['occupationId']
       if (isOccupationSelected(occupationId)) {
-        console.log('selected')
         // yes it is already selected
         // remove from selection list
         removeOccupationFromSelectionList(occupationId)
         // remove selected class
-        removeSelectedClassFromOccupation(occupationId)
+        removeSelectedClassFromOccupation(occupation)
       } else {
-        console.log('not selected')
         // no it is not
+        // add to the selection list
         addOccupationStateInSelectionList(occupationId)
-        addSelectedClassToOccupation(occupationId)
+        // add the selected class
+        addSelectedClassToOccupation(occupation)
       }
 
       // add or remove id from input
