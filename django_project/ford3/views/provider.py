@@ -5,10 +5,8 @@ from django.shortcuts import (
 from django.db import transaction, IntegrityError
 from django.urls import reverse
 from ford3.forms.provider_form import ProviderForm
-from ford3.models import (
-    Campus,
-    Provider,
-)
+from ford3.models.campus import Campus
+from ford3.models.provider import Provider
 
 
 @transaction.atomic

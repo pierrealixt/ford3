@@ -155,25 +155,29 @@
                                         </div>
 
                                         <div class='row mx-3'>
-                                            <div class='col-md-9 px-0'>
-                                                <input type='text' placeholder="e.g: Master of Computer Science" data-action='create-qualif' class='h-100 p-3'>
+                                            <div class='col-md-12 px-0'>
+                                                <input type='text' placeholder="e.g: Master of Computer Science" data-role='qualif-name' class='h-100 p-3'>
                                                 <input type='hidden' id='provider-id' value='{{ campus.provider.id }}' />
                                                 <input type='hidden' id='create-qualif-url' value='{% url "create-saqa-qualification" %}' />
                                             </div>
-                                            <div class='col-md-3 px-0'>
-                                                <button type='button' class='edu-button-blue h-100 w-100 border-0' data-action='create-qualif'>create</button>
+                                            <div class='col-md-12 px-0 my-3'>
+                                                <input type='hidden' id='list-sfos' value="{% url 'list-sfos' fos_id=0 %}" />
+                                                <select class='w-100' data-role='qualif-fos'>
+                                                    <option class='text-center' selected='selected' value='0'>--Please choose a field of study--</option>
+                                                    {% for field_of_study in fos %}
+                                                        <option value="{{ field_of_study.id }}">{{ field_of_study.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                <select data-role='qualif-sfos' class='d-none w-100 mt-3'>
+                                                </select>
                                             </div>
-                                        </div>
-
-                                        <div class='row mx-3'>
                                             <div class='col-md-12 px-0'>
                                                 <div id='create-qualif-form-error-alert' class="col-md-12 alert alert-danger d-none" role="alert"></div>
+                                            </div>                                            
+                                            <div class='col-md-3 px-0'>
+                                                <button type='button' class='edu-button-blue h-100 w-100 border-0 p-3' data-action='create-qualif'>create</button>
                                             </div>
-                                        </div>
-
-                                        
-                                        
-                                        
+                                        </div>    
                                     </div>
                                 </div>
                             </div>

@@ -1,11 +1,10 @@
-from django.db import models
 from typing import List
+from django.db import models
 from ford3.models.saqa_qualification import SAQAQualification
 from ford3.models.requirement import Requirement
 from ford3.models.interest import Interest
 from ford3.models.occupation import Occupation
-from ford3.models.qualification_entrance_requirement_subject import \
-    QualificationEntranceRequirementSubject
+from ford3.models.qualification_entrance_requirement_subject import QualificationEntranceRequirementSubject # noqa
 from ford3.models.qualification_event import QualificationEvent
 
 
@@ -182,3 +181,7 @@ class Qualification(models.Model):
         event_query = QualificationEvent.objects.filter(
             qualification__id=self.id).values()
         return list(event_query)
+
+    def set_saqa_qualification(self, saqa_id):
+        saqa_qualif = SAQAQualification.objects.get(id=saqa_id)
+        self.saqa_qualification = saqa_qualif

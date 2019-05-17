@@ -1,11 +1,9 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
-from ford3.models import (
-    Interest,
-    Occupation,
-    Subject,
-)
+from ford3.models.interest import Interest
+from ford3.models.occupation import Occupation
+from ford3.models.subject import Subject
 
 
 class QualificationForm(forms.Form):

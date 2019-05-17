@@ -1,8 +1,7 @@
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
-from ford3.models.qualification import Qualification
-from ford3.models.saqa_qualification import SAQAQualification
-from ford3.models.campus_event import CampusEvent
+
+
 
 
 class Campus(models.Model):
@@ -118,25 +117,21 @@ class Campus(models.Model):
 
     @property
     def events(self):
-        event_query = CampusEvent.objects.filter(
-            campus__id=self.id).values(
-                'date_start',
-                'name',
-                'http_link',
-                'date_end')
-        return list(event_query)
+        return list(self.campusevent_set.all().values(
+            'date_start',
+            'name',
+            'http_link',
+            'date_end'))
 
     @property
     def qualifications(self):
-        qualif_query = Qualification.objects.filter(
-            campus__id=self.id).order_by('id').values(
-                'id',
-                'saqa_qualification__id',
-                'saqa_qualification__name',
-                'saqa_qualification__saqa_id',
-                'saqa_qualification__accredited',
-                'edited_at')
-        return list(qualif_query)
+        return list(self.qualification_set.all().values(
+            'id',
+            'saqa_qualification__id',
+            'saqa_qualification__name',
+            'saqa_qualification__saqa_id',
+            'saqa_qualification__accredited',
+            'edited_at'))
 
     @property
     def saqa_ids(self):
@@ -217,7 +212,6 @@ class Campus(models.Model):
             each_campus_event.save()
 
     def save_qualifications(self, form_data):
-        print(form_data['saqa_ids'])
         if len(form_data['saqa_ids']) == 0:
             return
 
@@ -225,12 +219,8 @@ class Campus(models.Model):
         ids = set(self.saqa_ids) ^ set(form_data['saqa_ids'].split(' '))
 
         for saqa_id in ids:
-
-            saqa_qualif = SAQAQualification.objects.get(id=saqa_id)
-
-            qualif = Qualification(
-                saqa_qualification=saqa_qualif,
-                campus=self)
+            qualif = self.qualification_set.create()
+            qualif.set_saqa_qualification(saqa_id)
             qualif.save()
 
     def delete_qualifications(self, form_data):
@@ -239,7 +229,7 @@ class Campus(models.Model):
         ids = [saqa_id for saqa_id in ids if len(saqa_id) > 0]
 
         for saqa_id in ids:
-            qualif = Qualification.objects.filter(
+            qualif = self.qualification_set.filter(
                 saqa_qualification__id=saqa_id,
                 campus=self)
             qualif.delete()

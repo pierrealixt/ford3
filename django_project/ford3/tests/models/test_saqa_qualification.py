@@ -6,6 +6,15 @@ from django.core.exceptions import ValidationError
 
 class TestSAQAQualification(TestCase):
 
+    def setUp(self):
+        self.provider = ModelFactories.get_provider_test_object()
+        self.fos = ModelFactories.get_field_of_study_test_object()
+        self.data = {
+            'name': 'Non-official Bachelor of Arts',
+            'provider_id': self.provider.id,
+            'fos_id': self.fos.id
+        }
+
     def test_saqa_qualification_description(self):
         new_saqa_qualification = (
             ModelFactories.get_saqa_qualification_test_object())
@@ -14,30 +23,38 @@ class TestSAQAQualification(TestCase):
             'SAQAQualification name')
 
     def test_create_non_accredited_saqa_qualification(self):
-
-        provider = ModelFactories.get_provider_test_object()
-
         self.assertEqual(len(SAQAQualification.objects.all()), 0)
 
-        saqa_qualif = SAQAQualification.create_non_accredited(
-            name='Non-official Bachelor of Arts',
-            creator_provider=provider)
+        saqa_qualif = SAQAQualification.create_non_accredited(self.data)
 
         self.assertFalse(saqa_qualif.accredited)
-        self.assertEqual(saqa_qualif.creator_provider_id, provider.id)
+        self.assertEqual(saqa_qualif.creator_provider_id, self.provider.id)
+        self.assertEqual(saqa_qualif.field_of_study_id, self.fos.id)
+        self.assertIsNone(saqa_qualif.sub_field_of_study)
+        self.assertEqual(len(SAQAQualification.objects.all()), 1)
+
+    def test_create_non_accredited_saqa_qualification_with_subfield(self):
+        self.assertEqual(len(SAQAQualification.objects.all()), 0)
+
+        sfos = ModelFactories.get_sub_field_of_study_test_object()
+        self.data['fos_id'] = sfos.field_of_study.id
+        self.data['sfos_id'] = sfos.id
+        saqa_qualif = SAQAQualification.create_non_accredited(self.data)
+
+        self.assertFalse(saqa_qualif.accredited)
+        self.assertEqual(saqa_qualif.creator_provider_id, self.provider.id)
+
+        self.assertEqual(saqa_qualif.field_of_study_id, sfos.field_of_study.id)
+        self.assertEqual(saqa_qualif.sub_field_of_study_id, sfos.id)
+
         self.assertEqual(len(SAQAQualification.objects.all()), 1)
 
     def test_create_duplicate_non_accredited_saqa_qualification(self):
-        provider = ModelFactories.get_provider_test_object()
 
-        SAQAQualification.create_non_accredited(
-            name='Non-official Bachelor of Arts',
-            creator_provider=provider)
+        SAQAQualification.create_non_accredited(self.data)
 
         with self.assertRaises(ValidationError):
-            SAQAQualification.create_non_accredited(
-                name='Non-official Bachelor of Arts',
-                creator_provider=provider)
+            SAQAQualification.create_non_accredited(self.data)
 
     def test_create_accredited_saqa_qualification(self):
         self.assertEqual(len(SAQAQualification.objects.all()), 0)
