@@ -197,7 +197,7 @@ const createQualification = () => {
     }
   }
   const sfosId = getCreateQualificationSubFosElement().value
-  if (sfosId) {
+  if (parseInt(sfosId) > 0) {
     data['saqa_qualification']['sfos_id'] = sfosId
   }
   ajaxCreateQualification(data)
@@ -256,7 +256,6 @@ const ajaxCreateQualification = (data) => {
     }
   }
 
-  console.log(JSON.stringify(data))
   request.send(JSON.stringify(data))
 }
 
@@ -268,11 +267,10 @@ const ajaxGetSfos = (fosId) => {
   request.onload = function () {
     if (request.status >= 200 && request.status < 400) {
       const data = JSON.parse(request.responseText)
-      console.log(data)
       const selectElem = getCreateQualificationSubFosElement()
       const option = document.createElement('option')
       option.value = '0'
-      option.innerHTML = '--Choose a sub-field of study or not--'
+      option.innerHTML = '-- Choose a sub-field of study or not --'
       selectElem.appendChild(option)
       data['results'].forEach((result) => {
         const option = document.createElement('option')
