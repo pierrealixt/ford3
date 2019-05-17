@@ -2,28 +2,18 @@
 
 """Project level settings."""
 from .project import *  # noqa
-
-try:
-    from .secret import *  # noqa
-except ImportError:
-    import os
-    if 'SENTRY_KEY' in os.environ:
-        SENTRY_KEY = os.environ['SENTRY_KEY']
-
-try:
-    if SENTRY_KEY:
-        import sentry_sdk
-        from sentry_sdk.integrations.django import DjangoIntegration
-
-        sentry_sdk.init(
-            dsn=SENTRY_KEY,
-            integrations=[DjangoIntegration()],
-            send_default_pii=True
-        )
-except NameError:
-    pass
+import os
 
 
+if 'SENTRY_KEY' in os.environ:
+    SENTRY_KEY = os.environ['SENTRY_KEY']
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+    sentry_sdk.init(
+        dsn=SENTRY_KEY,
+        integrations=[DjangoIntegration()],
+        send_default_pii=True
+    )
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
