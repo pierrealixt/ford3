@@ -59,7 +59,10 @@ def scrape_qualification_page(html):
 def init_csv():
     csv_filename = 'saqa_qualifications_{}.csv'.format(TIMESTAMP)
     with open(csv_filename, 'w') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=CSV_FIELDNAMES)
+        writer = csv.DictWriter(
+            csvfile,
+            delimiter=';',
+            fieldnames=CSV_FIELDNAMES)
         writer.writeheader()
 
     return csv_filename
@@ -67,7 +70,10 @@ def init_csv():
 
 def write_to_csv(csv_filename, qualification):
     with open(csv_filename, 'a') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=CSV_FIELDNAMES)
+        writer = csv.DictWriter(
+            csvfile,
+            delimiter=';',
+            fieldnames=CSV_FIELDNAMES)
         writer.writerow(qualification)
 
 
@@ -75,10 +81,13 @@ def scrape_qualification_pages(ids):
     csv_filename = init_csv()
 
     for saqa_id in ids:
-        print(saqa_id)
-        html = get_qualification_page(saqa_id)
-        qualif = scrape_qualification_page(html)
-        write_to_csv(csv_filename, qualif)
+        try:
+            print(saqa_id)
+            html = get_qualification_page(saqa_id)
+            qualif = scrape_qualification_page(html)
+            write_to_csv(csv_filename, qualif)
+        except IndexError:
+            continue
 
 
 def save_ids(ids):

@@ -4,15 +4,14 @@ from ford3.models.saqa_qualification import SAQAQualification
 from django.core.exceptions import ValidationError
 
 
-
 class TestSAQAQualification(TestCase):
 
     def test_saqa_qualification_description(self):
         new_saqa_qualification = (
             ModelFactories.get_saqa_qualification_test_object())
-        self.assertEqual(new_saqa_qualification.__str__(),
-            """SAQAQualification name"""
-        )
+        self.assertEqual(
+            new_saqa_qualification.__str__(),
+            'SAQAQualification name')
 
     def test_create_non_accredited_saqa_qualification(self):
 
@@ -23,7 +22,6 @@ class TestSAQAQualification(TestCase):
         saqa_qualif = SAQAQualification.create_non_accredited(
             name='Non-official Bachelor of Arts',
             creator_provider=provider)
-
 
         self.assertFalse(saqa_qualif.accredited)
         self.assertEqual(saqa_qualif.creator_provider_id, provider.id)
@@ -51,4 +49,24 @@ class TestSAQAQualification(TestCase):
         self.assertTrue(saqa_qualif.accredited)
         self.assertNotEqual(saqa_qualif.id, saqa_qualif.saqa_id)
         self.assertIsNone(saqa_qualif.creator_provider_id)
+        self.assertEqual(len(SAQAQualification.objects.all()), 1)
+
+    def test_get_or_create_accredited_saqa_qualification(self):
+        self.assertEqual(len(SAQAQualification.objects.all()), 0)
+
+        saqa = {
+            'saqa_id': 59731,
+            'name': 'Champagne'
+        }
+        # it should create a SAQA qualification
+        saqa_qualif = SAQAQualification.get_or_create_accredited(saqa)
+
+        self.assertEqual(
+            saqa_qualif.saqa_id,
+            saqa['saqa_id'])
+        self.assertEqual(len(SAQAQualification.objects.all()), 1)
+
+        # it should return the same qualification
+        saqa_qualif_again = SAQAQualification.get_or_create_accredited(saqa)
+        self.assertEqual(saqa_qualif_again.id, saqa_qualif.id)
         self.assertEqual(len(SAQAQualification.objects.all()), 1)

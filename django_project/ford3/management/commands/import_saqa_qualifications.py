@@ -1,65 +1,52 @@
 import csv
+from collections import namedtuple
 from django.core.management.base import BaseCommand
-from ford3.models import SubFieldOfStudy, SAQAQualification
+from ford3.models import (
+    SAQAQualification,
+    FieldOfStudy,
+    SubFieldOfStudy
+)
+
+
+def parse_line(csv_line):
+    Line = namedtuple('Line', [
+        'saqa_id',
+        'name',
+        'type',
+        'field_of_study',
+        'subfield_of_study'])
+    return Line(*csv_line[0:5])
 
 
 class Command(BaseCommand):
     """
     Import SAQA Qualifications from scraped CSV
     """
-
-    def add_arguments(self, parser):
-        parser.add_argument(
-            '-f',
-            '--force',
-            action='store_true',
-            dest='force',
-            help='Force execute without asking for input from the user')
-
     def handle(self, *args, **options):
-        force = options.get('force')
-        if force:
-            yes_to_continue = 'yes'
-        else:
-            yes_to_continue = input(
-                'This will delete all data in the saqa_qualification table '
-                'and then attempt a fresh import. Type "yes" to continue.  ')
-        if yes_to_continue != 'yes':
-            print('Import canceled - User response: ' + yes_to_continue)
-            return
-        self.delete_everything()
-        print('Old data cleared from the saqa_qualification table')
         with open('SAQAData.csv') as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=',')
+            csv_reader = csv.reader(csv_file, delimiter=';')
             line_count = 0
             for row in csv_reader:
                 if line_count == 0:
                     print(f'Column names are {", ".join(row)}')
                     line_count += 1
                 else:
-                    # Create a qualification object for the row
-                    saqa_id = row[0]
-                    name = row[1]
-                    new_saqa_qualification = SAQAQualification()
-                    new_saqa_qualification.name = name
-                    new_saqa_qualification.saqa_id = saqa_id
-                    # Compile subfield of study
-                    this_subfield_of_study = ''
-                    for x in range(4, 8):
-                        if len(row[x]) > 0:
-                            this_subfield_of_study += ',' + row[x]
+                    line = parse_line(row)
 
-                    # For each subfield of study, get the subfield of study
-                    # from the list of subfields of study in the database
-                    subfield_of_study_object = SubFieldOfStudy.objects.filter(
-                        name = this_subfield_of_study
-                    )
+                    saqa_qualif = SAQAQualification.get_or_create_accredited(
+                        line._asdict())
 
-                    new_saqa_qualification.sub_field_of_study = (
-                        subfield_of_study_object.first())
-                    new_saqa_qualification.save()
+                    fos, created = FieldOfStudy.objects.get_or_create(
+                        name=line.field_of_study)
+
+                    sfos, created = SubFieldOfStudy.objects.get_or_create(
+                        name=line.subfield_of_study,
+                        field_of_study=fos)
+
+                    saqa_qualif.field_of_study = fos
+                    saqa_qualif.sub_field_of_study = sfos
+
+                    saqa_qualif.save()
+
                     line_count += 1
         print(f'Processed {line_count} lines.')
-
-    def delete_everything(self):
-        SAQAQualification.objects.all().delete()
