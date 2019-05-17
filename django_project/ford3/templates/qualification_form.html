@@ -40,8 +40,21 @@
 
                 </ul>
 
-                <form action="" method="post">{% csrf_token %}
 
+                  {% if wizard.steps.step1 == 4 %}
+                    <div class='row' id='occupations-form'>
+                        <div class='col-md-12'>
+                            <input type='hidden' id='list-occupations-url' value='{% url "list-occupations" %}' />
+                            <ul id='the-alphabet'></ul>
+                            <input type='text' id='search-occupations' placeholder='e.g: Accountant' />
+                            <ul id='selected-occupations' class='m-0 p-0'></ul>
+                            <div id='occupations-list' class='border'></div>
+                        </div>
+                    </div>
+                    
+                {% endif %}
+
+                <form action="" method="post">{% csrf_token %}
                     <div class="form-group">
                         {{ wizard.management_form }}
                         {% if wizard.form.forms %}
@@ -78,7 +91,6 @@
 	                    </div>
 	                {% endif %}
                     </div>
-
 	                {% if wizard.steps.step1 == 5 %}
 		                <div>
 			                {% for each_event in events_list %}
@@ -211,5 +223,7 @@
             src="{% static 'js/libs/jquery-ui-1.12.1-custom/jquery-ui.min.js' %}"></script>
     <script type="text/javascript"
             src="{% static 'js/qualification_form.js' %}"></script>
-
+{% if wizard.steps.step1 == 4 %}
+    <script type="text/javascript" src="{% static 'js/qualification_occupations.js' %}"></script>
+{% endif %}
 {% endblock %}
