@@ -191,7 +191,6 @@ class Qualification(models.Model):
         ids = set(self.occupation_ids) ^ set(occupations_ids.split(' '))
         for occupation_id in ids:
             occupation = Occupation.objects.get(pk=occupation_id)
-            print(f'add {occupation}')
             self.occupations.add(occupation)
 
         ids = set(occupations_ids.split(' ')) ^ set(self.occupation_ids)
@@ -199,5 +198,4 @@ class Qualification(models.Model):
 
         for occupation_id in ids:
             occupation = Occupation.objects.get(pk=occupation_id)
-            print(f'remove {occupation}')
             self.occupations.remove(occupation)
