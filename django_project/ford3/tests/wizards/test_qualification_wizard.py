@@ -37,7 +37,7 @@ class TestQualificationWizard(TestCase):
         'require_certain_subjects': '',
         'subject': None,
         'interest_list': [],
-        'occupation_list': [],
+        'occupations_ids': '',
         'critical_skill': '',
         'green_occupation': '',
         'high_demand_occupation': '',

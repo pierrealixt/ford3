@@ -189,13 +189,14 @@ class Qualification(models.Model):
         # save new occupations
         # symmetric difference
         ids = set(self.occupation_ids) ^ set(occupations_ids.split(' '))
+        ids = [id for id in ids if len(id) > 0]
         for occupation_id in ids:
             occupation = Occupation.objects.get(pk=occupation_id)
             self.occupations.add(occupation)
 
+        # remove occupations
         ids = set(occupations_ids.split(' ')) ^ set(self.occupation_ids)
-        # ids = [occupation_id for occupation_id in ids]
-
+        ids = [id for id in ids if len(id) > 0]
         for occupation_id in ids:
             occupation = Occupation.objects.get(pk=occupation_id)
             self.occupations.remove(occupation)

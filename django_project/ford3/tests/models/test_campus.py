@@ -31,25 +31,6 @@ class TestCampus(TestCase):
         self.assertEqual(self.campus.email, 'email@kartoza.com')
         self.assertEqual(self.campus.max_students_per_year, 1042)
 
-    def test_save_events_form_data(self):
-
-        campus_events = [ModelFactories.get_campus_event_test_object()]
-
-        # campus should not have events yet.
-        self.assertQuerysetEqual(self.campus.events, [])
-
-        # save events
-        self.campus.save_events(campus_events)
-
-        # campus should have one event
-        self.assertEqual(len(self.campus.events), 1)
-
-    def test_save_single_event(self):
-        self.assertEqual(len(self.campus.events), 0)
-        campus_events = [ModelFactories.get_campus_event_test_object()]
-        self.campus.save_events(campus_events)
-        self.assertEqual(len(self.campus.events), 1)
-
     def test_save_qualifications(self):
 
         # create two SAQA Qualifications
