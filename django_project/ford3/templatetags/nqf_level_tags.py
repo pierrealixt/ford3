@@ -6,5 +6,8 @@ register = template.Library()
 
 @register.filter()
 def filter_level(value):
-    level = value.split('.')[1]
-    return SaqaQualificationLevel[level].value
+    try:
+        level = value.split('.')[1]
+        return SaqaQualificationLevel[level].value
+    except:
+        return None

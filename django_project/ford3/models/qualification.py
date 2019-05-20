@@ -145,12 +145,11 @@ class Qualification(models.Model):
         return result
 
     @property
-    def occupation_id_list(self) -> List[int]:
-        occupation_query = Occupation.objects.filter(
-            qualification__id=self.id).order_by('id').values('id')
-        occupation_query_list = list(occupation_query)
-        result = [each_item['id'] for each_item in occupation_query_list]
-        return result
+    def occupation_ids(self) -> List[str]:
+        return [
+            str(i['id']) for i
+            in list(self.occupations.all().values('id'))
+        ]
 
     @property
     def occupation_name_list(self) -> List[int]:
@@ -185,3 +184,19 @@ class Qualification(models.Model):
     def set_saqa_qualification(self, saqa_id):
         saqa_qualif = SAQAQualification.objects.get(id=saqa_id)
         self.saqa_qualification = saqa_qualif
+
+    def toggle_occupations(self, occupations_ids):
+        # save new occupations
+        # symmetric difference
+        ids = set(self.occupation_ids) ^ set(occupations_ids.split(' '))
+        ids = [id for id in ids if len(id) > 0]
+        for occupation_id in ids:
+            occupation = Occupation.objects.get(pk=occupation_id)
+            self.occupations.add(occupation)
+
+        # remove occupations
+        ids = set(occupations_ids.split(' ')) ^ set(self.occupation_ids)
+        ids = [id for id in ids if len(id) > 0]
+        for occupation_id in ids:
+            occupation = Occupation.objects.get(pk=occupation_id)
+            self.occupations.remove(occupation)

@@ -2,7 +2,6 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
 from ford3.models.interest import Interest
-from ford3.models.occupation import Occupation
 from ford3.models.subject import Subject
 
 
@@ -209,20 +208,9 @@ class QualificationInterestsAndJobsForm(QualificationForm):
         )
     )
 
-    occupation_list = forms.ModelMultipleChoiceField(
-        label=(
-            'Choose up to five occupations that '
-            'this qualification could prepare you for'
-        ),
-        queryset=Occupation.objects.all(),
-        required=False,
-        widget=forms.SelectMultiple(
-            attrs={
-                'data-background-color': 'gray',
-                'data-max-selected': '5'
-            }
-        )
-    )
+    occupations_ids = forms.CharField(
+        widget=forms.HiddenInput(),
+        required=False)
 
     critical_skill = forms.TypedChoiceField(
         label=(

@@ -40,8 +40,48 @@
 
                 </ul>
 
-                <form action="" method="post">{% csrf_token %}
 
+				  {% if wizard.steps.step1 == 4 %}
+                    <div class='row border-bottom mb-3 no-gutters' id='occupations-form'>
+                        <div class='col-md-12'>
+                            <label>Choose up to five occupations</label>
+                            <input type='hidden' id='list-occupations-url' value='{% url "list-occupations" %}' />
+                            <div class='row'>
+                                <div class='col-md-4'>
+                                    <input type='text' id='search-occupations' placeholder='e.g: Accountant' />
+                                    <div id='search-no-result' class='d-none mt-2'>
+                                        <div class='alert alert-danger'>No result</div>
+                                    </div>                                    
+                                </div>
+                                <div class='col-md-8 align-middle'>
+                                    <ul id='the-alphabet' class='m-0 p-0'></ul>
+                                </div>
+                            </div>
+                            <div class='row mt-2 pt-2 no-gutters'>
+                                <div class='col-md-12'>
+                                    <div class='row no-gutters h-100'>
+                                        <div class='col-md-12'>
+                                            <ul id='selected-occupations' class='m-0 p-0 border-top border-bottom'>
+												{% for occupation in occupations %}
+													<li class='h-100' data-occupation-id='{{ occupation.id }}'>
+														{{ occupation.name }}
+														<span>X</span>
+													</li>
+												{% endfor %}
+											</ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='col-md-12'>
+                                    <div id='occupations-list'></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                {% endif %}
+
+                <form action="" method="post">{% csrf_token %}
                     <div class="form-group">
                         {{ wizard.management_form }}
                         {% if wizard.form.forms %}
@@ -78,7 +118,6 @@
 	                    </div>
 	                {% endif %}
                     </div>
-
 	                {% if wizard.steps.step1 == 5 %}
 		                <div>
 			                {% for each_event in events_list %}
@@ -211,5 +250,7 @@
             src="{% static 'js/libs/jquery-ui-1.12.1-custom/jquery-ui.min.js' %}"></script>
     <script type="text/javascript"
             src="{% static 'js/qualification_form.js' %}"></script>
-
+{% if wizard.steps.step1 == 4 %}
+    <script type="text/javascript" src="{% static 'js/qualification_occupations.js' %}"></script>
+{% endif %}
 {% endblock %}
