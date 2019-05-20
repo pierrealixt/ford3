@@ -209,7 +209,7 @@ class QualificationInterestsAndJobsForm(QualificationForm):
     )
 
     occupations_ids = forms.CharField(
-        widget=forms.TextInput(),
+        widget=forms.HiddenInput(),
         required=False)
 
     critical_skill = forms.TypedChoiceField(
