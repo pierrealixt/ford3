@@ -41,7 +41,7 @@
                 </ul>
 
 
-                  {% if wizard.steps.step1 == 4 %}
+				  {% if wizard.steps.step1 == 4 %}
                     <div class='row border-bottom mb-3 no-gutters' id='occupations-form'>
                         <div class='col-md-12'>
                             <label>Choose up to five occupations</label>
@@ -61,7 +61,14 @@
                                 <div class='col-md-12'>
                                     <div class='row no-gutters h-100'>
                                         <div class='col-md-12'>
-                                            <ul id='selected-occupations' class='m-0 p-0 border-top border-bottom'></ul>
+                                            <ul id='selected-occupations' class='m-0 p-0 border-top border-bottom'>
+												{% for occupation in occupations %}
+													<li class='h-100' data-occupation-id='{{ occupation.id }}'>
+														{{ occupation.name }}
+														<span>X</span>
+													</li>
+												{% endfor %}
+											</ul>
                                         </div>
                                     </div>
                                 </div>

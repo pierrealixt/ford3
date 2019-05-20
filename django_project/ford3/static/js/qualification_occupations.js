@@ -118,6 +118,10 @@ const setSearch = () => {
 const setupEvents = () => {
   setClickToLetters()
   setSearch()
+  document.querySelectorAll('#selected-occupations span').forEach(span => {
+    setClickRemoveOccupationSelectionList(span)
+  })
+  $('[data-toggle="tooltip"]').tooltip()
 }
 
 const removeOccupationFromSelectionList = (occupationId) => {
@@ -215,7 +219,7 @@ const displayResults = (data) => {
   if (data.results.length < itemsPerColumn) {
     columnsCount = data.results.length
   } else {
-    columnsCount = Math.round(data.results.length / itemsPerColumn)
+    columnsCount = Math.ceil(data.results.length / itemsPerColumn)
   }
 
   for (let i = 0; i < columnsCount; i++) {
