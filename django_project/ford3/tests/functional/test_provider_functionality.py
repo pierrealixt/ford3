@@ -44,7 +44,7 @@ class TestProviderForm(SeleniumTestCase):
         self.driver.get(f'{self.live_server_url}{provider_form_url}')
         html = self.driver.page_source
         self.assertTrue(html.startswith('<html'))
-        self.assertIn('FORD3', self.driver.title)
+        self.assertIn('Edit provider', self.driver.title)
         # They are greeted with their username
         header_text = self.driver.find_element_by_tag_name('h1').text
         self.assertIn('Welcome, ', header_text)

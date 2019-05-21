@@ -3,6 +3,8 @@
 {% load crispy_forms_tags %}
 {% load list_index %}
 
+{% block title %}{{ campus.name }} • Edit campus{% endblock %}
+
 {% block head %}
     {{ wizard.form.media }}
     <link rel="stylesheet" type="text/css"

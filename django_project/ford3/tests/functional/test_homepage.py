@@ -14,4 +14,4 @@ class TestHomepage(SeleniumTestCase):
         self.assertTrue(self.driver)
 
         self.driver.get(self.live_server_url)
-        self.assertIn('FORD3', self.driver.title)
+        self.assertIn('OpenEdu', self.driver.title)
