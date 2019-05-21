@@ -16,325 +16,402 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container mt-3">
-        <div class="row">
-            <div class="col-md-12">
-                <h2>{{ campus }} - {{ form_name_list|index:wizard.steps.step0 }}</h2>
-            </div>
-            {% if multi_step_form %}
-            <div class='col-md-12'>
-                <ul class="nav-wizard-steps nav nav-pills nav-fill">
-                    {% for form_name in form_name_list %}
-                        <li class="nav-item">
-                            <a class="nav-link
+	<div class="container mt-3">
+		<div class="row">
+			<div class="col-md-12">
+				<h2>{{ campus }} - {{ form_name_list|index:wizard.steps.step0 }}</h2>
+			</div>
+			{% if multi_step_form %}
+				<div class='col-md-12'>
+					<ul class="container nav-wizard-steps nav nav-pills nav-fill">
+						{% for form_name in form_name_list %}
+							<li class="nav-item">
+
+								<a class="row nav-link {% if forloop.counter == 1 %}
+                                first
+                            {% endif %}
                             {% if forloop.counter == wizard.steps.step1 %}
                                 active
-                            {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}" href="#">
-                                <h4 class="list-group-item-heading
-                                {% if forloop.counter == wizard.steps.step1 %}
-                                    active
-                                {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
-                                    Step {{ forloop.counter }}
-                                </h4>
-                                <p class="list-group-item-text">{{ form_name }}</p>
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-        </div>
-        <div class='row'>
-            <div class='col-md-12'>
+                            {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
 
-                        {% if wizard.steps.step1 == 3 %}
-                            <div class='row'>
-                                <div class='col-md-6'>
-                                    <input id='create-or-update-campus-event-url' type='hidden' value='{% url "create-or-update-campus-event" campus_id=campus.id %}' />
-                                    <input id='delete-campus-event-url' type='hidden' value='{% url "delete-campus-event" %}' />
+<span class="nav-item-number">
+		                        <span class="nav-item-number-inner">{{ forloop.counter }}</span>
+                            </span>
+									<span class="col-md-11 nav-item-caption">{{ form_name }}</span>
 
-                                    <div id='form-event'>
-                                        <label class="mt-1">Name*</label>
-                                        <input required placeholder="eg. Open day" type='text' name='name' />
-                                        <label class="mt-1">Start date*</label>
-                                        <input required placeholder="2019-10-26" type='text' name='date_start' class='mydatepicker' />
-                                        <label class="mt-1">End date*</label>
-                                        <input placeholder="2019-10-28" required type='text' name='date_end' class='mydatepicker' />
-                                        <label class="mt-1">Website</label>
-                                        <input type='text' placeholder="http://www.event-site.co.za" name='http_link' />
-                                        <div  data-role='new-event-form-error' class='mt-2 alert alert-danger d-none'></div>
-	                                    <div class="row no-gutters">
-		                                    <button class='col-md-4 edu-button edu-button-orange' data-action='create-event'>Create</button>
-	                                        <button class='col-md-4 edu-button edu-button-orange d-none' data-action='update-event'>Update</button>
-	                                        <button class='col-md-4 edu-button edu-button-orange d-none' data-action='cancel-update-event'>Cancel</button>
-	                                    </div>
-                                    </div>
-	                                {% if not multi_step_form %}
-	                                <div class="row no-gutters form-actions mt-4">
-		                                <div class="col-md-4">
-			                                <a href="{% url 'show-campus' provider_id=provider.id campus_id=campus.id %}"
-			                                   class="edu-button edu-button-blue"
-			                                   id='my-next-button'>Return to campus</a>
-		                                </div>
-	                                </div>
-		                                {% endif %}
-                                </div>
-                                <div id='events-list' class='col-md-6'>
-	                                <ul>
-	                                <li class='event-example event campus-event-list-item d-none pb-3 border-bottom'
-			                                    data-event-id=''>
+								</a>
+								<span class="nav-link-triangle
+                            {% if forloop.counter == 1 %}
+                                first
+                            {% endif %}
+                            {% if forloop.counter == wizard.steps.step1 %}
+                                active
+                            {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
+                        </span>
+
+							</li>
+						{% endfor %}
+
+					</ul>
+				</div>
+			{% endif %}
+		</div>
+		<div class='row'>
+			<div class='col-md-12'>
+
+				{% if wizard.steps.step1 == 3 %}
+					<div class='row'>
+						<div class='col-md-6'>
+							<input id='create-or-update-campus-event-url'
+							       type='hidden'
+							       value='{% url "create-or-update-campus-event" campus_id=campus.id %}'/>
+							<input id='delete-campus-event-url' type='hidden'
+							       value='{% url "delete-campus-event" %}'/>
+
+							<div id='form-event'>
+								<label class="mt-1">Name*</label>
+								<input required placeholder="eg. Open day"
+								       type='text' name='name'/>
+								<label class="mt-1">Start date*</label>
+								<input required placeholder="2019-10-26"
+								       type='text' name='date_start'
+								       class='mydatepicker'/>
+								<label class="mt-1">End date*</label>
+								<input placeholder="2019-10-28" required
+								       type='text' name='date_end'
+								       class='mydatepicker'/>
+								<label class="mt-1">Website</label>
+								<input type='text'
+								       placeholder="http://www.event-site.co.za"
+								       name='http_link'/>
+								<div data-role='new-event-form-error'
+								     class='mt-2 alert alert-danger d-none'></div>
+								<div class="row no-gutters">
+									<button class='col-md-4 edu-button edu-button-orange'
+									        data-action='create-event'>Create
+									</button>
+									<button class='col-md-4 edu-button edu-button-orange d-none'
+									        data-action='update-event'>Update
+									</button>
+									<button class='col-md-4 edu-button edu-button-orange d-none'
+									        data-action='cancel-update-event'>Cancel
+									</button>
+								</div>
+							</div>
+							{% if not multi_step_form %}
+								<div class="row no-gutters form-actions mt-4">
+									<div class="col-md-4">
+										<a href="{% url 'show-campus' provider_id=provider.id campus_id=campus.id %}"
+										   class="edu-button edu-button-blue"
+										   id='my-next-button'>Return to campus</a>
+									</div>
+								</div>
+							{% endif %}
+						</div>
+						<div id='events-list' class='col-md-6'>
+							<ul>
+								<li class='event-example event campus-event-list-item d-none pb-3 border-bottom'
+								    data-event-id=''>
 				                                <span class='font-weight-bold'
 				                                      data-role='name'></span>
 
-				                                <div class='row'>
-					                                <div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
-					                                <span class='col-md-6'
-					                                      data-role='date_start'></span>
-				                                </div>
-				                                <div class='row'>
-					                                <div class='col-md-1 ml-4 font-weight-bold'>End:</div>
-					                                <span class='col-md-6'
-					                                      data-role='date_end'></span>
-					                                <div class='col-md-3'></div>
-				                                </div>
-					                                <div class='row'>
-						                                <div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
-						                                <span class='col-md-6'
-						                                      data-role='http_link'><a
-								                                target='_blank'
-								                                href=''></a></span>
-					                                </div>
+									<div class='row'>
+										<div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
+										<span class='col-md-6'
+										      data-role='date_start'></span>
+									</div>
+									<div class='row'>
+										<div class='col-md-1 ml-4 font-weight-bold'>End:</div>
+										<span class='col-md-6'
+										      data-role='date_end'></span>
+										<div class='col-md-3'></div>
+									</div>
+									<div class='row'>
+										<div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
+										<span class='col-md-6'
+										      data-role='http_link'><a
+												target='_blank'
+												href=''></a></span>
+									</div>
 
-		                                        <button class='edit-campus-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
-					                                        data-action='edit-event'>Edit
-				                                </button>
-				                                <button class='delete-campus-event align-self-end col-md-3 edu-button edu-button-orange'
-				                                        data-action='delete-event'>Delete
-				                                </button>
-			                                </li>
-		                                {% for event in campus.events %}
-			                                <li class='event campus-event-list-item pb-3 border-bottom'
-			                                    data-event-id='{{ event.id }}'>
+									<button class='edit-campus-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
+									        data-action='edit-event'>Edit
+									</button>
+									<button class='delete-campus-event align-self-end col-md-3 edu-button edu-button-orange'
+									        data-action='delete-event'>Delete
+									</button>
+								</li>
+								{% for event in campus.events %}
+									<li class='event campus-event-list-item pb-3 border-bottom'
+									    data-event-id='{{ event.id }}'>
 				                                <span class='font-weight-bold'
 				                                      data-role='name'>{{ event.name }}</span>
 
-				                                <div class='row'>
-					                                <div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
-					                                <span class='col-md-6'
-					                                      data-role='date_start'>{{ event.date_start|date:"Y-m-d" }}</span>
-				                                </div>
-				                                <div class='row'>
-					                                <div class='col-md-1 ml-4 font-weight-bold'>End:</div>
-					                                <span class='col-md-6'
-					                                      data-role='date_end'>{{ event.date_end|date:"Y-m-d" }}</span>
-					                                <div class='col-md-3'></div>
-				                                </div>
-				                                {% if event.http_link %}
-					                                <div class='row'>
-						                                <div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
-						                                <span class='col-md-6'
-						                                      data-role='http_link'><a
-								                                target='_blank'
-								                                href='{{ event.http_link }}'>{{ event.http_link }}</a></span>
-					                                </div>
-				                                {% endif %}
-				                                <button class='edit-campus-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
-				                                        data-action='edit-event'>Edit
-				                                </button>
-				                                <button class='delete-campus-event align-self-end col-md-3 edu-button edu-button-orange'
-				                                        data-action='delete-event'>Delete
-				                                </button>
-			                                </li>
-                                    {% endfor %}
-                                    </ul>
-                                </div>
+										<div class='row'>
+											<div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
+											<span class='col-md-6'
+											      data-role='date_start'>{{ event.date_start|date:"Y-m-d" }}</span>
+										</div>
+										<div class='row'>
+											<div class='col-md-1 ml-4 font-weight-bold'>End:</div>
+											<span class='col-md-6'
+											      data-role='date_end'>{{ event.date_end|date:"Y-m-d" }}</span>
+											<div class='col-md-3'></div>
+										</div>
+										{% if event.http_link %}
+											<div class='row'>
+												<div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
+												<span class='col-md-6'
+												      data-role='http_link'><a
+														target='_blank'
+														href='{{ event.http_link }}'>{{ event.http_link }}</a></span>
+											</div>
+										{% endif %}
+										<button class='edit-campus-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
+										        data-action='edit-event'>Edit
+										</button>
+										<button class='delete-campus-event align-self-end col-md-3 edu-button edu-button-orange'
+										        data-action='delete-event'>Delete
+										</button>
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
 
-                            </div>
-                        {% endif %}
+					</div>
+				{% endif %}
 
 
-                <form action="" method="post">{% csrf_token %}
-                    <div class="form-group">
-                        {{ wizard.management_form }}
-                        {% if wizard.form.forms %}
-                            {{ wizard.form.management_form }}
-                            {% crispy wizard.form wizard.form.helper %}
-                        {% else %}
-                            {% crispy wizard.form wizard.form.helper %}
-                        {% endif %}
+				<form action="" method="post">{% csrf_token %}
+					<div class="form-group">
+						{{ wizard.management_form }}
+						{% if wizard.form.forms %}
+							{{ wizard.form.management_form }}
+							{% crispy wizard.form wizard.form.helper %}
+						{% else %}
+							{% crispy wizard.form wizard.form.helper %}
+						{% endif %}
 
-                        {% if wizard.steps.step1 == 4 %}
-                        <div class='row no-gutters'>
-                            <div class='col-md-5 campus-all-qualifications border'>
-                                <h5 class="text-center mb-0 py-3">Qualifications in this campus</h5>
-                                <hr class='m-0'/>
-                                <ul id='campus-qualifications-list' class='m-0 p-0 px-3'>
-                                    <li class='qualif-li-example container d-none mx-0 px-0 py-2 border-bottom' data-saqa-id=''>
-                                        <div class='row mx-0'>
-                                            <div class='col-md-9 px-0 qualif-name'></div>
-                                            <div class='col-md-3 px-0 qualif-saqa-id text-right'></div>
-                                        </div>
-                                    </li>
+						{% if wizard.steps.step1 == 4 %}
+							<div class='row no-gutters'>
+								<div class='col-md-5 campus-all-qualifications border'>
+									<h5 class="text-center mb-0 py-3">Qualifications in this campus</h5>
+									<hr class='m-0'/>
+									<ul id='campus-qualifications-list'
+									    class='m-0 p-0 px-3'>
+										<li class='qualif-li-example container d-none mx-0 px-0 py-2 border-bottom'
+										    data-saqa-id=''>
+											<div class='row mx-0'>
+												<div class='col-md-9 px-0 qualif-name'></div>
+												<div class='col-md-3 px-0 qualif-saqa-id text-right'></div>
+											</div>
+										</li>
 
-                                    {% for qualification in campus.qualifications %}
-                                    <li class='qualif-li container mx-0 px-0 py-2 border-bottom' data-saqa-id='{{ qualification.saqa_qualification__id }}'>
-                                        <div class='row'>
-                                            <div class='col-md-9 qualif-name'>
-                                                {{ qualification.saqa_qualification__name }}
-                                            </div>
-                                            <div class='col-md-3 qualif-saqa-id text-right'>
-                                                {% if qualification.saqa_qualification__accredited %}
-                                                    <a href='http://regqs.saqa.org.za/viewQualification.php?id={{ qualification.saqa_qualification__saqa_id }}' target='_blank'>{{ qualification.saqa_qualification__saqa_id }}</a>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                            <div class='col-md-2 text-center'>
-                                <div class='add-qualif-widget disabled'>
-                                    <p class="qualif-texts text-blue">add</p>
-                                    <button type='button'
-                                        class='arrow-button'
-                                        data-action='add-qualif'>
-                                    </button>
-                                </div>
+										{% for qualification in campus.qualifications %}
+											<li class='qualif-li container mx-0 px-0 py-2 border-bottom'
+											    data-saqa-id='{{ qualification.saqa_qualification__id }}'>
+												<div class='row'>
+													<div class='col-md-9 qualif-name'>
+														{{ qualification.saqa_qualification__name }}
+													</div>
+													<div class='col-md-3 qualif-saqa-id text-right'>
+														{% if qualification.saqa_qualification__accredited %}
+															<a href='http://regqs.saqa.org.za/viewQualification.php?id={{ qualification.saqa_qualification__saqa_id }}'
+															   target='_blank'>{{ qualification.saqa_qualification__saqa_id }}</a>
+														{% endif %}
+													</div>
+												</div>
+											</li>
+										{% endfor %}
+									</ul>
+								</div>
+								<div class='col-md-2 text-center'>
+									<div class='add-qualif-widget disabled'>
+										<p class="qualif-texts text-blue">add</p>
+										<button type='button'
+										        class='arrow-button'
+										        data-action='add-qualif'>
+										</button>
+									</div>
 
-                                <br />
-                                <br />
-                                <div class='remove-qualif-widget disabled'>
-                                    <button type='button'
-                                            class='arrow-button'
-                                            data-action='remove-qualif'>
-                                    </button>
-                                    <p class="qualif-texts text-blue">remove</p>
-                                </div>
-                            </div>
-                            <div class='col-md-5 saqa-all-qualifications border'>
-                                <ul class='nav nav-tabs' role='tablist'>
-                                    <li class='nav-item w-50 text-center border-right'>
-                                        <a class='nav-link active text-purple my-3' id='search-qualif-tab' data-toggle='tab' role='tab' aria-controls='search-qualif' aria-selected='true' href='#search-qualif'>Search</a>
-                                    </li>
-                                    <li class='nav-item w-50 text-center'>
-                                        <a class='nav-link text-purple my-3' id='create-qualif-tab' data-toggle='tab' role='tab' aria-controls='create-qualif' aria-selected='false' href='#create-qualif'>Create</a>
-                                    </li>
-                                </ul>
-                                <hr class='m-0'/>
-                                <div class='tab-content'>
+									<br/>
+									<br/>
+									<div class='remove-qualif-widget disabled'>
+										<button type='button'
+										        class='arrow-button'
+										        data-action='remove-qualif'>
+										</button>
+										<p class="qualif-texts text-blue">remove</p>
+									</div>
+								</div>
+								<div class='col-md-5 saqa-all-qualifications border'>
+									<ul class='nav nav-tabs' role='tablist'>
+										<li class='nav-item w-50 text-center border-right'>
+											<a class='nav-link active text-purple my-3'
+											   id='search-qualif-tab'
+											   data-toggle='tab' role='tab'
+											   aria-controls='search-qualif'
+											   aria-selected='true'
+											   href='#search-qualif'>Search</a>
+										</li>
+										<li class='nav-item w-50 text-center'>
+											<a class='nav-link text-purple my-3'
+											   id='create-qualif-tab'
+											   data-toggle='tab' role='tab'
+											   aria-controls='create-qualif'
+											   aria-selected='false'
+											   href='#create-qualif'>Create</a>
+										</li>
+									</ul>
+									<hr class='m-0'/>
+									<div class='tab-content'>
 
-                                    <div class='tab-pane active' id='search-qualif' role='tabpanel' aria-labelledby='search-qualif-tab'>
-                                        <div class='row mx-3'>
-                                            <div class='col-md-12 px-0'>
-                                                <p class='text-muted my-4'>Search a SAQA qualification by its name id</p>
-                                            </div>
-                                        </div>
+										<div class='tab-pane active'
+										     id='search-qualif' role='tabpanel'
+										     aria-labelledby='search-qualif-tab'>
+											<div class='row mx-3'>
+												<div class='col-md-12 px-0'>
+													<p class='text-muted my-4'>Search a SAQA qualification by its name id</p>
+												</div>
+											</div>
 
-                                        <div class='row mx-3'>
-                                            <div class='col-md-9 px-0'>
-                                                <input type='text' data-action='search-qualif' class="h-100 p-3" placeholder="e.g: 36009, laws" />
-                                                <input type='hidden' id='search-qualif-url' value='{% url "search-saqa-qualifications" %}' />
-                                            </div>
-                                            <div class="col-md-3 px-0">
-                                                <button type='button' class="edu-button-orange h-100 w-100 border-0"
-                                                data-action='clear-qualifs'>clear</button>
-                                            </div>
-                                        </div>
+											<div class='row mx-3'>
+												<div class='col-md-9 px-0'>
+													<input type='text'
+													       data-action='search-qualif'
+													       class="h-100 p-3"
+													       placeholder="e.g: 36009, laws"/>
+													<input type='hidden'
+													       id='search-qualif-url'
+													       value='{% url "search-saqa-qualifications" %}'/>
+												</div>
+												<div class="col-md-3 px-0">
+													<button type='button'
+													        class="edu-button-orange h-100 w-100 border-0"
+													        data-action='clear-qualifs'>clear
+													</button>
+												</div>
+											</div>
 
-                                        <hr class='mx-3' />
+											<hr class='mx-3'/>
 
-                                        <div id='search-error-alert' class='row mx-3 d-none'>
-                                            <div class='col-md-12 px-0'>
-                                                <div class='col-md-12 alert alert-danger'>No results.</div>
-                                            </div>
-                                        </div>
+											<div id='search-error-alert'
+											     class='row mx-3 d-none'>
+												<div class='col-md-12 px-0'>
+													<div class='col-md-12 alert alert-danger'>No results.</div>
+												</div>
+											</div>
 
-                                        <div class='row mx-3'>
-                                            <div class='col-md-12 px-0'>
-                                                <ul id='saqa-qualifications-list' class='m-0 p-0'>
-                                                </ul>
-                                            </div>
-                                        </div>
+											<div class='row mx-3'>
+												<div class='col-md-12 px-0'>
+													<ul id='saqa-qualifications-list'
+													    class='m-0 p-0'>
+													</ul>
+												</div>
+											</div>
 
-                                    </div>
-                                    <div class='tab-pane' id='create-qualif' role='tabpanel' aria-labelledby='create-qualif-tab'>
-                                        <div class='row mx-3'>
-                                            <div class='col-md-12 px-0'>
-                                                <p class='text-muted my-4'>Create a non-accredited qualification</p>
-                                            </div>
-                                        </div>
+										</div>
+										<div class='tab-pane' id='create-qualif'
+										     role='tabpanel'
+										     aria-labelledby='create-qualif-tab'>
+											<div class='row mx-3'>
+												<div class='col-md-12 px-0'>
+													<p class='text-muted my-4'>Create a non-accredited qualification</p>
+												</div>
+											</div>
 
-                                        <div class='row mx-3'>
-                                            <div class='col-md-12 px-0'>
-                                                <input type='text' placeholder="e.g: Master of Computer Science" data-role='qualif-name' class='h-100 p-3'>
-                                                <input type='hidden' id='provider-id' value='{{ campus.provider.id }}' />
-                                                <input type='hidden' id='create-qualif-url' value='{% url "create-saqa-qualification" %}' />
-                                            </div>
-                                            <div class='col-md-12 px-0 my-3'>
-                                                <input type='hidden' id='list-sfos' value="{% url 'list-sfos' fos_id=0 %}" />
-                                                <select class='w-100 select form-control' data-role='qualif-fos'>
-                                                    <option class='text-center' selected='selected' value='0'>-- Please choose a field of study --</option>
-                                                    {% for field_of_study in fos %}
-                                                        <option value="{{ field_of_study.id }}">{{ field_of_study.name }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                                <select data-role='qualif-sfos' class='d-none w-100 mt-3 select form-control'>
-                                                </select>
-                                            </div>
-                                            <div class='col-md-12 px-0'>
-                                                <div id='create-qualif-form-error-alert' class="col-md-12 alert alert-danger d-none" role="alert"></div>
-                                            </div>
-                                            <div class='col-md-3 px-0'>
-                                                <button type='button' class='edu-button-blue h-100 w-100 border-0 p-3' data-action='create-qualif'>create</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                    </div>
-                    {% if multi_step_form %}
-                    <div class="row form-actions">
-                        <div class="col-md-4">
-                            {% if wizard.steps.prev %}
-                                <button class="edu-button edu-button-blue"
-                                        name="wizard_goto_step" type="submit"
-                                        value="{{ wizard.steps.prev }}">
-                                    Back
-                                </button>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-4">
-                        </div>
-                        <div class="col-md-4">
-                            <button class="edu-button edu-button-blue"
-                                    type="submit"
-                                    value="submit"
-                                    id='my-next-button'>
-                                {% if wizard.steps.next %}
-                                    Next
-                                {% else %}
-                                    Submit
-                                {% endif %}
-                            </button>
-                        </div>
-                    </div>
-                    {% elif wizard.steps.step1 != 3 %}
-                        <div class="row form-actions">
-                            <div class="col-md-4">
-                                <button class="edu-button edu-button-blue"
-                                    type="submit"
-                                    value="submit"
-                                    id='my-next-button'>Submit</button>
-                            </div>
-                        </div>
+											<div class='row mx-3'>
+												<div class='col-md-12 px-0'>
+													<input type='text'
+													       placeholder="e.g: Master of Computer Science"
+													       data-role='qualif-name'
+													       class='h-100 p-3'>
+													<input type='hidden'
+													       id='provider-id'
+													       value='{{ campus.provider.id }}'/>
+													<input type='hidden'
+													       id='create-qualif-url'
+													       value='{% url "create-saqa-qualification" %}'/>
+												</div>
+												<div class='col-md-12 px-0 my-3'>
+													<input type='hidden'
+													       id='list-sfos'
+													       value="{% url 'list-sfos' fos_id=0 %}"/>
+													<select class='w-100 select form-control'
+													        data-role='qualif-fos'>
+														<option class='text-center'
+														        selected='selected'
+														        value='0'>-- Please choose a field of study --
+														</option>
+														{% for field_of_study in fos %}
+															<option value="{{ field_of_study.id }}">{{ field_of_study.name }}</option>
+														{% endfor %}
+													</select>
+													<select data-role='qualif-sfos'
+													        class='d-none w-100 mt-3 select form-control'>
+													</select>
+												</div>
+												<div class='col-md-12 px-0'>
+													<div id='create-qualif-form-error-alert'
+													     class="col-md-12 alert alert-danger d-none"
+													     role="alert"></div>
+												</div>
+												<div class='col-md-3 px-0'>
+													<button type='button'
+													        class='edu-button-blue h-100 w-100 border-0 p-3'
+													        data-action='create-qualif'>create
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+					</div>
+					{% if multi_step_form %}
+						<div class="row form-actions">
+							<div class="col-md-4">
+								{% if wizard.steps.prev %}
+									<button class="edu-button edu-button-blue"
+									        name="wizard_goto_step"
+									        type="submit"
+									        value="{{ wizard.steps.prev }}">
+										Back
+									</button>
+								{% endif %}
+							</div>
+							<div class="col-md-4">
+							</div>
+							<div class="col-md-4">
+								<button class="edu-button edu-button-blue"
+								        type="submit"
+								        value="submit"
+								        id='my-next-button'>
+									{% if wizard.steps.next %}
+										Next
+									{% else %}
+										Submit
+									{% endif %}
+								</button>
+							</div>
+						</div>
+					{% elif wizard.steps.step1 != 3 %}
+						<div class="row form-actions">
+							<div class="col-md-4">
+								<button class="edu-button edu-button-blue"
+								        type="submit"
+								        value="submit"
+								        id='my-next-button'>Submit
+								</button>
+							</div>
+						</div>
 
-                    {% endif %}
-                </form>
-            </div>
-        </div>
-    </div>
+					{% endif %}
+				</form>
+			</div>
+		</div>
+	</div>
 
 {% endblock %}
 
