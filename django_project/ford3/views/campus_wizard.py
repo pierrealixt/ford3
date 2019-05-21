@@ -1,5 +1,6 @@
 import os
 from collections import OrderedDict
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, Http404, get_object_or_404
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
@@ -11,7 +12,7 @@ from ford3.models.provider import Provider
 from ford3.models.field_of_study import FieldOfStudy
 
 
-class CampusFormWizard(CookieWizardView):
+class CampusFormWizard(LoginRequiredMixin, CookieWizardView):
     template_name = 'campus_form.html'
     file_storage = FileSystemStorage(
         location=os.path.join(settings.MEDIA_ROOT, 'photos'))

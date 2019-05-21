@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, Http404, get_object_or_404
 from django.urls import reverse
 from formtools.wizard.views import CookieWizardView
@@ -190,7 +191,7 @@ class QualificationFormWizardDataProcess(object):
         self.add_or_update_requirements(form_data)
 
 
-class QualificationFormWizard(CookieWizardView):
+class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
     template_name = 'qualification_form.html'
     initial_dict = {}
 

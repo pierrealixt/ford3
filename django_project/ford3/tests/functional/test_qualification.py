@@ -1,27 +1,59 @@
 import unittest
 from ford3.tests.functional.utils import SeleniumTestCase, selenium_flag_ready
+from django.contrib.auth.models import User
 from django.urls import reverse
 from ford3.tests.models.model_factories import ModelFactories
 from ford3.models import QualificationEvent
 
 
 class TestQualificationForm(SeleniumTestCase):
+
+    @unittest.skipUnless(
+        selenium_flag_ready(),
+        'Selenium test was not setup')
+    def setUp(self):
+        # url of non-existed campus
+        self.campus_form_url = reverse('show-campus', args=('1042', '2042'))
+        # logged in first to access any other urls
+        self.user = User.objects.create_user(
+            'bobby', 'bobby@kartoza.com', 'bob')
+        self.client.login(username="bobby", password="bob")
+        # logged in, set session so the browser knows it has logged in
+        cookie = self.client.cookies['sessionid']
+        # selenium will set cookie domain based on current page domain
+        self.driver.get(self.live_server_url + '/admin/')
+        self.driver.add_cookie({
+            'name': 'sessionid',
+            'value': cookie.value,
+            'secure': False,
+            'path': '/'})
+        # need to update page for logged in user
+        self.driver.refresh()
+        self.driver.get(self.live_server_url + '/admin/')
+
     @unittest.skipUnless(
         selenium_flag_ready(),
         'Selenium test was not setup')
     def test_return_404(self):
         """ If provider_id or campus_id does not exist, it should return 404.
         """
-
-        provider_id = '1042'
-        campus_id = '2042'
-
-        campus_form_url = reverse('show-campus', args=(provider_id, campus_id))
-
-        self.driver.get(f'{self.live_server_url}{campus_form_url}')
+        self.driver.get(f'{self.live_server_url}{self.campus_form_url}')
         html = self.driver.page_source
 
         self.assertIn('404', html)
+
+    @unittest.skipUnless(
+        selenium_flag_ready(),
+        'Selenium test was not setup')
+    def test_return_302(self):
+        """ Redirect to login page, even if provider_id or campus_id does not exist.
+        """
+        # make sure a user has logged out
+        self.client.logout()
+        # then trying to access the provider
+        self.assertTemplateUsed(
+            self.driver.get(f'{self.live_server_url}{self.campus_form_url}'),
+            'login.html')
 
 
 class TestQualificationFormDataBinding(SeleniumTestCase):

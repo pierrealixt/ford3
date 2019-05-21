@@ -1,6 +1,7 @@
 from django.urls import reverse
 from django.test import TestCase
 from django.test.utils import override_settings  # noqa
+from django.contrib.auth.models import User
 from ford3.tests.models.model_factories import ModelFactories
 from ford3.models.qualification import Qualification
 from ford3.models.qualification_entrance_requirement_subject import (
@@ -56,12 +57,20 @@ class TestQualificationWizard(TestCase):
         self.qualification_data_process = QualificationFormWizardDataProcess(
             qualification=self.qualification
         )
+        self.user = User.objects.create_user(
+            'bobby', 'bobby@kartoza.com', 'bob')
 
     def test_validate_data(self):
         self.assertTrue(True)
 
     def test_initial_call(self):
+        # should be redirected before logged in
         response = self.client.get(self.wizard_url)
+        self.assertEqual(response.status_code, 302)
+        self.client.login(username="bobby", password="bob")
+        # should be succeed after logged in
+        response = self.client.get(self.wizard_url)
+        self.assertEqual(response.status_code, 200)
         wizard = response.context['wizard']
         self.assertEqual(response.status_code, 200)
         self.assertEqual(wizard['steps'].current, '0')

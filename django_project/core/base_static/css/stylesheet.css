@@ -620,9 +620,9 @@ input:checked + .slider:before {
 
 /* ----------------------------- END OF DROPDOWN ----------------------------- */
 
-/* ----------------------------- TEXT INPUTS ----------------------------- */
+/* ----------------------------- TEXT INPUTS AND PASSWORDS ----------------------------- */
 
-input[type='text'] {
+input[type='text'], input[type='password'] {
     padding: 0.5rem;
     padding-left: 1.5rem;
     border-radius: 4px;
@@ -634,20 +634,20 @@ input[type='text'] {
     font-weight: 400;
 }
 
-input[type='text']::placeholder {
+input[type='text']::placeholder, input[type='password']::placeholder  {
     color: var(--c-grey-l);
 }
 
-input[type='text']:focus {
+input[type='text']:focus, , input[type='password']:focus {
     outline-color: var(--c-blue) !important;
 }
 
-input[type='text']:hover {
+input[type='text']:hover, input[type='password']:hover {
     color: var(--c-grey-d);
     border-color: var(--c-grey-d);
 }
 
-input[type='text']:hover::placeholder {
+input[type='text']:hover::placeholder, , input[type='password']:hover::placeholder {
     color: var(--c-grey);
     border-color: var(--c-grey-d);
 
@@ -859,7 +859,23 @@ nav#sidebar ul li a:hover {
     background-color: var(--c-smoke);
 }
 
+.user-icon {
+    background: url('../images/ui/user.svg') no-repeat;
+    background-size: 50px 50px;
+    width: 50px;
+    height: 50px;
+}
+
+#login-page {
+    background-color: var(--c-blue-l);
+}
+#login-form {
+    background-color: var(--c-navy);
+}
+
+.open-edu-logo-login {
+    font-size: 3rem;
+}
 .input-invalid {
     border: 1px solid red !important;
 }
-

@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import (
     render,
     get_object_or_404,
@@ -10,6 +11,7 @@ from ford3.models.campus import Campus
 from ford3.models.provider import Provider
 
 
+@login_required
 def show(request, provider_id, campus_id):
     campus = get_object_or_404(
         Campus,
@@ -31,6 +33,7 @@ def show(request, provider_id, campus_id):
     return render(request, 'campus.html', context)
 
 
+@login_required()
 def create(request, provider_id):
     if request.method == 'GET':
         url = reverse('show-provider', args=[str(provider_id)])

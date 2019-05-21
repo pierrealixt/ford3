@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.contrib.auth.models import User
 from django.urls import reverse
 from ford3.tests.models.model_factories import ModelFactories
 
@@ -7,6 +8,9 @@ class TestProvider(TestCase):
 
     def setUp(self):
         self.new_provider = ModelFactories.get_provider_test_object()
+        self.user = User.objects.create_user(
+            'bobby', 'bobby@kartoza.com', 'bob')
+
 
     def test_provider_description_save_and_read(self):
 
@@ -28,5 +32,10 @@ class TestProvider(TestCase):
                 'edit-provider',
                 kwargs={
                     'provider_id': self.new_provider.id})
+        response = self.client.get(url)
+        # redirect when not logged in
+        self.assertEqual(response.status_code, 302)
+        self.client.login(username="bobby", password="bob")
+        # get provider form when logged in
         response = self.client.get(url)
         self.assertTemplateUsed(response, 'provider_form.html')

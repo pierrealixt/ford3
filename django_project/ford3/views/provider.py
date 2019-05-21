@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import (
     render,
     redirect,
@@ -9,6 +10,7 @@ from ford3.models.campus import Campus
 from ford3.models.provider import Provider
 
 
+@login_required()
 @transaction.atomic
 def edit(request, provider_id):
     if request.method == 'POST':
@@ -114,6 +116,7 @@ def edit(request, provider_id):
         return render(request, 'provider_form.html', context)
 
 
+@login_required
 def show(request, provider_id):
     provider = get_object_or_404(
         Provider,

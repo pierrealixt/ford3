@@ -6,6 +6,7 @@ from ford3.views import (
     campus_events
 )
 from django.conf.urls import url
+from django.contrib.auth import views as auth_views
 from ford3.forms.qualification import (
     QualificationDetailForm,
     QualificationDurationFeesForm,
@@ -27,6 +28,7 @@ from ford3.views import (
     sub_field_of_study,
     occupations
 )
+from ford3.forms.custom_auth_form import CustomAuthForm
 
 
 qualification_wizard = QualificationFormWizard.as_view(
@@ -109,4 +111,12 @@ urlpatterns = [
         name='list-occupations'),
 
     url(r'^test_widgets/$', views.widget_examples, name='test_widgets'),
+    url(
+        r'^accounts/login/$',
+        auth_views.LoginView.as_view(authentication_form=CustomAuthForm),
+        name='login'),
+    url(
+        r'^logout/$',
+        auth_views.LogoutView.as_view(), {'next_page': '/'},
+        name='logout'),
 ]
