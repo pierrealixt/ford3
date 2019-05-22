@@ -176,7 +176,7 @@ class Qualification(models.Model):
         return result
 
     @property
-    def qualification_events_list(self) -> List[QualificationEvent]:
+    def events(self) -> List[QualificationEvent]:
         event_query = QualificationEvent.objects.filter(
             qualification__id=self.id).values()
         return list(event_query)

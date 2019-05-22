@@ -3,7 +3,7 @@ from django.urls import path
 from ford3.views import (
     views,
     saqa_qualifications,
-    campus_events
+    events
 )
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
@@ -71,13 +71,14 @@ urlpatterns = [
         name='create-campus'),
 
     path(
-        'campus/<int:campus_id>/events/',
-        campus_events.create_or_update,
-        name='create-or-update-campus-event'),
+        'events/create_or_update/<int:owner_id>/<str:event_type>',
+        events.create_or_update,
+        name='create-or-update-event'),
     path(
-        'campus/events/delete/',
-        campus_events.delete,
-        name='delete-campus-event'),
+        'events/delete/<str:event_type>',
+        events.delete,
+        name='delete-event'),
+
     path(
         'saqa_qualifications/search/',
         saqa_qualifications.search,
