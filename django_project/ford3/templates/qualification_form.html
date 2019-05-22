@@ -92,6 +92,119 @@
 				        </div>
 			        </div>
 		        {% endif %}
+		        {% if wizard.steps.step1 == 5 %}
+						<div class='row'>
+							<div class='col-md-6'>
+								<input id='create-or-update-event-url'
+								       type='hidden'
+								       value='{% url "create-or-update-event" owner_id=qualification.id event_type='qualification' %}'/>
+								<input id='delete-event-url' type='hidden'
+								       value='{% url "delete-event" event_type='qualification' %}'/>
+
+								<div id='form-event'>
+									<label class="mt-1">Name*</label>
+									<input required placeholder="eg. Open day"
+									       type='text' name='name'/>
+									<label class="mt-1">Start date*</label>
+									<input required placeholder="2019-10-26"
+									       type='text' name='date_start'
+									       class='mydatepicker'/>
+									<label class="mt-1">End date*</label>
+									<input placeholder="2019-10-28" required
+									       type='text' name='date_end'
+									       class='mydatepicker'/>
+									<label class="mt-1">Website</label>
+									<input type='text'
+									       placeholder="http://www.event-site.co.za"
+									       name='http_link'/>
+									<div data-role='new-event-form-error'
+									     class='mt-2 alert alert-danger d-none'></div>
+									<div class="row no-gutters">
+										<button class='col-md-4 edu-button edu-button-orange'
+										        data-action='create-event'>Create
+										</button>
+										<button class='col-md-4 edu-button edu-button-orange d-none'
+										        data-action='update-event'>Update
+										</button>
+										<button class='col-md-4 edu-button edu-button-orange d-none'
+										        data-action='cancel-update-event'>Cancel
+										</button>
+									</div>
+								</div>
+
+							</div>
+							<div id='events-list' class='col-md-6'>
+								<ul>
+									<li class='event-example event qualification-event-list-item d-none pb-3 border-bottom'
+									    data-event-id=''>
+					                        <span class='font-weight-bold'
+					                              data-role='name'></span>
+
+										<div class='row'>
+											<div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
+											<span class='col-md-6'
+											      data-role='date_start'></span>
+										</div>
+										<div class='row'>
+											<div class='col-md-1 ml-4 font-weight-bold'>End:</div>
+											<span class='col-md-6'
+											      data-role='date_end'></span>
+											<div class='col-md-3'></div>
+										</div>
+										<div class='row'>
+											<div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
+											<span class='col-md-6'
+											      data-role='http_link'><a
+													target='_blank'
+													href=''></a></span>
+										</div>
+
+										<button class='edit-qualification-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
+										        data-action='edit-event'>Edit
+										</button>
+										<button class='delete-qualification-event align-self-end col-md-3 edu-button edu-button-orange'
+										        data-action='delete-event'>Delete
+										</button>
+									</li>
+									{% for event in qualification.events %}
+										<li class='event qualification-event-list-item pb-3 border-bottom'
+										    data-event-id='{{ event.id }}'>
+					                        <span class='font-weight-bold'
+					                              data-role='name'>{{ event.name }}</span>
+
+											<div class='row'>
+												<div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
+												<span class='col-md-6'
+												      data-role='date_start'>{{ event.date_start|date:"Y-m-d" }}</span>
+											</div>
+											<div class='row'>
+												<div class='col-md-1 ml-4 font-weight-bold'>End:</div>
+												<span class='col-md-6'
+												      data-role='date_end'>{{ event.date_end|date:"Y-m-d" }}</span>
+												<div class='col-md-3'></div>
+											</div>
+											{% if event.http_link %}
+												<div class='row'>
+													<div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
+													<span class='col-md-6'
+													      data-role='http_link'><a
+															target='_blank'
+															href='{{ event.http_link }}'>{{ event.http_link }}</a></span>
+												</div>
+											{% endif %}
+											<button class='edit-qualification-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
+											        data-action='edit-event'>Edit
+											</button>
+											<button class='delete-qualification-event align-self-end col-md-3 edu-button edu-button-orange'
+											        data-action='delete-event'>Delete
+											</button>
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+
+						</div>
+					{% endif %}
 		        <form action="" method="post">{% csrf_token %}
 			        <div class="form-group">
 				        {{ wizard.management_form }}
@@ -136,119 +249,7 @@
 					        </div>
 				        {% endif %}
 			        </div>
-			        {% if wizard.steps.step1 == 5 %}
-					<div class='row'>
-						<div class='col-md-6'>
-							<input id='create-or-update-event-url'
-							       type='hidden'
-							       value='{% url "create-or-update-event" owner_id=qualification.id event_type='qualification' %}'/>
-							<input id='delete-event-url' type='hidden'
-							       value='{% url "delete-event" event_type='qualification' %}'/>
 
-							<div id='form-event'>
-								<label class="mt-1">Name*</label>
-								<input required placeholder="eg. Open day"
-								       type='text' name='name'/>
-								<label class="mt-1">Start date*</label>
-								<input required placeholder="2019-10-26"
-								       type='text' name='date_start'
-								       class='mydatepicker'/>
-								<label class="mt-1">End date*</label>
-								<input placeholder="2019-10-28" required
-								       type='text' name='date_end'
-								       class='mydatepicker'/>
-								<label class="mt-1">Website</label>
-								<input type='text'
-								       placeholder="http://www.event-site.co.za"
-								       name='http_link'/>
-								<div data-role='new-event-form-error'
-								     class='mt-2 alert alert-danger d-none'></div>
-								<div class="row no-gutters">
-									<button class='col-md-4 edu-button edu-button-orange'
-									        data-action='create-event'>Create
-									</button>
-									<button class='col-md-4 edu-button edu-button-orange d-none'
-									        data-action='update-event'>Update
-									</button>
-									<button class='col-md-4 edu-button edu-button-orange d-none'
-									        data-action='cancel-update-event'>Cancel
-									</button>
-								</div>
-							</div>
-
-						</div>
-						<div id='events-list' class='col-md-6'>
-							<ul>
-								<li class='event-example event qualification-event-list-item d-none pb-3 border-bottom'
-								    data-event-id=''>
-				                        <span class='font-weight-bold'
-				                              data-role='name'></span>
-
-									<div class='row'>
-										<div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
-										<span class='col-md-6'
-										      data-role='date_start'></span>
-									</div>
-									<div class='row'>
-										<div class='col-md-1 ml-4 font-weight-bold'>End:</div>
-										<span class='col-md-6'
-										      data-role='date_end'></span>
-										<div class='col-md-3'></div>
-									</div>
-									<div class='row'>
-										<div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
-										<span class='col-md-6'
-										      data-role='http_link'><a
-												target='_blank'
-												href=''></a></span>
-									</div>
-
-									<button class='edit-qualification-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
-									        data-action='edit-event'>Edit
-									</button>
-									<button class='delete-qualification-event align-self-end col-md-3 edu-button edu-button-orange'
-									        data-action='delete-event'>Delete
-									</button>
-								</li>
-								{% for event in qualification.events %}
-									<li class='event qualification-event-list-item pb-3 border-bottom'
-									    data-event-id='{{ event.id }}'>
-				                        <span class='font-weight-bold'
-				                              data-role='name'>{{ event.name }}</span>
-
-										<div class='row'>
-											<div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
-											<span class='col-md-6'
-											      data-role='date_start'>{{ event.date_start|date:"Y-m-d" }}</span>
-										</div>
-										<div class='row'>
-											<div class='col-md-1 ml-4 font-weight-bold'>End:</div>
-											<span class='col-md-6'
-											      data-role='date_end'>{{ event.date_end|date:"Y-m-d" }}</span>
-											<div class='col-md-3'></div>
-										</div>
-										{% if event.http_link %}
-											<div class='row'>
-												<div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
-												<span class='col-md-6'
-												      data-role='http_link'><a
-														target='_blank'
-														href='{{ event.http_link }}'>{{ event.http_link }}</a></span>
-											</div>
-										{% endif %}
-										<button class='edit-qualification-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
-										        data-action='edit-event'>Edit
-										</button>
-										<button class='delete-qualification-event align-self-end col-md-3 edu-button edu-button-orange'
-										        data-action='delete-event'>Delete
-										</button>
-									</li>
-								{% endfor %}
-							</ul>
-						</div>
-
-					</div>
-				{% endif %}
 			        <div class="row form-actions">
 				        <div class="col-md-4">
 					        {% if wizard.steps.prev %}
