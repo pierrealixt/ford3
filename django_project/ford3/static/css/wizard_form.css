@@ -219,3 +219,28 @@ h4.list-group-item-heading.active {
     background-color: #d5d5d5;
 }
 
+
+/* Events */
+
+
+.event-list-item {
+    list-style-type: none;
+    position: relative;
+}
+
+.delete-event {
+    position:absolute;
+    top: 1.5rem;
+    right: 0;
+    transform: scale(0.7);
+}
+
+.edit-event {
+    position:absolute;
+    top: 0rem;
+    right: 0;
+    margin-top: 0;
+    transform: scale(0.7);
+}
+
+

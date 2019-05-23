@@ -107,7 +107,7 @@
 						</div>
 						<div id='events-list' class='col-md-6'>
 							<ul>
-								<li class='event-example event campus-event-list-item d-none pb-3 border-bottom'
+								<li class='event-example event event-list-item d-none pb-3 border-bottom'
 								    data-event-id=''>
 				                                <span class='font-weight-bold'
 				                                      data-role='name'></span>
@@ -131,15 +131,15 @@
 												href=''></a></span>
 									</div>
 
-									<button class='edit-campus-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
+									<button class='edit-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
 									        data-action='edit-event'>Edit
 									</button>
-									<button class='delete-campus-event align-self-end col-md-3 edu-button edu-button-orange'
+									<button class='delete-event align-self-end col-md-3 edu-button edu-button-orange'
 									        data-action='delete-event'>Delete
 									</button>
 								</li>
 								{% for event in campus.events %}
-									<li class='event campus-event-list-item pb-3 border-bottom'
+									<li class='event event-list-item pb-3 border-bottom'
 									    data-event-id='{{ event.id }}'>
 				                                <span class='font-weight-bold'
 				                                      data-role='name'>{{ event.name }}</span>
@@ -164,10 +164,10 @@
 														href='{{ event.http_link }}'>{{ event.http_link }}</a></span>
 											</div>
 										{% endif %}
-										<button class='edit-campus-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
+										<button class='edit-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
 										        data-action='edit-event'>Edit
 										</button>
-										<button class='delete-campus-event align-self-end col-md-3 edu-button edu-button-orange'
+										<button class='delete-event align-self-end col-md-3 edu-button edu-button-orange'
 										        data-action='delete-event'>Delete
 										</button>
 									</li>
