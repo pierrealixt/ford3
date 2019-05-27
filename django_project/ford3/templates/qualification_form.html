@@ -213,7 +213,7 @@
 					        {% crispy wizard.form wizard.form.helper %}
 				        {% else %}
 					        {% crispy wizard.form wizard.form.helper %}
-				        {% endif %}
+						{% endif %}
 				        {% if wizard.steps.step1 == 3 %}
 					        <div>
 						        {% for each_subject in subjects_list %}
@@ -295,4 +295,18 @@
 		<script type="text/javascript"
 		        src="{% static 'js/event.js' %}"></script>
 	{% endif %}
+
+	<script type="text/javascript">
+		const disablerFields = document.querySelectorAll('input[data-disabler]')
+		disablerFields.forEach(function(disabler) {
+			disabler.addEventListener('change', function(evt) {
+				const field = document.querySelector(`[data-field="${evt.target.dataset['disabler']}"]`)
+				if (evt.target.value === 'False') {
+					field.disabled = true
+				} else {
+					field.disabled = false
+				}
+			})
+		})
+	</script>
 {% endblock %}
