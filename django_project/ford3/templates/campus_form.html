@@ -198,8 +198,8 @@
 									<h5 class="text-center mb-0 py-3">Qualifications in this campus</h5>
 									<hr class='m-0'/>
 									<ul id='campus-qualifications-list'
-									    class='m-0 p-0 px-3'>
-										<li class='qualif-li-example container d-none mx-0 px-0 py-2 border-bottom'
+									    class='m-0 p-0'>
+										<li class='qualif-li-example container d-none mx-0 px-3 py-2 border-bottom'
 										    data-saqa-id=''>
 											<div class='row mx-0'>
 												<div class='col-md-9 px-0 qualif-name'></div>
@@ -208,7 +208,7 @@
 										</li>
 
 										{% for qualification in campus.qualifications %}
-											<li class='qualif-li container mx-0 px-0 py-2 border-bottom'
+											<li class='qualif-li container mx-0 px-3 py-2 border-bottom'
 											    data-saqa-id='{{ qualification.saqa_qualification__id }}'>
 												<div class='row'>
 													<div class='col-md-9 qualif-name'>
@@ -302,8 +302,8 @@
 												</div>
 											</div>
 
-											<div class='row mx-3'>
-												<div class='col-md-12 px-0'>
+											<div class='row'>
+												<div class='col-md-12'>
 													<ul id='saqa-qualifications-list'
 													    class='m-0 p-0'>
 													</ul>
