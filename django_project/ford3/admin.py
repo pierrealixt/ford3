@@ -38,9 +38,7 @@ class UserAdminForm(forms.ModelForm):
         fields = [
             'email',
             'is_staff',
-            'is_province',
-            'is_provider',
-            'is_campus']
+            'is_superuser']
 
 
 class UserAdmin(admin.ModelAdmin):
