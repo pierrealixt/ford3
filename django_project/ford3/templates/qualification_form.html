@@ -287,6 +287,9 @@
 	        src="{% static 'js/libs/jquery-ui-1.12.1-custom/jquery-ui.min.js' %}"></script>
 	<script type="text/javascript"
 	        src="{% static 'js/qualification_form.js' %}"></script>
+	{% if wizard.steps.step1 == 3 %}
+		<script type="text/javascript" src="{% static 'js/qualification_subjects.js' %}"></script>
+	{% endif %}
 	{% if wizard.steps.step1 == 4 %}
 		<script type="text/javascript"
 		        src="{% static 'js/qualification_occupations.js' %}"></script>

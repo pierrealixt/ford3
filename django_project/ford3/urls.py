@@ -33,11 +33,11 @@ from ford3.forms.custom_auth_form import CustomAuthForm
 
 qualification_wizard = QualificationFormWizard.as_view(
     [
-        QualificationDetailForm,
-        QualificationDurationFeesForm,
-        QualificationRequirementsForm,
-        QualificationInterestsAndJobsForm,
-        QualificationImportantDatesForm,
+        ('qualification-details', QualificationDetailForm),
+        ('qualification-duration-fees', QualificationDurationFeesForm),
+        ('qualification-requirements', QualificationRequirementsForm),
+        ('qualification-interests-jobs', QualificationInterestsAndJobsForm),
+        ('qualification-dates', QualificationImportantDatesForm),
     ],
 )
 

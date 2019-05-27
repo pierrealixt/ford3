@@ -68,40 +68,40 @@ class QualificationFormWizardDataProcess(object):
                 continue
         return qualification_fields
 
-    def add_subjects(self, form_data):
-        """
-        Add subjects to qualification
-        :param form_data: dict of form data
-        """
-        # Remove old subjects
-        QualificationEntranceRequirementSubject.objects.filter(
-            qualification=self.qualification).delete()
-        subject_list = form_data['subject_list'].split(',')
-        minimum_score_list = form_data['minimum_score_list'].split(',')
-        for index, subject_value in enumerate(subject_list):
-            try:
-                subject = Subject.objects.get(
-                    id=subject_value
-                )
-            except (Subject.DoesNotExist, ValueError):
-                continue
-            requirement_subjects, created = (
-                QualificationEntranceRequirementSubject.objects.
-                get_or_create(
-                    subject=subject,
-                    qualification=self.qualification,
-                )
-            )
-            try:
-                minimum_score_value = int(minimum_score_list[index])
-            except IndexError:
-                continue
-            if minimum_score_value == -1:
-                continue
-            requirement_subjects.minimum_score = (
-                minimum_score_value
-            )
-            requirement_subjects.save()
+    # def add_subjects(self, form_data):
+    #     """
+    #     Add subjects to qualification
+    #     :param form_data: dict of form data
+    #     """
+    #     # Remove old subjects
+    #     QualificationEntranceRequirementSubject.objects.filter(
+    #         qualification=self.qualification).delete()
+    #     subject_list = form_data['subject_list'].split(',')
+    #     minimum_score_list = form_data['minimum_score_list'].split(',')
+    #     for index, subject_value in enumerate(subject_list):
+    #         try:
+    #             subject = Subject.objects.get(
+    #                 id=subject_value
+    #             )
+    #         except (Subject.DoesNotExist, ValueError):
+    #             continue
+    #         requirement_subjects, created = (
+    #             QualificationEntranceRequirementSubject.objects.
+    #             get_or_create(
+    #                 subject=subject,
+    #                 qualification=self.qualification,
+    #             )
+    #         )
+    #         try:
+    #             minimum_score_value = int(minimum_score_list[index])
+    #         except IndexError:
+    #             continue
+    #         if minimum_score_value == -1:
+    #             continue
+    #         requirement_subjects.minimum_score = (
+    #             minimum_score_value
+    #         )
+    #         requirement_subjects.save()
 
     def add_or_update_requirements(self, form_data):
         """
@@ -258,10 +258,16 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
         context['provider_logo'] = \
             self.qualification.campus.provider.provider_logo.url \
             if self.qualification.campus.provider.provider_logo else ""
-        context['subjects_list'] = (
-            self.qualification.entrance_req_subjects_list)
-        context['events_list'] = self.qualification.events
-        context['occupations'] = self.qualification.occupations.all()
+
+        if self.steps.current == 'qualification-requirements':
+            context['subjects_list'] = (
+                self.qualification.entrance_req_subjects_list)
+        if self.steps.current == 'qualification-interests-jobs':
+            context['occupations'] = self.qualification.occupations.all()
+
+        if self.steps.current == 'qualification-dates':
+            context['events_list'] = self.qualification.events
+
         return context
 
     def get_form_initial(self, step):

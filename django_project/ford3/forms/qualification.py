@@ -183,29 +183,29 @@ class QualificationRequirementsForm(QualificationForm):
         widget=forms.RadioSelect
     )
 
-    subject = forms.ModelChoiceField(
-        label='Subject 1',
-        queryset=Subject.objects.all(),
-        required=False,
-        widget=forms.Select(
-            attrs={'class': 'col-md-4 subject-list'}
-        ),
-    )
+    # subject = forms.ModelChoiceField(
+    #     label='Subject 1',
+    #     queryset=Subject.objects.all(),
+    #     required=False,
+    #     widget=forms.Select(
+    #         attrs={'class': 'col-md-4 subject-list'}
+    #     ),
+    # )
 
-    subject_list = forms.CharField(
-        required=False,
-        widget=forms.HiddenInput(
-            attrs={'id': 'subject-list'}
-        ),
-    )
+    # subject_list = forms.CharField(
+    #     required=False,
+    #     widget=forms.HiddenInput(
+    #         attrs={'id': 'subject-list'}
+    #     ),
+    # )
 
-    minimum_score_list = forms.CharField(
-        required=False,
-        widget=forms.HiddenInput(
-            attrs={'id': 'minimum-score-list'}
-        ),
-        initial='0',
-    )
+    # minimum_score_list = forms.CharField(
+    #     required=False,
+    #     widget=forms.HiddenInput(
+    #         attrs={'id': 'minimum-score-list'}
+    #     ),
+    #     initial='0',
+    # )
 
 
 class QualificationInterestsAndJobsForm(QualificationForm):
