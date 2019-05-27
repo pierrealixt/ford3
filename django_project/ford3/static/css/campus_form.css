@@ -84,8 +84,12 @@ input[data-action='create-qualif'] {
 }
 
 .qualif-saqa-id a {
-  color: darkred;
+  color: black;
   text-decoration: underline;
+}
+
+.selected .qualif-saqa-id a {
+  color: white;
 }
 
 .saqa-all-qualifications .nav-tabs {
@@ -111,4 +115,9 @@ input[data-action='create-qualif'] {
 }
 .saqa-all-qualifications .nav-link.active {
   background:  transparent !important;
+  text-decoration: underline;
+}
+
+.saqa-all-qualifications .nav-item {
+  height: 55px;
 }
