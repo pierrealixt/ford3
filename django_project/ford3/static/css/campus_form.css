@@ -111,6 +111,11 @@ input[data-action='create-qualif'] {
 }
 .saqa-all-qualifications .nav-link.active {
   background:  transparent !important;
+  text-decoration: underline;
+}
+
+.saqa-all-qualifications .nav-item {
+  height: 55px;
 }
 
 
