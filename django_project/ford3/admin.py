@@ -13,7 +13,8 @@ from ford3.models import (
     SecondaryInstitutionType,
     QualificationEvent,
     SAQAQualification,
-    Prospect
+    Prospect,
+    User
 )
 
 
@@ -29,6 +30,24 @@ class ProviderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Provider, ProviderAdmin)
+
+
+class UserAdminForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            'email',
+            'is_staff',
+            'is_province',
+            'is_provider',
+            'is_campus']
+
+
+class UserAdmin(admin.ModelAdmin):
+    form = UserAdminForm
+
+
+admin.site.register(User, UserAdmin)
 
 
 admin.site.register(Campus)
