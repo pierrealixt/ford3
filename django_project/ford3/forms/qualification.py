@@ -132,7 +132,11 @@ class QualificationRequirementsForm(QualificationForm):
         coerce=lambda x: x == 'True',
         required=False,
         choices=((True, 'Yes'), (False, 'No')),
-        widget=forms.RadioSelect
+        widget=forms.RadioSelect(
+            attrs={
+                'data-disabler': 'portfolio'
+            }
+        )
     )
 
     portfolio_comment = forms.CharField(
@@ -141,7 +145,9 @@ class QualificationRequirementsForm(QualificationForm):
         widget=forms.Textarea(
             attrs={
                 'rows': '5',
-                'placeholder': 'What does the portfolio require?'}
+                'placeholder': 'What does the portfolio require?',
+                'data-field': 'portfolio'
+            }
         ),
         max_length=120
     )
@@ -151,14 +157,21 @@ class QualificationRequirementsForm(QualificationForm):
         coerce=lambda x: x == 'True',
         required=False,
         choices=((True, 'Yes'), (False, 'No')),
-        widget=forms.RadioSelect
+        widget=forms.RadioSelect(
+            attrs={
+                'data-disabler': 'aps-score'
+            }
+        )
     )
 
     aps_calculator_link = forms.URLField(
-        label='Link to APS Calculator on Website [if any]',
+        label='Link to APS Calculator',
         required=False,
         widget=forms.TextInput(
-            attrs={'placeholder': 'www.example/aps.com'}
+            attrs={
+                'placeholder': 'www.example/aps.com',
+                'data-field': 'aps-score'
+            }
         )
     )
 
