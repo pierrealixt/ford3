@@ -1,14 +1,21 @@
-# coding=utf-8
+from django.conf.urls import url
+from django.contrib.auth import views as auth_views
 from django.urls import path
 from ford3.views import (
     views,
     saqa_qualifications,
     events,
     account,
-    dashboard
+    dashboard,
+    campus,
+    provider,
+    sub_field_of_study,
+    occupations
 )
-from django.conf.urls import url
-from django.contrib.auth import views as auth_views
+from ford3.views.users import (
+    UserList,
+    UserCreate
+)
 from ford3.forms.qualification import (
     QualificationDetailForm,
     QualificationDurationFeesForm,
@@ -24,12 +31,6 @@ from ford3.forms.campus import (
     CampusQualificationsForm
 )
 from ford3.views.campus_wizard import CampusFormWizard
-from ford3.views import (
-    campus,
-    provider,
-    sub_field_of_study,
-    occupations
-)
 from ford3.forms.custom_auth_form import CustomAuthForm
 
 
@@ -122,6 +123,16 @@ urlpatterns = [
         'dashboard/',
         dashboard.show,
         name='dashboard'
+    ),
+    path(
+        'dashboard/users/',
+        UserList.as_view(),
+        name='dashboard-users'
+    ),
+    path(
+        'dashboard/users/add/',
+        UserCreate.as_view(),
+        name='dashboard-users-add'
     ),
     url(r'^test_widgets/$', views.widget_examples, name='test_widgets'),
     url(

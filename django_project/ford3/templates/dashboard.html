@@ -5,7 +5,22 @@
  {% block title %}
 	Dashboard
 {% endblock %}
-
+{% block side_navbar %}
+<nav id="sidebar" class="col-md-2 px-0">
+    <div class="container-fluid px-0">
+        <div class="col-12">
+            <ul>
+                <li>
+                    <a href="{% url 'dashboard' %}">Providers</a>
+                </li>
+                <li>
+                    <a href="{% url 'dashboard-users' %}">Users</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
 {% block body %}
 {% if providers %}
     {% for provider in providers %}

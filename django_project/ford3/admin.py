@@ -41,10 +41,15 @@ class UserAdminForm(forms.ModelForm):
             'email',
             'is_staff',
             'is_superuser']
+        
 
 
 class UserAdmin(admin.ModelAdmin):
     form = UserAdminForm
+    list_display = (
+        'email', 'is_province', 'is_provider', 'is_campus',
+        'account_activated', 'is_active'
+    )
 
 
 

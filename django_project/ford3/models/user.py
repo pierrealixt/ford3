@@ -28,6 +28,42 @@ class User(AbstractUser):
         # elif user.is_campus:
         #     return CampusUser(user)
 
+    def __str__(self):
+        return self.email
+
+class CampusUser(User):
+    class Meta:
+        proxy = True
+
+    def save(self, *args, **kwargs):
+        self.is_campus = True
+        self.username = self.email
+        super().save(*args, **kwargs)
+
+        group = Group.objects.get(pk=OpenEduGroups.CAMPUS.value)
+        group.user_set.add(self)
+    
+    @property
+    def providers(self):
+        return []
+
+
+class ProviderUser(User):
+    class Meta:
+        proxy = True
+
+    def save(self, *args, **kwargs):
+        self.is_provider = True
+        self.username = self.email
+        super().save(*args, **kwargs)
+
+        group = Group.objects.get(pk=OpenEduGroups.PROVIDER.value)
+        group.user_set.add(self)
+
+    @property
+    def providers(self):
+        return []
+
 
 class ProvinceUser(User):
     class Meta:

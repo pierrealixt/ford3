@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% load change_value %}
+
+{% block title %}Dashboard • Users{% endblock %}
+
+{% block body %}
+    {{ user.is_province }}
+    {{ object_list }}
+<ul>
+        {% for user in object_list %}
+            <li>{{ user.email }}</li>
+            {{ user.is_superuser }}
+        {% endfor %}
+    </ul>
+    <a href="{% url 'dashboard-users-add' %}">Add an user</a>
+    {% endblock %}
+
