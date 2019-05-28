@@ -13,7 +13,7 @@ class UserList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         if self.request.user.is_province:
-            return User.objects.filter(is_provider=True)
+            return User.objects.filter(is_provider=True, creator=self.request.user)
         elif self.request.user.is_provider:
             return User.objects.filter(is_campus=True)
 
@@ -33,5 +33,6 @@ class UserCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         elif self.request.user.is_provider:
             # provider user creates campus user
             self.object.is_campus = True
+        self.object.creator = self.request.user
         self.object.save()
         return HttpResponseRedirect(reverse('dashboard-users'))

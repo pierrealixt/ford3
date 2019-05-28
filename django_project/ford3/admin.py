@@ -69,7 +69,7 @@ class ProvinceAdmin(admin.ModelAdmin):
 admin.site.register(Province, ProvinceAdmin)
 class ProvinceUserAdminForm(forms.ModelForm):
     class Meta:
-        model = User
+        model = ProvinceUser
         fields = [
             'email', 'provinces'
         ]

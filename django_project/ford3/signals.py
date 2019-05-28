@@ -22,5 +22,5 @@ def add_user_to_group(sender, instance, created, **kwargs):
 
 post_save.connect(send_activation_email, sender=User)
 post_save.connect(add_user_to_group, sender=User)
-# post_save.connect(send_activation_email, sender=ProvinceUser)
-# post_save.connect(add_user_to_group, sender=ProvinceUser)
+post_save.connect(send_activation_email, sender=ProvinceUser)
+post_save.connect(add_user_to_group, sender=ProvinceUser)
