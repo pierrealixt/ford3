@@ -3,7 +3,9 @@ from django.urls import path
 from ford3.views import (
     views,
     saqa_qualifications,
-    events
+    events,
+    account,
+    dashboard
 )
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
@@ -110,7 +112,17 @@ urlpatterns = [
         'occupations/',
         occupations.index,
         name='list-occupations'),
-
+    url(
+        r'^activate/'
+        r'(?P<uidb64>[0-9A-Za-z_\-]+)/'
+        r'(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        account.activate,
+        name='activate'),
+    path(
+        'dashboard/',
+        dashboard.show,
+        name='dashboard'
+    ),
     url(r'^test_widgets/$', views.widget_examples, name='test_widgets'),
     url(
         r'^accounts/login/$',

@@ -403,6 +403,8 @@ create-providers-group:
 create-campus-group:
 	@docker-compose exec uwsgi python manage.py loaddata campus_group.json
 
+create-sa-provinces:
+	@docker-compose exec uwsgi python manage.py loaddata sa_provinces.json
 
 load-initial-data:
 	@docker-compose exec uwsgi python manage.py loaddata occupation.json
@@ -411,6 +413,7 @@ load-initial-data:
 	@docker-compose exec uwsgi python manage.py loaddata provinces_group.json
 	@docker-compose exec uwsgi python manage.py loaddata providers_group.json
 	@docker-compose exec uwsgi python manage.py loaddata campus_group.json
+	@docker-compose exec uwsgi python manage.py loaddata sa_provinces.json
 	@docker-compose exec uwsgi python manage.py import_saqa_qualifications
 
 

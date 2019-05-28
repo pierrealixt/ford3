@@ -1,0 +1,46 @@
+{% extends 'index.html' %}
+{% load static %}
+
+
+ {% block title %}{{ title }}{% endblock %}
+{% block parent-body %}
+<div class="container-fluid" id="login-page">
+    <div class="row py-5">
+        <div class="col-md-3 mx-auto rounded px-4" id="login-form">
+            {% block registration %}
+                <div class="row">
+                    <div class="col-md-12 mt-4">
+                        <h4 class="text-center text-white">Activate your account</h4>
+                    </div>
+                </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-12 py-2 text-white">
+                          {{ form.as_p  }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 py-4">
+                        <input type="submit" class="edu-button edu-button-orange border-0" value="Activate">
+                    </div>
+                </div>
+
+                     </form>
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+	<footer class='container-fluid mt-5'>
+		<div class='row'>
+			<div class='col-md-2 mx-auto'>
+				<p>
+				<small>Powered by <a href="http://www.kartoza.com" target="_blank">Kartoza</a> - 2019</small>
+				</p>
+			</div>
+		</div>
+	</footer>
+{% endblock %}

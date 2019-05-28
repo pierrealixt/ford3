@@ -14,7 +14,9 @@ from ford3.models import (
     QualificationEvent,
     SAQAQualification,
     Prospect,
-    User
+    User,
+    ProvinceUser,
+    Province
 )
 
 
@@ -45,31 +47,40 @@ class UserAdmin(admin.ModelAdmin):
     form = UserAdminForm
 
 
-class ProvinceUser(User):
+
+class ProvinceAdminForm(forms.ModelForm):
     class Meta:
-        proxy=True
-    
-    def save(self, *args, **kwargs):
-        self.is_province = True
-        self.username = self.email
-        super().save(*args, **kwargs)
+        model = Province
+        fields = ['name']
 
 
+class ProvinceAdmin(admin.ModelAdmin):
+    form = ProvinceAdminForm
+
+
+admin.site.register(Province, ProvinceAdmin)
 class ProvinceUserAdminForm(forms.ModelForm):
     class Meta:
         model = ProvinceUser
         fields = [
-            'email',
+            'email', 'provinces'
         ]
 
-class ProvinceUserAdminForm(admin.ModelAdmin):
+class ProvinceUserAdmin(admin.ModelAdmin):
     form = ProvinceUserAdminForm
+    list_display = ('email', 'get_provinces')
+
+    def get_provinces(self, obj):
+        # todo it should call a model method
+        # e.g: get_provinces_for_admin
+        return "\n".join([p.name for p in obj.provinces.all()])
+
     def get_queryset(self, request):
         return self.model.objects.filter(is_province=True)
 
 
 
-admin.site.register(ProvinceUser, ProvinceUserAdminForm)
+admin.site.register(ProvinceUser, ProvinceUserAdmin)
 admin.site.register(User, UserAdmin)
 
 
