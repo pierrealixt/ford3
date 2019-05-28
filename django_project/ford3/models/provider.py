@@ -2,6 +2,7 @@ from django.db import models
 from ford3.models.campus import Campus
 
 
+
 class Provider(models.Model):
     PROVIDER_TYPES = (
         'TVET College',
@@ -106,7 +107,11 @@ class Provider(models.Model):
         help_text='',
         max_length=255)
 
-    pass
+    province = models.ForeignKey(
+        'ford3.Province',
+        null=True,
+        on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return self.name

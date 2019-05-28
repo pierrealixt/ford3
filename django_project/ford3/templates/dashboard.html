@@ -7,6 +7,16 @@
 {% endblock %}
 
 {% block body %}
+{% if providers %}
+    {% for provider in providers %}
+    <a href="{% url 'show-provider' provider_id=provider.id %}">{{ provider.name }}</a>
+    {{ provider.province__name }}
+    {{ provider.number_of_campus }}
+    {% endfor %}
+{% else %}
+    No providers yet.
+{% endif %}
+
 {% endblock %}
 
 {% block footer %}

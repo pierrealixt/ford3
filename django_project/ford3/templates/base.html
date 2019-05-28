@@ -4,7 +4,11 @@
 {# navbar  #}
 {% block navbar %}
 <nav class="navbar pl-0">
-        <div class="open-edu-logo col-md-2 text-center px-0"><span class='text-white'>Open</span><span class='text-blue'>Edu</span></div>
+        <div class="open-edu-logo col-md-2 text-center px-0">
+            <a href="{% url 'dashboard' %}">
+                <span class='text-white'>Open</span><span class='text-blue'>Edu</span>
+            </a>
+        </div>
         <div class="col-md-8">
             <p class="text-right">
                 {% if user.is_superuser %}
@@ -36,6 +40,7 @@
     {% block side_navbar %}
     <nav id="sidebar" class="col-md-2 px-0">
         <div class="container-fluid px-0">
+            {% if not is_dashboard %}
             <div class="col-12">
                 <div id="provider-photo" class="provider-photo">
                     {% if provider_logo %}
@@ -43,6 +48,9 @@
                     {% endif %}
                 </div>
             </div>
+            {% else %}
+                This is a dashboard sidebar
+            {% endif %}
             <div class="col-12 side-bar-title" id="provider-name">
                 {% if provider %}
                     <a href="{% url 'show-provider' provider.id %}">{{ provider.name }}</a>

@@ -1,0 +1,23 @@
+[
+    {
+        "model": "auth.Group",
+        "pk": 1,
+        "fields": {
+            "name": "PROVINCE-ADMINS"
+        }
+    },
+    {
+        "model": "auth.Group",
+        "pk": 2,
+        "fields": {
+            "name": "PROVIDER-ADMINS"
+        }
+    },
+    {
+        "model": "auth.Group",
+        "pk": 3,
+        "fields": {
+            "name": "CAMPUS-ADMINS"
+        }
+    }
+]

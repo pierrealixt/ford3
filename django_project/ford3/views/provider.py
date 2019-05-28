@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import (
     render,
     redirect,
@@ -11,6 +11,7 @@ from ford3.models.provider import Provider
 
 
 @login_required()
+@permission_required('ford3.change_provider', raise_exception=True)
 @transaction.atomic
 def edit(request, provider_id):
     if request.method == 'POST':

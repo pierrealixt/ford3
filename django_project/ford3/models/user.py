@@ -1,5 +1,7 @@
-from django.contrib.auth.models import AbstractUser
+from itertools import chain
+from django.contrib.auth.models import AbstractUser, Group
 from django.db import models
+from ford3.enums.open_edu_groups import OpenEduGroups
 
 
 class User(AbstractUser):
@@ -18,6 +20,14 @@ class User(AbstractUser):
         null=True,
         on_delete=models.PROTECT)
 
+    @classmethod
+    def set_user_from_type(self, user):
+        # model_class_name = user.type.split('_')[1]
+        if user.is_province:
+            return ProvinceUser.objects.get(pk=user.id)
+        # elif user.is_campus:
+        #     return CampusUser(user)
+
 
 class ProvinceUser(User):
     class Meta:
@@ -27,8 +37,15 @@ class ProvinceUser(User):
         self.is_province = True
         self.username = self.email
         super().save(*args, **kwargs)
-    
-    # @property
-    # def providers(self):
-    #     Provider.objects.all.filter(province_id=self.province_id)
 
+        # Add the ProvinceUser into the PROVINCE group.
+        group = Group.objects.get(pk=OpenEduGroups.PROVINCE.value)
+        group.user_set.add(self)
+
+
+    @property
+    def providers(self):
+
+        return chain.from_iterable([
+            province.providers
+            for province in self.provinces.all()])

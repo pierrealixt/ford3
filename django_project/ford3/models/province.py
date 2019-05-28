@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 from django.contrib.auth import get_user_model
 
 
@@ -22,3 +23,7 @@ class Province(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def providers(self):
+        return list(self.provider_set.all().values('id', 'name', 'province__name').annotate(number_of_campus=Count('campus')))

@@ -24,7 +24,7 @@ from ford3.models import (
 class ProviderAdminForm(forms.ModelForm):
     class Meta:
         model = Provider
-        fields = ['name']
+        fields = ['name', 'province']
 
 
 class ProviderAdmin(admin.ModelAdmin):
