@@ -13,6 +13,10 @@ class User(AbstractUser):
     provinces = models.ManyToManyField(
         'ford3.Province',
         blank=True)
+    creator = models.ForeignKey(
+        'self',
+        null=True,
+        on_delete=models.PROTECT)
 
 
 class ProvinceUser(User):
@@ -24,6 +28,7 @@ class ProvinceUser(User):
         self.username = self.email
         super().save(*args, **kwargs)
     
-    @property
-    def providers(self):
-        Provider.objects.all.filter(province_id=self.province_id)
+    # @property
+    # def providers(self):
+    #     Provider.objects.all.filter(province_id=self.province_id)
+
