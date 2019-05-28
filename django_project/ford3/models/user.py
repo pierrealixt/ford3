@@ -1,7 +1,6 @@
 from itertools import chain
-from django.contrib.auth.models import AbstractUser, Group
+from django.contrib.auth.models import AbstractUser
 from django.db import models
-from ford3.enums.open_edu_groups import OpenEduGroups
 
 
 class User(AbstractUser):
@@ -22,11 +21,14 @@ class User(AbstractUser):
 
     @classmethod
     def set_user_from_type(self, user):
-        # model_class_name = user.type.split('_')[1]
         if user.is_province:
             return ProvinceUser.objects.get(pk=user.id)
-        # elif user.is_campus:
-        #     return CampusUser(user)
+        elif user.is_provider:
+            return ProviderUser.objects.get(pk=user.id)
+        elif user.is_campus:
+            return CampusUser.objects.get(pk=user.id)
+        else:
+            return user
 
     def __str__(self):
         return self.email
@@ -35,14 +37,6 @@ class CampusUser(User):
     class Meta:
         proxy = True
 
-    def save(self, *args, **kwargs):
-        self.is_campus = True
-        self.username = self.email
-        super().save(*args, **kwargs)
-
-        group = Group.objects.get(pk=OpenEduGroups.CAMPUS.value)
-        group.user_set.add(self)
-    
     @property
     def providers(self):
         return []
@@ -51,14 +45,6 @@ class CampusUser(User):
 class ProviderUser(User):
     class Meta:
         proxy = True
-
-    def save(self, *args, **kwargs):
-        self.is_provider = True
-        self.username = self.email
-        super().save(*args, **kwargs)
-
-        group = Group.objects.get(pk=OpenEduGroups.PROVIDER.value)
-        group.user_set.add(self)
 
     @property
     def providers(self):
@@ -75,8 +61,8 @@ class ProvinceUser(User):
         super().save(*args, **kwargs)
 
         # Add the ProvinceUser into the PROVINCE group.
-        group = Group.objects.get(pk=OpenEduGroups.PROVINCE.value)
-        group.user_set.add(self)
+        # group = Group.objects.get(pk=OpenEduGroups.PROVINCE.value)
+        # group.user_set.add(self)
 
 
     @property

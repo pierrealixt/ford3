@@ -41,16 +41,19 @@ class UserAdminForm(forms.ModelForm):
             'email',
             'is_staff',
             'is_superuser']
-        
 
 
 class UserAdmin(admin.ModelAdmin):
     form = UserAdminForm
     list_display = (
         'email', 'is_province', 'is_provider', 'is_campus',
-        'account_activated', 'is_active'
+        'account_activated', 'is_active', 'first_name', 'last_name', 'get_groups'
     )
 
+    def get_groups(self, obj):
+        # todo it should call a model method
+        # e.g: get_provinces_for_admin
+        return "\n".join([p.name for p in obj.groups.all()])
 
 
 class ProvinceAdminForm(forms.ModelForm):
@@ -66,7 +69,7 @@ class ProvinceAdmin(admin.ModelAdmin):
 admin.site.register(Province, ProvinceAdmin)
 class ProvinceUserAdminForm(forms.ModelForm):
     class Meta:
-        model = ProvinceUser
+        model = User
         fields = [
             'email', 'provinces'
         ]

@@ -9,8 +9,7 @@ from ford3.models.user import User
 def show(request):
     user = User.set_user_from_type(request.user)
     context = {
-        'providers': user.providers,
-        'is_dashboard': True
+        'providers': user.providers
     }
 
     return render(request, 'dashboard.html', context)
