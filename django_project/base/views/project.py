@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from django.views.generic import TemplateView
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from ford3.forms.prospect_form import ProspectForm
 from ford3.models.prospect import Prospect
 
@@ -18,6 +18,12 @@ class Home(TemplateView):
         context['prospect_form'] = ProspectForm()
 
         return context
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(reverse('dashboard'))
+        else:
+            return render(request, self.template_name, self.get_context_data())
 
     def post(self, request, *args, **kwargs):
         form = ProspectForm(request.POST)

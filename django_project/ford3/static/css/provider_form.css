@@ -127,3 +127,12 @@ ul.errorlist {
     padding-inline-start: 10px;
     color: red;
 }
+
+label {
+    font-weight: 600;
+}
+
+ul.errorlist {
+    margin: 0;
+    padding: 0;
+}

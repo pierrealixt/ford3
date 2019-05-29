@@ -1,6 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from ford3.models.provider import Provider
+from ford3.models.province import Province
+
 
 
 EMPTY_TEL_ERROR = 'Your telephone number is required.'
@@ -11,32 +13,33 @@ class ProviderForm(forms.models.ModelForm):
 
     class Meta:
         model = Provider
-        provider_types_list = []
-        for each_provider_type in Provider.PROVIDER_TYPES:
-            next_provider = (each_provider_type, each_provider_type)
-            provider_types_list.append(next_provider)
-        provider_types = tuple(provider_types_list)
-        fields = ('name',
-                  'provider_type',
-                  'telephone',
-                  'admissions_contact_no',
-                  'email',
-                  'website',
-                  'physical_address_line_1',
-                  'physical_address_line_2',
-                  'physical_address_city',
-                  'physical_address_postal_code',
-                  'postal_address_differs',
-                  'postal_address_line_1',
-                  'postal_address_line_2',
-                  'postal_address_city',
-                  'postal_address_postal_code',
-                  'provider_logo',
-                  )
+        fields = (
+            'name',
+            'province',
+            'provider_type',
+            'telephone',
+            'admissions_contact_no',
+            'email',
+            'website',
+            'physical_address_line_1',
+            'physical_address_line_2',
+            'physical_address_city',
+            'physical_address_postal_code',
+            'postal_address_differs',
+            'postal_address_line_1',
+            'postal_address_line_2',
+            'postal_address_city',
+            'postal_address_postal_code',
+            'provider_logo',)
         widgets = {
-            'name' : forms.fields.HiddenInput(),
+            'name' : forms.fields.TextInput(
+                attrs={'placeholder': "Provider's name"}
+            ),
+            'province': forms.fields.Select(
+                choices=Province.to_form(),
+                attrs={'class' : 'edu-button edu-dropdown-button'}),
             'provider_type' : forms.fields.Select(
-                choices=provider_types,
+                choices=Provider.types_to_form(),
                 attrs={'class' : 'edu-button edu-dropdown-button'}),
             'telephone': forms.fields.TextInput(
                 attrs={'placeholder': 'Primary contact number'}),
@@ -49,8 +52,7 @@ class ProviderForm(forms.models.ModelForm):
             'physical_address_line_1': forms.fields.TextInput(
                 attrs={'placeholder': 'Address Line 1'}),
             'physical_address_line_2': forms.fields.TextInput(
-                attrs={'placeholder': 'Address Line 2',
-                       'class' : 'mt1'}),
+                attrs={'placeholder': 'Address Line 2'}),
             'physical_address_city': forms.fields.TextInput(
                 attrs={'placeholder': 'City'}),
             'physical_address_postal_code': forms.fields.TextInput(
@@ -59,8 +61,7 @@ class ProviderForm(forms.models.ModelForm):
             'postal_address_line_1': forms.fields.TextInput(
                 attrs={'placeholder': 'Address Line 1'}),
             'postal_address_line_2': forms.fields.TextInput(
-                attrs={'placeholder': 'Address Line 2',
-                       'class': 'mt1'}),
+                attrs={'placeholder': 'Address Line 2'}),
             'postal_address_city': forms.fields.TextInput(
                 attrs={'placeholder': 'City'}),
             'postal_address_postal_code': forms.fields.TextInput(
@@ -70,7 +71,6 @@ class ProviderForm(forms.models.ModelForm):
             'telephone': {'required': EMPTY_TEL_ERROR},
             'email' : {'required': EMPTY_EMAIL_ERROR}
         }
-
 
     def clean_provider_logo(self):
         provider_logo = self.cleaned_data.get('provider_logo', False)

@@ -46,9 +46,15 @@ class UserAdminForm(forms.ModelForm):
 class UserAdmin(admin.ModelAdmin):
     form = UserAdminForm
     list_display = (
-        'email', 'is_province', 'is_provider', 'is_campus',
-        'account_activated', 'is_active', 'first_name', 'last_name', 'get_groups'
+        'email', 'edu_group_name', 'account_activated',
+        'is_active', 'first_name', 'last_name',
+        'get_groups'
     )
+
+    def edu_group_name(self, instance):
+        if type(instance.edu_group) == bool:
+            return 'Admin'
+        return instance.edu_group.name
 
     def get_groups(self, obj):
         # todo it should call a model method

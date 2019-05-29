@@ -5,33 +5,52 @@
  {% block title %}
 	Dashboard
 {% endblock %}
-{% block side_navbar %}
-<nav id="sidebar" class="col-md-2 px-0">
-    <div class="container-fluid px-0">
-        <div class="col-12">
-            <ul>
-                <li>
-                    <a href="{% url 'dashboard' %}">Providers</a>
-                </li>
-                <li>
-                    <a href="{% url 'dashboard-users' %}">Users</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-{% endblock %}
-{% block body %}
-{% if providers %}
-    {% for provider in providers %}
-    <a href="{% url 'show-provider' provider_id=provider.id %}">{{ provider.name }}</a>
-    {{ provider.province__name }}
-    {{ provider.number_of_campus }}
-    {% endfor %}
-{% else %}
-    No providers yet.
-{% endif %}
 
+{% block side_navbar %}
+{% include 'dashboard_sidebar.html' %}
+{% endblock %}
+
+{% block body %}
+<div class='row'>
+    <div class='col-md-10'>
+        <h3>Providers</h3>
+    </div>
+    {% if perms.ford3.add_provider %}
+    <div class='col-md-2'>
+        <a href="{% url 'new-provider' %}" class='edu-button edu-button-orange'>Add a provider</a>
+    </div>
+    {% endif %}
+
+    <div class='col-md-12'>
+            {% if providers %}
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">Provider</th>
+                    <th scope="col">Province</th>
+                    <th scope="col">Number of campus</th>
+                    <!-- <th scope="col">Number of qualifications</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for provider in providers %}
+                    <tr>
+                    <th scope="row">
+                        <a href="{% url 'show-provider' provider_id=provider.id %}">{{ provider.name }}</a>
+                    </th>
+                    <td>{{ provider.province__name }}</td>
+                    <td>{{ provider.number_of_campus }}</td>
+                    <!-- <td>1000</td> -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            {% else %}
+                No providers yet.
+            {% endif %}
+    </div>
+</div>
 {% endblock %}
 
 {% block footer %}

@@ -1,6 +1,7 @@
 from django.views.generic import ListView, CreateView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.db import IntegrityError
 from django.contrib.auth.mixins import (
     LoginRequiredMixin, PermissionRequiredMixin
 )
@@ -12,10 +13,8 @@ class UserList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = User
 
     def get_queryset(self):
-        if self.request.user.is_province:
-            return User.objects.filter(is_provider=True, creator=self.request.user)
-        elif self.request.user.is_provider:
-            return User.objects.filter(is_campus=True)
+        return User.set_user_from_type(
+            self.request.user).users
 
 
 class UserCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -34,5 +33,14 @@ class UserCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
             # provider user creates campus user
             self.object.is_campus = True
         self.object.creator = self.request.user
-        self.object.save()
+        try:
+            self.object.save()
+        except IntegrityError:
+            return self.render_to_response(self.get_context_data(
+                form=form, 
+                form_error='Email already present in the database.'))
+        
         return HttpResponseRedirect(reverse('dashboard-users'))
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))

@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required, permission_required
+from django.views.decorators.http import require_http_methods
 from django.shortcuts import (
     render,
     redirect,
@@ -11,123 +12,107 @@ from ford3.models.provider import Provider
 
 
 @login_required()
-@permission_required('ford3.change_provider', raise_exception=True)
-@transaction.atomic
-def edit(request, provider_id):
-    if request.method == 'POST':
-        form = ProviderForm(request.POST, request.FILES)
-        if form.is_valid():
-            new_provider = Provider.objects.filter(pk=provider_id).first()
-            provider_type = form.cleaned_data['provider_type']
-            telephone = form.cleaned_data['telephone']
-            email = form.cleaned_data['email']
-            physical_address_line_1 = (
-                form.cleaned_data['physical_address_line_1'])
-            physical_address_line_2 = (
-                form.cleaned_data['physical_address_line_2'])
-            physical_address_city = (
-                form.cleaned_data['physical_address_city'])
-            postal_address_differs = (
-                form.cleaned_data['postal_address_differs'])
-            physical_address_postal_code = (
-                form.cleaned_data['physical_address_postal_code'])
-            postal_address_line_1 = (
-                form.cleaned_data['postal_address_line_1'])
-            postal_address_line_2 = (
-                form.cleaned_data['postal_address_line_2'])
-            postal_address_city = form.cleaned_data['postal_address_city']
-            postal_address_postal_code = (
-                form.cleaned_data['postal_address_postal_code'])
-            admissions_contact_no = (
-                form.cleaned_data['admissions_contact_no'])
-            provider_logo = form.cleaned_data['provider_logo']
-            # use case: user does not upload logo, then use old logo
-            if not form.cleaned_data['provider_logo']:
-                provider_logo = new_provider.provider_logo
-            new_provider.provider_type = provider_type
-            new_provider.telephone = telephone
-            new_provider.email = email
-            new_provider.physical_address_line_1 = physical_address_line_1
-            new_provider.physical_address_line_2 = physical_address_line_2
-            new_provider.physical_address_city = physical_address_city
-            new_provider.physical_address_postal_code = (
-                physical_address_postal_code)
-            new_provider.postal_address_differs = postal_address_differs
-            if postal_address_differs:
-                new_provider.postal_address_line_1 = postal_address_line_1
-                new_provider.postal_address_line_2 = postal_address_line_2
-                new_provider.postal_address_city = postal_address_city
-                new_provider.postal_address_postal_code = (
-                    postal_address_postal_code)
-            else:
-                new_provider.postal_address_line_1 = physical_address_line_1
-                new_provider.postal_address_line_2 = physical_address_line_2
-                new_provider.postal_address_city = physical_address_city
-                new_provider.postal_address_postal_code = (
-                    physical_address_postal_code)
-            new_provider.admissions_contact_no = admissions_contact_no
-            new_provider.provider_logo = provider_logo
-            new_provider.save()
-            campus_list = request.POST.getlist('campus_name')
-            number_of_campuses = len(campus_list)
-            try:
-                with transaction.atomic():
-                    for idx in range(number_of_campuses):
-                        campus_name = campus_list[idx]
-                        Campus.objects.create(provider=new_provider,
-                                              name=campus_name)
-            except IntegrityError:
-                return render(request, 'provider_form.html', {'form': form})
-            redirect_url = reverse(
-                'show-provider',
-                args=[str(new_provider.id)])
-            return redirect(redirect_url)
-        # form is not valid
-        else:
-            provider = Provider.objects.filter(pk=provider_id).first()
-            # use uploaded logo if form submission failed
-            if form.cleaned_data['provider_logo']:
-                form.instance.provider_logo = \
-                    form.cleaned_data['provider_logo']
-            # otherwise, use old logo
-            else:
-                form.instance.provider_logo = provider.provider_logo
+@permission_required('ford3.add_provider', raise_exception=True)
+@require_http_methods(['GET'])
+def new(request):
+    context = {
+        'form': ProviderForm(),
+        'is_new_provider': True,
+        'submit_url': reverse('create-provider')
+    }
+    return render(
+        request,
+        'provider_form.html',
+        context)
 
-            context = {
-                'form': form,
-                'provider_id': provider_id,
-                'provider': provider,
-                'is_new_provider': provider.is_new_provider
 
-            }
-            return render(request, 'provider_form.html', context)
+@login_required()
+@permission_required('ford3.add_provider', raise_exception=True)
+@require_http_methods(['POST'])
+def create(request):
+    form = ProviderForm(request.POST, request.FILES)
+    if form.is_valid():
+        provider = form.save()
+        try:
+            provider.creator = request.user
+            provider.save()
+
+            provider.create_campus(request.POST.getlist('campus_name'))
+        except IntegrityError:
+            return render(request, 'provider_form.html', {'form': form})
+
+        redirect_url = reverse(
+            'show-provider',
+            args=[str(provider.id)])
+        return redirect(redirect_url)
     else:
-        provider = get_object_or_404(
-            Provider,
-            id=provider_id
-        )
-        form = ProviderForm(instance=provider)
         context = {
             'form': form,
-            'provider_id': provider_id,
-            'provider': provider,
-            'is_new_provider': provider.is_new_provider,
+            'is_new_provider': True,
+            'submit_url': reverse('create-provider')
         }
-
         return render(request, 'provider_form.html', context)
 
 
+
+@login_required()
+@permission_required('ford3.change_provider', raise_exception=True)
+@require_http_methods(['GET'])
+def edit(request, provider_id):
+    provider = get_object_or_404(
+        Provider,
+        id=provider_id)
+    form = ProviderForm(instance=provider)
+    submit_url = reverse(
+        'update-provider',
+        args=[str(provider.id)])
+    context = {
+        'form': form,
+        'submit_url': submit_url
+    }
+    return render(
+        request,
+        'provider_form.html',
+        context)
+
+
+@login_required()
+@permission_required('ford3.change_provider', raise_exception=True)
+@require_http_methods(['POST'])
+def update(request, provider_id):
+    provider = get_object_or_404(
+        Provider,
+        id=provider_id)
+    form = ProviderForm(request.POST, request.FILES, instance=provider)
+    if form.is_valid():
+        provider = form.save()
+        redirect_url = reverse(
+            'show-provider',
+            args=[str(provider.id)])
+    else:
+        submit_url = reverse(
+            'update-provider',
+            args=[str(provider.id)])
+        context = {
+            'form': form,
+            'submit_url': submit_url
+        }
+
+        return render(
+            request,
+            'provider_form.html',
+            context)
+
+    return redirect(redirect_url)
+
+
 @login_required
+@require_http_methods(['GET'])
 def show(request, provider_id):
     provider = get_object_or_404(
         Provider,
         id=provider_id
     )
-    if provider.is_new_provider:
-        redirect_url = reverse(
-            'edit-provider',
-            args=[str(provider.id)])
-        return redirect(redirect_url)
 
     context = {
         'provider': provider

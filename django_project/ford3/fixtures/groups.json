@@ -3,21 +3,24 @@
         "model": "auth.Group",
         "pk": 1,
         "fields": {
-            "name": "PROVINCE-ADMINS"
+            "name": "PROVINCE-ADMINS",
+            "permissions": [52, 76, 116, 80, 45, 46, 47, 48]
         }
     },
     {
         "model": "auth.Group",
         "pk": 2,
         "fields": {
-            "name": "PROVIDER-ADMINS"
+            "name": "PROVIDER-ADMINS",
+            "permissions": [49, 50, 51, 52, 53, 54, 55, 56, 73, 74, 75, 76, 45, 46, 47, 48]
         }
     },
     {
         "model": "auth.Group",
         "pk": 3,
         "fields": {
-            "name": "CAMPUS-ADMINS"
+            "name": "CAMPUS-ADMINS",
+            "permissions": [49, 50, 51, 52]
         }
     }
 ]

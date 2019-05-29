@@ -6,178 +6,175 @@
 {% block title %}{{ qualification }} • Overview{% endblock %}
 
 {% block body %}
-<div class='container'>
-    <div class='row'>
-        <div class="col-md-12">
-            {% autoescape off %}
-            <h3 class="mb-4 px-0">{{ qualification.campus }}: {{ qualification }}</h3>
-            <div class='row pt-3 mx-0'>
-                <div class='col-md-10 edu-underline px-0'>
-                    <h4 class="mt-3">1. Details</h4>
-                </div>
-                <div class='col-md-2'>
-                    <a class="edu-button edu-button-orange" href="{% url 'edit-qualification' provider_id=qualification.campus.provider.id campus_id=qualification.campus.id qualification_id=qualification.id %}">Edit</a>
-                </div>
+<div class='row'>
+    <div class="col-md-12">
+        {% autoescape off %}
+        <h3 class="mb-4 px-0">{{ qualification.campus }}: {{ qualification }}</h3>
+        <div class='row pt-3 mx-0'>
+            <div class='col-md-10 edu-underline px-0'>
+                <h4 class="mt-3">1. Details</h4>
             </div>
-            <div class='row py-3'>
-                <div class='col-md-12'>
-                    <b>Short description</b>
-                    <p class="pt-3">{{ qualification.short_description|is_none }}</p>
-
-                    <b>Long description</b>
-                    <p class="py-3">{{ qualification.long_description|is_none }}</p>
-                </div>
-                <div class='col-md-6 pb-3'>
-                    <b>NQF Level:</b> {{ qualification.saqa_qualification.nqf_level|is_none }}
-                </div>
-                <div class='col-md-6 pb-3'>
-                    <b>Distance learning:</b> {{ qualification.distance_learning|yesno:"YES,NO" }}
-                </div>
+            <div class='col-md-2'>
+                <a class="edu-button edu-button-orange" href="{% url 'edit-qualification' provider_id=qualification.campus.provider.id campus_id=qualification.campus.id qualification_id=qualification.id %}">Edit</a>
             </div>
-
-            <div class="row py-3 mx-0">
-                <div class='col-md-10 edu-underline px-0'>
-                    <h4 class="mt-3">2. Duration and Fees</h4>
-                </div>
-                <div class='col-md-2'>
-                    <a class="edu-button edu-button-orange" href="#">Edit</a>
-                </div>
-            </div>
-            <div class='row py-3'>
-                <div class="row col-md-12 pb-3">
-                    <div class="col-md-6">
-                        <b>Full-time qualification:</b> {{ qualification.full_time|yesno:"YES,NO" }}
-                    </div>
-                    <div class="col-md-6">
-                        <b>Part-time qualification:</b> {{ qualification.part_time|yesno:"YES,NO" }}
-                    </div>
-                </div>
-                <div class="row col-md-12 pb-3">
-                    <div class="col-md-6">
-                        <b>Duration of the qualification:</b> {{ qualification.duration_in_months|is_number_none }} months
-                    </div>
-                    <div class="col-md-6">
-                        <b>Total cost of the qualification:</b> R {{ qualification.total_cost|is_number_none }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="row py-3 mx-0">
-                <div class='col-md-10 edu-underline px-0'>
-                    <h4 class="mt-3">3. Requirements</h4>
-                </div>
-                <div class='col-md-2'>
-                    <a class="edu-button edu-button-orange" href="#">Edit</a>
-                </div>
-            </div>
-            <div class='row py-3'>
-                <div class='col-md-12 pb-3'>
-                    {% for requirement in qualification.requirements %}
-                    <div class="row pb-3">
-                        <div class="col-md-6">
-                            <b>Required entrace qualification: </b>{{ requirement.min_nqf_level|filter_level|is_none }}
-                        </div>
-                        <div class="col-md-6">
-                            <b>Is there an interview: </b>{{ requirement.interview|yesno:"YES,NO" }}
-                        </div>
-                    </div>
-                    <div class="row pb-3">
-                        <div class="col-md-6">
-                            <b>Require a portfolio: </b>{{ requirement.portfolio|yesno:"YES,NO" }}
-                            <br />
-                            <b>Require and APS score: </b>{{ requirement.require_aps_score|yesno:"YES,NO" }}
-                        </div>
-                        <div class="col-md-6">
-                            <b>What does the portfolio require: </b>{{ requirement.portfolio_comment }}
-                        </div>
-                    </div>
-                    <div class="row pb-3">
-                        <div class="col-md-6">
-                            <b>Does qualification require certain subjects: </b>{{ requirement.require_certain_subjects }}
-                        </div>
-                    </div>
-                        <div class="row pb-3">
-                        {% for subject in qualification.entrance_req_subjects_list %}
-                            <div class="col-md-6">
-                                <b>Subject {{ forloop.counter }}: </b>{{ subject.name }} {{ subject.minimum_score }}%
-                            </div>
-                        {% endfor %}
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="row py-3 mx-0">
-                <div class='col-md-10 edu-underline px-0'>
-                    <h4 class="mt-3">4. Interests and Jobs</h4>
-                </div>
-                <div class='col-md-2'>
-                    <a class="edu-button edu-button-orange" href="#">Edit</a>
-                </div>
-            </div>
-            <div class='row py-3'>
-                <div class='col-md-12'>
-                    <div class="row pb-3">
-                        <div class="col-md-6">
-                            <b>Interests</b>
-                            <br />
-                            {% for  interest in qualification.interest_name_list %}
-                                {{  interest }}
-                                {% if forloop.counter < qualification.interest_name_list|length %}, {% endif  %}
-                            {% endfor %}
-                        </div>
-                        <div class="col-md-6">
-                            <b>Occupations</b>
-                            <br />
-                            {% for occupation in qualification.occupation_name_list %}
-                                {{  occupation }}
-                                {% if forloop.counter < qualification.occupation_name_list|length %}, {% endif  %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="row pb-3">
-                        <div class="col-md-6">
-                            <b>Does the qualification prepare for a critical skills occupation</b>
-                                {{ qualification.critical_skill|checked_or_crossed}}
-                        </div>
-                        <div class="col-md-6">
-                            <b>Does the qualification prepare for a green occupation</b>
-                                {{ qualification.green_occupation|checked_or_crossed}}
-                        </div>
-                    </div>
-                    <div class="row pb-3">
-                        <div class="col-md-6">
-                            <b>Does the qualification prepare for a high demand occupation</b>
-                                {{ qualification.high_demand_occupation|checked_or_crossed }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row py-3 mx-0">
-                <div class='col-md-10 edu-underline px-0'>
-                    <h4 class="mt-3">5. Important Dates</h4>
-                </div>
-                <div class='col-md-2'>
-                    <a class="edu-button edu-button-orange" href="#">Edit</a>
-                </div>
-            </div>
-            <div class='row py-3'>
-                <div class='col-md-6'>
-                    {% for event in qualification.qualification_events_list %}
-                    <b>{{ event.name }} </b>{{ event.date_start }} - {{ event.date_end }}
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="row mb-5">
-                <div class="col-md-3 mx-auto">
-                    <a class="edu-button edu-button-blue h-100" href="{% url 'show-campus' provider_id=provider.id campus_id=qualification.campus.id %}">Go to Campus Overview</a>
-                </div>
-            </div>
-        {% endautoescape %}
         </div>
+        <div class='row py-3'>
+            <div class='col-md-12'>
+                <b>Short description</b>
+                <p class="pt-3">{{ qualification.short_description|is_none }}</p>
+
+                <b>Long description</b>
+                <p class="py-3">{{ qualification.long_description|is_none }}</p>
+            </div>
+            <div class='col-md-6 pb-3'>
+                <b>NQF Level:</b> {{ qualification.saqa_qualification.nqf_level|is_none }}
+            </div>
+            <div class='col-md-6 pb-3'>
+                <b>Distance learning:</b> {{ qualification.distance_learning|yesno:"YES,NO" }}
+            </div>
+        </div>
+
+        <div class="row py-3 mx-0">
+            <div class='col-md-10 edu-underline px-0'>
+                <h4 class="mt-3">2. Duration and Fees</h4>
+            </div>
+            <div class='col-md-2'>
+                <a class="edu-button edu-button-orange" href="#">Edit</a>
+            </div>
+        </div>
+        <div class='row py-3'>
+            <div class="row col-md-12 pb-3">
+                <div class="col-md-6">
+                    <b>Full-time qualification:</b> {{ qualification.full_time|yesno:"YES,NO" }}
+                </div>
+                <div class="col-md-6">
+                    <b>Part-time qualification:</b> {{ qualification.part_time|yesno:"YES,NO" }}
+                </div>
+            </div>
+            <div class="row col-md-12 pb-3">
+                <div class="col-md-6">
+                    <b>Duration of the qualification:</b> {{ qualification.duration_in_months|is_number_none }} months
+                </div>
+                <div class="col-md-6">
+                    <b>Total cost of the qualification:</b> R {{ qualification.total_cost|is_number_none }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row py-3 mx-0">
+            <div class='col-md-10 edu-underline px-0'>
+                <h4 class="mt-3">3. Requirements</h4>
+            </div>
+            <div class='col-md-2'>
+                <a class="edu-button edu-button-orange" href="#">Edit</a>
+            </div>
+        </div>
+        <div class='row py-3'>
+            <div class='col-md-12 pb-3'>
+                {% for requirement in qualification.requirements %}
+                <div class="row pb-3">
+                    <div class="col-md-6">
+                        <b>Required entrace qualification: </b>{{ requirement.min_nqf_level|filter_level|is_none }}
+                    </div>
+                    <div class="col-md-6">
+                        <b>Is there an interview: </b>{{ requirement.interview|yesno:"YES,NO" }}
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col-md-6">
+                        <b>Require a portfolio: </b>{{ requirement.portfolio|yesno:"YES,NO" }}
+                        <br />
+                        <b>Require and APS score: </b>{{ requirement.require_aps_score|yesno:"YES,NO" }}
+                    </div>
+                    <div class="col-md-6">
+                        <b>What does the portfolio require: </b>{{ requirement.portfolio_comment }}
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col-md-6">
+                        <b>Does qualification require certain subjects: </b>{{ requirement.require_certain_subjects }}
+                    </div>
+                </div>
+                    <div class="row pb-3">
+                    {% for subject in qualification.entrance_req_subjects_list %}
+                        <div class="col-md-6">
+                            <b>Subject {{ forloop.counter }}: </b>{{ subject.name }} {{ subject.minimum_score }}%
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row py-3 mx-0">
+            <div class='col-md-10 edu-underline px-0'>
+                <h4 class="mt-3">4. Interests and Jobs</h4>
+            </div>
+            <div class='col-md-2'>
+                <a class="edu-button edu-button-orange" href="#">Edit</a>
+            </div>
+        </div>
+        <div class='row py-3'>
+            <div class='col-md-12'>
+                <div class="row pb-3">
+                    <div class="col-md-6">
+                        <b>Interests</b>
+                        <br />
+                        {% for  interest in qualification.interest_name_list %}
+                            {{  interest }}
+                            {% if forloop.counter < qualification.interest_name_list|length %}, {% endif  %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        <b>Occupations</b>
+                        <br />
+                        {% for occupation in qualification.occupation_name_list %}
+                            {{  occupation }}
+                            {% if forloop.counter < qualification.occupation_name_list|length %}, {% endif  %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col-md-6">
+                        <b>Does the qualification prepare for a critical skills occupation</b>
+                            {{ qualification.critical_skill|checked_or_crossed}}
+                    </div>
+                    <div class="col-md-6">
+                        <b>Does the qualification prepare for a green occupation</b>
+                            {{ qualification.green_occupation|checked_or_crossed}}
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col-md-6">
+                        <b>Does the qualification prepare for a high demand occupation</b>
+                            {{ qualification.high_demand_occupation|checked_or_crossed }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row py-3 mx-0">
+            <div class='col-md-10 edu-underline px-0'>
+                <h4 class="mt-3">5. Important Dates</h4>
+            </div>
+            <div class='col-md-2'>
+                <a class="edu-button edu-button-orange" href="#">Edit</a>
+            </div>
+        </div>
+        <div class='row py-3'>
+            <div class='col-md-6'>
+                {% for event in qualification.qualification_events_list %}
+                <b>{{ event.name }} </b>{{ event.date_start }} - {{ event.date_end }}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-md-3 mx-auto">
+                <a class="edu-button edu-button-blue h-100" href="{% url 'show-campus' provider_id=provider.id campus_id=qualification.campus.id %}">Go to Campus Overview</a>
+            </div>
+        </div>
+    {% endautoescape %}
     </div>
 </div>
-
 {% endblock %}
 
 {% block footer %}

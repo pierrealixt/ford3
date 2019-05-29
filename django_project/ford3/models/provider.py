@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from ford3.models.campus import Campus
 
 
@@ -10,7 +10,7 @@ class Provider(models.Model):
         'Private Tertiary College',)
 
     name = models.CharField(
-        blank=True,
+        blank=False,
         null=False,
         unique=False,
         help_text="The provider's name",
@@ -113,6 +113,12 @@ class Provider(models.Model):
         on_delete=models.CASCADE
     )
 
+    creator = models.ForeignKey(
+        'ford3.User',
+        null=True,
+        on_delete=models.CASCADE
+    )
+
     def __str__(self):
         return self.name
 
@@ -125,3 +131,34 @@ class Provider(models.Model):
     @property
     def is_new_provider(self):
         return len(self.campus) == 0
+
+    @classmethod
+    def types_to_form(self):
+        return tuple(
+            (provider_type, provider_type) 
+            for provider_type in Provider.PROVIDER_TYPES)
+
+    def create_campus(self, campuses):
+        with transaction.atomic():
+            for campus_name in campuses:
+                self.campus_set.create(name=campus_name)
+
+    @property
+    def physical_address(self):
+        return f'''
+            {self.physical_address_line_1},
+            {self.physical_address_line_2},
+            {self.physical_address_city},
+            {self.physical_address_postal_code}
+        '''
+
+    @property
+    def postal_address(self):
+        if not self.postal_address_differs:
+            return self.physical_address
+        return f'''
+            {self.postal_address_line_1},
+            {self.postal_address_line_2},
+            {self.postal_address_city},
+            {self.postal_address_postal_code}
+        '''

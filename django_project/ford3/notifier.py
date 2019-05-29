@@ -13,6 +13,7 @@ class Notifier:
             'emails/account_activation.html', {
                 'user': user,
                 'domain': settings.SERVER_PUBLIC_HOST,
+                'valid_link_days': settings.VALID_LINK_DAYS,
                 'uid': urlsafe_base64_encode(
                     force_bytes(user.pk)).decode(),
                 'token': default_token_generator.make_token(user),

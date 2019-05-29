@@ -6,7 +6,7 @@
 
     {{ domain }}{% url 'activate' uidb64=uid token=token %}
 
-    The link is valid within {{ settings.VALID_LINK_DAYS }} days.
+    The link is valid within {{ valid_link_days }} days.
 
     If you believe you were not the intended recipient, please ignore this email.
 

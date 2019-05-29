@@ -56,11 +56,16 @@ def activate(request, uidb64, token):
             password = form.cleaned_data["new_password1"]
             user.set_password(password)
             user.save()
-            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            login(
+                request,
+                user,
+                backend='django.contrib.auth.backends.ModelBackend')
             return redirect(reverse('dashboard'))
         else:
-            messages.warning(request, 'Form is not valid')
-
+            return render(
+                request,
+                'account/activation_form.html',
+                {'form': form})
 
     return render(
         request,

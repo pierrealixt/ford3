@@ -33,24 +33,18 @@
     {% block navbar %}
         <nav class="navbar">
             <div class='container'>
-                <p class="open-edu-logo"><span class='text-white'>Open</span><span class='text-blue'>Edu</span></p>
-            <div class="col-md-8">
-                <p class="text-right">
-            <a class='text-white pull-right mr-0' href='/site-admin'>Administration |</a>
-
-        {% if user.is_authenticated %}
-                <b class="text-white">{{ user.username }}</b>
-                <a href="{% url 'logout' %}?next=/accounts/login" class="text-white"> Logout</a>
-            </p>
-        {% else %}
-                <a href="{% url 'login' %}" class="text-white">Login</a>
-            </p>
-        {% endif %}
-
-            {% if user.is_superuser %}
-            {% endif %}
-            </div>
-                <!-- <div class="question-mark-logo"></div> -->
+                <p class="open-edu-logo">
+                    <a href="{% url 'home' %}" style='text-decoration: none'>
+                        <span class='text-white'>Open</span><span class='text-blue'>Edu</span>
+                    </a>
+                </p>
+                <div class='row'>
+                    <div class="col-md-8">
+                        <p class="text-right">
+                            <a href="{% url 'login' %}" class="text-white">Login</a>
+                        </p>
+                    </div>
+                </div>
             </div>
         </nav>
     {% endblock %}

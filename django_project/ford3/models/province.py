@@ -26,4 +26,12 @@ class Province(models.Model):
 
     @property
     def providers(self):
-        return list(self.provider_set.all().values('id', 'name', 'province__name').annotate(number_of_campus=Count('campus')))
+        return list(self.provider_set.all().values(
+            'id', 'name', 'province__name').annotate
+            (number_of_campus=Count('campus')))
+
+    @classmethod
+    def to_form(self):
+        return tuple((
+            (province.id, province.name)
+            for province in Province.objects.all()))
