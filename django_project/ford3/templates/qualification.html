@@ -162,7 +162,7 @@
         </div>
         <div class='row py-3'>
             <div class='col-md-6'>
-                {% for event in qualification.qualification_events_list %}
+                {% for event in qualification.events %}
                 <b>{{ event.name }} </b>{{ event.date_start }} - {{ event.date_end }}
                 {% endfor %}
             </div>
