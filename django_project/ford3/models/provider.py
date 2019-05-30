@@ -113,11 +113,28 @@ class Provider(models.Model):
         on_delete=models.CASCADE
     )
 
-    creator = models.ForeignKey(
+    created_at = models.DateTimeField(
+        auto_now_add=True)
+    edited_at = models.DateTimeField(
+        auto_now=True)
+
+    created_by = models.ForeignKey(
         'ford3.User',
         null=True,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='provider_created_by'
     )
+
+    edited_by = models.ForeignKey(
+        'ford3.User',
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='provider_edited_by'
+    )
+
+    deleted = models.BooleanField(
+        default=False,
+        help_text='Provider has been deleted')
 
     def __str__(self):
         return self.name
@@ -138,10 +155,13 @@ class Provider(models.Model):
             (provider_type, provider_type)
             for provider_type in Provider.PROVIDER_TYPES)
 
-    def create_campus(self, campuses):
+    def create_campus(self, campuses, created_by):
         with transaction.atomic():
             for campus_name in campuses:
-                self.campus_set.create(name=campus_name)
+                self.campus_set.create(
+                    name=campus_name,
+                    created_by=created_by,
+                    edited_by=created_by)
 
     @property
     def physical_address(self):

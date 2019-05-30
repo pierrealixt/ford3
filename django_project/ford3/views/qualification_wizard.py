@@ -19,9 +19,10 @@ from ford3.forms.qualification import (
 class QualificationFormWizardDataProcess(object):
     new_qualification_events = []
 
-    def __init__(self, qualification):
+    def __init__(self, qualification, edited_by):
         self.qualification = qualification
         self.new_qualification_events = []
+        self.edited_by = edited_by
 
     def duration_in_months(self, duration, duration_type):
         """
@@ -171,7 +172,8 @@ class QualificationFormWizardDataProcess(object):
         Qualification.objects.filter(
             id=self.qualification.id
         ).update(
-            **qualification_form_data
+            **qualification_form_data,
+            edited_by=self.edited_by
         )
 
         # Update interests
@@ -282,7 +284,8 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
                 form_data.update(form.cleaned_data)
 
         qualification_data_process = QualificationFormWizardDataProcess(
-            self.qualification
+            self.qualification,
+            self.request.user
         )
         qualification_data_process.process_data(
             form_data

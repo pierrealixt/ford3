@@ -105,6 +105,24 @@ class Qualification(models.Model):
     edited_at = models.DateTimeField(
         auto_now=True)
 
+    created_by = models.ForeignKey(
+        'ford3.User',
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='qualification_created_by'
+    )
+
+    edited_by = models.ForeignKey(
+        'ford3.User',
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='qualification_edited_by'
+    )
+
+    deleted = models.BooleanField(
+        default=False,
+        help_text="Qualification has been deleted")
+
 
     def __str__(self):
         return self.saqa_qualification.name

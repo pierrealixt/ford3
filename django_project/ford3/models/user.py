@@ -62,7 +62,7 @@ class CampusUser(User):
     @property
     def providers(self):
         return Provider.objects.filter(
-            creator_id=self.creator_id).values(
+            created_by_id=self.creator_id).values(
             'id', 'name', 'province__name').annotate(
                 number_of_campus=Count('campus'))
 
@@ -73,7 +73,7 @@ class ProviderUser(User):
 
     @property
     def providers(self):
-        return Provider.objects.filter(creator_id=self.id).values(
+        return Provider.objects.filter(created_by_id=self.id).values(
             'id', 'name', 'province__name').annotate(
                 number_of_campus=Count('campus'))
 

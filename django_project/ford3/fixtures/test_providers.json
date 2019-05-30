@@ -5,7 +5,10 @@
         "fields": {
             "name": "Provider #1",
             "province": 1,
-            "creator": 2
+            "created_by": 2,
+            "edited_by": 2,
+            "created_at": "2019-05-30 15:18:56.665177-07:00",
+            "edited_at": "2019-05-30 15:18:56.665177-07:00"
         }
     }
 ]

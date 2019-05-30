@@ -17,7 +17,7 @@
                 An activation email will be sent to the new user.
             </p>
         </div>
-        {% else %}
+        {% elif user.is_provider %}
         <div class='col-md-12'>
             <h3>Add a new campus user</h3>
             <p class='text-muted'>
@@ -27,6 +27,7 @@
             </p>
         </div>    
         {% endif %}
+        {% if user.is_province or user.is_provider %}
         <div class='col-md-6'>
             {% if form_error %}
             <div class='alert alert-danger'>
@@ -38,6 +39,9 @@
                 <input type="submit" value="Create" class='edu-button edu-button-orange border-0'>
             </form>
         </div>
+        {% else %}
+        Please use the administration site to create users.
+        {% endif %}
     </div>
 {% endblock %}
 

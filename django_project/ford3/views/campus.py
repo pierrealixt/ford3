@@ -49,7 +49,9 @@ def create(request, provider_id):
 
     try:
         provider.campus_set.create(
-            name=request.POST['campus_name'])
+            name=request.POST['campus_name'],
+            created_by=request.user,
+            edited_by=request.user)
         context['campus_success'] = 'Campus successfully created.'
     except ValidationError as ve:
         context['campus_error'] = '<br />'.join(ve.messages)

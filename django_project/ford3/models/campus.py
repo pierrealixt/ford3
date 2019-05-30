@@ -101,6 +101,29 @@ class Campus(models.Model):
         help_text="The campus' postal adress code",
         max_length=255)
 
+    created_at = models.DateTimeField(
+        auto_now_add=True)
+    edited_at = models.DateTimeField(
+        auto_now=True)
+
+    created_by = models.ForeignKey(
+        'ford3.User',
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='campus_created_by'
+    )
+
+    edited_by = models.ForeignKey(
+        'ford3.User',
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='campus_edited_by'
+    )
+
+    deleted = models.BooleanField(
+        default=False,
+        help_text="Campus has been deleted")
+
     def save(self, *args, **kwargs):
         if self.id is None:
             if len(self.name) == 0:
@@ -205,7 +228,7 @@ class Campus(models.Model):
             setattr(self, key, value)
         self.save()
 
-    def save_qualifications(self, form_data):
+    def save_qualifications(self, form_data, created_by):
         if len(form_data['saqa_ids']) == 0:
             return
 
@@ -213,7 +236,10 @@ class Campus(models.Model):
         ids = set(self.saqa_ids) ^ set(form_data['saqa_ids'].split(' '))
 
         for saqa_id in ids:
-            qualif = self.qualification_set.create()
+            qualif = self.qualification_set.create(
+                created_by=created_by,
+                edited_by=created_by
+            )
             qualif.set_saqa_qualification(saqa_id)
             qualif.save()
 

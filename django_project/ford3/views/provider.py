@@ -31,12 +31,15 @@ def new(request):
 def create(request):
     form = ProviderForm(request.POST, request.FILES)
     if form.is_valid():
-        provider = form.save()
+        provider = form.save(commit=False)
         try:
-            provider.creator = request.user
+            provider.created_by = request.user
+            provider.edited_by = request.user
             provider.save()
 
-            provider.create_campus(request.POST.getlist('campus_name'))
+            provider.create_campus(
+                request.POST.getlist('campus_name'),
+                request.user)
         except IntegrityError:
             return render(request, 'provider_form.html', {'form': form})
 
@@ -85,6 +88,8 @@ def update(request, provider_id):
     form = ProviderForm(request.POST, request.FILES, instance=provider)
     if form.is_valid():
         provider = form.save()
+        provider.edited_by = request.user
+        provider.save()
         redirect_url = reverse(
             'show-provider',
             args=[str(provider.id)])

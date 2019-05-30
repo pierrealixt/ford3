@@ -63,10 +63,11 @@ class TestQualificationWizard(TestCase):
                 self.qualification.campus.provider.id,
                 self.qualification.campus.id,
                 self.qualification.id))
-        self.qualification_data_process = QualificationFormWizardDataProcess(
-            qualification=self.qualification
-        )
         self.user = User.objects.get(pk=3)
+        self.qualification_data_process = QualificationFormWizardDataProcess(
+            qualification=self.qualification,
+            edited_by=self.user
+        )
 
     def test_validate_data(self):
         self.assertTrue(True)
