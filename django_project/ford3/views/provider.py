@@ -127,3 +127,19 @@ def show(request, provider_id):
         context['provider_logo'] = provider.provider_logo.url
 
     return render(request, 'provider.html', context)
+
+
+@login_required()
+@permission_required('ford3.delete_provider', raise_exception=True)
+@require_http_methods(['GET'])
+def delete(request, provider_id):
+    provider = get_object_or_404(
+        Provider,
+        id=provider_id
+    )
+
+    provider.deleted = True
+    provider.deleted_by = request.user
+    provider.save()
+
+    return redirect(reverse('dashboard'))

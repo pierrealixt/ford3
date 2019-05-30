@@ -3,6 +3,11 @@ from django.db.models import Count
 from django.contrib.auth import get_user_model
 
 
+class ActiveProviderManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted=False)
+
+
 class Province(models.Model):
     name = models.CharField(
         blank=False,
@@ -25,6 +30,9 @@ class Province(models.Model):
 
     @property
     def providers(self):
-        return list(self.provider_set.all().values(
-            'id', 'name', 'province__name').annotate
-            (number_of_campus=Count('campus')))
+        queryset = self.provider_set \
+            .all() \
+            .filter(deleted=False) \
+            .values('id', 'name', 'province__name') \
+            .annotate(number_of_campus=Count('campus'))
+        return list(queryset)

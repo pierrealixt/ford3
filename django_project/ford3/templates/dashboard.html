@@ -29,6 +29,9 @@
                     <th scope="col">Provider</th>
                     <th scope="col">Province</th>
                     <th scope="col">Number of campus</th>
+                    {% if user.is_superuser or user.is_staff %}
+                    <th scope="col">Deleted</th>
+                    {% endif %}
                     <!-- <th scope="col">Number of qualifications</th> -->
                     </tr>
                 </thead>
@@ -41,6 +44,9 @@
                     <td>{{ provider.province__name }}</td>
                     <td>{{ provider.number_of_campus }}</td>
                     <!-- <td>1000</td> -->
+                    {% if user.is_superuser or user.is_staff %}
+                    <td>{{ provider.deleted }}</td>
+                    {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>

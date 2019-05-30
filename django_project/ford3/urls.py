@@ -69,6 +69,9 @@ urlpatterns = [
     path('providers/<int:provider_id>/',
         provider.show,
         name='show-provider'),
+    path('providers/<int:provider_id>/delete/',
+        provider.delete,
+        name='delete-provider'),
     path(
         'providers/<int:provider_id>/campus/<int:campus_id>/edit/',
         campus_wizard,
@@ -81,7 +84,10 @@ urlpatterns = [
         'providers/<int:provider_id>/campus/create/',
         campus.create,
         name='create-campus'),
-
+    path(
+        'providers/<int:provider_id>/campus/<int:campus_id>/delete/',
+        campus.delete,
+        name='delete-campus'),
     path(
         'events/create_or_update/<int:owner_id>/<str:event_type>',
         events.create_or_update,
@@ -114,6 +120,13 @@ urlpatterns = [
             'qualifications/<int:qualification_id>/']),
         views.show_qualification,
         name='show-qualification'),
+    path(
+        '/'.join([
+            'providers/<int:provider_id>',
+            'campus/<int:campus_id>',
+            'qualifications/<int:qualification_id>/delete/']),
+        views.delete_qualification,
+        name='delete-qualification'),
     path(
         'sfos/<int:fos_id>/index/',
         sub_field_of_study.index,

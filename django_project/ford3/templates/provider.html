@@ -155,6 +155,14 @@
             </div>
         </div>
     </div>
+    {% if perms.ford3.delete_provider %}
+    <div class='col-md-2 my-5'>
+        <a 
+            href="{% url 'delete-provider' provider_id=provider.id %}"
+            class='m-0 p-0 edu-button btn-danger danger'
+            onclick="return confirm('Are you sure you want to delete this?')">Delete Provider</a>
+    </div>
+    {% endif %}
     
 </div>
 

@@ -167,13 +167,22 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="row mb-5">
+        <!-- <div class="row mb-5">
             <div class="col-md-3 mx-auto">
                 <a class="edu-button edu-button-blue h-100" href="{% url 'show-campus' provider_id=provider.id campus_id=qualification.campus.id %}">Go to Campus Overview</a>
             </div>
-        </div>
+        </div> -->
     {% endautoescape %}
     </div>
+    {% if perms.ford3.delete_qualification %}
+    <div class='col-md-2 my-5'>
+        <a 
+            href="{% url 'delete-qualification' provider_id=provider.id campus_id=qualification.campus.id qualification_id=qualification.id %}"
+            class='m-0 p-0 edu-button btn-danger danger'
+            onclick="return confirm('Are you sure you want to delete this?')">Delete Qualification</a>
+    </div>
+    {% endif %}
+
 </div>
 {% endblock %}
 

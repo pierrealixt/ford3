@@ -45,7 +45,10 @@ class User(AbstractUser):
 
     @property
     def providers(self):
-        return Provider.objects.all()
+        return Provider.objects \
+            .all() \
+            .values('id', 'name', 'province__name', 'deleted') \
+            .annotate(number_of_campus=Count('campus'))
 
     @property
     def users(self):
@@ -61,10 +64,10 @@ class CampusUser(User):
 
     @property
     def providers(self):
-        return Provider.objects.filter(
-            created_by_id=self.creator_id).values(
-            'id', 'name', 'province__name').annotate(
-                number_of_campus=Count('campus'))
+        return Provider.active_objects \
+            .filter(created_by_id=self.creator_id) \
+            .values('id', 'name', 'province__name') \
+            .annotate(number_of_campus=Count('campus'))
 
 
 class ProviderUser(User):
@@ -73,9 +76,10 @@ class ProviderUser(User):
 
     @property
     def providers(self):
-        return Provider.objects.filter(created_by_id=self.id).values(
-            'id', 'name', 'province__name').annotate(
-                number_of_campus=Count('campus'))
+        return Provider.active_objects \
+            .filter(created_by_id=self.id) \
+            .values('id', 'name', 'province__name') \
+            .annotate(number_of_campus=Count('campus'))
 
     @property
     def users(self):

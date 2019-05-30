@@ -2,6 +2,10 @@ from django.db import models, transaction
 from ford3.models.campus import Campus
 
 
+class ActiveProviderManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted=False)
+
 
 class Provider(models.Model):
     PROVIDER_TYPES = (
@@ -132,16 +136,26 @@ class Provider(models.Model):
         related_name='provider_edited_by'
     )
 
+    deleted_by = models.ForeignKey(
+        'ford3.User',
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='provider_deleted_by'
+    )
+
     deleted = models.BooleanField(
         default=False,
         help_text='Provider has been deleted')
+
+    objects = models.Manager()
+    active_objects = ActiveProviderManager()
 
     def __str__(self):
         return self.name
 
     @property
     def campus(self):
-        campus_query = Campus.objects.filter(
+        campus_query = Campus.active_objects.filter(
             provider__id=self.id).order_by('name')
         return list(campus_query)
 
