@@ -26,5 +26,3 @@ class TestUser(TestCase):
         )
         self.assertEqual(user.edu_group.name.lower(), 'campus')
         self.assertEqual(user.edu_group.value, 3)
-
-
