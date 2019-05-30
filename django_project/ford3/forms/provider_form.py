@@ -4,15 +4,21 @@ from ford3.models.provider import Provider
 from ford3.models.province import Province
 
 
-
 EMPTY_TEL_ERROR = 'Your telephone number is required.'
 EMPTY_EMAIL_ERROR = 'Your email is required.'
 
 
+def get_provider_choices():
+    return ProviderForm.PROVINCE_OPTIONS
+
+
 class ProviderForm(forms.models.ModelForm):
+
+    # PROVINCE_OPTIONS = Province.to_form()
 
     class Meta:
         model = Provider
+        # provinces_to_form = Province.to_form()
         fields = (
             'name',
             'province',
@@ -31,12 +37,13 @@ class ProviderForm(forms.models.ModelForm):
             'postal_address_city',
             'postal_address_postal_code',
             'provider_logo',)
+        province = forms.ModelChoiceField(
+            queryset=Province.objects.all())
         widgets = {
             'name' : forms.fields.TextInput(
                 attrs={'placeholder': "Provider's name"}
             ),
             'province': forms.fields.Select(
-                choices=Province.to_form(),
                 attrs={'class' : 'edu-button edu-dropdown-button'}),
             'provider_type' : forms.fields.Select(
                 choices=Provider.types_to_form(),

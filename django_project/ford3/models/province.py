@@ -18,7 +18,6 @@ class Province(models.Model):
         max_length=255)
     users = models.ManyToManyField(
         get_user_model(),
-        through=get_user_model().provinces.through,
         blank=True)
 
     def __str__(self):
@@ -29,9 +28,3 @@ class Province(models.Model):
         return list(self.provider_set.all().values(
             'id', 'name', 'province__name').annotate
             (number_of_campus=Count('campus')))
-
-    @classmethod
-    def to_form(self):
-        return tuple((
-            (province.id, province.name)
-            for province in Province.objects.all()))

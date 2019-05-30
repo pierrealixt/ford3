@@ -1,7 +1,6 @@
 from django.urls import reverse
 from django.test import TestCase
 from django.test.utils import override_settings  # noqa
-from django.contrib.auth.models import User
 from ford3.tests.models.model_factories import ModelFactories
 from ford3.models.qualification import Qualification
 from ford3.models.qualification_entrance_requirement_subject import (
@@ -9,6 +8,7 @@ from ford3.models.qualification_entrance_requirement_subject import (
 )
 from ford3.models.qualification_event import QualificationEvent
 from ford3.models.requirement import Requirement
+from ford3.models.user import User
 from ford3.views.qualification_wizard import QualificationFormWizardDataProcess
 
 
@@ -16,6 +16,15 @@ from ford3.views.qualification_wizard import QualificationFormWizardDataProcess
 #     STATICFILES_STORAGE='pipeline.storage.NonPackagingPipelineStorage',
 #     PIPELINE_ENABLED=False)
 class TestQualificationWizard(TestCase):
+    fixtures = [
+        'groups',
+        'sa_provinces',
+        'test_province_users',
+        'test_provider_users',
+        'test_campus_users',
+        'test_providers'
+    ]
+
     wizard_step_1_data = {
         'session_contact_wizard-current_step': '0',
     }
@@ -57,8 +66,7 @@ class TestQualificationWizard(TestCase):
         self.qualification_data_process = QualificationFormWizardDataProcess(
             qualification=self.qualification
         )
-        self.user = User.objects.create_user(
-            'bobby', 'bobby@kartoza.com', 'bob')
+        self.user = User.objects.get(pk=3)
 
     def test_validate_data(self):
         self.assertTrue(True)
@@ -67,7 +75,7 @@ class TestQualificationWizard(TestCase):
         # should be redirected before logged in
         response = self.client.get(self.wizard_url)
         self.assertEqual(response.status_code, 302)
-        self.client.login(username="bobby", password="bob")
+        self.client.force_login(self.user, backend=None)
         # should be succeed after logged in
         response = self.client.get(self.wizard_url)
         self.assertEqual(response.status_code, 200)

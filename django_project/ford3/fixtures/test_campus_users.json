@@ -1,0 +1,13 @@
+[
+    {
+        "model": "ford3.User",
+        "pk": 3,
+        "fields": {
+            "email": "email@campus.com",
+            "username": "campus",
+            "is_campus": true,
+            "groups": [3],
+            "creator": 2
+        }
+    }
+]

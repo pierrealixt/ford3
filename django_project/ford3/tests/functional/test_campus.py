@@ -1,13 +1,13 @@
 import unittest
 from ford3.tests.functional.utils import SeleniumTestCase, selenium_flag_ready
-from django.contrib.auth.models import User
 from django.urls import reverse
 from ford3.tests.models.model_factories import ModelFactories
 from selenium.webdriver.common.by import By
-from ford3.models import Campus, CampusEvent
+from ford3.models import Campus, CampusEvent, User
 
 
 class TestCampus(SeleniumTestCase):
+    fixtures = ['sa_provinces', 'groups']
 
     def setUp(self):
         self.campus = ModelFactories.get_campus_test_object()
@@ -65,6 +65,15 @@ class TestCampus(SeleniumTestCase):
 
 
 class TestCampusForm(SeleniumTestCase):
+    fixtures = [
+        'groups',
+        'sa_provinces',
+        'test_province_users',
+        'test_provider_users',
+        'test_campus_users',
+        'test_providers'
+    ]
+
     @unittest.skipUnless(
         selenium_flag_ready(),
         'Selenium test was not setup')
@@ -72,9 +81,11 @@ class TestCampusForm(SeleniumTestCase):
         self.campus_form_url = reverse('show-campus', args=('1042', '2042'))
 
         # logged in first to access any other urls
-        self.user = User.objects.create_user(
-            'bobby', 'bobby@kartoza.com', 'bob')
-        self.client.login(username="bobby", password="bob")
+        self.user = User.objects.get(pk=1)
+        # .create_user(
+        #     'bobby', 'bobby@kartoza.com', 'bob')
+        self.client.force_login(self.user, backend=None)
+        # self.client.login(username="bobby", password="bob")
         # logged in, set session so the browser knows it has logged in
         cookie = self.client.cookies['sessionid']
         # selenium will set cookie domain based on current page domain
@@ -114,6 +125,7 @@ class TestCampusForm(SeleniumTestCase):
 
 
 class TestCampusFormDataBinding(SeleniumTestCase):
+    fixtures = ['sa_provinces']
     def setUp(self):
         self.provider = ModelFactories.get_provider_test_object(
             new_id=42)
@@ -128,8 +140,8 @@ class TestCampusFormDataBinding(SeleniumTestCase):
         self.campus_form_url = f'{self.live_server_url}{campus_form_url}'
         # logged in first to access any other urls
         self.user = User.objects.create_user(
-            'bobby', 'bobby@kartoza.com', 'bob')
-        self.client.login(username="bobby", password="bob")
+            'bobby2', 'bobby2@kartoza.com', 'bob')
+        self.client.login(username="bobby2", password="bob")
         # logged in, set session so the browser knows it has logged in
         cookie = self.client.cookies['sessionid']
         # selenium will set cookie domain based on current page domain

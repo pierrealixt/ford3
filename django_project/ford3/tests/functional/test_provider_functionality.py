@@ -1,11 +1,12 @@
 import unittest
 from ford3.tests.functional.utils import SeleniumTestCase, selenium_flag_ready
 from ford3.tests.models.model_factories import ModelFactories
-from django.contrib.auth.models import User
 from django.urls import reverse
+from ford3.models import User
 
 
 class TestProviderForm(SeleniumTestCase):
+    fixtures = ['sa_provinces', 'groups']
 
     def setUp(self):
         self.new_provider = ModelFactories.get_provider_test_object()

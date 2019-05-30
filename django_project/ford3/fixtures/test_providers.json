@@ -1,0 +1,11 @@
+[
+    {
+        "model": "ford3.Provider",
+        "pk": 1,
+        "fields": {
+            "name": "Provider #1",
+            "province": 1,
+            "creator": 2
+        }
+    }
+]
