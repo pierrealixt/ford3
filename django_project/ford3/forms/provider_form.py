@@ -83,5 +83,5 @@ class ProviderForm(forms.models.ModelForm):
         provider_logo = self.cleaned_data.get('provider_logo', False)
         if provider_logo:
             if provider_logo.size > 100 * 1024:
-                raise ValidationError("Max file size is 100Kb")
+                raise ValidationError("Max file size is 100 Kb")
             return provider_logo
