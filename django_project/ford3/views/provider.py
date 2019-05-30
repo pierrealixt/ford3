@@ -4,10 +4,9 @@ from django.shortcuts import (
     render,
     redirect,
     get_object_or_404)
-from django.db import transaction, IntegrityError
+from django.db import IntegrityError
 from django.urls import reverse
 from ford3.forms.provider_form import ProviderForm
-from ford3.models.campus import Campus
 from ford3.models.provider import Provider
 
 

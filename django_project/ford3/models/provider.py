@@ -135,7 +135,7 @@ class Provider(models.Model):
     @classmethod
     def types_to_form(self):
         return tuple(
-            (provider_type, provider_type) 
+            (provider_type, provider_type)
             for provider_type in Provider.PROVIDER_TYPES)
 
     def create_campus(self, campuses):

@@ -5,7 +5,6 @@ from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth import login
 from django.urls import reverse
 from ford3.models.user import User
@@ -34,7 +33,9 @@ def check_user_activation(uidb64, token):
         return user
     else:
         # the token does not exist anymore
-        # By including the user's hashed password and last login timestamp in the hash, a token is automatically invalidated when the user logs in or changes their password
+        # By including the user's hashed password and last login timestamp
+        # in the hash, a token is automatically invalidated
+        # when the user logs in or changes their password
         raise ActivationInvalid
 
 

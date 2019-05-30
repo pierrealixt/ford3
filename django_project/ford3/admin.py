@@ -57,9 +57,10 @@ class UserAdmin(admin.ModelAdmin):
         return instance.edu_group.name
 
     def get_groups(self, obj):
-        # todo it should call a model method
-        # e.g: get_provinces_for_admin
         return "\n".join([p.name for p in obj.groups.all()])
+
+
+admin.site.register(User, UserAdmin)
 
 
 class ProvinceAdminForm(forms.ModelForm):
@@ -73,6 +74,8 @@ class ProvinceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Province, ProvinceAdmin)
+
+
 class ProvinceUserAdminForm(forms.ModelForm):
     class Meta:
         model = ProvinceUser
@@ -80,24 +83,19 @@ class ProvinceUserAdminForm(forms.ModelForm):
             'email', 'provinces'
         ]
 
+
 class ProvinceUserAdmin(admin.ModelAdmin):
     form = ProvinceUserAdminForm
     list_display = ('email', 'get_provinces')
 
     def get_provinces(self, obj):
-        # todo it should call a model method
-        # e.g: get_provinces_for_admin
         return "\n".join([p.name for p in obj.provinces.all()])
 
     def get_queryset(self, request):
         return self.model.objects.filter(is_province=True)
 
 
-
 admin.site.register(ProvinceUser, ProvinceUserAdmin)
-admin.site.register(User, UserAdmin)
-
-
 admin.site.register(Campus)
 admin.site.register(CampusEvent)
 admin.site.register(Qualification)

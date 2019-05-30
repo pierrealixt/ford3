@@ -37,9 +37,9 @@ class UserCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
             self.object.save()
         except IntegrityError:
             return self.render_to_response(self.get_context_data(
-                form=form, 
+                form=form,
                 form_error='Email already present in the database.'))
-        
+
         return HttpResponseRedirect(reverse('dashboard-users'))
 
     def form_invalid(self, form):
