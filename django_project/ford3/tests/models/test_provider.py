@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.urls import reverse
 from ford3.tests.models.model_factories import ModelFactories
 from ford3.models.user import User
 

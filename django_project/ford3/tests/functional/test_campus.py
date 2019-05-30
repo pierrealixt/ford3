@@ -126,6 +126,7 @@ class TestCampusForm(SeleniumTestCase):
 
 class TestCampusFormDataBinding(SeleniumTestCase):
     fixtures = ['sa_provinces']
+
     def setUp(self):
         self.provider = ModelFactories.get_provider_test_object(
             new_id=42)

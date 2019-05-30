@@ -23,7 +23,7 @@ class TestDashboard(TestCase):
     def runTest(self):
         """
         The three users (province, provider, campus) should see the same provider.
-        """
+        """ # noqa
         for user_id in self.users_ids:
             user = User.objects.get(pk=user_id)
             self.client.force_login(user, backend=None)
