@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+
+ {% block parent-body %}
+<div class='row text-center'>
+    <div class='col-md-4 mx-auto'>
+        <h1 class="text-muted">403</h1>
+        <p class="lead">Sorry, but you can't view this page</p>
+        <p class="lead text-muted">
+            Most likely you have limited access
+        </p>
+        <a href="{% url 'dashboard' %}">Back to the home page</a>
+    </div>
+</div>
+{% endblock %}

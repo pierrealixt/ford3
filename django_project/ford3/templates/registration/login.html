@@ -3,8 +3,17 @@
 
 {% block title %}Login{% endblock %}
 
+{% block head %}
+<style>
+    body {
+        background: var(--c-blue-l);
+    }
+</style>
+{% endblock %}
+
 {% block parent-body %}
-<div class="container-fluid" id="login-page">
+
+<div class="container-fluid" id="login-page"> 
     <div class="row py-5">
         <div class="col-md-3 mx-auto rounded px-4" id="login-form">
             <div class="row">
@@ -25,15 +34,9 @@
                     <h4 class="text-center text-white">Login</h4>
                 </div>
             </div>
-              <form method="post">
+              <form method="post" class='text-white'>
                 {% csrf_token %}
-                      {% for field in form  %}
-                          <div class="row">
-                            <div class="col-md-12 py-2">
-                              {{ field }}
-                            </div>
-                          </div>
-                      {% endfor  %}
+                {{ form.as_p }}
                 <div class="row">
                     <button class="edu-button edu-button-orange mx-3 my-4" type="submit">Login</button>
                 </div>
@@ -42,15 +45,4 @@
     </div>
 </div>
 </div>
-{% endblock %}
-{% block footer %}
-	<footer class='container-fluid mt-5'>
-		<div class='row'>
-			<div class='col-md-2 mx-auto'>
-				<p>
-				<small>Powered by <a href="http://www.kartoza.com" target="_blank">Kartoza</a> - 2019</small>
-				</p>
-			</div>
-		</div>
-	</footer>
 {% endblock %}

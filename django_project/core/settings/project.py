@@ -76,3 +76,6 @@ SELENIUM_UNIT_TEST_FLAG = strtobool(
 
 SELENIUM_TEST_HOSTNAME = os.environ.get('SELENIUM_TEST_HOSTNAME', 'localhost')
 SELENIUM_TEST_PORT = int(os.environ.get('SELENIUM_TEST_PORT', '0'))
+
+AUTH_USER_MODEL = 'ford3.User'
+VALID_LINK_DAYS = 3

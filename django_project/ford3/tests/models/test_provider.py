@@ -1,14 +1,13 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
-from django.urls import reverse
 from ford3.tests.models.model_factories import ModelFactories
+from ford3.models.user import User
 
 
 class TestProvider(TestCase):
 
     def setUp(self):
         self.new_provider = ModelFactories.get_provider_test_object()
-        self.user = User.objects.create_user(
+        self.user = User(
             'bobby', 'bobby@kartoza.com', 'bob')
 
 
@@ -26,16 +25,3 @@ class TestProvider(TestCase):
         self.assertEqual(self.new_provider.id, campus.provider_id)
 
         self.assertFalse(self.new_provider.is_new_provider)
-
-    def test_correct_GET_template_used(self):
-        url = reverse(
-                'edit-provider',
-                kwargs={
-                    'provider_id': self.new_provider.id})
-        response = self.client.get(url)
-        # redirect when not logged in
-        self.assertEqual(response.status_code, 302)
-        self.client.login(username="bobby", password="bob")
-        # get provider form when logged in
-        response = self.client.get(url)
-        self.assertTemplateUsed(response, 'provider_form.html')

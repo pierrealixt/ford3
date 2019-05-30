@@ -3,6 +3,11 @@ from django.core.exceptions import ValidationError
 from ford3.models.campus_event import CampusEvent
 
 
+class ActiveCampusManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted=False)
+
+
 class Campus(models.Model):
     provider = models.ForeignKey(
         'ford3.provider',
@@ -101,6 +106,39 @@ class Campus(models.Model):
         help_text="The campus' postal adress code",
         max_length=255)
 
+    created_at = models.DateTimeField(
+        auto_now_add=True)
+    edited_at = models.DateTimeField(
+        auto_now=True)
+
+    created_by = models.ForeignKey(
+        'ford3.User',
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='campus_created_by'
+    )
+
+    edited_by = models.ForeignKey(
+        'ford3.User',
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='campus_edited_by'
+    )
+
+    deleted_by = models.ForeignKey(
+        'ford3.User',
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='campus_deleted_by'
+    )
+
+    deleted = models.BooleanField(
+        default=False,
+        help_text="Campus has been deleted")
+
+    objects = models.Manager()
+    active_objects = ActiveCampusManager()
+
     def save(self, *args, **kwargs):
         if self.id is None:
             if len(self.name) == 0:
@@ -108,7 +146,8 @@ class Campus(models.Model):
 
             if Campus.objects.filter(
                 provider_id=self.provider.id,
-                    name__iexact=self.name).exists():
+                    name__iexact=self.name,
+                    deleted=False).exists():
                 raise ValidationError({'campus': 'Name is already taken.'})
 
         super().save(*args, **kwargs)
@@ -126,13 +165,16 @@ class Campus(models.Model):
 
     @property
     def qualifications(self):
-        return list(self.qualification_set.all().values(
-            'id',
-            'saqa_qualification__id',
-            'saqa_qualification__name',
-            'saqa_qualification__saqa_id',
-            'saqa_qualification__accredited',
-            'edited_at'))
+        queryset = self.qualification_set \
+            .filter(deleted=False) \
+            .values(
+                'id',
+                'saqa_qualification__id',
+                'saqa_qualification__name',
+                'saqa_qualification__saqa_id',
+                'saqa_qualification__accredited',
+                'edited_at')
+        return list(queryset)
 
     @property
     def saqa_ids(self):
@@ -205,7 +247,7 @@ class Campus(models.Model):
             setattr(self, key, value)
         self.save()
 
-    def save_qualifications(self, form_data):
+    def save_qualifications(self, form_data, created_by):
         if len(form_data['saqa_ids']) == 0:
             return
 
@@ -213,7 +255,10 @@ class Campus(models.Model):
         ids = set(self.saqa_ids) ^ set(form_data['saqa_ids'].split(' '))
 
         for saqa_id in ids:
-            qualif = self.qualification_set.create()
+            qualif = self.qualification_set.create(
+                created_by=created_by,
+                edited_by=created_by
+            )
             qualif.set_saqa_qualification(saqa_id)
             qualif.save()
 

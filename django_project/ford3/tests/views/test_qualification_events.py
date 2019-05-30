@@ -25,7 +25,6 @@ class TestCreateQualificationEventView(TestCase):
         response = self.client.post(self.url, self.data)
         body = json.loads(response.content)
         self.assertEqual(body['success'], True)
-        print(body['event'])
         self.assertEqual(
             body['event']['id'], self.qualification.events[0]['id'])
         self.assertEqual(len(self.qualification.events), 1)

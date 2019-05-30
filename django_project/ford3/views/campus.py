@@ -1,4 +1,6 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
+from django.views.decorators.http import require_http_methods
+
 from django.shortcuts import (
     render,
     get_object_or_404,
@@ -49,7 +51,9 @@ def create(request, provider_id):
 
     try:
         provider.campus_set.create(
-            name=request.POST['campus_name'])
+            name=request.POST['campus_name'],
+            created_by=request.user,
+            edited_by=request.user)
         context['campus_success'] = 'Campus successfully created.'
     except ValidationError as ve:
         context['campus_error'] = '<br />'.join(ve.messages)
@@ -58,3 +62,19 @@ def create(request, provider_id):
         context['campus_error'] = 'Bad request.'
 
     return render(request, 'provider.html', context)
+
+
+@login_required()
+@permission_required('ford3.delete_provider', raise_exception=True)
+@require_http_methods(['GET'])
+def delete(request, provider_id, campus_id):
+    campus = get_object_or_404(
+        Campus,
+        id=campus_id
+    )
+
+    campus.deleted = True
+    campus.deleted_by = request.user
+    campus.save()
+
+    return redirect(reverse('dashboard'))

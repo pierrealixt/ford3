@@ -1,0 +1,12 @@
+[
+    {
+        "model": "ford3.User",
+        "pk": 2,
+        "fields": {
+            "email": "provider@email.com",
+            "username": "provider",
+            "is_provider": true,
+            "groups": [2]
+        }
+    }
+]

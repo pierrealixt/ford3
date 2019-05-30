@@ -96,8 +96,14 @@ class CampusFormWizard(LoginRequiredMixin, CookieWizardView):
             elif form == 'campus-location':
                 self.campus.save_postal_data(cleaned_data)
             elif form == 'campus-qualifications':
-                self.campus.save_qualifications(cleaned_data)
+                self.campus.save_qualifications(
+                    cleaned_data,
+                    self.request.user)
                 self.campus.delete_qualifications(cleaned_data)
+
+        Campus.objects \
+            .filter(pk=self.campus.id) \
+            .update(edited_by=self.request.user)
 
         url = reverse('show-campus', args=(self.provider.id, self.campus.id))
         return redirect(url)

@@ -31,3 +31,4 @@ DATABASES = {
 
 PIPELINE_ENABLED = False
 STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
+SERVER_PUBLIC_HOST = 'http://localhost'

@@ -1,12 +1,12 @@
 import unittest
 from ford3.tests.functional.utils import SeleniumTestCase, selenium_flag_ready
-from django.contrib.auth.models import User
 from django.urls import reverse
 from ford3.tests.models.model_factories import ModelFactories
-from ford3.models import QualificationEvent
+from ford3.models import QualificationEvent, User
 
 
 class TestQualificationForm(SeleniumTestCase):
+    fixtures = ['sa_provinces', 'groups']
 
     @unittest.skipUnless(
         selenium_flag_ready(),

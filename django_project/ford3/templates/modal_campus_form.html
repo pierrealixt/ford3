@@ -1,0 +1,37 @@
+<!-- Modal -->
+<div class="modal fade" id="addCampusModal" tabindex="-1" role="dialog"
+    aria-labelledby="addCampusModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title"
+                id="addCampusModalLabel">New campus</h5>
+            <button type="button" class="close" data-dismiss="modal"
+                    aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form id='form-add-campus' method="post" action="{% url 'create-campus' provider_id=provider.id %}">
+            {% csrf_token %}
+            <div class="modal-body">
+                {% if campus_error|length > 0 %}
+                    <div id='campus-error' class="alert alert-danger">{{ campus_error }}</div>
+                {% endif %}
+                <label for="campus-name">Campus name</label>
+                <input required id="campus-name" type="text"
+                    placeholder="e.g: My new Campus" name="campus_name">
+            </div>
+            <div class="modal-footer pl-0">
+                <div class="row w-100">
+                    <div class="col-8"></div>
+                    <div class="col-4">
+                        <button type="submit" id="submit_add_new_campus"
+                                class="edu-button edu-button-blue">Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>

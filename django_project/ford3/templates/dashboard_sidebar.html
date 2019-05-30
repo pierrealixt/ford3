@@ -1,0 +1,20 @@
+<nav id="sidebar" class="col-md-2 px-0">
+    <div class="container-fluid px-0">
+        <div class="col-md-12 px-0">
+            <ul class='mt-5'>
+                <li>
+                    <a href="{% url 'dashboard' %}">Providers</a>
+                </li>
+                {% if perms.ford3.view_user %}
+                <li>
+                    <a href="{% url 'dashboard-users' %}">Users</a>
+                </li>
+                {% endif %}
+                <!-- <hr style='background:white'/>
+                <li>
+                    <a href="{% url 'home' %}">My profile</a>
+                </li> -->
+            </ul>
+        </div>
+    </div>
+</nav>

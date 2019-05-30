@@ -14,9 +14,22 @@ from ford3.models.campus_event import CampusEvent
 from ford3.models.qualification_event import QualificationEvent
 from ford3.models.interest import Interest
 from ford3.models.saqa_qualification import SAQAQualification
+from ford3.models.user import User
+from ford3.enums.open_edu_groups import OpenEduGroups
+from django.contrib.auth.models import Group
 
 
 class ModelFactories:
+    @staticmethod
+    def create_user_provider():
+        user = User(
+            email='hello@test.com',
+            is_provider=True)
+        user.save()
+        provider_group = Group.objects.get(pk=OpenEduGroups.PROVIDER.value)
+        provider_group.user_set.add(user)
+        return user
+
     @staticmethod
     def get_qualification_test_object(new_id=1):
         qualification_test_object_instance = Qualification.objects.create(
@@ -89,6 +102,14 @@ class ModelFactories:
             postal_address_postal_code='93460')
 
         return campus_test_object_instance
+
+    @staticmethod
+    def get_campus_test_object_with_name(name, provider):
+        campus = ModelFactories.get_campus_test_object()
+        campus.name = name
+        campus.provider = provider
+        campus.save()
+        return campus
 
     @staticmethod
     def get_campus_event_test_object(new_id=1):

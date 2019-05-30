@@ -1,0 +1,15 @@
+{% autoescape off %}
+    Hi,
+
+    You've been given an access to the OpenEdu platform.
+    Please click on the link below to activate your account:
+
+    {{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+    The link is valid within {{ valid_link_days }} days.
+
+    If you believe you were not the intended recipient, please ignore this email.
+
+    Regards,
+    The OpenEdu team
+{% endautoescape %}

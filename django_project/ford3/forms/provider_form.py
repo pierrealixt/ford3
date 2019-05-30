@@ -1,42 +1,52 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from ford3.models.provider import Provider
+from ford3.models.province import Province
 
 
 EMPTY_TEL_ERROR = 'Your telephone number is required.'
 EMPTY_EMAIL_ERROR = 'Your email is required.'
 
 
+def get_provider_choices():
+    return ProviderForm.PROVINCE_OPTIONS
+
+
 class ProviderForm(forms.models.ModelForm):
+
+    # PROVINCE_OPTIONS = Province.to_form()
 
     class Meta:
         model = Provider
-        provider_types_list = []
-        for each_provider_type in Provider.PROVIDER_TYPES:
-            next_provider = (each_provider_type, each_provider_type)
-            provider_types_list.append(next_provider)
-        provider_types = tuple(provider_types_list)
-        fields = ('name',
-                  'provider_type',
-                  'telephone',
-                  'admissions_contact_no',
-                  'email',
-                  'website',
-                  'physical_address_line_1',
-                  'physical_address_line_2',
-                  'physical_address_city',
-                  'physical_address_postal_code',
-                  'postal_address_differs',
-                  'postal_address_line_1',
-                  'postal_address_line_2',
-                  'postal_address_city',
-                  'postal_address_postal_code',
-                  'provider_logo',
-                  )
+        # provinces_to_form = Province.to_form()
+        fields = (
+            'name',
+            'province',
+            'provider_type',
+            'telephone',
+            'admissions_contact_no',
+            'email',
+            'website',
+            'physical_address_line_1',
+            'physical_address_line_2',
+            'physical_address_city',
+            'physical_address_postal_code',
+            'postal_address_differs',
+            'postal_address_line_1',
+            'postal_address_line_2',
+            'postal_address_city',
+            'postal_address_postal_code',
+            'provider_logo',)
+        province = forms.ModelChoiceField(
+            queryset=Province.objects.all())
         widgets = {
-            'name' : forms.fields.HiddenInput(),
+            'name' : forms.fields.TextInput(
+                attrs={'placeholder': "Provider's name"}
+            ),
+            'province': forms.fields.Select(
+                attrs={'class' : 'edu-button edu-dropdown-button'}),
             'provider_type' : forms.fields.Select(
-                choices=provider_types,
+                choices=Provider.types_to_form(),
                 attrs={'class' : 'edu-button edu-dropdown-button'}),
             'telephone': forms.fields.TextInput(
                 attrs={'placeholder': 'Primary contact number'}),
@@ -49,8 +59,7 @@ class ProviderForm(forms.models.ModelForm):
             'physical_address_line_1': forms.fields.TextInput(
                 attrs={'placeholder': 'Address Line 1'}),
             'physical_address_line_2': forms.fields.TextInput(
-                attrs={'placeholder': 'Address Line 2',
-                       'class' : 'mt1'}),
+                attrs={'placeholder': 'Address Line 2'}),
             'physical_address_city': forms.fields.TextInput(
                 attrs={'placeholder': 'City'}),
             'physical_address_postal_code': forms.fields.TextInput(
@@ -59,8 +68,7 @@ class ProviderForm(forms.models.ModelForm):
             'postal_address_line_1': forms.fields.TextInput(
                 attrs={'placeholder': 'Address Line 1'}),
             'postal_address_line_2': forms.fields.TextInput(
-                attrs={'placeholder': 'Address Line 2',
-                       'class': 'mt1'}),
+                attrs={'placeholder': 'Address Line 2'}),
             'postal_address_city': forms.fields.TextInput(
                 attrs={'placeholder': 'City'}),
             'postal_address_postal_code': forms.fields.TextInput(
@@ -71,10 +79,9 @@ class ProviderForm(forms.models.ModelForm):
             'email' : {'required': EMPTY_EMAIL_ERROR}
         }
 
-
     def clean_provider_logo(self):
         provider_logo = self.cleaned_data.get('provider_logo', False)
         if provider_logo:
             if provider_logo.size > 100 * 1024:
-                raise ValidationError("Max file size is 100Kb")
+                raise ValidationError("Max file size is 100 Kb")
             return provider_logo

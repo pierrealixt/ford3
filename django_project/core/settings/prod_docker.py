@@ -57,3 +57,5 @@ LOGGING = {
         },
     },
 }
+
+SERVER_PUBLIC_HOST = 'http://ford3.kartoza.com'

@@ -2,14 +2,22 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 from ford3.models.campus import Campus
 from ford3.models.saqa_qualification import SAQAQualification
+from ford3.models.user import User
 from ford3.tests.models.model_factories import ModelFactories
 
 
 class TestCampus(TestCase):
+    fixtures = [
+        'groups',
+        'sa_provinces',
+        'test_province_users',
+        'test_provider_users',
+        'test_campus_users']
 
     def setUp(self):
         self.campus = ModelFactories.get_campus_test_object(
             new_id=420)
+        self.user = User.objects.get(pk=3)
 
     def test_campus_description(self):
         # new_campus = ModelFactories.get_campus_test_object(1)
@@ -55,7 +63,7 @@ class TestCampus(TestCase):
         self.assertQuerysetEqual(self.campus.qualifications, [])
 
         # save qualifications
-        self.campus.save_qualifications(form_data)
+        self.campus.save_qualifications(form_data, self.user)
 
         # campus should have 2 qualifications.
         self.assertEqual(len(self.campus.qualifications), 2)
@@ -81,8 +89,8 @@ class TestCampus(TestCase):
             'saqa_ids': '{}'.format(saqas[0].id)
         }
         # save two times with same saqa_ids
-        self.campus.save_qualifications(form_data)
-        self.campus.save_qualifications(form_data)
+        self.campus.save_qualifications(form_data, self.user)
+        self.campus.save_qualifications(form_data, self.user)
 
         self.assertEqual(len(self.campus.qualifications), 1)
 
@@ -91,7 +99,7 @@ class TestCampus(TestCase):
         }
 
         # save with a new saqa_id
-        self.campus.save_qualifications(form_data)
+        self.campus.save_qualifications(form_data, self.user)
 
         self.assertEqual(len(self.campus.qualifications), 2)
 
@@ -113,13 +121,13 @@ class TestCampus(TestCase):
         form_data = {
             'saqa_ids': '{} {}'.format(saqas[0].id, saqas[1].id)
         }
-        self.campus.save_qualifications(form_data)
+        self.campus.save_qualifications(form_data, self.user)
         self.assertEqual(len(self.campus.qualifications), 2)
 
         # add those two qualifications to another campus
         self.other_campus = ModelFactories.get_campus_test_object(
             new_id=421)
-        self.other_campus.save_qualifications(form_data)
+        self.other_campus.save_qualifications(form_data, self.user)
 
         form_data = {
             'saqa_ids': '{}'.format(saqas[1].id)

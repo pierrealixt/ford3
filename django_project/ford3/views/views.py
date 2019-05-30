@@ -1,7 +1,9 @@
 from django.shortcuts import (
     render,
     get_object_or_404,
-    render_to_response
+    render_to_response,
+    redirect,
+    reverse
 )
 from ford3.models.qualification import (
     Qualification
@@ -22,6 +24,17 @@ def show_qualification(request, provider_id, campus_id, qualification_id):
             if qualification.campus.provider.provider_logo else ""
     }
     return render(request, 'qualification.html', context)
+
+
+def delete_qualification(request, provider_id, campus_id, qualification_id):
+    qualification = get_object_or_404(
+        Qualification,
+        id=qualification_id)
+
+    qualification.deleted = True
+    qualification.save()
+
+    return redirect(reverse('dashboard'))
 
 
 def widget_examples(request):

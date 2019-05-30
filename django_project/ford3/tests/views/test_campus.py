@@ -4,6 +4,7 @@ from ford3.tests.models.model_factories import ModelFactories
 
 
 class TestCreateCampusView(TestCase):
+    fixtures = ['groups']
 
     def setUp(self):
         self.provider = ModelFactories.get_provider_test_object()
@@ -12,6 +13,9 @@ class TestCreateCampusView(TestCase):
         self.data = {
             'campus_name': 'My Campus'
         }
+
+        user = ModelFactories.create_user_provider()
+        self.client.force_login(user, backend=None)
 
     def test_create_campus(self):
         response = self.client.post(self.url, self.data)
@@ -44,7 +48,7 @@ class TestCreateCampusView(TestCase):
 
         # it should redirect to provider.
         provider_url = reverse('show-provider', args=[str(self.provider.id)])
-        self.assertRedirects(response, provider_url, target_status_code=302)
+        self.assertRedirects(response, provider_url, target_status_code=200)
 
     def test_show_success(self):
         response = self.client.post(self.url, self.data)
