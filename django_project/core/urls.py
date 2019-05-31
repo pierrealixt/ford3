@@ -8,6 +8,7 @@ from django.conf import settings
 from django.shortcuts import render
 from sentry_sdk import capture_message
 from ford3.forms.custom_auth_form import CustomAuthForm
+
 # from django.conf.urls.static import static
 
 admin.autodiscover()
@@ -42,6 +43,7 @@ urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^site-admin/', admin.site.urls),
     url(r'^ford3/', include('ford3.urls')),
+    url(r'^api/', include('api.urls')),
     url(r'^', include('base.urls')),
     url(
         r'^accounts/login/$',
@@ -51,6 +53,7 @@ urlpatterns = [
         r'^logout/$',
         auth_views.LogoutView.as_view(), {'next_page': '/'},
         name='logout'),
+    url(r'^api-auth/', include('rest_framework.urls')),
     # url(r'^', include('ford3.urls')),
     # url(r'^accounts/', include('allauth.urls')),
 ]

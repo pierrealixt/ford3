@@ -19,7 +19,8 @@ class Qualification(models.Model):
         through='QualificationEntranceRequirementSubject')
     campus = models.ForeignKey(
         'ford3.campus',
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE,
+        related_name='qualification_set')
     saqa_qualification = models.ForeignKey(
         SAQAQualification,
         null=True,

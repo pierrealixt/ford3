@@ -5,7 +5,8 @@ from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
 class Requirement(models.Model):
     qualification = models.ForeignKey(
         'ford3.qualification',
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE,
+        related_name='requirement_set')
 
     description = models.CharField(
         blank=True,

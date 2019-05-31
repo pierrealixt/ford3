@@ -14,7 +14,8 @@ class CampusEvent(models.Model):
 
     campus = models.ForeignKey(
         'ford3.campus',
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE,
+        related_name='campus_events')
     name = models.CharField(
         blank=False,
         null=False,

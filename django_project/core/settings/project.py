@@ -9,6 +9,7 @@ from .contrib import *  # noqa
 INSTALLED_APPS += (
     'base',
     'ford3',
+    'api',
 )
 
 # Due to profile page does not available,

@@ -6,7 +6,8 @@ from django.core.exceptions import ValidationError
 class QualificationEvent(models.Model):
     qualification = models.ForeignKey(
         'Qualification',
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE,
+        related_name='qualification_events')
     name = models.CharField(
         blank=False,
         null=False,
