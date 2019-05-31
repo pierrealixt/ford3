@@ -32,7 +32,7 @@ class CampusDetailForm(CampusForm):
     max_students_per_year = forms.IntegerField(
         label='Annual student capacity',
         widget=forms.NumberInput(
-            attrs={'placeholder': '1000'}),
+            attrs={'placeholder': 'e.g: 1000'}),
         max_value=1000000,
         min_value=0,
         required=False)
