@@ -141,3 +141,6 @@ django_project/ford3/scraping/*.csv
 
 # media
 deployment/media/provider_logo/
+
+# node_modules
+node_modules
