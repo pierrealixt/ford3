@@ -13,8 +13,9 @@ class UserList(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = User
 
     def get_queryset(self):
-        return User.set_user_from_type(
-            self.request.user).users
+        return User \
+            .set_user_from_type(self.request.user) \
+            .users
 
 
 class UserCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -24,7 +25,6 @@ class UserCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.username = self.object.email
 
         if self.request.user.is_province:
             # province user creates provider user

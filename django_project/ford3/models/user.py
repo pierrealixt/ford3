@@ -7,6 +7,10 @@ from ford3.enums.open_edu_groups import OpenEduGroups
 
 
 class User(AbstractUser):
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    email = models.EmailField(unique=True, null=True)
     is_province = models.BooleanField(
         'province status', default=False)
     is_provider = models.BooleanField(
@@ -21,6 +25,10 @@ class User(AbstractUser):
         'self',
         null=True,
         on_delete=models.PROTECT)
+
+    def save(self, *args, **kwargs):
+        self.username = self.email
+        super().save(*args, **kwargs)
 
     @classmethod
     def set_user_from_type(self, user):
@@ -94,7 +102,6 @@ class ProvinceUser(User):
 
     def save(self, *args, **kwargs):
         self.is_province = True
-        self.username = self.email
         super().save(*args, **kwargs)
 
 
