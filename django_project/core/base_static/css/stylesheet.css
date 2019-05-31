@@ -638,16 +638,16 @@ input[type='text']::placeholder, input[type='password']::placeholder, input[type
     color: var(--c-grey-l);
 }
 
-input[type='text']:focus, , input[type='password']:focus, input[type='number']:focus {
+input[type='text']:focus, input[type='password']:focus, input[type='number']:focus {
     outline-color: var(--c-blue) !important;
 }
 
-input[type='text']:hover, input[type='password']:hover {
+input[type='text']:hover, input[type='password']:hover, input[type='number']:hover {
     color: var(--c-grey-d);
     border-color: var(--c-grey-d);
 }
 
-input[type='text']:hover::placeholder, , input[type='password']:hover::placeholder, input[type='number']:hover::placeholder {
+input[type='text']:hover::placeholder, input[type='password']:hover::placeholder, input[type='number']:hover::placeholder {
     color: var(--c-grey);
     border-color: var(--c-grey-d);
 
