@@ -56,22 +56,11 @@
             </div>
             {% endif %}
         </div>
+		{% include 'list_events.html' with events=campus.events %}
 
-        <div class='row py-3'>
-            <div class='col-md-12'>
-                {% if campus.events|length == 0 %}
-                    <p class='text-muted'>No events yet</p>
-                {% endif %}
-                {% for event in campus.events %}
-                    <p>
-                        <b>{{ event.name }}:</b> {{ event.date_start }} - {{ event.date_end }}
-                        <a href="{{ event.http_link }}" target="_blank">{{ event.http_link }}</a>
-                    </p>
-                {% endfor %}
-                </ul>
 
-            </div>
-        </div>
+
+
         <div class='row'>
         </div>
 
