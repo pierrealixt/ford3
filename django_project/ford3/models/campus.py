@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from ford3.models.campus_event import CampusEvent
 
 
@@ -9,6 +10,12 @@ class ActiveCampusManager(models.Manager):
 
 
 class Campus(models.Model):
+    phone_regex = RegexValidator(
+        regex=r'^\+?1?\d{10,15}$',
+        message=
+        "Phone number must be at least 10 digits and at max 15 digits."
+        "It can start with +(country code)")
+
     provider = models.ForeignKey(
         'ford3.provider',
         on_delete=models.CASCADE)
@@ -33,7 +40,8 @@ class Campus(models.Model):
         null=True,
         unique=False,
         help_text="The campus' telephone number",
-        max_length=255)
+        validators=[phone_regex],
+        max_length=16)
     email = models.EmailField(
         blank=False,
         null=True,

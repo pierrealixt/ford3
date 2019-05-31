@@ -1,3 +1,4 @@
+from django.core.validators import RegexValidator
 from django.db import models, transaction
 from ford3.models.campus import Campus
 
@@ -12,6 +13,11 @@ class Provider(models.Model):
         'TVET College',
         'University',
         'Private Tertiary College',)
+    phone_regex = RegexValidator(
+        regex=r'^\+?1?\d{10,15}$',
+        message=
+        "Phone number must be at least 10 digits and at max 15 digits."
+        "It can start with +(country code)")
 
     name = models.CharField(
         blank=False,
@@ -32,7 +38,8 @@ class Provider(models.Model):
         null=True,
         unique=False,
         help_text="The provider's telephone number",
-        max_length=12)
+        validators=[phone_regex],
+        max_length=16)
     website = models.CharField(
         blank=True,
         null=True,
@@ -49,8 +56,9 @@ class Provider(models.Model):
         blank=False,
         null=True,
         unique=False,
+        validators=[phone_regex],
         help_text="A contact number students interested in applying can use",
-        max_length=255)
+        max_length=16)
     physical_address_postal_code = models.CharField(
         blank=False,
         null=False,

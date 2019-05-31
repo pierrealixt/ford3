@@ -12,7 +12,7 @@ class ProspectForm(forms.models.ModelForm):
             'name': forms.fields.TextInput(
                 attrs={'placeholder': 'John Doe'}),
             'telephone': forms.fields.TextInput(
-                attrs={'placeholder': '021 345 678'}),
+                attrs={'placeholder': '+271234567890 or 123456789012345'}),
             'email': forms.fields.EmailInput(
                 attrs={'placeholder': 'johndoe@email.com'}),
         }

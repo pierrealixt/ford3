@@ -49,9 +49,9 @@ class ProviderForm(forms.models.ModelForm):
                 choices=Provider.types_to_form(),
                 attrs={'class' : 'edu-button edu-dropdown-button'}),
             'telephone': forms.fields.TextInput(
-                attrs={'placeholder': 'Primary contact number'}),
+                attrs={'placeholder': '+271234567890 or 123456789012345'}),
             'admissions_contact_no' : forms.fields.TextInput(
-                attrs={'placeholder': 'Admissions contact number'}),
+                attrs={'placeholder': '+271234567890 or 123456789012345'}),
             'email': forms.fields.EmailInput(
                 attrs={'placeholder': 'example@example.com'}),
             'website': forms.fields.URLInput(
