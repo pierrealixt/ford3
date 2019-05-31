@@ -1,11 +1,11 @@
 # FORD3 
 
-[![FORD Screenshot](http://ford3screenshoturl)](http://ford3productionurl)
+[![FORD Screenshot](http://ford3.kartoza.com)](http://ford3.kartoza.com)
 
 
-A django app for creating publishing open education programm data for South Africa. 
+A django app for creating publishing open education program data for South Africa.
 
-View a running instance at [http://ford3productionurl](http://ford3productionurl)
+View a running instance at [http://ford3.kartoza.com](http://ford3.kartoza.com)
 
 
 Note that whilst usable, Ford3 is under continual development and not
@@ -25,22 +25,13 @@ The latest source code is available at
 
 ## Project activity
 
-Story queue on Waffle:
-
-* [![Stories in Ready](https://badge.waffle.io/kartoza/ford3.svg?label=ready&title=Ready)](http://waffle.io/kartoza/ford3) 
-* [![Stories in In Progress](https://badge.waffle.io/kartoza/ford3.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/kartoza/ford3)
-
-[![Throughput Graph](https://graphs.waffle.io/kartoza/ford3/throughput.svg)](https://waffle.io/kartoza/ford3/metrics)
-
-* Current test status master: [![Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=master)](https://travis-ci.org/inasafe/inasafe) and
+* Current test status master: [![Build Status](https://api.travis-ci.com/kartoza/ford3.svg?branch=master)](https://travis-ci.com/kartoza/ford3) and
 [![Code Health](https://landscape.io/github/kartoza/ford3/master/landscape.svg?style=flat)](https://landscape.io/github/kartoza/ford3/master)
 
-* Current test status develop: [![Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=develop)](https://travis-ci.org/inasafe/inasafe) and
+* Current test status develop: [![Build Status](https://api.travis-ci.com/kartoza/ford3.svg?branch=develop)](https://travis-ci.org/kartoza/ford3) and
 [![Code Health](https://landscape.io/github/kartoza/ford3/develop/landscape.svg?style=flat)](https://landscape.io/github/kartoza/ford3/develop)
 
 * Test coverage [![codecov](https://codecov.io/gh/kartoza/ford3/branch/develop/graph/badge.svg)](https://codecov.io/gh/kartoza/ford3)
-
-
 
 ## Quick Installation Guide
 
@@ -48,8 +39,24 @@ For deployment we use [docker](http://docker.com) so you need to have docker
 running on the host. Ford3 is a django app so it will help if you have
 some knowledge of running a django site.
 
+To run the project locally, there are four steps:
+1. Build the images and set up the docker env
+2. Populate initial data
+3. Run the server
+4. Open browser
+
+### 1. Build the images and set up the docker for the project
+
+Clone the repo
 ```
 git clone git://github.com/kartoza/ford3.git
+```
+
+- We will use Makefile script available under deployment folder.
+- Any `make` commands should be run under deployment folder.
+
+
+```
 cd ford3/deployment
 cp btsync-db.env.EXAMPLE btsync-db.env
 cp btsync-media.env.EXAMPLE btsync-media.env
@@ -61,31 +68,106 @@ make migrate
 make collectstatic
 ```
 
-If you need backups, put btsync keys in these files. If you don't need backups, 
-you can let the default content.
+### 2. Populate initial Data
+#### Add superuser
+Admin user is required to administer the site.
+To add admin:
 
-So as to create your admin account:
 ```
+cd deployment
 make superuser
+# write your usename, email, and password
 ```
 
-**google authentication**
-
-In social auth to use the google authentication you need to go to:
-
-https://console.developers.google.com/apis/credentials
-
-Create and oath2 credential with these options:
-
-Authorized redirect URIs
-
-http://<your domain>/en/complete/google-oauth2/
-
-Use the ford3 admin panel to set up the google account with your id and
-secret
+#### Add initial data
+```
+cd deployment
+make load-initial-data
+```
 
 
-**Backups**
+### 3. Run the server
+#### A. From PyCharm Professional
+```
+cd deployment/ansible/development/group_vars
+cp all.sample.yml all.yml
+```
+
+- edit line 6 (*remote_user*), 8 (*remote_group*), and 10 (*project_path*) in all.yml accordingly
+  - make sure that *remote_user* is equal to your local user
+  - *remote_group* is likely stay the same if using linux and macOS
+  - *project_path* is equal to `/home/web/ford3`
+
+```
+cd deployment/ansible
+mkdir tmp
+cd ..
+make setup-ansible
+# choose your pycharm version from the list
+```
+
+- Open PyCharm
+- Notice your pycharm, there should be *Ford3* django server in the toolbar.
+  - Wait for a couple of minutes. Make sure the PyCharm has loaded all the necessary files.
+  - If pycharm requires to install additional supported modules, click on the provided link
+- Click on the `play button` or `debug button` next to *Ford3* instance in the toolbar. The pycharm will run the server for you
+  - sometimes restart pycharm can remedy the problem too
+  - If the server doesn't run, try:
+
+```
+cd deployment
+make down
+make up
+```
+
+
+#### B. From CLI
+```
+cd deployment
+make migrate
+make shell
+python manage.py runserver 0.0.0.0:8080
+```
+
+#### 4. Open Browser
+
+- Open browser and type: `http://localhost`
+- You have the project running now
+
+## Useful tools for development
+
+These tools are suggested before developers make a pull request to the repo.
+
+###  Coding style
+
+**flake8** is used to make sure the code is aligned with coding style.
+
+```
+cd deployment
+make flake8
+```
+- Fix the code if the tool complaint about the coding
+
+### Selenium and django tests
+
+ In order to run the selenium tests, double check the web server is not running.
+ ```
+ cd deployment
+ make selenium-up
+ ```
+
+ To run django test:
+ ```
+ cd deployment
+ make test
+ ```
+
+
+## Miscellaneous
+
+### Backups
+
+If you don't need backups, you can let the default content.
 
 If you wish to sync backups, you need to establish a read / write btsync 
 key on your production server and run one or more btsync clients 
