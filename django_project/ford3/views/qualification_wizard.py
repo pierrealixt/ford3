@@ -291,7 +291,7 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
             if form.prefix == 'qualification-requirements':
                 context = self.get_context_data(form=form, **kwargs)
                 self.add_required_subjects(
-                    context['view'].storage.data['step_data']['qualification-requirements'])
+                    context['view'].storage.data['step_data']['qualification-requirements']) # noqa
                 form_data.update(form.cleaned_data)
             else:
                 form_data.update(form.cleaned_data)

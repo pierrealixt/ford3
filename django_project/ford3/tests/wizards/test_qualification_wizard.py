@@ -82,12 +82,12 @@ class TestQualificationWizard(TestCase):
         self.assertEqual(response.status_code, 200)
         wizard = response.context['wizard']
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(wizard['steps'].current, '0')
+        self.assertEqual(wizard['steps'].current, 'qualification-details')
         self.assertEqual(wizard['steps'].step0, 0)
         self.assertEqual(wizard['steps'].step1, 1)
-        self.assertEqual(wizard['steps'].last, '4')
+        self.assertEqual(wizard['steps'].last, 'qualification-dates')
         self.assertEqual(wizard['steps'].prev, None)
-        self.assertEqual(wizard['steps'].next, '1')
+        self.assertEqual(wizard['steps'].next, 'qualification-duration-fees')
         self.assertEqual(wizard['steps'].count, 5)
 
     def test_duration_in_months(self):
