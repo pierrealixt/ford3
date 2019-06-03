@@ -107,7 +107,6 @@
 .side-bar-kartoza-icon {
     height: 2rem;
     position: fixed;
-    width: 320px;
     background-position: center;
     bottom: 0;
     background-color: var(--c-purple);
