@@ -1,0 +1,99 @@
+.remove-qualification-button-inner {
+    line-height: 2.7rem;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.remove-qualification-event-button {
+    background-color: var(--c-orange);
+    border-radius: 50%;
+    width: 2.75rem;
+    height: 2.75rem;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    top: -0.25rem;
+}
+
+
+#occupations-form {
+    min-height: 300px;
+}
+
+#the-alphabet li {
+    display: inline-block;
+    padding: 0 0.5rem;
+    /* padding: 0 1%; */
+    cursor: pointer;
+}
+
+#the-alphabet li:first-child {
+    padding-left:  0;
+}
+
+
+#the-alphabet li:hover {
+    text-decoration: underline;
+}
+
+#the-alphabet li.selected {
+    color:  var(--c-orange-d);
+    font-weight: 800;
+}
+
+#occupations-form {
+    width: 100%;
+}
+
+#occupations-list {
+    overflow-y:hidden;
+    overflow-x:hidden;
+    overflow:  auto;
+    white-space: nowrap;
+    height: 230px;
+    padding: 10px 0;
+}
+
+.occupation-column {
+    display: inline-block;
+    width: 250px;
+    padding: 0;
+    margin-bottom: 0;
+    margin-right:  10px;
+    text-align:  justify;
+}
+
+.occupation-column li {
+    list-style: none;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.occupation-column li:hover {
+    text-decoration: underline;
+}
+
+.selected-occupation {
+    font-weight: 800;
+    color:  var(--c-orange-d);
+}
+
+#selected-occupations li {
+    display: inline-block;
+    background: var(--c-smoke);
+    color: var(--c-purple);
+    margin: 5px 10px 5px 0;
+    padding: 10px;
+    position: relative;
+}
+
+#selected-occupations li > span {
+    color: var(--c-orange-d);
+    cursor: pointer;
+    font-weight: 800;
+    margin-left: 10px;
+}

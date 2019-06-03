@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Provider Form
+{% endblock %}
+
+{% block body %}
+
+<div class='container'>
+	<button id="sidebarCollapse" class="edu-button edu-button-blue">
+		<span>Toggle Sidebar</span>
+	</button>
+	<div class='hide'>
+		<h3>Colour Palette</h3>
+		<div class='row'>
+			<div class='col-2' style='text-align: center'>
+				<div class='container round-block'
+					 style='background-color:var(--c-purple)'></div>
+				#2C314F
+			</div>
+			<div class='col-2' style='text-align: center'>
+				<div class='container round-block'
+					 style='background-color:var(--c-blue)'></div>
+				#7ACDCF
+			</div>
+			<div class='col-2' style='text-align: center'>
+				<div class='container round-block'
+					 style='background-color:var(--c-orange)'></div>
+				#FCB53B
+			</div>
+			<div class='col-2' style='text-align: center'>
+				<div class='container round-block'
+					 style='background-image:var(--cg-blue-dblue)'></div>
+				Blue Gradient
+			</div>
+			<div class='col-2' style='text-align: center'>
+				<div class='container round-block'
+					 style='background-image:var(--cg-orange-dorange)'></div>
+				Orange
+				Gradient
+			</div>
+		</div>
+		<div class='row'>
+			<div class='col-2' style='text-align: center'>
+				<div class='container round-block'
+					 style='background-color:var(--c-smoke)'></div>
+				#EFEEE9
+			</div>
+			<div class='col-2' style='text-align: center'>
+				<div class='container round-block'
+					 style='background-color:var(--c-grey-l)'></div>
+				#D5D5D5
+			</div>
+			<div class='col-2' style='text-align: center'>
+				<div class='container round-block'
+					 style='background-color:var(--c-grey)'></div>
+				#AAAAAA
+			</div>
+			<div class='col-2' style='text-align: center'>
+				<div class='container round-block'
+					 style='background-color:var(--c-grey-d)'></div>
+				#464646
+			</div>
+			<div class='col-2' style='text-align: center'>
+				<div class='container round-block'
+					 style='background-color:var(--c-grey-d)'></div>
+				#1B1D28
+			</div>
+		</div>
+		<div class='col-12'>
+			<h1 class='row'>HEADER 1</h1>
+			<h2 class='row'>HEADER 2</h2>
+			<h3 class='row'>HEADER 3</h3>
+			<h4 class='row'>HEADER 4</h4>
+			<div class='row'>Regular Text</div>
+		</div>
+		<div class='row'>
+			<div class='col-3'>
+				<button class='edu-button edu-button-blue'>Blue Button</button>
+			</div>
+			<div class='col-3'>
+
+				<button class='edu-button edu-button-orange'>Orange Button
+				</button>
+			</div>
+			<div class='col-3'>
+				<button id="sidebarCollapse" class='edu-button edu-button-grey'>
+					Button
+				</button>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class='row'>
+		<div class='col-12'>
+			Switch:
+		</div>
+	</div>
+	<div class='row'>
+		<div class='col-4'>
+			<label class="switch">
+				<input type="checkbox">
+				<span class="slider"></span>
+			</label>
+		</div>
+	</div>
+	<div class='row'>
+		<div class='col-12'>
+			Slider:
+		</div>
+	</div>
+	<div class='row'>
+		<div class='col-8'>
+			<input type="range" min="1" max="100" value="50"
+				   class="range-slider" id="myRange">
+
+		</div>
+	</div>
+
+
+	<div class='col-12'>
+		<h3 class='row'>
+			Checkbox
+		</h3>
+		<div class='row'>
+			<label class="checkbox-container">One
+				<input type="checkbox" checked="checked">
+				<span class="checkmark"></span>
+			</label>
+
+			<label class="checkbox-container">Two
+				<input type="checkbox">
+				<span class="checkmark"></span>
+			</label>
+
+			<label class="checkbox-container">Three
+				<input type="checkbox">
+				<span class="checkmark"></span>
+			</label>
+
+			<label class="checkbox-container">Four
+				<input type="checkbox">
+				<span class="checkmark"></span>
+			</label>
+		</div>
+
+		<h3 class='row'>
+			Radio Buttons:
+		</h3>
+		<div class="row">
+			<div class='row' style='left: 15px; position: relative;'>
+
+				<label class="checkbox-container">One
+					<input name="radio-group" type="radio" checked="checked">
+					<span class="radio-dot"></span>
+				</label>
+
+
+				<label class="checkbox-container">Two
+					<input name="radio-group" type="radio">
+					<span class="radio-dot"></span>
+				</label>
+
+				<label class="checkbox-container">Three
+					<input name="radio-group" type="radio">
+					<span class="radio-dot"></span>
+				</label>
+
+				<label class="checkbox-container">Four
+					<input name="radio-group" type="radio">
+					<span class="radio-dot"></span>
+				</label>
+			</div>
+		</div>
+		<h3 class='row'>Tooltip</h3>
+		<div class='row'></div>
+		<div id='edu-tooltips' class='row'>
+			<div class='col-2' id='tooltip1' style='text-align: center'>
+				<div data-html="true"
+					 title='I could not figure out how to make different coloured tooltips.'
+					 data-toggle="tooltip" data-placement="top"
+					 title="<div class='edu-tooltip-orange'>Tooltip</div>"
+					 class='edu-tooltip-orange container round-block'
+					 style='background-color:var(--c-purple)'></div>
+			</div>
+			<div class='col-2' id='tooltip2' style='text-align: center'>
+				<div data-html="true"
+					 title='I could give it custom html with a custom class but that leaves all...'
+					 data-toggle="tooltip" data-placement="right"
+					 title="<div class='edu-tooltip-orange'>Tooltip</div>"
+					 class='edu-tooltip-light container round-block'
+					 style='background-color:var(--c-purple)'></div>
+			</div>
+			<div class='col-2' id='tooltip3' style='text-align: center'>
+				<div data-html="true"
+					 title='but one anoying arrow I need to reference in css. If this is important we can do it with javascript easily enough.'
+					 data-toggle="tooltip" data-placement="bottom"
+					 title="<div class='edu-tooltip-orange'>Tooltip</div>"
+					 class='edu-tooltip-dark red-tooltip container round-block'
+					 style='background-color:var(--c-purple)'></div>
+			</div>
+		</div>
+		<h3 class='row'>Dropdown</h3>
+		<div class='row'>
+			<div class='col-4'>
+				<div class="btn-group">
+					<button type="button"
+							class="edu-button edu-dropdown-button dropdown-toggle"
+							data-toggle="dropdown">
+						Knock knock
+					</button>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="#">Who</a>
+						<a class="dropdown-item" href="#">Is</a>
+						<a class="dropdown-item" href="#">There</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="#">?</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<h3 class='row'>
+			Text Inputs
+		</h3>
+	</div>
+	<div class='container'>
+		<div class='row'>
+			<div class='col-12'>
+				Hip Hip...
+			</div>
+			<div class='col-12'>
+				<input type='text' placeholder='Hooray!'/>
+			</div>
+		</div>
+	</div>
+	<div class='row' style="height: 300px;">
+	</div>
+
+
+</div>
+
+{% endblock body %}

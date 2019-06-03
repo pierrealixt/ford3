@@ -1,3 +1,17 @@
+# Deprecation notice
+
+**Note:** This document is deprecated in favor of Ansible Setup.
+The project files and config will be auto-generated for deployment and PyCharm.
+Refer to [Ansible Readme](deployment/ansible/README.md) for more info.
+
+All the `make dev*` commands are considered deprecated to streamline the workflow.
+The philosophy is to use the same command whenever possible, but the way it 
+behaves is determined by the configuration file. So, if you use local development 
+configuration, `make build` will build development image (with SSH in it), just like 
+the previous `make build-devweb` do. Similarly, `make web` will prepare a web stack 
+for development. With this approach you can have multiple config files and can 
+easily switch between them and just run the same command.
+
 # Developer Documentation
 
 **Note:** This documentation is intentionally generic so that it can
@@ -41,8 +55,8 @@ In case you don't get some not installed packages, you can run this
 repeatable steps:
 
 1. Close PyCharm
-2. `make kill` or `docker-compose -p projecta kill`
-3. `make rm` or `docker-compose -p projecta rm`
+2. `make kill` or `docker-compose -p ford3 kill`
+3. `make rm` or `docker-compose -p ford3 rm`
 4. `make build`
 5. `make build-devweb`
 6. `make devweb`
@@ -107,7 +121,7 @@ Now set these options:
 
 * **Name:** Django Server
 * **Host:** 0.0.0.0
-* **Port:** (use the http port specified in the docker-compose.yml file, e.g. 8080)`*` **Run browser** If checked, it will open the url after you click run. You should be able to access the running projecta on 0.0.0.0:61202 (the port that mapped to 8080)
+* **Port:** (use the http port specified in the docker-compose.yml file, e.g. 8080)`*` **Run browser** If checked, it will open the url after you click run. You should be able to access the running ford3 on 0.0.0.0:61202 (the port that mapped to 8080)
 * **Additional options:** ``--settings=core.settings.dev_docker``
 * **Run browser:** Optionally set this to your IP address (MacOS/Linux) or your specific IP address (Windows) followed by the port forward address for port 8080 specified in your ``docker-compose.yml`` file. For example: ``http://0.0.0.0:61202``.
 * **Environment vars:** Leave as default unless you need to add something to the env
@@ -133,8 +147,7 @@ I made a general overview screencast describing this process here:
 
 ## Running Tests
 
-Tim write stuff here....
-
+See /django_project/ford3/tests/functional/README.md for setting up selenium.
 
 ## Developer FAQ
 

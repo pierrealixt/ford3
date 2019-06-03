@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}{{ provider.name }} • Edit provider{% endblock %}
+
+{% block side_navbar %}
+{% include 'dashboard_sidebar.html' %}
+{% endblock %}
+
+{% block body %}
+    <div class='row'>
+        <div class='col-md-12'>
+            <h3>Add a provider</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class='col-md-12'>
+            <h4>Provider Details</h4>
+            <hr />
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class='col-md-12 p-0'>
+            <form class='container' action="{{ submit_url }}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class='row'>
+                    <div class='col-md-4'>
+                        <label>Provider's name <span class="text-danger">*</span> </label>
+                        {{ form.name.errors }}
+                    </div>
+                    <div class='col-md-8'>
+                        {{ form.name }}
+                    </div>
+                </div>
+                <div class='row my-5'>
+                    <div class='col-md-4'>
+                        <label>Provider's logo</label>
+                        <p class='text-muted'>Max size: 100 Kb</p>
+                        {% if form.provider_logo %}
+                            <p class="form_provider_logo">{{ form.provider_logo }}</p>
+                        {% endif %}
+                        {{ form.provider_logo.errors }}
+                    </div>
+                    <div class='col-md-8'>
+                        <div class="provider-form-photo">
+                            {% if form.instance.provider_logo %}
+                                <img src="{{ form.instance.provider_logo.url }}" />
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-4">
+                        <label>Province <span class="text-danger">*</span></label>
+                        {{ form.province.errors }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form.province }}
+                    </div>
+                </div>
+
+                <div class="row my-3">
+                    <div class="col-md-4">
+                        <label>Provider type <span class="text-danger">*</span></label>
+                        {{ form.provider_type.errors }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form.provider_type }}
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class='col-md-12'>
+                        <h4>Central Office Contact Details</h4>
+                        <hr />
+                    </div>
+                </div>
+
+                <div class="row my-3">
+                    <div class="col-md-4">
+                        <label>Telephone number <span class="text-danger">*</span></label>
+                        {{ form.telephone.errors }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form.telephone }}
+                        {{ form.telephone.errors }}
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-4">
+                        <label>Admissions contact number <span class="text-danger">*</span></label>
+                        {{ form.admissions_contact_no.errors }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form.admissions_contact_no }}
+                        {{ form.admissions_contact_no.errors }}
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-4">
+                        <label>Website</label>
+                        {{ form.website.errors }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form.website }}
+                    </div>
+                </div>                
+                <div class="row my-3">
+                    <div class="col-md-4">
+                        <label>E-mail address <span class="text-danger">*</span></label>
+                        {{ form.email.errors }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form.email }}
+                    </div>
+                </div>
+
+                <div class="row my-3">
+                    <div class="col-md-4">
+                        <label>Physical address <span class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='my-2'>
+                            {{ form.physical_address_line_1.errors }}
+                            {{ form.physical_address_line_1 }}
+                        </div>
+                        <div class='my-2'>
+                            {{ form.physical_address_line_2.errors }}
+                            {{ form.physical_address_line_2 }}
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-7 col-sm-12 mt-1">
+                                {{ form.physical_address_city.errors}}
+                                {{ form.physical_address_city}}
+                            </div>
+                            <div class="col-lg-5 col-sm-12 mt-1">
+                                {{ form.physical_address_postal_code.errors}}
+                                {{ form.physical_address_postal_code }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <label class="checkbox-container">
+                            The postal address differs from the physical address
+                            {{  form.postal_address_differs }}
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+                <div id="postal_address_container" class="row my-3">
+                    <div class="col-md-4">
+                        <label>Postal address</label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class='my-2'>
+                            {{ form.postal_address_line_1.errors }}
+                            {{ form.postal_address_line_1 }}
+                        </div>
+                        <div class='my-2'>
+                            {{ form.postal_address_line_2.errors }}
+                            {{ form.postal_address_line_2 }}
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-7 col-sm-12 mt1">
+                                {{ form.postal_address_city.errors}}
+                                {{ form.postal_address_city}}
+                            </div>
+                            <div class="col-lg-5 col-sm-12 mt1">
+                                {{ form.postal_address_postal_code.errors}}
+                                {{ form.postal_address_postal_code }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if is_new_provider %}
+                <div class="row my-3">
+                    <div class='col-md-8'>
+                        <h4>Campuses</h4>
+                    </div>
+                    <div class='col-md-4'>
+                        <div id="add-campus-name" class="edu-button edu-button-orange">
+                            Add Campus
+                        </div>
+                    </div>
+                    <div class='col-md-12'>
+                        <hr />
+                    </div>
+                </div>
+                <div id="campus-names-input-wrapper">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Campus Name <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="col-md-7">
+                            <input 
+                                name="campus_name" 
+                                required class="campus_name"
+                                type="text" placeholder="•••••••••••••••••" />
+                        </div>
+                        <div class="col-md-1">
+                            <div class="remove-campus-button">
+                                <div class="remove-campus-button-inner ">X</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% endif %}
+                <div class='row'>
+                    <div class='col-md-12'>
+                        <hr />
+                    </div>
+                    <div class='col-md-4'>
+                        <button type="submit" class="edu-button edu-button-blue">Submit</button>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+
+{% endblock body %}
+
+{% block footer %}
+<script type="text/javascript" src="{% static 'js/provider_form.js' %}"></script>
+<script type="text/javascript">
+    const MAX_SIZE = 100 * 1024
+    $('#id_provider_logo').bind('change', function() {
+        if (this.files[0].size > MAX_SIZE) {
+            alert(`${this.files[0].name} is too big. Max size is 100 Kb.`);
+            $('#id_provider_logo').val('')
+        }
+
+            
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,142 @@
+[
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Health"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Business"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Problem Solving"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Performing Arts"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Music"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Social Science"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Management"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Science"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Sports"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Environment/Nature"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Practical Work"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Technology"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Writing"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Teaching"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Numbers"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Design"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Creative Work"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Communication"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Film and Media"
+    }
+  },
+  {
+    "model": "ford3.Interest",
+    "pk": null,
+    "fields": {
+      "name": "Law"
+    }
+  }
+]

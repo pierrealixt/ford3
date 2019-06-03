@@ -1,9 +1,3 @@
-# coding=utf-8
-"""
-core.settings.base
-"""
-# Django settings for projecta project.
-
 from .utils import absolute_path
 
 ADMINS = (
@@ -63,7 +57,7 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     absolute_path('core', 'base_static'),
-    absolute_path('certification', 'static'),
+    absolute_path('ford3', 'static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -84,6 +78,7 @@ TEMPLATES = [
         'DIRS': [
             # project level templates
             absolute_path('core', 'base_templates'),
+            absolute_path('ford3', 'templates'),
         ],
         'APP_DIRS': False,
         'OPTIONS': {
@@ -96,8 +91,8 @@ TEMPLATES = [
             'context_processors': [
                 # Already defined Django-related contexts
                 'django.contrib.auth.context_processors.auth',
-                'django.core.context_processors.request',
-                'django.core.context_processors.media',
+                'django.template.context_processors.request',
+                'django.template.context_processors.media',
                 'django.template.context_processors.i18n',
 
                 # `allauth` needs this from django
@@ -108,7 +103,7 @@ TEMPLATES = [
     },
 ]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -116,7 +111,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
 
 ROOT_URLCONF = 'core.urls'
 
@@ -133,7 +128,18 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.syndication',
     'django.contrib.gis',
+    'django_hashedfilenamestorage',
+    'rest_framework',
 )
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -155,7 +161,7 @@ LOGGING = {
             'class': 'django.utils.log.AdminEmailHandler'
         },
         'null': {
-            'class': 'django.utils.log.NullHandler',
+            'class': 'logging.NullHandler',
         },
     },
     'loggers': {

@@ -1,19 +1,15 @@
-# coding=utf-8
-
-"""Project level settings.
-
-Adjust these values as needed but don't commit passwords etc. to any public
-repository!
-"""
-
 import os  # noqa
+from distutils.util import strtobool
+
 from django.utils.translation import ugettext_lazy as _
-from .utils import absolute_path
 from .contrib import *  # noqa
+
 
 # Project apps
 INSTALLED_APPS += (
     'base',
+    'ford3',
+    'api',
 )
 
 # Due to profile page does not available,
@@ -38,26 +34,30 @@ LANGUAGES = (
 LOCALE_PATHS = (absolute_path('locale'),)
 
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
     # Add any custome middleware classes here
-) + MIDDLEWARE_CLASSES
+] + MIDDLEWARE
 
 # Project specific javascript files to be pipelined
 # For third party libs like jquery should go in contrib.py
-PIPELINE_JS['project'] = {
+
+PIPELINE['JAVASCRIPT']['project'] = {
     'source_filenames': (
         'js/csrf-ajax.js',
         'js/ford3.js',
+        'js/provider_form.js',
     ),
     'output_filename': 'js/project.js',
 }
 
 # Project specific css files to be pipelined
 # For third party libs like bootstrap should go in contrib.py
-PIPELINE_CSS['project'] = {
+PIPELINE['STYLESHEETS']['project'] = {
     'source_filenames': (
         'css/ford3.css',
         'css/form.css',
+        'css/stylesheet.css',
+        'css/provider_form.css',
     ),
     'output_filename': 'css/project.css',
     'extra_context': {
@@ -65,3 +65,18 @@ PIPELINE_CSS['project'] = {
     },
 }
 
+STATIC_URL = '/static/'
+
+
+# Selenium test configuration
+# URL of selenium driver. example: http://hub.test:4444/wd/hub
+SELENIUM_DRIVER = os.environ.get('SELENIUM_DRIVER', '')
+
+SELENIUM_UNIT_TEST_FLAG = strtobool(
+    os.environ.get('SELENIUM_UNIT_TEST_FLAG', 'False'))
+
+SELENIUM_TEST_HOSTNAME = os.environ.get('SELENIUM_TEST_HOSTNAME', 'localhost')
+SELENIUM_TEST_PORT = int(os.environ.get('SELENIUM_TEST_PORT', '0'))
+
+AUTH_USER_MODEL = 'ford3.User'
+VALID_LINK_DAYS = 3

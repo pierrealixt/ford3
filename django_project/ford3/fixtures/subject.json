@@ -1,0 +1,142 @@
+[
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Home language"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "First additional language"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Mathematics"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Mathematical Literacy"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Life orientation"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Accounting"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Agricultural Sciences"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Business Studies"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Dramatic Arts"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Economics"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Engineering Graphics and Design"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Geography"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "History"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Consumer Studies"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Information Technology"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Life Sciences"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Music"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Physical Sciences"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Religion Studies"
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Visual Arts"
+    }
+  }
+]

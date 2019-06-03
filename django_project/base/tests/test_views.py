@@ -1,15 +1,14 @@
-## coding=utf-8
-#from django.core.urlresolvers import reverse
-#from django.test import TestCase, override_settings
-#from django.test.client import Client
-#from base.tests.model_factories import ProjectF, OrganisationF
-#from core.model_factories import UserF
-#import logging
-#
-#
-#class TestViews(TestCase):
+# from django.core.urlresolvers import reverse
+# from django.test import TestCase, override_settings
+# from django.test.client import Client
+# from base.tests.model_factories import ProjectF, OrganisationF
+# from core.model_factories import UserF
+# import logging
+
+
+# class TestViews(TestCase):
 #    """Tests that Project views work."""
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def setUp(self):
 #        """
@@ -18,7 +17,7 @@
 #        the locale of the host running the tests and we
 #        will get unpredictable results / 404s
 #        """
-#
+
 #        self.client = Client()
 #        self.client.post(
 #                '/set_language/', data={'language': 'en'})
@@ -34,11 +33,11 @@
 #        # a work around for that - sett #581
 #        self.user.set_password('password')
 #        self.user.save()
-#
+
 #        self.test_project = ProjectF.create()
 #        self.unapproved_project = ProjectF.create(approved=False)
 #        self.test_organisation = OrganisationF.create()
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_ProjectListView(self):
 #        client = Client()
@@ -50,7 +49,7 @@
 #        self.assertEqual(response.template_name, expected_templates)
 #        self.assertEqual(response.context_data['object_list'][0],
 #                         self.test_project)
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_ProjectCreateView_with_login(self):
 #        client = Client()
@@ -61,13 +60,13 @@
 #            'project/create.html'
 #        ]
 #        self.assertEqual(response.template_name, expected_templates)
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_ProjectCreateView_no_login(self):
 #        client = Client()
 #        response = client.get(reverse('project-create'))
 #        self.assertEqual(response.status_code, 302)
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_ProjectCreate_with_login(self):
 #        client = Client()
@@ -82,7 +81,7 @@
 #        }
 #        response = client.post(reverse('project-create'), post_data)
 #        self.assertRedirects(response, reverse('home'))
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_ProjectCreate_no_login(self):
 #        client = Client()
@@ -91,7 +90,7 @@
 #        }
 #        response = client.post(reverse('project-create'), post_data)
 #        self.assertEqual(response.status_code, 302)
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_ProjectUpdateView_with_login(self):
 #        client = Client()
@@ -104,7 +103,7 @@
 #            'project/update.html'
 #        ]
 #        self.assertEqual(response.template_name, expected_templates)
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_ProjectUpdateView_no_login(self):
 #        client = Client()
@@ -112,7 +111,7 @@
 #            'slug': self.test_project.slug
 #        }))
 #        self.assertEqual(response.status_code, 302)
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_ProjectUpdate_with_login(self):
 #        client = Client()
@@ -130,7 +129,7 @@
 #        self.assertRedirects(response, reverse('project-detail', kwargs={
 #            'slug': self.test_project.slug
 #        }))
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_ProjectUpdate_no_login(self):
 #        client = Client()
@@ -142,7 +141,7 @@
 #            'slug': self.test_project.slug
 #        }), post_data)
 #        self.assertEqual(response.status_code, 302)
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_ProjectDetailView(self):
 #        client = Client()
@@ -154,7 +153,7 @@
 #            'project/new_detail.html'
 #        ]
 #        self.assertEqual(response.template_name, expected_templates)
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_ProjectDeleteView_with_login(self):
 #        client = Client()
@@ -167,14 +166,14 @@
 #            'project/delete.html'
 #        ]
 #        self.assertEqual(response.template_name, expected_templates)
-#
+
 #    def test_ProjectDeleteView_no_login(self):
 #        client = Client()
 #        response = client.get(reverse('project-delete', kwargs={
 #            'slug': self.test_project.slug
 #        }))
 #        self.assertEqual(response.status_code, 302)
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_ProjectDelete_with_login(self):
 #        client = Client()
@@ -190,7 +189,7 @@
 #        # TODO: The following line to test that the object is deleted does not
 #        # currently pass as expected.
 #        # self.assertTrue(project_to_delete.pk is None)
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_ProjectDelete_no_login(self):
 #        client = Client()
@@ -199,7 +198,7 @@
 #            'slug': project_to_delete.slug
 #        }))
 #        self.assertEqual(response.status_code, 302)
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_GithubRepoView_no_login(self):
 #        client = Client()
@@ -207,7 +206,7 @@
 #            'slug': self.test_project.slug
 #        }))
 #        self.assertEqual(response.status_code, 302)
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_GithubRepoView_with_login(self):
 #        client = Client()
@@ -218,9 +217,9 @@
 #            'github/populate-github.html'
 #        ]
 #        self.assertEqual(response.template_name, expected_templates)
-#
-#
-#class TestOrganisationCreate(TestCase):
+
+
+# class TestOrganisationCreate(TestCase):
 #    """Test organisation creation."""
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def setUp(self):
@@ -233,15 +232,15 @@
 #            'username': 'sonlinux',
 #            'is_staff': True,
 #        })
-#
+
 #        self.user.set_password('password')
 #        self.user.save()
-#
+
 #        # lets set up a testing project to create organisations from.
 #        self.test_project = ProjectF.create()
 #        self.unapproved_project = ProjectF.create(approved=False)
 #        self.test_organisation = OrganisationF.create()
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_oroganisation_create_with_login(self):
 #        """
@@ -249,19 +248,19 @@
 #        """
 #        client = Client()
 #        loged_in = client.login(username='sonlinux', password='password')
-#
+
 #        # Test client log in.
 #        self.assertTrue(loged_in)
-#
+
 #        expected_templates = [
 #            'organisation/create.html'
 #        ]
 #        response = client.post(reverse('create-organisation'))
 #        self.assertEqual(response.status_code, 200)
-#
+
 #        # Test if get the correct template view after creation.
 #        self.assertEqual(response.template_name, expected_templates)
-#
+
 #    @override_settings(VALID_DOMAIN = ['testserver', ])
 #    def test_multiple_organisation_create_with_single_login(self):
 #        """
@@ -270,19 +269,19 @@
 #        """
 #        client = Client()
 #        loged_in = client.login(username='sonlinux', password='password')
-#
+
 #        # Test that user is actually loged in.
 #        self.assertTrue(loged_in)
 #        post_data_list = [
 #            'Test organisation creation',
 #            'Test organisation creation two',
 #            'Test organisation creation three']
-#
+
 #        for post_data in post_data_list:
 #            response = client.post(reverse('create-organisation'),
 #                                   {'name': post_data})
 #            self.assertEqual(response.status_code, 302)
-#
+
 #    @override_settings(VALID_DOMAIN = ['testserver', ])
 #    def test_organisation_create_with_no_login(self):
 #        """Test that no non-authenticated user can create an organisation."""
@@ -293,9 +292,9 @@
 #        # response = client.post( reverse( 'account_login') , post_data )
 #        response = client.post(reverse('create-organisation'), post_data)
 #        self.assertEqual(response.status_code, 302)
-#
-#
-#class TestOrganisationCreateWithSuperuserPermissions(TestCase):
+
+
+# class TestOrganisationCreateWithSuperuserPermissions(TestCase):
 #    """Test organisation creation with a superuser login."""
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def setUp(self):
@@ -308,15 +307,15 @@
 #            'username': 'sonlinux',
 #            'is_superuser': True,
 #        })
-#
+
 #        self.user.set_password('password')
 #        self.user.save()
-#
+
 #        # lets set up a testing project to create organisations from.
 #        self.test_project = ProjectF.create()
 #        self.unapproved_project = ProjectF.create(approved=False)
 #        self.test_organisation = OrganisationF.create()
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_oroganisation_create_with_superuser(self):
 #        """
@@ -324,19 +323,19 @@
 #        """
 #        client = Client()
 #        loged_in = client.login(username='sonlinux', password='password')
-#
+
 #        # Test client log in.
 #        self.assertTrue(loged_in)
-#
+
 #        expected_templates = [
 #            'organisation/create.html'
 #        ]
 #        response = client.post(reverse('create-organisation'))
 #        self.assertEqual(response.status_code, 200)
-#
+
 #        # Test if get the correct template view after creation.
 #        self.assertEqual(response.template_name, expected_templates)
-#
+
 #    @override_settings(VALID_DOMAIN = ['testserver', ])
 #    def test_multiple_organisation_create_with_superuser(self):
 #        """
@@ -344,21 +343,21 @@
 #        """
 #        client = Client()
 #        loged_in = client.login(username='sonlinux', password='password')
-#
+
 #        # Test that user is actually loged in.
 #        self.assertTrue(loged_in)
 #        post_data_list = [
 #            'Test organisation creation',
 #            'Test organisation creation two',
 #            'Test organisation creation three']
-#
+
 #        for post_data in post_data_list:
 #            response = client.post(reverse('create-organisation'),
 #                                   {'name': post_data})
 #            self.assertEqual(response.status_code, 302)
-#
-#
-#class TestOrganisationCreateWithNoneStaffPermissions(TestCase):
+
+
+# class TestOrganisationCreateWithNoneStaffPermissions(TestCase):
 #    """Test organisation creation with a none staff user."""
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def setUp(self):
@@ -371,34 +370,34 @@
 #            'username': 'sonlinux',
 #            'is_staff': False,
 #        })
-#
+
 #        self.user.set_password('password')
 #        self.user.save()
-#
+
 #        # lets set up a testing project to create organisations from.
 #        self.test_project = ProjectF.create()
 #        self.unapproved_project = ProjectF.create(approved=False)
 #        self.test_organisation = OrganisationF.create()
-#
+
 #    @override_settings(VALID_DOMAIN=['testserver', ])
 #    def test_oroganisation_create_with_none_staff_login(self):
 #        """Test that a none staff user can create an organisations."""
-#
+
 #        client = Client()
 #        loged_in = client.login(username='sonlinux', password='password')
-#
+
 #        # Test client log in.
 #        self.assertTrue(loged_in)
-#
+
 #        expected_templates = [
 #            'organisation/create.html'
 #        ]
 #        response = client.post(reverse('create-organisation'))
 #        self.assertEqual(response.status_code, 200)
-#
+
 #        # Test if get the correct template view after creation.
 #        self.assertEqual(response.template_name, expected_templates)
-#
+
 #    @override_settings(VALID_DOMAIN = ['testserver', ])
 #    def test_multiple_organisation_create_with_none_staff_user(self):
 #        """
@@ -406,14 +405,14 @@
 #        """
 #        client = Client()
 #        loged_in = client.login(username='sonlinux', password='password')
-#
+
 #        # Test that user is actually loged in.
 #        self.assertTrue(loged_in)
 #        post_data_list = [
 #            'Test organisation creation',
 #            'Test organisation creation two',
 #            'Test organisation creation three']
-#
+
 #        for post_data in post_data_list:
 #            response = client.post(reverse('create-organisation'),
 #                                   {'name': post_data})

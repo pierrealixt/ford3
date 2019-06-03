@@ -3,7 +3,7 @@
 # noinspection PyUnresolvedReferences
 from .prod import *  # noqa
 import os
-print os.environ
+print(os.environ)
 
 DEBUG = False
 
@@ -41,3 +41,21 @@ EMAIL_HOST_USER = 'noreply@kartoza.com'
 EMAIL_HOST_PASSWORD = 'docker'
 EMAIL_USE_TLS = False
 EMAIL_SUBJECT_PREFIX = '[FORD3]'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
+
+SERVER_PUBLIC_HOST = 'http://ford3.kartoza.com'

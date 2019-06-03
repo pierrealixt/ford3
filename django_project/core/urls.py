@@ -1,19 +1,21 @@
 # coding=utf-8
 """Project level url handler."""
-from django.conf.urls import patterns, include, url
-from django.conf.urls.i18n import i18n_patterns
-from django.contrib.auth import views as auth_views  # noqa
-from django.contrib import admin
-from django.conf import settings
+from django.conf.urls import include, url
 from django.conf.urls.static import static
-from django.http import HttpResponseServerError
-from django.template import loader, Context
+from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.shortcuts import render
+from sentry_sdk import capture_message
+from ford3.forms.custom_auth_form import CustomAuthForm
+
+# from django.conf.urls.static import static
 
 admin.autodiscover()
 handler404 = 'base.views.error_views.custom_404'
 
 
-def handler500(request):
+def handler500(request, template_name='500.html', *args, **kwargs):
     """500 error handler which includes ``request`` in the context.
 
     See http://raven.readthedocs.org/en/latest/integrations/
@@ -24,23 +26,40 @@ def handler500(request):
     Templates: `500.html`
     Context: None
     """
+    capture_message("Page not found!", level="error")
+
     # You need to create a 500.html template.
-    t = loader.get_template('500.html')
-    return HttpResponseServerError(t.render(Context({
-        'request': request,
-    })))
+    response = render(
+        request,
+        template_name,
+        context={
+            'request': request
+        },
+        status=500)
+    return response
 
 
-urlpatterns = []
-# These patterns work if there is a locale code injected in front of them
-# e.g. /en/reports/
-urlpatterns += i18n_patterns(
-    url(r'^site-admin/', include(admin.site.urls)),
-    url(r'^', include('base.urls')),
+urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
-    url(r'^accounts/', include('allauth.urls')),
-)
+    url(r'^site-admin/', admin.site.urls),
+    url(r'^ford3/', include('ford3.urls')),
+    url(r'^api/', include('api.urls')),
+    url(r'^', include('base.urls')),
+    url(
+        r'^accounts/login/$',
+        auth_views.LoginView.as_view(authentication_form=CustomAuthForm),
+        name='login'),
+    url(
+        r'^logout/$',
+        auth_views.LogoutView.as_view(), {'next_page': '/'},
+        name='logout'),
+    url(r'^api-auth/', include('rest_framework.urls')),
+    # url(r'^', include('ford3.urls')),
+    # url(r'^accounts/', include('allauth.urls')),
+]
 
 if settings.DEBUG:
-    urlpatterns += static(
-        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += \
+        static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += \
+        static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

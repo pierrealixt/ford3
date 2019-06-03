@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+
+ {% block parent-body %}
+<div class='row text-center'>
+    <div class='col-md-4 mx-auto'>
+        <h1 class="text-muted">Failed</h1>
+        <p class="lead">Sorry, your account can't be activated</p>
+        <p class="lead text-muted">
+            It's either invalid request or invalid link.
+        </p>
+        <a href='/'>Back to the home page</a>
+    </div>
+</div>
+{% endblock %}

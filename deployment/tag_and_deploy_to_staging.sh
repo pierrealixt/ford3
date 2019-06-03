@@ -22,7 +22,7 @@ then
     rsync -L  backups/latest.dmp staging.ford3.kartoza.com:/home/web/deployment/backups/
     rsync -r -v media/ staging.ford3.kartoza.com:/home/web/deployment/media
     # Tag the release and push to main repo
-    # .version is used by Raven/Sentry
+    # .version is used by Sentry
     echo $VERSION > ../django_project/.version
     git reset HEAD *
     git add ../django_project/.version

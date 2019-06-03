@@ -1,0 +1,16 @@
+[
+    {
+        "model": "ford3.Province",
+        "pk": 1,
+        "fields": {
+            "name": "Western Cape"
+        }
+    },
+    {
+        "model": "ford3.Province",
+        "pk": 2,
+        "fields": {
+            "name": "Eastern Cape"
+        }
+    }
+]

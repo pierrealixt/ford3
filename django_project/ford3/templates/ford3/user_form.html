@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% load change_value %}
+
+{% block title %}Dashboard • Users{% endblock %}
+{% block side_navbar %}
+{% include 'dashboard_sidebar.html' %}
+{% endblock %}
+{% block body %}
+    <div class='row'>
+        {% if user.is_province %}
+        <div class='col-md-12'>
+            <h3>Add a new provider user</h3>
+            <p class='text-muted'>
+                A provider user will be able to create providers as well as campus users.
+                <br />
+                An activation email will be sent to the new user.
+            </p>
+        </div>
+        {% elif user.is_provider %}
+        <div class='col-md-12'>
+            <h3>Add a new campus user</h3>
+            <p class='text-muted'>
+                A campus user will be able to create campuses.
+                <br />
+                An activation email will be sent to the new user.
+            </p>
+        </div>    
+        {% endif %}
+        {% if user.is_province or user.is_provider %}
+        <div class='col-md-6'>
+            {% if form_error %}
+            <div class='alert alert-danger'>
+                {{ form_error}}
+            </div>
+            {% endif %}
+            <form method="post">{% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Create" class='edu-button edu-button-orange border-0'>
+            </form>
+        </div>
+        {% else %}
+        Please use the administration site to create users.
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

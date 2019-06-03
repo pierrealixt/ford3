@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 WSGI config for web project.
 
@@ -19,7 +18,6 @@ import os
 # We put this here so that low level uwsgi errors also get reported
 # noinspection PyUnresolvedReferences
 # pylint:
-from raven.contrib.django.raven_compat.middleware.wsgi import Sentry  # noqa
 from django.core.wsgi import get_wsgi_application
 # We defer to a DJANGO_SETTINGS_MODULE already in the environment. This breaks
 # if running multiple sites in the same mod_wsgi process. To fix this, use
@@ -49,8 +47,6 @@ def application(environ, start_response):
 
     Places env vars defined in apache conf into a context accessible by django.
     """
-    #if 'GITHUB_PASSWORD' in environ:
-    #    os.environ['GITHUB_PASSWORD'] = environ['GITHUB_PASSWORD']
     return _application(environ, start_response)
 
 # Apply WSGI middleware here.

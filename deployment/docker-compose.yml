@@ -7,152 +7,119 @@
 #
 # See accompanying Make commands for easy collectstatic etc.
 
-smtp:
-  image: catatnight/postfix
-  hostname: postfix
-  environment:
-    # You could change this to something more suitable
-    - maildomain=kartoza.com
-    - smtp_user=noreply:docker
-  restart: unless-stopped
+version: '2'
+services:
+  smtp:
+    image: catatnight/postfix
+    environment:
+      # You could change this to something more suitable
+      - maildomain=kartoza.com
+      - smtp_user=noreply:docker
+    restart: unless-stopped
 
-db:
-  image: kartoza/postgis:9.6-2.4
-  volumes:
-    #- ./pg/postgres_data:/var/lib/postgresql
-    - ./backups:/backups
-  environment:
-    - USERNAME=docker
-    - PASS=docker
-  restart: unless-stopped
-#  Uncomment the next line to have an access with PGAdmin using localhost and port 25432 on your computer.
-#  Only for development !
-#  ports:
-#    - "25432:5432"
+  db:
+    image: kartoza/postgis:9.6-2.4
+    volumes:
+      # db volume mount can be overridden in docker-compose.override.yml
+#      - ./pg/postgres_data:/var/lib/postgresql
+      - ./backups:/backups
+    environment:
+      - ALLOW_IP_RANGE=0.0.0.0/0
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      # Postgres env var. For postgres CLI shortcut
+      - PGUSER=docker
+      - PGPASSWORD=docker
+      - PGHOST=localhost
+    restart: unless-stopped
+  #  Overrides the next line in docker-compose.override.yml
+  #  to have an access with PGAdmin using localhost and port 25432 on your
+  #  computer. Only for development !
+  #  ports:
+  #    - "25432:5432"
 
-uwsgi:
-  build: docker
-  hostname: uwsgi
-  environment:
-    - DATABASE_NAME=gis
-    - DATABASE_USERNAME=docker
-    - DATABASE_PASSWORD=docker
-    - DATABASE_HOST=db
-    - DJANGO_SETTINGS_MODULE=core.settings.prod_docker
-    - VIRTUAL_HOST=ford3.kartoza.com
-    - VIRTUAL_PORT=8080
-  volumes:
-    - ../django_project:/home/web/django_project
-    - ./static:/home/web/static:rw
-    - ./media:/home/web/media:rw
-    - ./reports:/home/web/reports
-    - ./logs:/var/log/
-  links:
-    - smtp:smtp
-    - db:db
-  restart: unless-stopped
-  user: root
+# This is to build the base image (production)
+  base_uwsgi:
+    build: docker
+    image: ford3_uwsgi
 
-dbbackups:
-  image: kartoza/pg-backup:9.6
-  hostname: pg-backups
-  volumes:
-    - ./backups:/backups
-  links:
-    - db:db
-  environment:
-    # take care to let the project name below match that
-    # declared in the top of the makefile
-    - DUMPPREFIX=PG_projecta
-    # These are all defaults anyway, but setting explicitly in
-    # case we ever want to ever use different credentials
-    - PGUSER=docker
-    - PGPASSWORD=docker
-    - PGPORT=5432
-    - PGHOST=db
-    - PGDATABASE=gis
-  restart: unless-stopped
+  uwsgi:
+    image: ford3_uwsgi
+    working_dir: /home/web/django_project
+    environment:
+      - PYTHONPATH=/home/web/django_project
+      - DATABASE_NAME=gis
+      - DATABASE_USERNAME=docker
+      - DATABASE_PASSWORD=docker
+      - DATABASE_HOST=db
+      - DJANGO_SETTINGS_MODULE=core.settings.prod_docker
+      - VIRTUAL_HOST=ford3.kartoza.com
+      - VIRTUAL_PORT=8080
+    volumes:
+      - ../django_project:/home/web/django_project
+      - ./static:/home/web/static:rw
+      - ./media:/home/web/media:rw
+      - ./logs:/var/log/
+    links:
+      - smtp:smtp
+      - db:db
+    restart: unless-stopped
 
-# This is normally the main entry point for a production server
-web:
-  image: nginx
-  hostname: nginx
-  volumes:
-    - ./sites-enabled:/etc/nginx/conf.d:ro
-    # I dont use volumes_from as I want to use the ro modifier
-    - ./static:/home/web/static:ro
-    - ./media:/home/web/media:ro
-    - ./logs:/var/log/nginx
-  links:
-    - uwsgi:uwsgi
-  ports:
-    - "80:8080"
-    - "4430:443"
-  restart: unless-stopped
+  dbbackups:
+    image: kartoza/pg-backup:9.6
+    entrypoint: []
+    command: ["/start.sh"]
+    volumes:
+      - ./backups:/backups
+    links:
+      - db:db
+    environment:
+      # take care to let the project name below match that
+      # declared in the top of the makefile
+      - DUMPPREFIX=PG_ford3
+      # These are all defaults anyway, but setting explicitly in
+      # case we ever want to ever use different credentials
+      - PGUSER=docker
+      - PGPASSWORD=docker
+      - PGPORT=5432
+      - PGHOST=db
+      - PGDATABASE=gis
+    restart: unless-stopped
 
-# This is the entry point for a development server.
-# Run with --no-deps to run attached to the services
-# from produ environment if wanted
-devweb:
-  build: docker
-  dockerfile: Dockerfile-dev
-  hostname: uwsgi
-  environment:
-    - DATABASE_NAME=gis
-    - DATABASE_USERNAME=docker
-    - DATABASE_PASSWORD=docker
-    - DATABASE_HOST=db
-    - DJANGO_SETTINGS_MODULE=core.settings.prod_docker
-    - PYTHONPATH=/home/web/django_project
-    - VIRTUAL_HOST=dev.ford3.kartoza.com
-    - VIRTUAL_PORT=8080
-  volumes:
-    - ../django_project:/home/web/django_project
-    - ./static:/home/web/static
-    - ./media:/home/web/media
-    - ./reports:/home/web/reports
-    - ./logs:/var/log/
-  links:
-    - smtp:smtp
-    - db:db
-  ports:
-    # for django test server
-    - "61202:8080"
-    # for ssh
-    - "61203:22"
+  # This is normally the main entry point for a production server
+  web:
+    image: nginx
+    volumes:
+      # Mount production nginx conf to use uwsgi.
+      # Mount development nginx conf to use django manage.py runserver
+      # Dev conf can be overridden in docker-compose.override.yml
+#      - ./sites-enabled/dev.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./sites-enabled/prod.conf:/etc/nginx/conf.d/default.conf:ro
+      # I dont use volumes_from as I want to use the ro modifier
+      - ./static:/home/web/static:ro
+      - ./media:/home/web/media:ro
+      - ./logs:/var/log/nginx
+    links:
+      - uwsgi:uwsgi
+    ports:
+      # You can overrides port mapping in docker-compose.override.yml
+      - "80:80"
+    restart: unless-stopped
 
-btsync-db:
-  # BTSync backups for database dumps
-  image: kartoza/btsync
-  volumes:
-    # We mount RW so that we can use remove peer to clean up old backups off the server
-    - ./backups:/web:rw
-  env_file:
-    # The environment file should define two variables:
-    # SECRET: a RW btsync key if the server is a production server
-    #         a RO btsync key if it is staging or development machine
-    # DEVICE: a unique device name so you can recognise which host is being peered with in btsync
-    # See the btsync example env in this folder for a template
-    # NOTE:
-    # Do not version control the env file as anyone else could peer it and sync
-    # our database backups etc.
-    - btsync-db.env
+  btsync-db:
+    # BTSync backups for database dumps
+    image: kartoza/btsync
+    volumes:
+      # We mount RW so that we can use remove peer to clean up old backups off the server
+      - ./backups:/web:rw
+    # Btsync secret is configured in docker-compose.override.yml
 
-btsync-media:
-  # BTSync backups for django media
-  image: kartoza/btsync
-  volumes:
-    # We mount RO as we do not really want peers to change this data
-    - ./media:/web:ro
-  env_file:
-    # The environment file should define two variables:
-    # SECRET: a RW btsync key if the server is a production server
-    #         a RO btsync key if it is staging or development machine
-    # DEVICE: a unique device name so you can recognise which host is being peered with in btsync
-    # See the btsync example env in this folder for a template
-    # NOTE:
-    # Do not version control the env file as anyone else could peer it and sync
-    # our media backups etc.
-    - btsync-media.env
+  btsync-media:
+    # BTSync backups for django media
+    image: kartoza/btsync
+    volumes:
+      # We mount RO as we do not really want peers to change this data
+      - ./media:/web:ro
+    # Btsync secret is configured in docker-compose.override.yml
 
 

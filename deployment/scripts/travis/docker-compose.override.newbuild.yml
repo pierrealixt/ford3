@@ -1,0 +1,23 @@
+version: '2'
+services:
+
+  # This docker compose files will make sure that we build a new docker image
+  base_uwsgi:
+    build: docker
+    image: ford3_uwsgi
+
+  uwsgi:
+    build:
+      context: docker
+      dockerfile: Dockerfile-dev
+    image: ford3_dev_uwsgi
+    environment:
+      # For Selenium tests
+      SELENIUM_DRIVER: http://hub:4444/wd/hub
+      SELENIUM_UNIT_TEST_FLAG: 'True'
+      # The hostname base url that is going to be accessed by Selenium
+      # Since we are using docker, we can just use the service name internally.
+      SELENIUM_TEST_HOSTNAME: 'uwsgi'
+      # In travis, no one is going to view the test currently runs,
+      # so random port is fine to avoid test being blocked by AddressInUse error.
+      SELENIUM_TEST_PORT: 0

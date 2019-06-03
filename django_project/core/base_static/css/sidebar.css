@@ -1,0 +1,113 @@
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#sidebar {
+    background-color: var(--c-purple);
+    color: #fff;
+    transition: all 0.3s;
+    min-height: 100vh;
+}
+
+#sidebar.active {
+    margin-left: 0px;
+}
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+
+    #sidebar.active {
+        margin-left: 0;
+    }
+}
+
+#sidebar ul {
+    width: 100%;
+    padding: 0;
+}
+
+#sidebar ul li {
+    padding-left: 1rem;
+    padding-top: 0.5rem;
+    width: 100%;
+    list-style: none;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.13);
+    height: 2.5rem;
+    line-height: 1.25rem;
+    color: var(--c-grey-l);
+}
+
+#sidebar ul li:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.21);
+
+}
+
+#sidebar ul li.selected {
+    background-color: rgba(255, 255, 255, 0.21);
+}
+
+#sidebar ul li.active {
+    background-color: rgba(255, 255, 255, 0.29);
+}
+
+.provider-photo {
+    width: 10rem;
+    height: 10rem;
+    max-width: 86px;
+    min-width: 86px;
+    border-radius: 50%;
+    background-color: white;
+    max-height: 86px;
+    min-height: 86px;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.img-provider-photo {
+    width: 10rem;
+    height: 10rem;
+    max-width: 86px;
+    min-width: 86px;
+    border-radius: 50%;
+    background-color: white;
+    max-height: 86px;
+    min-height: 86px;
+    margin-top: 0;
+    margin-bottom: 0;
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.side-bar-title {
+    text-align: center;
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+}
+
+.side-bar-title a {
+    color: #ffffff;
+    text-decoration: underline;
+    color: #ffffff;
+    font-family: Lato;
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration-line: none;
+}
+
+.side-bar-kartoza-icon {
+    height: 2rem;
+    position: fixed;
+    width: 250px;
+    background-position: center;
+    bottom: 0;
+}

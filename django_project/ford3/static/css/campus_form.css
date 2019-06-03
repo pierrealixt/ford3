@@ -1,0 +1,123 @@
+body {
+  font-family: Lato;
+}
+
+.selected {
+    background: #83cbd1;
+    color: #ffffff;
+}
+
+button.arrow-button {
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-color: #ffffff;
+  height: 5px;
+  border: none;
+  width: 61px;
+  height: 48px;
+  cursor: pointer;
+}
+
+.add-qualif-widget.disabled button {
+  background-image: url('../images/ui/left-arrow-grey.png');
+}
+
+.add-qualif-widget button {
+  background-image: url('../images/ui/left-arrow.svg');
+}
+
+.remove-qualif-widget.disabled button {
+  background-image: url('../images/ui/right-arrow-grey.png');
+}
+
+.remove-qualif-widget button {
+  background-image: url('../images/ui/right-arrow.png');
+}
+
+.add-qualif-widget.disabled p, .remove-qualif-widget.disabled p {
+  color: var(--c-grey-l) !important;  
+}
+
+.add-qualif-widget button:focus, .remove-qualif-widget button:focus {
+    outline: 0 !important;
+}
+
+.qualif-texts {
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+
+input[data-action='search-qualif'] {
+  border-radius: 0px !important;
+}
+
+input[data-action='create-qualif'] {
+  border-radius: 0px !important;
+}
+
+.campus-all-qualifications, .saqa-all-qualifications {
+  height: 480px;
+}
+
+#campus-qualifications-list, #saqa-qualifications-list {
+  list-style: none;
+  overflow-y: auto;
+}
+
+#campus-qualifications-list {
+  height: 420px;
+}
+
+#saqa-qualifications-list {
+  height: 240px;
+}
+
+#saqa-qualifications-list li, #campus-qualifications-list li {
+  min-height: 42px;
+  height: auto;
+}
+
+.qualif-li {
+  cursor: pointer;
+}
+
+.qualif-saqa-id a {
+  color: black;
+  text-decoration: underline;
+}
+
+.selected .qualif-saqa-id a {
+  color: white;
+}
+
+.saqa-all-qualifications .nav-tabs {
+  border: none !important;
+}
+
+.saqa-all-qualifications .nav-link {
+  border: none !important;
+  padding: 0;
+  color: var(--c-purple) !important; 
+  font-weight: bold;
+  font-size: 1.25rem;  
+  line-height: 1.2;
+}
+
+.saqa-all-qualifications .nav-link:hover {
+  text-decoration: underline
+}
+
+.saqa-all-qualifications ul.nav, .campus-all-qualifications h5 {
+  height:  55px;
+  background:  var(--c-smoke);
+}
+.saqa-all-qualifications .nav-link.active {
+  background:  transparent !important;
+  text-decoration: underline;
+}
+
+.saqa-all-qualifications .nav-item {
+  height: 55px;
+}

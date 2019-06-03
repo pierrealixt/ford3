@@ -1,0 +1,57 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block head %}
+<style>
+    body {
+        background: var(--c-blue-l);
+    }
+</style>
+{% endblock %}
+
+{% block parent-body %}
+
+<div class="container-fluid" id="login-page"> 
+    <div class="row py-5">
+        <div class="col-md-3 mx-auto rounded px-4" id="login-form">
+        {% block registration %}
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="open-edu-logo-login text-center">
+                        <span class='text-white'>Open</span><span class='text-blue'>Edu</span>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="user-icon mx-auto">
+                </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="text-center text-white">Login</h4>
+                </div>
+            </div>
+              <form method="post" class='text-white'>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="row">
+                    <div class="col-md-12 py-2">
+                        <a href="{% url 'password_reset'%}" class="text-white">Forgot password?</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="edu-button edu-button-orange mx-3 my-4" type="submit">Login</button>
+                </div>
+              </form>
+
+        {% endblock %}
+
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+[
+    {
+        "model": "ford3.User",
+        "pk": 1,
+        "fields": {
+            "email": "province@email.com",
+            "username": "province",
+            "is_province": true,
+            "provinces": [1],
+            "groups": [1]
+        }
+    }
+]
