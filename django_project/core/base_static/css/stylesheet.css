@@ -56,6 +56,10 @@ h5 {
     background-color:  var(--c-purple) !important;
 }
 
+.bg-orange {
+    background-color: var(--c-orange-d) !important;
+}
+
 .text-purple {
     color: var(--c-purple);   
 }
