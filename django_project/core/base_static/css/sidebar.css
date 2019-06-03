@@ -9,6 +9,7 @@
     color: #fff;
     transition: all 0.3s;
     min-height: 100vh;
+    padding-bottom: 4rem;
 }
 
 #sidebar.active {
@@ -31,15 +32,14 @@
 }
 
 #sidebar ul li {
-    padding-left: 1rem;
-    padding-top: 0.5rem;
     width: 100%;
     list-style: none;
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.13);
-    height: 2.5rem;
+    height: 100%;
     line-height: 1.25rem;
     color: var(--c-grey-l);
+    padding: 0.5rem 1rem;
 }
 
 #sidebar ul li:hover {
@@ -107,7 +107,8 @@
 .side-bar-kartoza-icon {
     height: 2rem;
     position: fixed;
-    width: 250px;
+    width: 320px;
     background-position: center;
     bottom: 0;
+    background-color: var(--c-purple);
 }
