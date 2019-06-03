@@ -232,33 +232,28 @@ class QualificationInterestsAndJobsForm(QualificationForm):
         widget=forms.HiddenInput(),
         required=False)
 
-    critical_skill = forms.TypedChoiceField(
+    critical_skill = forms.BooleanField(
         label=(
-            'Does the qualification prepare for a '
-            '<b>critical skills</b> occupation?'
+            'This qualification prepares a learner for a '
+            '<b>critical skills</b> occupation.'
         ),
         required=False,
-        choices=((True, 'Yes'), (False, 'No')),
-        widget=forms.RadioSelect
     )
 
-    green_occupation = forms.TypedChoiceField(
+    green_occupation = forms.BooleanField(
         label=(
-            'Does the qualification prepare for a <b>green</b> occupation?'
+            'This qualification prepares a learner for a <b>green</b> '
+            'occupation.'
         ),
         required=False,
-        choices=((True, 'Yes'), (False, 'No')),
-        widget=forms.RadioSelect
     )
 
-    high_demand_occupation = forms.TypedChoiceField(
+    high_demand_occupation = forms.BooleanField(
         label=(
-            'Does the qualification '
-            'prepare for a <b>high demand</b> occupation?'
+            'This qualification prepares a learner for a <b>high demand</b> '
+            'occupation.'
         ),
         required=False,
-        choices=((True, 'Yes'), (False, 'No')),
-        widget=forms.RadioSelect
     )
 
 
