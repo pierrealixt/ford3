@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, Http404, get_object_or_404
 from django.urls import reverse
+from django.forms.models import model_to_dict
 from formtools.wizard.views import CookieWizardView
 from ford3.models.qualification import Qualification
 from ford3.models.requirement import Requirement
@@ -238,13 +239,13 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
         )
 
     def get(self, *args, **kwargs):
-        self.set_initial_data()
         qualification = self.qualification
         if not qualification:
             raise Http404()
         return super(QualificationFormWizard, self).get(*args, **kwargs)
 
     def get_context_data(self, form, **kwargs):
+
         context = super().get_context_data(form, **kwargs)
         context['form_name_list'] = [
             'Details',
@@ -260,25 +261,37 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
         context['provider_logo'] = \
             self.qualification.campus.provider.provider_logo.url \
             if self.qualification.campus.provider.provider_logo else ""
-        context['subjects_list'] = (
-            self.qualification.entrance_req_subjects_list)
-        context['events_list'] = self.qualification.events
-        context['occupations'] = self.qualification.occupations.all()
+
+        if self.steps.current == 'qualification-requirements':
+            context['subjects_list'] = \
+                self.qualification.entrance_req_subjects_list
+
+        if self.steps.current == 'qualification-interets-jobs':
+            context['occupations'] = self.qualification.occupations.all()
+
+        if self.steps.current == 'qualification-dates':
+            context['events_list'] = self.qualification.events
+
         return context
 
     def get_form_initial(self, step):
-        if step == '3':
-            # interets and occupations step
+        initial_dict = model_to_dict(self.qualification)
+        if step == 'qualification-requirements':
+            initial_dict = model_to_dict(self.qualification.requirement)
+        if step == 'qualification-interets-jobs':
             occupations_ids = ' '.join(self.qualification.occupation_ids)
-            return {'occupations_ids': occupations_ids}
+            initial_dict.update({
+                'occupations_ids': occupations_ids,
+                'interest_list': initial_dict['interests']})
+        return initial_dict
 
     def done(self, form_list, **kwargs):
         form_data = dict()
         for form in form_list:
-            if form.prefix == '2':
+            if form.prefix == 'qualification-requirements':
                 context = self.get_context_data(form=form, **kwargs)
                 self.add_required_subjects(
-                    context['view'].storage.data['step_data']['2'])
+                    context['view'].storage.data['step_data']['qualification-requirements'])
                 form_data.update(form.cleaned_data)
             else:
                 form_data.update(form.cleaned_data)
@@ -316,52 +329,3 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
                 # ToDo: I need to alert the user one of the subjects could
                 #  not be saved
                 pass
-
-    def set_initial_data(self):
-        try:
-            self.initial_dict['0'] = ({
-                'short_description': self.qualification.short_description,
-                'long_description': self.qualification.long_description,
-                'distance_learning': self.qualification.distance_learning
-            })
-        except (IndexError, AttributeError):
-            pass
-        try:
-            self.initial_dict['1'] = ({
-                'full_time': self.qualification.full_time,
-                'part_time': self.qualification.part_time,
-                'duration': self.qualification.duration_in_months,
-                'duration_type': 'month',
-                'total_cost': self.qualification.total_cost,
-                'total_cost_comment': self.qualification.total_cost_comment
-            })
-        except (IndexError, AttributeError):
-            pass
-        try:
-            self.initial_dict['2'] = ({
-                'min_nqf_level':
-                    self.qualification.requirement.min_nqf_level,
-                    'interview': self.qualification.requirement.interview,
-                'portfolio': self.qualification.requirement.portfolio,
-                'portfolio_comment':
-                    self.qualification.requirement.portfolio_comment,
-                'require_aps_score':
-                    self.qualification.requirement.require_aps_score,
-                'aps_calculator_link':
-                    self.qualification.requirement.aps_calculator_link,
-                'require_certain_subjects':
-                    self.qualification.requirement.require_certain_subjects
-            })
-        except (IndexError, AttributeError):
-            pass
-        try:
-            self.initial_dict['3'] = ({
-                'occupations_ids': self.occupation_ids,
-                'interest_list': self.qualification.interest_id_list,
-                'critical_skill': self.qualification.critical_skill,
-                'green_occupation': self.qualification.green_occupation,
-                'high_demand_occupation':
-                    self.qualification.high_demand_occupation
-            })
-        except (IndexError, AttributeError):
-            pass

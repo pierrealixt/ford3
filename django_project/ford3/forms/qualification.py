@@ -20,22 +20,22 @@ class QualificationForm(forms.Form):
 class QualificationDetailForm(QualificationForm):
     short_description = forms.CharField(
         label='Short description of this qualification',
-        help_text='*120 character max',
+        help_text='*120 characters max',
         required=False,
         widget=forms.Textarea(
             attrs={
-                'rows': '5',
+                'rows': '2',
                 'placeholder': 'Brief summary of the qualification'}
         ),
         max_length=120
     )
     long_description = forms.CharField(
         label='Long description of this qualification',
-        help_text='*500 character max',
+        help_text='*500 characters max',
         required=False,
         widget=forms.Textarea(
             attrs={
-                'rows': '10',
+                'rows': '5',
                 'cols': '40',
                 'placeholder': 'Write full description of the qualification'}
         ),
