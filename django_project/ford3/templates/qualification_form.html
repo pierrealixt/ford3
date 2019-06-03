@@ -295,19 +295,26 @@
 {% endif %}
 
 <script type="text/javascript">
-    const toggleFieldDisability = (fieldId) => {
+    const toggleFieldDisability = (fieldId, disabled) => {
         const field = document.querySelector(`[data-field="${fieldId}"]`)
-        field.disabled = !field.disabled
+        field.disabled = disabled
     }
 
     const disablerFields = document.querySelectorAll('input[data-disabler]')
     disablerFields.forEach(function(disabler) {
-        if (disabler.value == 'False') {
-            toggleFieldDisability(disabler.dataset['disabler'])
+        if (disabler.checked) {
+            if (disabler.value == 'True') {
+                toggleFieldDisability(disabler.dataset['disabler'], false)
+            } else {
+                toggleFieldDisability(disabler.dataset['disabler'], true)
+            }
         }
-
         disabler.addEventListener('change', function(evt) {
-            toggleFieldDisability(evt.target.dataset['disabler'])
+            if (disabler.value == 'True') {
+                toggleFieldDisability(evt.target.dataset['disabler'], false)
+            } else {
+                toggleFieldDisability(evt.target.dataset['disabler'], true)
+            }
         })
     })
 </script>

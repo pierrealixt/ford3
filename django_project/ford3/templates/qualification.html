@@ -45,18 +45,20 @@
         <div class='row py-3'>
             <div class="row col-md-12 pb-3">
                 <div class="col-md-6">
-                    <b>Full-time qualification</b> {{ qualification.full_time|yesno:"YES,NO" }}
-                </div>
-                <div class="col-md-6">
-                    <b>Part-time qualification</b> {{ qualification.part_time|yesno:"YES,NO" }}
+                    <b>Type</b>
+                    {% if qualification.full_time %}
+                        Full-time
+                    {% else %}
+                        Part-time
+                    {% endif %}
                 </div>
             </div>
             <div class="row col-md-12 pb-3">
                 <div class="col-md-6">
-                    <b>Duration of the qualification</b> {{ qualification.duration_in_months|is_number_none }} months
+                    <b>Duration</b> {{ qualification.duration_in_months|is_number_none }} months
                 </div>
                 <div class="col-md-6">
-                    <b>Total cost of the qualification</b> R {{ qualification.total_cost|is_number_none }}
+                    <b>Total cost</b> R {{ qualification.total_cost|is_number_none }}
                 </div>
             </div>
         </div>
