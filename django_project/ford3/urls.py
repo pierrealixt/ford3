@@ -42,15 +42,15 @@ from ford3.forms.password_reset_form import PasswordResetForm
 from ford3.forms.set_password_form import SetPasswordForm
 
 
-qualification_wizard = QualificationFormWizard.as_view(
-    [
-        QualificationDetailForm,
-        QualificationDurationFeesForm,
-        QualificationRequirementsForm,
-        QualificationInterestsAndJobsForm,
-        QualificationImportantDatesForm,
-    ],
-)
+QUALIFICATION_FORMS = [
+    ('qualification-details', QualificationDetailForm),
+    ('qualification-duration-fees', QualificationDurationFeesForm),
+    ('qualification-requirements', QualificationRequirementsForm),
+    ('qualification-interets-jobs', QualificationInterestsAndJobsForm),
+    ('qualification-dates', QualificationImportantDatesForm)
+]
+
+qualification_wizard = QualificationFormWizard.as_view(QUALIFICATION_FORMS)
 
 CAMPUS_FORMS = [
     ('campus-details', CampusDetailForm),
