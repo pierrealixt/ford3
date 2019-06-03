@@ -16,6 +16,12 @@ from ford3.views.users import (
     UserList,
     UserCreate
 )
+from django.contrib.auth.views import (
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView
+)
 from ford3.forms.qualification import (
     QualificationDetailForm,
     QualificationDurationFeesForm,
@@ -32,6 +38,8 @@ from ford3.forms.campus import (
 )
 from ford3.views.campus_wizard import CampusFormWizard
 from ford3.forms.custom_auth_form import CustomAuthForm
+from ford3.forms.password_reset_form import PasswordResetForm
+from ford3.forms.set_password_form import SetPasswordForm
 
 
 qualification_wizard = QualificationFormWizard.as_view(
@@ -165,4 +173,20 @@ urlpatterns = [
         r'^logout/$',
         auth_views.LogoutView.as_view(), {'next_page': '/'},
         name='logout'),
+    url(
+        r'^accounts/password/reset/$',
+        PasswordResetView.as_view(form_class=PasswordResetForm),
+        name='password_reset'),
+    url(
+        r'^accounts/password/reset/done$',
+        PasswordResetDoneView.as_view(),
+        name='password_reset_done'),
+    url(
+        r'^reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
+        PasswordResetConfirmView.as_view(form_class=SetPasswordForm),
+        name='password_reset_confirm'),
+    url(
+        r'^reset/done/',
+        PasswordResetCompleteView.as_view(),
+        name='password_reset_complete'),
 ]

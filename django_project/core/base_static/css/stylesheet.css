@@ -866,9 +866,6 @@ nav#sidebar ul li a:hover {
     height: 50px;
 }
 
-#login-page {
-    background-color: var(--c-blue-l);
-}
 #login-form {
     background-color: var(--c-navy);
 }
