@@ -38,7 +38,6 @@ class ModelFactories:
             long_description='Some very long description that just goes on...',
             duration_in_months=12,
             full_time=True,
-            part_time=False,
             credits_after_completion=200,
             distance_learning=False,
             total_cost=100000,

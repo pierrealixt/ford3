@@ -55,13 +55,7 @@ class Qualification(models.Model):
     full_time = models.BooleanField(
         blank=True,
         null=True,
-        default=False,
         help_text="Can this qualification be completed on a full-time basis?")
-    part_time = models.BooleanField(
-        blank=True,
-        null=True,
-        default=False,
-        help_text="Can this qualification be completed on a part-time basis?")
     credits_after_completion = models.IntegerField(
         blank=True,
         null=True,
@@ -213,6 +207,10 @@ class Qualification(models.Model):
         event_query = QualificationEvent.objects.filter(
             qualification__id=self.id).values()
         return list(event_query)
+
+    @property
+    def part_time(self):
+        return not self.full_time
 
     def set_saqa_qualification(self, saqa_id):
         saqa_qualif = SAQAQualification.objects.get(id=saqa_id)
