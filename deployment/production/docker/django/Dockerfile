@@ -24,4 +24,5 @@ RUN cd /usr/src/ford3/deployment/docker && \
 EXPOSE 8080
 
 WORKDIR /home/web/django_project
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["uwsgi", "--ini", "/uwsgi.conf"]
