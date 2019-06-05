@@ -106,8 +106,33 @@
 
 .side-bar-kartoza-icon {
     height: 2rem;
-    position: fixed;
+    width: 2rem;
     background-position: center;
     bottom: 0;
+    background-color: transparent;
+}
+
+.side-bar-footer {
+    font-family: "Avenir";
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.44px;
+    text-transform: uppercase;
+    text-align: center;
+    width: 100%;
+    display: inline-flex;
+    position: fixed;
+    bottom: 0;
     background-color: var(--c-purple);
+}
+
+.powered-by-kartoza-left {
+    margin-right: -3px;
+    padding-top: 2px;
+}
+
+.powered-by-kartoza-right {
+    margin-left: -3px;
+    padding-top: 2px;
 }

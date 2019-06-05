@@ -735,7 +735,7 @@ input[type='email']:hover::placeholder, input[type='url']:hover::placeholder {
 }
 
 .edu-icon-powered-by-kartoza {
-    background-image: url('../images/powered_by_kartoza.png');
+    background-image: url('../images/kartoza-logo-svg-small.svg');
     background-repeat: no-repeat;
 }
 

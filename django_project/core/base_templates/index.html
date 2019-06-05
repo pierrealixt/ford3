@@ -27,7 +27,10 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
 			integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"
 			crossorigin="anonymous"></script>
-	{% block head %} {% endblock %}
+	{% block head %}
+		<link rel="stylesheet" type="text/css"
+        href="{% static 'css/landing.css' %}">
+	{% endblock %}
 </head>
 <body id="page-top">
     {% block navbar %}
@@ -160,23 +163,30 @@
             </div>
         </div>
     {% endblock %}
-</body>
-
 {% block footer %}
-	<footer class='container py-5'>
+	<footer class='container-fluid'>
 		<div class='row'>
-			<div class='col-md-2 mx-auto'>
-				<p>
-				<small>Powered by <a href="http://www.kartoza.com" target="_blank">Kartoza</a> - 2019</small>
-				</p>
+			<div class='w-100'>
+				<p class="text-center py-2 w-100 bg-transparent mb-0 login-footer" >
+			    By <a href="http://kartoza.com">
+			    Kartoza (Pty) Ltd.
+			    <img src={% static 'images/kartoza_footer.png' %} alt="OpenEdu">
+		    </a>
+			    <a href="https://github.com/kartoza/ford3" target="_blank">
+				    Available on GitHub!
+			    </a>
+			    </span>
+		    </p>
 			</div>
 		</div>
 	</footer>
 {% endblock %}
+</body>
+
+
 <script>
 	$(function () {
 		$('[data-toggle="tooltip"]').tooltip()
 	})
 </script>
 </html>
-
