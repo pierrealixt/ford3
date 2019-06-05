@@ -16,19 +16,22 @@
 
 {% block body %}
 <div class="row">
-<div class='col-md-12'>
-    <h3>{{ qualification }}</h3>
-</div>
-<div class="col-lg-12">
-    <ul class="container nav-wizard-steps nav nav-pills nav-fill">
-        {% for form_name in form_name_list %}
-            <li class="nav-item">
-                <a class="row nav-link {% if forloop.counter == 1 %}
-                    first
-                {% endif %}
-                {% if forloop.counter == wizard.steps.step1 %}
-                    active
-                {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
+	<div class='col-md-12'>
+		<h3>{{ qualification }}</h3>
+	</div>
+	{% if multi_step_form %}
+		<div class="col-md-12">
+		<ul class="container nav-wizard-steps nav nav-pills nav-fill">
+			{% for form_name in form_name_list %}
+
+
+				<li class="nav-item">
+					<a  href="{% url 'edit-qualification' provider_id=provider.id campus_id=qualification.campus.id qualification_id=qualification.id %}?step={{ form_identifier_list|get_dictionary_item:form_name }}&multi-step=true" class="row nav-link {% if forloop.counter == 1 %}
+						first
+					{% endif %}
+					{% if forloop.counter == wizard.steps.step1 %}
+						active
+					{% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
 
                 <span class="nav-item-number">
                 <span class="nav-item-number-inner">{{ forloop.counter }}</span>
@@ -45,8 +48,10 @@
                 {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
             </span>
             </li>
+
         {% endfor %}
     </ul>
+	{% endif %}
     {% if wizard.steps.step1 == 4 %}
         <div class='row border-bottom mb-3 no-gutters'
                 id='occupations-form'>
@@ -249,31 +254,42 @@
             {% endif %}
         </div>
 
-        <div class="row form-actions">
-            <div class="col-md-4">
-                {% if wizard.steps.prev %}
-                    <button class="edu-button edu-button-blue"
-                            name="wizard_goto_step" type="submit"
-                            value="{{ wizard.steps.prev }}">Prev
-                        step
-                    </button>
-                {% endif %}
-            </div>
-            <div class="col-md-4">
-            </div>
-            <div class="col-md-4">
-                <button class="edu-button edu-button-blue"
-                        type="submit"
-                        value="submit"
-                        id="my-next-button">
-                    {% if wizard.steps.next %}
-                        Next
-                    {% else %}
-                        Submit
-                    {% endif %}
-                </button>
-            </div>
-        </div>
+		<div class="row form-actions">
+			{% if multi_step_form %}
+				<div class="col-md-4">
+					{% if wizard.steps.prev %}
+						<button class="edu-button edu-button-blue"
+						        name="wizard_goto_step" type="submit"
+						        value="{{ wizard.steps.prev }}">Prev
+							step
+						</button>
+					{% endif %}
+				</div>
+				<div class="col-md-4">
+				</div>
+				<div class="col-md-4">
+					<button class="edu-button edu-button-blue"
+					        type="submit"
+					        value="submit"
+					        id="my-next-button">
+						{% if wizard.steps.next %}
+							Next
+						{% else %}
+							Submit
+						{% endif %}
+					</button>
+				</div>
+			{% else %}
+				<div class="col-md-4">
+					<button class="edu-button edu-button-blue"
+					        type="submit"
+					        value="submit"
+					        id='my-next-button'>Submit
+					</button>
+				</div>
+			{% endif %}
+		</div>
+
     </form>
 </div>
 </div>

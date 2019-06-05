@@ -23,32 +23,32 @@
     {% if multi_step_form %}
         <div class='col-md-12'>
             <ul class="container nav-wizard-steps nav nav-pills nav-fill">
-                {% for form_name in form_name_list %}
-                    <li class="nav-item">
+	            {% for form_name in form_name_list %}
 
-                        <a class="row nav-link {% if forloop.counter == 1 %}
-                        first
-                    {% endif %}
-                    {% if forloop.counter == wizard.steps.step1 %}
-                        active
-                    {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
-
-<span class="nav-item-number">
-                        <span class="nav-item-number-inner">{{ forloop.counter }}</span>
-                    </span>
-                            <span class="col-md-11 nav-item-caption">{{ form_name }}</span>
-
-                        </a>
-                        <span class="nav-link-triangle
-                    {% if forloop.counter == 1 %}
-                        first
-                    {% endif %}
-                    {% if forloop.counter == wizard.steps.step1 %}
-                        active
-                    {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
-                </span>
+			            <li class="nav-item">
+				            <a href="{% url 'edit-campus' provider_id=provider.id campus_id=campus.id %}?step={{ form_identifier_list|get_dictionary_item:form_name }}&multi-step=true"  class="row nav-link
+						{% if forloop.counter == 1 %}
+	                        first
+	                    {% endif %}
+	                    {% if forloop.counter == wizard.steps.step1 %}
+	                        active
+	                    {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
+							<span class="nav-item-number">
+								<span class="nav-item-number-inner">{{ forloop.counter }}</span>
+	                        </span>
+					            <span class="col-md-11 nav-item-caption">{{ form_name }}</span>
+				            </a>
+				            <span class="nav-link-triangle
+	                    {% if forloop.counter == 1 %}
+	                        first
+	                    {% endif %}
+	                    {% if forloop.counter == wizard.steps.step1 %}
+	                        active
+	                    {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
+	                </span>
 
                     </li>
+
                 {% endfor %}
 
             </ul>
@@ -383,16 +383,18 @@
                         <button class="edu-button edu-button-blue"
                                 type="submit"
                                 value="submit"
-                                id='my-next-button'>
+                                id='my-next-button'
                             {% if wizard.steps.next %}
-                                Next
+                                data-action='next-step'>Next
                             {% else %}
-                                Submit
+                                data-action='last-step'>Submit
                             {% endif %}
                         </button>
                     </div>
                 </div>
+	            </form>
             {% elif wizard.steps.step1 != 3 %}
+
                 <div class="row form-actions">
                     <div class="col-md-4">
                         <button class="edu-button edu-button-blue"

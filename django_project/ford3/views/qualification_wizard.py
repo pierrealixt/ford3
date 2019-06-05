@@ -1,8 +1,11 @@
+from collections import OrderedDict
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, Http404, get_object_or_404
 from django.urls import reverse
 from django.forms.models import model_to_dict
+from django.template.defaulttags import register
 from formtools.wizard.views import CookieWizardView
+from ford3.views.wizard_utilities import get_form_identifier_list_from_keys
 from ford3.models.qualification import Qualification
 from ford3.models.requirement import Requirement
 from ford3.models.subject import Subject
@@ -66,7 +69,7 @@ class QualificationFormWizardDataProcess(object):
                 qualification_fields[qualification_field] = (
                     form_data[qualification_field]
                 )
-            except AttributeError:
+            except (AttributeError, KeyError):
                 continue
         return qualification_fields
 
@@ -158,17 +161,21 @@ class QualificationFormWizardDataProcess(object):
         Process qualification form data then update qualification
         :param form_data: dict of form data
         """
+
         qualification_form_data = self.qualification_form_data(
             form_data
         )
         # Check duration
-        if form_data['duration']:
-            qualification_form_data['duration_in_months'] = (
-                self.duration_in_months(
-                    duration=form_data['duration'],
-                    duration_type=form_data['duration_type']
+        try:
+            if form_data['duration']:
+                qualification_form_data['duration_in_months'] = (
+                    self.duration_in_months(
+                        duration=form_data['duration'],
+                        duration_type=form_data['duration_type']
+                    )
                 )
-            )
+        except KeyError:
+            pass
 
         Qualification.objects.filter(
             id=self.qualification.id
@@ -176,20 +183,29 @@ class QualificationFormWizardDataProcess(object):
             **qualification_form_data,
             edited_by=self.edited_by
         )
+        try:
+            # Update interests
+            interests = form_data['interest_list']
+            for interest in self.qualification.interests.all():
+                self.qualification.interests.remove(interest)
+            for interest in interests:
+                self.qualification.interests.add(interest)
+        except KeyError:
+            pass
 
-        # Update interests
-        interests = form_data['interest_list']
-        for interest in self.qualification.interests.all():
-            self.qualification.interests.remove(interest)
-        for interest in interests:
-            self.qualification.interests.add(interest)
+        try:
+            # Update occupations
+            occupations = form_data['occupations_ids']
+            self.qualification.toggle_occupations(occupations)
+        except KeyError:
+            pass
 
-        # Update occupations
-        occupations = form_data['occupations_ids']
-        self.qualification.toggle_occupations(occupations)
+        try:
+            # Add requirements
+            self.add_or_update_requirements(form_data)
+        except KeyError:
+            pass
 
-        # Add requirements
-        self.add_or_update_requirements(form_data)
 
 
 class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
@@ -242,10 +258,26 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
         qualification = self.qualification
         if not qualification:
             raise Http404()
-        return super(QualificationFormWizard, self).get(*args, **kwargs)
+        if 'step' in self.request.GET:
+            return super().render_goto_step(self.request.GET['step'], **kwargs)
+        else:
+            return super(QualificationFormWizard, self).get(*args, **kwargs)
+
+    def render_next_step(self, form, **kwargs):
+        """
+        This method gets called when the next step/form should be rendered.
+        `form` contains the last/current form.
+        """
+        # get the form instance based on the data from the storage backend
+        # (if available).
+
+        if 'step' in self.request.GET and 'multi-step' not in self.request.GET:
+            return self.render_done(form, **kwargs)
+        else:
+            return super().render_next_step(form, **kwargs)
+
 
     def get_context_data(self, form, **kwargs):
-
         context = super().get_context_data(form, **kwargs)
         context['form_name_list'] = [
             'Details',
@@ -254,6 +286,9 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
             'Interest & Jobs',
             'Important Dates',
         ]
+        context['form_identifier_list'] = (
+            get_form_identifier_list_from_keys(
+                self.form_list, context['form_name_list']))
         context['qualification'] = self.qualification
         context['provider'] = self.provider
         # make sure logo has been uploaded before set the context
@@ -266,11 +301,14 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
             context['subjects_list'] = \
                 self.qualification.entrance_req_subjects_list
 
-        if self.steps.current == 'qualification-interets-jobs':
+        if self.steps.current == 'qualification-interests-jobs':
             context['occupations'] = self.qualification.occupations.all()
 
-        if self.steps.current == 'qualification-dates':
+        if self.steps.current == 'qualification-important-dates':
             context['events_list'] = self.qualification.events
+        context['multi_step_form'] = True
+        if 'step' in self.request.GET and 'multi-step' not in self.request.GET:
+            context['multi_step_form'] = False
 
         return context
 
@@ -289,13 +327,17 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
     def done(self, form_list, **kwargs):
         form_data = dict()
         for form in form_list:
-            if form.prefix == 'qualification-requirements':
-                context = self.get_context_data(form=form, **kwargs)
-                self.add_required_subjects(
-                    context['view'].storage.data['step_data']['qualification-requirements']) # noqa
-                form_data.update(form.cleaned_data)
-            else:
-                form_data.update(form.cleaned_data)
+            if form.is_bound and form.prefix != \
+                    'qualification-important-dates':
+                if form.prefix == 'qualification-requirements':
+                    context = self.get_context_data(form=form, **kwargs)
+                    self.add_required_subjects(
+                        context['view'].storage.data
+                        ['step_data']
+                        ['qualification-requirements'])
+                    form_data.update(form.cleaned_data)
+                else:
+                    form_data.update(form.cleaned_data)
 
         qualification_data_process = QualificationFormWizardDataProcess(
             self.qualification,
@@ -330,3 +372,45 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
                 # ToDo: I need to alert the user one of the subjects could
                 #  not be saved
                 pass
+
+    def render_done(self, form, **kwargs):
+        """
+        This method gets called when all forms passed. The method should also
+        re-validate all steps to prevent manipulation. If any form fails to
+        validate, `render_revalidation_failure` should get called.
+        If everything is fine call `done`.
+        """
+
+        final_forms = OrderedDict()
+        if ('step' in self.request.GET and 'multi-step'
+                not in self.request.GET and self.request.method != 'POST'):
+            form_list = [self.request.GET['step']]
+        else:
+            form_list = self.get_form_list()
+
+        # walk through the form list and try to validate the data again.
+        for form_key in form_list:
+            form_obj = self.get_form(
+                step=form_key,
+                data=self.storage.get_step_data(form_key),
+                files=self.storage.get_step_files(form_key)
+            )
+            if not form_obj.is_valid() and form_obj.is_bound:
+                return self.render_revalidation_failure(
+                    form_key, form_obj, **kwargs)
+            if form_obj.is_valid and form_obj.is_bound:
+                final_forms[form_key] = form_obj
+
+        # render the done view and reset the wizard before returning the
+        # response. This is needed to prevent from rendering done with the
+        # same data twice.
+        done_response = self.done(
+            final_forms.values(), form_dict=final_forms, **kwargs)
+        self.storage.reset()
+
+        return done_response
+
+
+@register.filter
+def get_dictionary_item(dictionary, key):
+    return dictionary.get(key)
