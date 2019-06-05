@@ -87,6 +87,10 @@ class CampusFormWizard(LoginRequiredMixin, CookieWizardView):
         })
         return initial_dict
 
+    def process_step(self, form):
+
+        return self.get_form_step_data(form)
+
     def done(self, form_list, **kwargs):
         for form in kwargs['form_dict']:
             cleaned_data = kwargs['form_dict'][form].cleaned_data
@@ -115,7 +119,6 @@ class CampusFormWizard(LoginRequiredMixin, CookieWizardView):
         """
         # get the form instance based on the data from the storage backend
         # (if available).
-
         if 'step' in self.request.GET:
             return self.render_done(form, **kwargs)
         else:
@@ -156,3 +159,7 @@ class CampusFormWizard(LoginRequiredMixin, CookieWizardView):
         self.storage.reset()
 
         return done_response
+
+    def post(self, *args, **kwargs):
+
+        return super().post(self, *args, **kwargs)

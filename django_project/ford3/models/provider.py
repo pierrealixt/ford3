@@ -16,8 +16,8 @@ class Provider(models.Model):
     phone_regex = RegexValidator(
         regex=r'^\+?1?\d{10,15}$',
         message=
-        "Phone number must be at least 10 digits and at max 15 digits."
-        "It can start with +(country code)")
+        "Phone number must be at least 10 digits and at max 15 digits. "
+        "It can start with +(country code).")
 
     name = models.CharField(
         blank=False,

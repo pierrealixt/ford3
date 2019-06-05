@@ -1,5 +1,6 @@
 # coding=utf-8
 from django import forms
+from django.core.validators import RegexValidator
 from crispy_forms.helper import FormHelper
 
 
@@ -16,14 +17,18 @@ class CampusForm(forms.Form):
 
 
 class CampusDetailForm(CampusForm):
-    # photo = forms.FileField(
-    #     required=False)
+    phone_regex = RegexValidator(
+        regex=r'^\+?1?\d{10,15}$',
+        message=
+        "Phone number must be at least 10 digits and at max 15 digits. "
+        "It can start with +(country code)")
 
     telephone = forms.CharField(
         label='Telephone number',
         widget=forms.TextInput(
             attrs={'placeholder': '+271234567890 or 123456789012345'}),
-        required=False)
+        required=False,
+        validators=[phone_regex])
 
     email = forms.EmailField(
         label='E-mail address',
