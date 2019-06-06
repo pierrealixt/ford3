@@ -182,6 +182,17 @@ cp btsync-db.env.EXAMPLE btsync-db.env
 Now edit the ``btsync-media.env`` and ``btsync-db.env`` files, including 
 relevant SECRET and DEVICE settings.
 
+### Render a graphical overview of the app's models
+
+```
+cd deployment
+make shell
+apt-get install graphviz
+pip install django-extensions graphviz pyparsing pydot pygraphviz
+./manage.py graph_models --pygraphviz -a -g -o openedu_models.png --exclude-models Session,AbstractBaseSession,PostGISSpatialRefSys,PostGISGeometryColumns,EmailConfirmation,SocialToken,LogEntry,EmailAddress,SocialAccount,SocialApp,Site,ContentType
+```
+
+
 ## Participation
 
 
