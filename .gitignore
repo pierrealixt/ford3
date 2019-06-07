@@ -114,6 +114,9 @@ secret.py
 deployment/static
 
 # MacOS files
+/.DS_Store
+*/.DS_Store
+*DS_Store
 .DS_Store
 
 # Database stuff
@@ -127,7 +130,14 @@ deployment/ansible/tmp
 deployment/ansible/development/site.retry
 deployment/ansible/development/group_vars/all.yml
 deployment/docker-compose.override.yml
+deployment/logs/*
 
 # scraping temp files
 django_project/ford3/scraping/*.txt
 django_project/ford3/scraping/*.csv
+
+# vscode
+.vscode/
+
+# media
+deployment/media/provider_logo/
