@@ -70,9 +70,8 @@ class PasswordResetForm(forms.Form):
             if not domain_override:
                 current_site = get_current_site(request)
                 site_name = current_site.name
-                domain = current_site.domain
             else:
-                site_name = domain = domain_override
+                site_name = domain_override
             context = {
                 'email': email,
                 'domain': settings.SERVER_PUBLIC_HOST,
