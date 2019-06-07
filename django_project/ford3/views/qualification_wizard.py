@@ -115,10 +115,9 @@ class QualificationFormWizardDataProcess(object):
         """
         # Check if there is already a requirements object
         requirement_exists = True
-        existing_requirement: Requirement = self.qualification.requirement
         try:
-            existing_requirement.qualification
-        except AttributeError:
+            existing_requirement: Requirement = self.qualification.requirement
+        except Requirement.DoesNotExist:
             requirement_exists = False
         if requirement_exists:
             existing_requirement.min_nqf_level = (

@@ -6,7 +6,6 @@ from ford3.models.qualification import Qualification
 from ford3.models.qualification_entrance_requirement_subject import (
     QualificationEntranceRequirementSubject
 )
-from ford3.models.qualification_event import QualificationEvent
 from ford3.models.requirement import Requirement
 from ford3.models.user import User
 from ford3.views.qualification_wizard import QualificationFormWizardDataProcess
@@ -177,17 +176,3 @@ class TestQualificationWizard(TestCase):
                 value,
                 getattr(requirement, key)
             )
-
-    def test_add_qualification_events(self):
-
-        new_qualification_event = (
-            ModelFactories.get_qualification_event_test_object())
-
-        self.qualification.add_events(
-            [new_qualification_event]
-        )
-        events = QualificationEvent.objects.filter(
-            qualification=self.qualification.id
-        )
-        self.assertTrue(events.exists())
-        self.assertTrue(events.count(), 1)
