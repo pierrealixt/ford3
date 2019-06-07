@@ -143,16 +143,9 @@ class Qualification(models.Model):
         return self.saqa_qualification.name
 
     @property
-    def requirements(self) -> List[Requirement]:
-        requirement_query = Requirement.objects.filter(
-            qualification__id=self.id).order_by('id').values()
-        return list(requirement_query)
-
-    @property
     def requirement(self) -> Requirement:
-        requirement_query = Requirement.objects.filter(
-            qualification__id=self.id).order_by('id').first()
-        return requirement_query
+        return Requirement.objects.get(
+            qualification_id=self.id)
 
     def add_events(self, qualification_events):
         if len(qualification_events) == 0:
@@ -219,6 +212,9 @@ class Qualification(models.Model):
         return not self.full_time
 
     def set_saqa_qualification(self, saqa_id):
+        """
+        Set SAQA qualificiation.
+        """
         saqa_qualif = SAQAQualification.objects.get(id=saqa_id)
         self.saqa_qualification = saqa_qualif
 
