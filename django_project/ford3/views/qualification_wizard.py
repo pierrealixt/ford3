@@ -166,16 +166,16 @@ class QualificationFormWizardDataProcess(object):
             form_data
         )
         # Check duration
-        try:
-            if form_data['duration']:
-                qualification_form_data['duration_in_months'] = (
-                    self.duration_in_months(
-                        duration=form_data['duration'],
-                        duration_type=form_data['duration_type']
-                    )
-                )
-        except KeyError:
-            pass
+        # try:
+        #     if form_data['duration']:
+        #         qualification_form_data['duration_in_months'] = (
+        #             self.duration_in_months(
+        #                 duration=form_data['duration'],
+        #                 duration_type=form_data['duration_type']
+        #             )
+        #         )
+        # except KeyError:
+        #     pass
 
         Qualification.objects.filter(
             id=self.qualification.id
