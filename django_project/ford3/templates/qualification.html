@@ -2,7 +2,6 @@
 {% load static %}
 {% load nqf_level_tags %}
 {% load change_value %}
-{% load pluralize %}
 
 {% block title %}{{ qualification }} • Overview{% endblock %}
 
@@ -47,21 +46,16 @@
             <div class="row col-md-12 pb-3">
                 <div class="col-md-6">
                     <b>Type</b>
-                    {% if qualification.full_time is not None%}
-                        {% if qualification.full_time %}
-                            Full-time
-                        {% else %}
-                            Part-time
-                        {% endif %}
+                    {% if qualification.full_time %}
+                        Full-time
                     {% else %}
-                        {{ qualification.full_time|is_none}}
+                        Part-time
                     {% endif %}
                 </div>
             </div>
             <div class="row col-md-12 pb-3">
                 <div class="col-md-6">
-                    <b>Duration</b> {{ qualification.duration|is_number_none }} 
-                    {{ qualification.duration_time_repr }}{{ qualification.duration_time_repr|pluralize:qualification.duration }}
+                    <b>Duration</b> {{ qualification.duration_in_months|is_number_none }} months
                 </div>
                 <div class="col-md-6">
                     <b>Total cost</b> R {{ qualification.total_cost|is_number_none }}

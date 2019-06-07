@@ -82,7 +82,7 @@ class QualificationDurationFeesForm(QualificationForm):
         )
     )
 
-    duration_time_repr = forms.ChoiceField(
+    duration_type = forms.ChoiceField(
         label=' ',
         choices=[
             ('month', 'Month'),
