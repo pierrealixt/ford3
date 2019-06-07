@@ -317,7 +317,7 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
         if step == 'qualification-requirements' and\
             self.qualification.requirement is not None:
             initial_dict = model_to_dict(self.qualification.requirement)
-        if step == 'qualification-interets-jobs':
+        if step == 'qualification-interests-jobs':
             occupations_ids = ' '.join(self.qualification.occupation_ids)
             initial_dict.update({
                 'occupations_ids': occupations_ids,
