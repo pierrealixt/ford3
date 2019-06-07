@@ -48,10 +48,16 @@ class Qualification(models.Model):
         help_text="A longer description of the qualification for the student"
                   " who is interested and would like to know more",
         max_length=500)
-    duration_in_months = models.IntegerField(
+    duration = models.IntegerField(
         blank=True,
         null=True,
-        help_text="How long the qualification takes to complete (in months)")
+        help_text="How long the qualification takes to complete")
+    duration_time_repr = models.CharField(
+        blank=True,
+        null=True,
+        help_text="Represent the duration of the qualification in month or year", # noqa
+        max_length=100
+    )
     full_time = models.BooleanField(
         blank=True,
         null=True,
