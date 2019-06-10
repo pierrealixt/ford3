@@ -85,28 +85,27 @@
         </div>
         <div class='row py-3'>
             <div class='col-md-12 pb-3'>
-                {% for requirement in qualification.requirements %}
                 <div class="row pb-3">
                     <div class="col-md-6">
-                        <b>Required entrance qualification </b>{{ requirement.min_nqf_level|filter_level|is_none }}
+                        <b>Required entrance qualification </b>{{ qualification.requirement.min_nqf_level|filter_level|is_none }}
                     </div>
                     <div class="col-md-6">
-                        <b>Is there an interview </b>{{ requirement.interview|yesno:"YES,NO" }}
+                        <b>Is there an interview </b>{{ qualification.requirement.interview|yesno:"YES,NO" }}
                     </div>
                 </div>
                 <div class="row pb-3">
                     <div class="col-md-6">
-                        <b>Require a portfolio </b>{{ requirement.portfolio|yesno:"YES,NO" }}
+                        <b>Require a portfolio </b>{{ qualification.requirement.portfolio|yesno:"YES,NO" }}
                         <br />
-                        <b>Require and APS score </b>{{ requirement.require_aps_score|yesno:"YES,NO" }}
+                        <b>Require and APS score </b>{{ qualification.requirement.require_aps_score|yesno:"YES,NO" }}
                     </div>
                     <div class="col-md-6">
-                        <b>What does the portfolio require </b>{{ requirement.portfolio_comment }}
+                        <b>What does the portfolio require </b>{{ qualification.requirement.portfolio_comment }}
                     </div>
                 </div>
                 <div class="row pb-3">
                     <div class="col-md-6">
-                        <b>Does qualification require certain subjects </b>{{ requirement.require_certain_subjects }}
+                        <b>Does qualification require certain subjects </b>{{ qualification.requirement.require_certain_subjects }}
                     </div>
                 </div>
                     <div class="row pb-3">
@@ -116,7 +115,6 @@
                         </div>
                     {% endfor %}
                     </div>
-                {% endfor %}
             </div>
         </div>
         <div class="row py-3 mx-0">

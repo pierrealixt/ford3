@@ -144,8 +144,11 @@ class Qualification(models.Model):
 
     @property
     def requirement(self) -> Requirement:
-        return Requirement.objects.get(
-            qualification_id=self.id)
+        try:
+            return Requirement.objects.get(
+                qualification_id=self.id)
+        except Requirement.DoesNotExist:
+            return None
 
     # def add_events(self, qualification_events):
     #     if len(qualification_events) == 0:
