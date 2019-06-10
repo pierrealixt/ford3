@@ -150,13 +150,6 @@ class Qualification(models.Model):
         except Requirement.DoesNotExist:
             return None
 
-    # def add_events(self, qualification_events):
-    #     if len(qualification_events) == 0:
-    #         return
-    #     for each_qualification_event in qualification_events:
-    #         each_qualification_event.qualification = self
-    #         each_qualification_event.save()
-
     @property
     def interest_id_list(self) -> List[int]:
         interest_query = Interest.objects.filter(

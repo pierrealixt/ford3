@@ -15,7 +15,7 @@ class QualificationSerializer(serializers.ModelSerializer):
     saqa_qualification = SAQAQualificationSerializer()
     occupations = OccupationSerializer(many=True)
     interests = InterestSerializer(many=True)
-    requirement_set = RequirementSerializer(many=True)
+    requirement = RequirementSerializer()
 
     class Meta:
         model = Qualification
