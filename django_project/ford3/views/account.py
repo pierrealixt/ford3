@@ -3,12 +3,12 @@ from pytz import UTC
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
 from django.contrib.auth import login
 from django.urls import reverse
 from ford3.models.user import User
 from ford3.forms.user_account_activation import UserAccountActivationForm
+from ford3.tokens import account_activation_token
 
 
 class ActivationInvalid(Exception):
@@ -21,15 +21,8 @@ def check_user_activation(uidb64, token):
         user = get_object_or_404(User, pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         raise ActivationInvalid
-    if default_token_generator.check_token(user, token):
-        valid_date = user.date_joined + datetime.timedelta(
-            days=settings.VALID_LINK_DAYS)
-        current_date = datetime.datetime.now()
-        valid_date = valid_date.replace(tzinfo=UTC)
-        current_date = current_date.replace(tzinfo=UTC)
 
-        if current_date > valid_date:
-            raise ActivationInvalid
+    if account_activation_token.check_token(user, token):
         return user
     else:
         # the token does not exist anymore
