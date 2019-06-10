@@ -34,7 +34,7 @@ class Campus(models.Model):
         blank=False,
         null=True,
         unique=False,
-        help_text="The campus' telephone number",
+        help_text="The campus' switchboard",
         max_length=16)
     email = models.EmailField(
         blank=False,
@@ -71,7 +71,7 @@ class Campus(models.Model):
         blank=False,
         null=True,
         unique=False,
-        help_text="The campus' physical address postal code",
+        help_text="The campus' physical address post code",
         max_length=255)
 
     postal_address_differs = models.BooleanField(

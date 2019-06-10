@@ -37,7 +37,7 @@ class Provider(models.Model):
         blank=False,
         null=True,
         unique=False,
-        help_text="The provider's telephone number",
+        help_text="The provider's switchboard",
         validators=[phone_regex],
         max_length=16)
     website = models.CharField(
@@ -63,7 +63,7 @@ class Provider(models.Model):
         blank=False,
         null=False,
         unique=False,
-        help_text="The provider's 4 digit postal code",
+        help_text="The provider's 4 digit post code",
         max_length=4)
 
     physical_address_line_1 = models.CharField(

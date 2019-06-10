@@ -24,7 +24,7 @@ class CampusDetailForm(CampusForm):
         "It can start with +(country code)")
 
     telephone = forms.CharField(
-        label='Telephone number',
+        label='Switchboard',
         widget=forms.TextInput(
             attrs={'placeholder': '+271234567890 or 123456789012345'}),
         required=False,
@@ -72,7 +72,7 @@ class CampusLocationForm(CampusForm):
         label=' ',
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Postal code'
+                'placeholder': 'Post code'
             }
         ))
 
@@ -110,7 +110,7 @@ class CampusLocationForm(CampusForm):
         label=' ',
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Postal code'
+                'placeholder': 'Post code'
             }
         ))
 
