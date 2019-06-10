@@ -15,7 +15,6 @@ RUN pip3 install uwsgi
 ADD uwsgi.conf /uwsgi.conf
 ADD entrypoint.sh /entrypoint.sh
 
-RUN echo "PENBRA"
 # Open port 8080 as we will be running our uwsgi socket on that
 EXPOSE 8080
 

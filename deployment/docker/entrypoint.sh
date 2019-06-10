@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 python manage.py collectstatic --noinput
-penbra is the best
+python manage.py migrate
 
 exec "$@"
