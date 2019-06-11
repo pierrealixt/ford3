@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from ford3.models.provider import Provider
 from ford3.models.province import Province
-
+from ford3.views.wizard_utilities import add_http_to_link
 
 EMPTY_TEL_ERROR = 'Your switchboard telephone number is required.'
 EMPTY_EMAIL_ERROR = 'Your email is required.'
@@ -18,7 +18,6 @@ class ProviderForm(forms.models.ModelForm):
 
     class Meta:
         model = Provider
-        # provinces_to_form = Province.to_form()
         fields = (
             'name',
             'province',
@@ -54,7 +53,7 @@ class ProviderForm(forms.models.ModelForm):
                 attrs={'placeholder': '+271234567890 or 123456789012345'}),
             'email': forms.fields.EmailInput(
                 attrs={'placeholder': 'example@example.com'}),
-            'website': forms.fields.URLInput(
+            'website': forms.fields.TextInput(
                 attrs={'placeholder': 'www.yourwebsitename.com'}),
             'physical_address_line_1': forms.fields.TextInput(
                 attrs={'placeholder': 'Address Line 1'}),
@@ -85,3 +84,7 @@ class ProviderForm(forms.models.ModelForm):
             if provider_logo.size > 100 * 1024:
                 raise ValidationError("Max file size is 100 Kb")
             return provider_logo
+
+    def clean_website(self):
+        http_link = self.cleaned_data.get('website', False)
+        return add_http_to_link(http_link)

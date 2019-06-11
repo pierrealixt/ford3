@@ -1,9 +1,6 @@
-import datetime
-from pytz import UTC
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import render, redirect, get_object_or_404
-from django.conf import settings
 from django.contrib.auth import login
 from django.urls import reverse
 from ford3.models.user import User
@@ -30,7 +27,6 @@ def check_user_activation(uidb64, token):
         # in the hash, a token is automatically invalidated
         # when the user logs in or changes their password
         raise ActivationInvalid
-
 
 
 def activate(request, uidb64, token):
