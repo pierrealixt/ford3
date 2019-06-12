@@ -1,6 +1,7 @@
 # coding=utf-8
 """Factory for building model instances for testing."""
 import datetime
+from django.contrib.auth.models import Group
 from ford3.models.campus import Campus
 from ford3.models.field_of_study import FieldOfStudy
 from ford3.models.occupation import Occupation
@@ -16,7 +17,7 @@ from ford3.models.interest import Interest
 from ford3.models.saqa_qualification import SAQAQualification
 from ford3.models.user import User
 from ford3.enums.open_edu_groups import OpenEduGroups
-from django.contrib.auth.models import Group
+from ford3.models.qualification_entrance_requirement_subject import QualificationEntranceRequirementSubject  # noqa
 
 
 class ModelFactories:
@@ -212,3 +213,15 @@ class ModelFactories:
         )
 
         return saqa_qualification_test_object
+
+    @staticmethod
+    def get_qualification_entrance_requirement_to():
+        qualification_entrance_requirement_test_object = (
+            QualificationEntranceRequirementSubject.objects.create(
+                minimum_score=10,
+                required=True,
+                qualification=ModelFactories.get_qualification_test_object(),
+                subject=ModelFactories.get_subject_test_object()
+            )
+        )
+        return qualification_entrance_requirement_test_object

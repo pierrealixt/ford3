@@ -20,7 +20,8 @@ class QualificationForm(forms.Form):
 class QualificationDetailForm(QualificationForm):
     short_description = forms.CharField(
         label='Short description of this qualification',
-        help_text='*120 characters max',
+        help_text='*120 characters max '
+                  '- This field is required for publication',
         required=False,
         widget=forms.Textarea(
             attrs={
@@ -53,26 +54,12 @@ class QualificationDetailForm(QualificationForm):
 class QualificationDurationFeesForm(QualificationForm):
     full_time = forms.TypedChoiceField(
         label='Type of the qualification',
+        help_text='<br>This field is required for publication',
         coerce=lambda x: x == 'True',
         choices=((True, 'Full-time'), (False, 'Part-time')),
         required=False,
         widget=forms.RadioSelect
     )
-    # full_time = forms.TypedChoiceField(
-    #     label='Full-Time qualification',
-    #     coerce=lambda x: x == 'True',
-    #     required=False,
-    #     choices=((True, 'Yes'), (False, 'No')),
-    #     widget=forms.RadioSelect
-    # )
-
-    # part_time = forms.TypedChoiceField(
-    #     label='Part-time qualification',
-    #     coerce=lambda x: x == 'True',
-    #     required=False,
-    #     choices=((True, 'Yes'), (False, 'No')),
-    #     widget=forms.RadioSelect
-    # )
 
     duration = forms.IntegerField(
         label='Duration of the qualification',
@@ -120,7 +107,8 @@ class QualificationDurationFeesForm(QualificationForm):
 class QualificationRequirementsForm(QualificationForm):
     min_nqf_level = forms.ChoiceField(
         label='Required entrance qualification',
-        help_text='*List from SAQA',
+        help_text='*List from SAQA '
+                  '- This field is required for publication',
         required=False,
         choices=[('', '-')] + [
             (level, level.value) for level in SaqaQualificationLevel]
@@ -184,6 +172,8 @@ class QualificationRequirementsForm(QualificationForm):
 
     require_certain_subjects = forms.TypedChoiceField(
         label='Does the qualification require certain subjects?',
+        help_text='<br>If "Yes", please add at least one required subject if '
+                  'you wish to publish this qualification',
         coerce=lambda x: x == 'True',
         required=False,
         choices=((True, 'Yes'), (False, 'No')),

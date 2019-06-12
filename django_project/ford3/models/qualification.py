@@ -4,8 +4,9 @@ from ford3.models.saqa_qualification import SAQAQualification
 from ford3.models.requirement import Requirement
 from ford3.models.interest import Interest
 from ford3.models.occupation import Occupation
-from ford3.models.qualification_entrance_requirement_subject import QualificationEntranceRequirementSubject # noqa
+from ford3.models.qualification_entrance_requirement_subject import QualificationEntranceRequirementSubject  # noqa
 from ford3.models.qualification_event import QualificationEvent
+from ford3.models_logic.qualification_audit import QualificationAudit
 
 
 class ActiveQualificationManager(models.Manager):
@@ -25,6 +26,18 @@ class Qualification(models.Model):
         SAQAQualification,
         null=True,
         on_delete=models.PROTECT)
+    published = models.BooleanField(
+        blank=True,
+        null=True,
+        default=False,
+        help_text="Has this qualification been published?")
+
+    ready_to_publish = models.BooleanField(
+        blank=True,
+        null=True,
+        default=False,
+        help_text=("Has the qualification's details been completed in enough "
+                   "detail to allow publication."))
     occupations = models.ManyToManyField(
         'ford3.occupation',
         blank=True)
@@ -142,8 +155,19 @@ class Qualification(models.Model):
     def __str__(self):
         return self.saqa_qualification.name
 
+    def audit_for_publish(self):
+        audit_result = QualificationAudit(self).evaluate_audit()
+
+        if not self.published and audit_result and not self.ready_to_publish:
+            self.ready_to_publish = True
+            self.save()
+        elif (self.ready_to_publish or self.published) and not audit_result:
+            self.ready_to_publish = False
+            self.published = False
+            self.save()
+
     @property
-    def requirement(self) -> Requirement:
+    def requirement(self):
         try:
             return Requirement.objects.get(
                 qualification_id=self.id)

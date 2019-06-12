@@ -79,34 +79,36 @@ class QualificationFormWizardDataProcess(object):
         :param form_data: dict of form data
         """
         # Remove old subjects
-        QualificationEntranceRequirementSubject.objects.filter(
-            qualification=self.qualification).delete()
-        subject_list = form_data['subject_list'].split(',')
-        minimum_score_list = form_data['minimum_score_list'].split(',')
-        for index, subject_value in enumerate(subject_list):
-            try:
-                subject = Subject.objects.get(
-                    id=subject_value
+        if (QualificationEntranceRequirementSubject.objects.filter(
+                qualification=self.qualification).count() > 0):
+            QualificationEntranceRequirementSubject.objects.filter(
+                qualification=self.qualification).delete()
+            subject_list = form_data['subject_list'].split(',')
+            minimum_score_list = form_data['minimum_score_list'].split(',')
+            for index, subject_value in enumerate(subject_list):
+                try:
+                    subject = Subject.objects.get(
+                        id=subject_value
+                    )
+                except (Subject.DoesNotExist, ValueError):
+                    continue
+                requirement_subjects, created = (
+                    QualificationEntranceRequirementSubject.objects.
+                    get_or_create(
+                        subject=subject,
+                        qualification=self.qualification,
+                    )
                 )
-            except (Subject.DoesNotExist, ValueError):
-                continue
-            requirement_subjects, created = (
-                QualificationEntranceRequirementSubject.objects.
-                get_or_create(
-                    subject=subject,
-                    qualification=self.qualification,
+                try:
+                    minimum_score_value = int(minimum_score_list[index])
+                except IndexError:
+                    continue
+                if minimum_score_value == -1:
+                    continue
+                requirement_subjects.minimum_score = (
+                    minimum_score_value
                 )
-            )
-            try:
-                minimum_score_value = int(minimum_score_list[index])
-            except IndexError:
-                continue
-            if minimum_score_value == -1:
-                continue
-            requirement_subjects.minimum_score = (
-                minimum_score_value
-            )
-            requirement_subjects.save()
+                requirement_subjects.save()
 
     def add_or_update_requirements(self, form_data):
         """
@@ -354,24 +356,26 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
 
     def add_required_subjects(self, step_data):
         # Remove old subjects
-        QualificationEntranceRequirementSubject.objects.filter(
-            qualification__id=self.qualification.id).delete()
-        new_subject_values = step_data['2-subject']
-        new_minimum_scores = step_data['2-subject-minimum-score']
-        number_of_new_subjects = len(new_subject_values)
-        for i in range(0, number_of_new_subjects):
-            try:
-                subject = Subject.objects.filter(
-                    id=new_subject_values[i]).first()
-                new_subject = QualificationEntranceRequirementSubject()
-                new_subject.subject = subject
-                new_subject.qualification = self.qualification
-                new_subject.minimum_score = new_minimum_scores[i]
-                new_subject.save()
-            except (Subject.DoesNotExist, ValueError):
-                # ToDo: I need to alert the user one of the subjects could
-                #  not be saved
-                pass
+        if (QualificationEntranceRequirementSubject.objects.filter(
+                qualification__id=self.qualification.id).count() == 0):
+            QualificationEntranceRequirementSubject.objects.filter(
+                qualification__id=self.qualification.id).delete()
+            new_subject_values = step_data['2-subject']
+            new_minimum_scores = step_data['2-subject-minimum-score']
+            number_of_new_subjects = len(new_subject_values)
+            for i in range(0, number_of_new_subjects):
+                try:
+                    subject = Subject.objects.filter(
+                        id=new_subject_values[i]).first()
+                    new_subject = QualificationEntranceRequirementSubject()
+                    new_subject.subject = subject
+                    new_subject.qualification = self.qualification
+                    new_subject.minimum_score = new_minimum_scores[i]
+                    new_subject.save()
+                except (Subject.DoesNotExist, ValueError):
+                    # ToDo: I need to alert the user one of the subjects could
+                    #  not be saved
+                    pass
 
     def render_done(self, form, **kwargs):
         """
@@ -407,7 +411,7 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
         done_response = self.done(
             final_forms.values(), form_dict=final_forms, **kwargs)
         self.storage.reset()
-
+        self.qualification.save()
         return done_response
 
 

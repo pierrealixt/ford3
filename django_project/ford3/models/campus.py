@@ -175,7 +175,9 @@ class Campus(models.Model):
                 'saqa_qualification__name',
                 'saqa_qualification__saqa_id',
                 'saqa_qualification__accredited',
-                'edited_at')
+                'edited_at',
+                'published',
+                'ready_to_publish')
         return list(queryset)
 
     @property

@@ -82,8 +82,8 @@
                     <thead>
                         <tr class='row text-purple no-gutters'>
                             <th class="col-md-7 align-middle text-center">Qualifications</th>
-                            <th class="col-md-3 align-middle text-center">Last edited</th>
-                            <th class="col-md-2 align-middle text-center">Actions</th>
+                            <th class="col-md-2 align-middle text-center">Last edited</th>
+                            <th class="col-md-3 align-middle text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -92,14 +92,23 @@
                                 <td class="col-md-7 my-auto mx-auto">
                                     <a class='text-left' href="{% url 'show-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">{{ qualification.saqa_qualification__name }} (SAQA_ID: {{ qualification.saqa_qualification__saqa_id }})</a>
                                 </td>
-                                <td class=" col-md-3 my-auto mx-auto text-center">
+                                <td class=" col-md-2 my-auto mx-auto text-center">
                                     <span class='h-100'>{{ qualification.edited_at }}</span>
                                 </td>
-                                <td class=" col-md-2 my-auto mx-auto">
+                                <td class=" col-md-3 my-auto mx-auto">
+                                    <div class="row mx-2">
                                     {% if perms.ford3.change_qualification %}
-                                    <a class="edu-button edu-button-navy edu-button-addon w-100" href="{% url 'edit-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Edit</a>
+	                                    <a class="col-md edu-button edu-button-navy edu-button-addon mx-1" href="{% url 'edit-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Edit</a>
+	                                    {% if qualification.ready_to_publish and not qualification.published %}
+											<a class="col-md edu-button edu-button-navy edu-button-addon mx-1" href="{% url 'publish-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Publish</a>
+	                                    {% endif %}
+	                                    {% if qualification.published %}
+	                                        <a class="col-md edu-button edu-button-navy edu-button-addon mx-1" href="{% url 'unpublish-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">Unpublish</a>
+                                        {% endif %}
                                     {% endif %}
+                                    </div>
                                 </td>
+
                             </tr>
                         {% endfor %}
                     </tbody>

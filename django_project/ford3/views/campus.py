@@ -31,7 +31,6 @@ def show(request, provider_id, campus_id):
             campus.provider.provider_logo.url
             if campus.provider.provider_logo else ""
     }
-
     return render(request, 'campus.html', context)
 
 

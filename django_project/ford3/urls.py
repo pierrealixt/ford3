@@ -10,7 +10,8 @@ from ford3.views import (
     campus,
     provider,
     sub_field_of_study,
-    occupations
+    occupations,
+    qualification
 )
 from ford3.views.users import (
     UserList,
@@ -121,6 +122,20 @@ urlpatterns = [
             'qualifications/<int:qualification_id>/edit/']),
         qualification_wizard,
         name='edit-qualification'),
+    path(
+        '/'.join([
+            'providers/<int:provider_id>',
+            'campus/<int:campus_id>',
+            'qualifications/<int:qualification_id>/publish/']),
+        qualification.toggle_publication,
+        name='publish-qualification'),
+    path(
+        '/'.join([
+            'providers/<int:provider_id>',
+            'campus/<int:campus_id>',
+            'qualifications/<int:qualification_id>/unpublish/']),
+        qualification.toggle_publication,
+        name='unpublish-qualification'),
     path(
         '/'.join([
             'providers/<int:provider_id>',
