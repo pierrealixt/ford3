@@ -90,31 +90,32 @@
                         <b>Required entrance qualification </b>{{ qualification.requirement.min_nqf_level|filter_level|is_none }}
                     </div>
                     <div class="col-md-6">
-                        <b>Is there an interview </b>{{ qualification.requirement.interview|yesno:"YES,NO" }}
+                        <b>Is there an interview </b>{{ qualification.requirement.interview|yesno:"Yes,No" }}
                     </div>
                 </div>
                 <div class="row pb-3">
                     <div class="col-md-6">
-                        <b>Require a portfolio </b>{{ qualification.requirement.portfolio|yesno:"YES,NO" }}
+                        <b>Require a portfolio </b>{{ qualification.requirement.portfolio|yesno:"Yes,No" }}
                         <br />
-                        <b>Require and APS score </b>{{ qualification.requirement.require_aps_score|yesno:"YES,NO" }}
+                        <b>Require and APS score </b>{{ qualification.requirement.require_aps_score|yesno:"Yes,No" }}
                     </div>
                     <div class="col-md-6">
                         <b>What does the portfolio require </b>{{ qualification.requirement.portfolio_comment }}
                     </div>
                 </div>
+                {% if qualification.requirement.require_certain_subjects %}
                 <div class="row pb-3">
                     <div class="col-md-6">
-                        <b>Does qualification require certain subjects </b>{{ qualification.requirement.require_certain_subjects }}
+                        <b>Subjects</b><br />
+                        <ul>
+                        {% for subject in qualification.entrance_req_subjects_list %}
+                            <li>{{ subject.name }}: {{ subject.minimum_score }}%</li>
+                        {% endfor %}
+                        </ul>
+
                     </div>
                 </div>
-                    <div class="row pb-3">
-                    {% for subject in qualification.entrance_req_subjects_list %}
-                        <div class="col-md-6">
-                            <b>Subject {{ forloop.counter }} </b>{{ subject.name }} {{ subject.minimum_score }}%
-                        </div>
-                    {% endfor %}
-                    </div>
+                {% endif %}
             </div>
         </div>
         <div class="row py-3 mx-0">

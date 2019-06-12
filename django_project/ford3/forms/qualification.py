@@ -182,32 +182,9 @@ class QualificationRequirementsForm(QualificationForm):
 
     # (subject_id, min_score), (..., ...), ...
     subjects_scores = forms.CharField(
-        required=False
+        required=False,
+        widget=forms.HiddenInput()
     )
-
-    # subject = forms.ModelChoiceField(
-    #     label='Subject 1',
-    #     queryset=Subject.objects.all(),
-    #     required=False,
-    #     widget=forms.Select(
-    #         attrs={'class': 'col-md-4 subject-list'}
-    #     ),
-    # )
-
-    # subject_list = forms.CharField(
-    #     required=False,
-    #     widget=forms.HiddenInput(
-    #         attrs={'id': 'subject-list'}
-    #     ),
-    # )
-
-    # minimum_score_list = forms.CharField(
-    #     required=False,
-    #     widget=forms.HiddenInput(
-    #         attrs={'id': 'minimum-score-list'}
-    #     ),
-    #     initial='0',
-    # )
 
 
 class QualificationInterestsAndJobsForm(QualificationForm):
