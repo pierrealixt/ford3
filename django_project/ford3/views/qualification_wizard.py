@@ -84,7 +84,7 @@ class QualificationFormWizardDataProcess(object):
                 qualification=self.qualification).delete()
 
             for subject_score_tuple in form_data['subjects_scores'].split(','):
-                match = re.match('\(([0-9]*) ([0-9]*)\)', subject_score_tuple)
+                match = re.match(r'\(([0-9]*) ([0-9]*)\)', subject_score_tuple)
                 if match:
                     subject_id, minimum_score = match.groups()
                     try:
