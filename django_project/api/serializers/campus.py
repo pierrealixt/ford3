@@ -6,6 +6,9 @@ from api.serializers.utilities.common_excluded_fields import CommonExcludedField
 
 
 class CampusSerializer(serializers.ModelSerializer):
+    """
+    This is the campus serializer
+    """
     campus_events = CampusEventSerializer(many=True)
     qualification_set = QualificationSerializer(many=True)
 
