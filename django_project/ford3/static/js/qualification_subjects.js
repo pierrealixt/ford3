@@ -6,7 +6,7 @@ const getSubjects = () => {
 
 const getSubjectsScoresInputElement = () => {
   // we use this input to save subject ids and their mininum score
-  // (subject_id mininum_score) (.. ..) ...
+  // (subject_id, mininum_score) (.., ..) ...
   return document.querySelector('#id_qualification-requirements-subjects_scores')
 }
 
@@ -187,10 +187,6 @@ const createSubjectForm = (data = {}) => {
   return subjectForm
 }
 
-const addNewSubjectForm = () => {
-  subjectsWidget().appendChild(createSubjectForm())
-}
-
 const parseSubjectForm = (subjectForm) => {
   const selectedSubjectIndex = subjectForm.querySelector('select').selectedIndex
   return {
@@ -200,7 +196,7 @@ const parseSubjectForm = (subjectForm) => {
 }
 
 const displayError = (subjectForm) => {
-  alert('error')
+  alert('Minimum score should be a number between 1 and 99.')
 }
 
 const clearMinScoreInput = (subjectForm, minScore = '') => {
@@ -293,18 +289,25 @@ const buildSubjectForms = () => {
   })
 }
 
+const addNewSubjectForm = (event) => {
+  subjectsWidget().appendChild(createSubjectForm())
+  hideAddNewSubjectFormButton()
+}
+
 const showSubjectsWidget = () => {
   buildSubjectForms()
   addNewSubjectForm()
-  getAddNewSubjectFormButtonElem().addEventListener('click', function (event) {
-    addNewSubjectForm()
-    hideAddNewSubjectFormButton()
-  })
+  getAddNewSubjectFormButtonElem().addEventListener('click', addNewSubjectForm)
+}
+
+const resetSubjectsWidget = () => {
+  getSubjectsScoresInputElement().value = ''
+  subjectsWidget().innerHTML = ''
+  hideAddNewSubjectFormButton()
+  getAddNewSubjectFormButtonElem().removeEventListener('click', addNewSubjectForm, false)
 }
 
 (function () {
-  // events
-
   document.querySelectorAll('input[name="qualification-requirements-require_certain_subjects"]').forEach(input => {
     if (input.checked && input.value === 'True') {
       showSubjectsWidget()
@@ -314,16 +317,12 @@ const showSubjectsWidget = () => {
       if (changedInput.checked && changedInput.value === 'True') {
         showSubjectsWidget()
       } else if (changedInput.checked && changedInput.value === 'False') {
-        const store = getSubjectsScores()
-        if (store.length > 0) {
+        if (getSubjectsScores().length > 0) {
           if (confirm('Are you sure to remove the subjects already saved?')) {
-            getSubjectsScoresInputElement().value = ''
-            subjectsWidget().innerHTML = ''
-            hideAddNewSubjectFormButton()
+            resetSubjectsWidget()
           }
         } else {
-          subjectsWidget().innerHTML = ''
-          hideAddNewSubjectFormButton()
+          resetSubjectsWidget()
         }
       }
     })
