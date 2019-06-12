@@ -3,12 +3,6 @@ from django.test import TestCase
 # from django.test.utils import override_settings  # noqa
 from ford3.tests.models.model_factories import ModelFactories
 from ford3.models.qualification import Qualification
-<<<<<<< HEAD
-# from ford3.models.qualification_entrance_requirement_subject import (
-#     QualificationEntranceRequirementSubject
-# )
-=======
->>>>>>> fix flake8
 from ford3.models.requirement import Requirement
 from ford3.models.user import User
 from ford3.views.qualification_wizard import QualificationFormWizardDataProcess
