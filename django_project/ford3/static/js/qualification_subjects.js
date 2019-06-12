@@ -266,7 +266,7 @@ const editSubject = (target) => {
 }
 
 const removeSubject = (target) => {
-  const subjectForm = target.parentNode
+  const subjectForm = target.parentNode.parentNode
   const subjectFormIndex = subjectForm.parentNode.dataset['formIndex']
   let store = getSubjectsScores()
   store.splice(subjectFormIndex, 1)
