@@ -300,6 +300,10 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
             if self.qualification.campus.provider.provider_logo else ""
 
         if self.steps.current == 'qualification-requirements':
+            context['subjects'] = list(Subject.objects
+                .all()
+                .values('id', 'name'))
+
             context['subjects_list'] = \
                 self.qualification.entrance_req_subjects_list
 

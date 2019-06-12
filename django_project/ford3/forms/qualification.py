@@ -177,32 +177,39 @@ class QualificationRequirementsForm(QualificationForm):
         coerce=lambda x: x == 'True',
         required=False,
         choices=((True, 'Yes'), (False, 'No')),
-        widget=forms.RadioSelect
+        widget=forms.RadioSelect({
+            'data-disabler': 'subjects'
+        })
     )
 
-    subject = forms.ModelChoiceField(
-        label='Subject 1',
-        queryset=Subject.objects.all(),
-        required=False,
-        widget=forms.Select(
-            attrs={'class': 'col-md-4 subject-list'}
-        ),
+    # [(subject_id, min_score), ...]
+    subjects_scores = forms.CharField(
+        required=False
     )
 
-    subject_list = forms.CharField(
-        required=False,
-        widget=forms.HiddenInput(
-            attrs={'id': 'subject-list'}
-        ),
-    )
+    # subject = forms.ModelChoiceField(
+    #     label='Subject 1',
+    #     queryset=Subject.objects.all(),
+    #     required=False,
+    #     widget=forms.Select(
+    #         attrs={'class': 'col-md-4 subject-list'}
+    #     ),
+    # )
 
-    minimum_score_list = forms.CharField(
-        required=False,
-        widget=forms.HiddenInput(
-            attrs={'id': 'minimum-score-list'}
-        ),
-        initial='0',
-    )
+    # subject_list = forms.CharField(
+    #     required=False,
+    #     widget=forms.HiddenInput(
+    #         attrs={'id': 'subject-list'}
+    #     ),
+    # )
+
+    # minimum_score_list = forms.CharField(
+    #     required=False,
+    #     widget=forms.HiddenInput(
+    #         attrs={'id': 'minimum-score-list'}
+    #     ),
+    #     initial='0',
+    # )
 
 
 class QualificationInterestsAndJobsForm(QualificationForm):
