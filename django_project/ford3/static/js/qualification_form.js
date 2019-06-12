@@ -68,10 +68,10 @@ $(document).ready(function () {
   add_subject_button.click().click()
 })
 
-let removeSubject = (e) => {
-  let $row = $(e).parent().parent().parent()
-  $row.remove()
-}
+// let removeSubject = (e) => {
+//   let $row = $(e).parent().parent().parent()
+//   $row.remove()
+// }
 
 let subjectChangedHandler = (e) => {
   // Handler for Subject select changed event

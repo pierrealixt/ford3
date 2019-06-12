@@ -14,8 +14,20 @@ const subjectsWidget = () => {
   return document.querySelector('#subjects-widget')
 }
 
+const getAddNewSubjectFormButtonElem = () => {
+  return document.querySelector('#add-new-subject-form')
+}
+
+const showAddNewSubjectFormButton = () => {
+  getAddNewSubjectFormButtonElem().style.display = 'block'
+}
+
+const hideAddNewSubjectFormButton = () => {
+  getAddNewSubjectFormButtonElem().style.display = 'none'
+}
+
 const hideAddButton = (subjectForm) => {
-  subjectForm.querySelector('input[data-action="add-subject"]').style.display = 'none'
+  subjectForm.querySelector('input[data-action="add-subject"]').parentNode.style.display = 'none'
 }
 
 const showEditButton = (subjectForm) => {
@@ -26,85 +38,152 @@ const showRemoveButton = (subjectForm) => {
   subjectForm.querySelector('input[data-action="remove-subject"]').style.display = 'block'
 }
 
-const createSelectSubjectsElem = () => {
+const disableSelect = (subjectForm) => {
+  subjectForm.querySelector('select').disabled = true
+}
+
+const createSelectSubjectsElem = (data) => {
+  const div = document.createElement('div')
+  div.classList.add('col-sm-3')
   const select = document.createElement('select')
-  select.classList = 'col-sm-4'
-  // select.dataset['field'] = 'subjects'
+
+  select.dataset['field'] = 'subject-id'
+  select.classList.add('w-100', 'select', 'form-control')
   const selectedSubjectIds = getSelectedSubjects()
 
-  getSubjects().forEach(subject => {
-    if (!selectedSubjectIds.includes(subject.id)) {
-      const option = document.createElement('option')
-      option.value = subject.id
-      option.innerHTML = subject.name
-      select.appendChild(option)
-    }
-  })
-  return select
+  if (Object.keys(data).includes('subjectId')) {
+    const subject = getSubjects().filter(subject => subject.id === parseInt(data.subjectId))[0]
+
+    const option = document.createElement('option')
+    option.value = subject.id
+    option.innerHTML = subject.name
+    select.appendChild(option)
+    select.disabled = true
+  } else {
+    getSubjects().forEach(subject => {
+      if (!selectedSubjectIds.includes(subject.id)) {
+        const option = document.createElement('option')
+        option.value = subject.id
+        option.innerHTML = subject.name
+        select.appendChild(option)
+      }
+    })
+  }
+
+  div.appendChild(select)
+  return div
 }
 
-const createInputMinScoreElem = () => {
+const createInputMinScoreElem = (data) => {
+  const div = document.createElement('div')
+  div.classList.add('col-sm-2')
+
   const input = document.createElement('input')
-  input.classList = 'col-sm-4'
-  return input
+  input.classList.add('form-control', 'w-100')
+  input.dataset['field'] = 'min-score'
+  input.placeholder = 'Mininum score'
+  if (Object.keys(data).includes('minScore')) {
+    input.value = data.minScore
+  }
+
+  div.appendChild(input)
+  return div
 }
 
-const createButtonAddElem = () => {
+const createButtonAddElem = (isNewData) => {
+  const div = document.createElement('div')
+  div.classList.add('col-sm-2')
+  div.style.display = isNewData ? 'block' : 'none'
+
   let input = document.createElement('input')
-  input.classList = 'col-sm-4'
   input.type = 'button'
   input.value = 'Add'
   input.dataset['action'] = 'add-subject'
+
+  input.classList.add('edu-button', 'edu-button-blue', 'border-0', 'h-100', 'm-0')
   input.addEventListener('click', function (event) {
     addSubject(event.target)
   })
-  return input
+  div.appendChild(input)
+  return div
 }
 
-const createButtonEditElem = () => {
+const createButtonEditElem = (isNewData) => {
+  const div = document.createElement('div')
+  div.classList.add('col-sm-2')
+
   let input = document.createElement('input')
-  input.classList = 'col-sm-2'
   input.type = 'button'
   input.value = 'Edit'
-  input.style.display = 'none'
+  input.style.display = isNewData ? 'none' : 'block'
   input.dataset['action'] = 'edit-subject'
+  input.classList.add('edu-button', 'edu-button-blue', 'border-0', 'h-100', 'm-0')
   input.addEventListener('click', function (event) {
-    // editSubject(event.target)
+    editSubject(event.target)
   })
-  return input
+  div.appendChild(input)
+  return div
 }
 
-const createButtonRemoveElem = () => {
+const createButtonRemoveElem = (isNewData) => {
+  const div = document.createElement('div')
+  div.classList.add('col-sm-2')
+
   let input = document.createElement('input')
-  input.classList = 'col-sm-2'
   input.type = 'button'
   input.value = 'Remove'
-  input.style.display = 'none'
+  input.style.display = isNewData ? 'none' : 'block'
+  input.classList.add('edu-button', 'edu-button-blue', 'border-0', 'h-100', 'm-0')
   input.dataset['action'] = 'remove-subject'
   input.addEventListener('click', function (event) {
-    // removeSubject(event.target)
+    removeSubject(event.target)
   })
-  return input
+  div.appendChild(input)
+  return div
 }
 
-const createSubjectForm = () => {
+const createLabel = (formIndex) => {
+  let div = document.createElement('div')
+  div.classList.add('col-sm-3')
+  let label = document.createElement('label')
+  const text = document.createTextNode(`Required subject ${formIndex + 1}`)
+  label.appendChild(text)
+  div.appendChild(label)
+  return div
+}
+
+const getNextSubjectFormIndex = () => {
+  return subjectsWidget().querySelectorAll('.subject-form').length
+}
+
+const isDataEmpty = (data) => {
+  return Object.keys(data).length === 0
+}
+
+const createSubjectForm = (data = {}) => {
+  const isNewData = isDataEmpty(data)
+  const formIndex = getNextSubjectFormIndex()
   const subjectForm = document.createElement('div')
-  subjectForm.classList = 'col-sm-12'
+  subjectForm.classList.add('col-sm-12', 'subject-form', 'mb-3')
+  subjectForm.dataset['formIndex'] = formIndex
   const row = document.createElement('div')
   row.classList = 'row'
-  subjectForm.appendChild(row)
 
-  const select = createSelectSubjectsElem()
-  const input = createInputMinScoreElem()
-  const addButton = createButtonAddElem()
-  const editButton = createButtonEditElem()
-  const removeButton = createButtonRemoveElem()
+  const label = createLabel(formIndex)
+  const select = createSelectSubjectsElem(data)
+  const input = createInputMinScoreElem(data)
+  const addButton = createButtonAddElem(isNewData)
+  const editButton = createButtonEditElem(isNewData)
+  const removeButton = createButtonRemoveElem(isNewData)
 
+  row.appendChild(label)
   row.appendChild(select)
   row.appendChild(input)
   row.appendChild(addButton)
   row.appendChild(editButton)
   row.appendChild(removeButton)
+
+  subjectForm.appendChild(row)
   return subjectForm
 }
 
@@ -124,17 +203,25 @@ const displayError = (subjectForm) => {
   alert('error')
 }
 
+const clearMinScoreInput = (subjectForm, minScore = '') => {
+  subjectForm.querySelector('input[data-field="min-score"]').value = minScore
+}
+
 const subjectDataValid = (subjectData) => {
-  return subjectData.minScore > 0 && !isNaN(subjectData.minScore)
+  return subjectData.minScore > 0 && subjectData.minScore < 100 && !isNaN(subjectData.minScore)
 }
 
 const subjectAsTuple = (subjectData) => {
   return `(${subjectData.subjectId} ${subjectData.minScore})`
 }
 
+const parseSubjectTuple = (tuple) => {
+  return /\(([0-9]*) ([0-9]*)\)/.exec(tuple)
+}
+
 const getSelectedSubjects = () => {
   return getSubjectsScores().map(tuple => {
-    let result = /\(([0-9]*) ([0-9]*)\)/.exec(tuple)
+    let result = parseSubjectTuple(tuple)
     return parseInt(result[1]) // subject id
   })
 }
@@ -150,31 +237,95 @@ const saveSubject = (subjectData) => {
 }
 
 const addSubject = (target) => {
-  const subjectForm = target.parentNode
+  const subjectForm = target.parentNode.parentNode
   const data = parseSubjectForm(subjectForm)
   if (subjectDataValid(data)) {
     saveSubject(data)
     hideAddButton(subjectForm)
     showEditButton(subjectForm)
     showRemoveButton(subjectForm)
+    disableSelect(subjectForm)
+    showAddNewSubjectFormButton()
   } else {
     displayError(subjectForm)
+    clearMinScoreInput(subjectForm)
   }
 }
 
-(function () {
-  addNewSubjectForm()
+const editSubject = (target) => {
+  const subjectForm = target.parentNode.parentNode
+  const data = parseSubjectForm(subjectForm)
 
-  // events
-  document.querySelector('#add-new-subject-form').addEventListener('click', function (event) {
-    addNewSubjectForm()
+  const subjectFormIndex = subjectForm.parentNode.dataset['formIndex']
+  let store = getSubjectsScores()
+
+  if (subjectDataValid(data)) {
+    store[subjectFormIndex] = subjectAsTuple(data)
+    getSubjectsScoresInputElement().value = store.join(',')
+  } else {
+    displayError(subjectForm)
+    const minScore = parseSubjectTuple(store[subjectFormIndex])[2]
+    clearMinScoreInput(subjectForm, minScore)
+  }
+}
+
+const removeSubject = (target) => {
+  const subjectForm = target.parentNode
+  const subjectFormIndex = subjectForm.parentNode.dataset['formIndex']
+  let store = getSubjectsScores()
+  store.splice(subjectFormIndex, 1)
+  getSubjectsScoresInputElement().value = store.join(',')
+
+  subjectsWidget().innerHTML = ''
+  buildSubjectForms()
+}
+
+const buildSubjectForms = () => {
+  getSubjectsScores().forEach(tuple => {
+    const data = parseSubjectTuple(tuple)
+
+    const subjectForm = createSubjectForm({
+      'subjectId': data[1],
+      'minScore': data[2]
+    })
+
+    subjectsWidget().appendChild(subjectForm)
   })
-  // document.querySelectorAll('input[data-action="add-subject"]').forEach(button => {
-  //   button.addEventListener('click', function (event) {
-  //     addSubject(event.target)
-  //   })
-  // })
-  // addSubjectButtonElement().addEventListener('click', function (event) {
+}
 
-  // })
+const showSubjectsWidget = () => {
+  buildSubjectForms()
+  addNewSubjectForm()
+  getAddNewSubjectFormButtonElem().addEventListener('click', function (event) {
+    addNewSubjectForm()
+    hideAddNewSubjectFormButton()
+  })
+}
+
+(function () {
+  // events
+
+  document.querySelectorAll('input[name="qualification-requirements-require_certain_subjects"]').forEach(input => {
+    if (input.checked && input.value === 'True') {
+      showSubjectsWidget()
+    }
+    input.addEventListener('change', function (event) {
+      const changedInput = event.target
+      if (changedInput.checked && changedInput.value === 'True') {
+        showSubjectsWidget()
+      } else if (changedInput.checked && changedInput.value === 'False') {
+        const store = getSubjectsScores()
+        if (store.length > 0) {
+          if (confirm('Are you sure to remove the subjects already saved?')) {
+            getSubjectsScoresInputElement().value = ''
+            subjectsWidget().innerHTML = ''
+            hideAddNewSubjectFormButton()
+          }
+        } else {
+          subjectsWidget().innerHTML = ''
+          hideAddNewSubjectFormButton()
+        }
+      }
+    })
+  })
 })()

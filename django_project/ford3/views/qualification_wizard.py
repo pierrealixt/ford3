@@ -328,6 +328,11 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
             initial_dict.update({
                 'occupations_ids': occupations_ids,
                 'interest_list': initial_dict['interests']})
+        # if step == 'qualification-requirements':
+        #     subjects_scores = '(1 42),(2 42)'
+        #     initial_dict.update({
+        #         'subjects_scores': subjects_scores
+        #     })
         return initial_dict
 
     def done(self, form_list, **kwargs):

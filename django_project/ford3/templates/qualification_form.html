@@ -227,21 +227,15 @@
         </div>
 
         {% if wizard.steps.step1 == 3 %}
-        <div id='subjects-widget' class='row border-bottom mb-3 no-gutters'>
-            <!-- <div class='col-md-12'>
-                <div class='subject-form'>
-                    <select data-field='subjects'>
-                        {% for subject in subjects %}
-                            <option value='{{ subject.id }}'>{{ subject.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <input type='text' />
-                    <input type='button' data-action='add-subject' value='Add subject'/>
-                </div>
+        <div id='subjects-widget' class='row'></div>
+        <div class='row'>
+            <!-- <div class='col-sm-12'>
+                <hr />
             </div> -->
+            <div class='col-sm-2'>
+                <input id='add-new-subject-form' type='button' value='Add a new subject' class='edu-button edu-button-orange border-0' style='display:none'/>
+            </div>
         </div>
-        <hr />
-        <input id='add-new-subject-form' type='button' value='Add a new subject' />
         {% endif %}
 
 

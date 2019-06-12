@@ -177,12 +177,10 @@ class QualificationRequirementsForm(QualificationForm):
         coerce=lambda x: x == 'True',
         required=False,
         choices=((True, 'Yes'), (False, 'No')),
-        widget=forms.RadioSelect({
-            'data-disabler': 'subjects'
-        })
+        widget=forms.RadioSelect()
     )
 
-    # [(subject_id, min_score), ...]
+    # (subject_id, min_score), (..., ...), ...
     subjects_scores = forms.CharField(
         required=False
     )
