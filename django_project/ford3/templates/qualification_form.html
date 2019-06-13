@@ -19,12 +19,10 @@
 	<div class='col-md-12'>
 		<h3>{{ qualification }}</h3>
 	</div>
+	<div class="col-md-12">
 	{% if multi_step_form %}
-		<div class="col-md-12">
 		<ul class="container nav-wizard-steps nav nav-pills nav-fill">
 			{% for form_name in form_name_list %}
-
-
 				<li class="nav-item">
 					<a  href="{% url 'edit-qualification' provider_id=provider.id campus_id=qualification.campus.id qualification_id=qualification.id %}?step={{ form_identifier_list|get_dictionary_item:form_name }}&multi-step=true" class="row nav-link {% if forloop.counter == 1 %}
 						first
@@ -32,12 +30,10 @@
 					{% if forloop.counter == wizard.steps.step1 %}
 						active
 					{% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
-
                 <span class="nav-item-number">
                 <span class="nav-item-number-inner">{{ forloop.counter }}</span>
                 </span>
                     <span class="col-md-11 nav-item-caption">{{ form_name }}</span>
-
                 </a>
                 <span class="nav-link-triangle
                 {% if forloop.counter == 1 %}
@@ -48,7 +44,6 @@
                 {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
             </span>
             </li>
-
         {% endfor %}
     </ul>
     {% endif %}
@@ -211,11 +206,10 @@
                         {% endfor %}
                     </ul>
                 </div>
-
             </div>
         {% endif %}
 
-    <form class="col-6 pl-0" action="" method="post">{% csrf_token %}
+    <form class="col-12 pl-0" action="" method="post">{% csrf_token %}
         <div class="form-group">
             {{ wizard.management_form }}
             {% if wizard.form.forms %}
@@ -277,9 +271,7 @@
 		</form>
 	</div>
 </div>
-
 {% endblock %}
-
 {% block footer %}
 <script type="text/javascript"
         src="{% static 'js/libs/jquery-ui-1.12.1-custom/jquery-ui.min.js' %}"></script>
