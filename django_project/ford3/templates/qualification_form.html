@@ -214,8 +214,8 @@
 
             </div>
         {% endif %}
-    
-    <form action="" method="post">{% csrf_token %}
+
+    <form class="col-6 pl-0" action="" method="post">{% csrf_token %}
         <div class="form-group">
             {{ wizard.management_form }}
             {% if wizard.form.forms %}
@@ -239,44 +239,43 @@
         {% endif %}
 
 
-		<div class="row form-actions">
-			{% if multi_step_form %}
-				<div class="col-md-4">
-					{% if wizard.steps.prev %}
-						<button class="edu-button edu-button-blue"
-						        name="wizard_goto_step" type="submit"
-						        value="{{ wizard.steps.prev }}">Prev
-							step
-						</button>
-					{% endif %}
-				</div>
-				<div class="col-md-4">
-				</div>
-				<div class="col-md-4">
-					<button class="edu-button edu-button-blue"
-					        type="submit"
-					        value="submit"
-					        id="my-next-button">
-						{% if wizard.steps.next %}
-							Next
-						{% else %}
-							Submit
+			<div class="row no-gutters form-actions">
+				{% if multi_step_form %}
+					<div class="col-md-4">
+						{% if wizard.steps.prev %}
+							<button class="edu-button edu-button-blue"
+							        name="wizard_goto_step" type="submit"
+							        value="{{ wizard.steps.prev }}">Prev
+								step
+							</button>
 						{% endif %}
-					</button>
-				</div>
-			{% else %}
-				<div class="col-md-4">
-					<button class="edu-button edu-button-blue"
-					        type="submit"
-					        value="submit"
-					        id='my-next-button'>Submit
-					</button>
-				</div>
-			{% endif %}
-		</div>
-
-    </form>
-</div>
+					</div>
+					<div class="col-md-4">
+					</div>
+					<div class="col-md-4">
+						<button class="edu-button edu-button-blue"
+						        type="submit"
+						        value="submit"
+						        id="my-next-button">
+							{% if wizard.steps.next %}
+								Next
+							{% else %}
+								Submit
+							{% endif %}
+						</button>
+					</div>
+				{% else %}
+					<div class="col-md-4">
+						<button class="edu-button edu-button-blue"
+						        type="submit"
+						        value="submit"
+						        id='my-next-button'>Submit
+						</button>
+					</div>
+				{% endif %}
+			</div>
+		</form>
+	</div>
 </div>
 
 {% endblock %}
