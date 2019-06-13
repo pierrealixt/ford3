@@ -759,6 +759,11 @@ input[type='email']:hover::placeholder, input[type='url']:hover::placeholder {
 
 nav#sidebar ul li a {
     color: inherit;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }
 
 nav#sidebar ul li a:hover {
@@ -817,6 +822,14 @@ nav#sidebar ul li a:hover {
 }
 .campus-card .progress-bar {
     background-color: #ffffff;
+}
+
+.campus-card h5 {
+    text-overflow: ellipsis;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    color: white;
 }
 
 .body-wrapper {
