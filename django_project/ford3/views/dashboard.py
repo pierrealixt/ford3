@@ -11,4 +11,4 @@ def show(request):
         'providers': list(user.providers)
     }
 
-    return render(request, 'dashboard.html', context)
+    return render(request, 'dashboard/dashboard.html', context)

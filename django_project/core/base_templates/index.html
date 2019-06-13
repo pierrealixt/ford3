@@ -25,12 +25,15 @@
 	href="{% static 'css/sidebar.css' %}">
 	<script src="{% static 'js/libs/jquery-3.3.1.min.js' %}"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
-			integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"
-			crossorigin="anonymous"></script>
+	        integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"
+	        crossorigin="anonymous"></script>
+
 	{% block head %}
 		<link rel="stylesheet" type="text/css"
         href="{% static 'css/landing.css' %}">
 	{% endblock %}
+    <script src="{% static 'js/ford3.js' %}"></script>
+
 </head>
 <body id="page-top">
     {% block navbar %}
@@ -185,8 +188,6 @@
 
 
 <script>
-	$(function () {
-		$('[data-toggle="tooltip"]').tooltip()
-	})
+
 </script>
 </html>

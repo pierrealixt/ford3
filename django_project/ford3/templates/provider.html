@@ -7,14 +7,16 @@
 
 {% block body %}
 <div class="row no-gutters">
-    <div class='col-md-12'>
+    <div class='col-12'>
         <h3>{{ provider.name }}</h3>
     </div>
-    <div class='col-md-10'>
+    <div class='col'>
         <h4>Campuses</h4>
     </div>
     {% if perms.ford3.add_campus %}
-    <div class='col-md-2'>
+     <div class='col-xs-4
+                col-sm-4
+                col-md-3'>
         <a data-toggle="modal" data-target="#addCampusModal" id="open-add-campus-modal"
         class='edu-button edu-button-orange m-0 p-0 text-white'>
             Add Campus
@@ -27,7 +29,7 @@
 </div>
 
 {% if campus_success|length > 0 %}
-<div class="row no-gutters">
+<div class="row my-1 no-gutters">
     <div class='col-md-4 mx-auto'>
         <div class='alert alert-success text-center'>
             <p class='m-0'>{{ campus_success }}</p>
@@ -36,10 +38,15 @@
 </div>
 {% endif %}
 
-<div class='row justify-content-center no-gutters'>
+<div class='row justify-content-center no-gutters my-1'>
     {% if provider.campus %}
     {% for campus in provider.campus %}
-        <div class='col-md-4 card mb-5 border-0'>
+        <div class='
+        col-sm-12
+        col-md-6
+        col-lg-6
+        col-xl-4
+        card mb-5 border-0'>
             <div class='campus-card mx-auto text-center'>
                 <div class='card-body h-100'>
                     <h5 class='card-title'><a class='text-white' href="{% url 'show-campus' provider_id=provider.id campus_id=campus.id %}">{{ campus.name }}</a></h5>
@@ -78,11 +85,13 @@
 </div>
 
 <div class="row no-gutters">
-    <div class='col-md-10'>
+    <div class='col'>
         <h4>Details</h4>
     </div>
     {% if perms.ford3.change_provider %}
-    <div class='col-md-2'>
+     <div class='col-xs-4
+                col-sm-4
+                col-md-3'>
         <a href="{% url 'edit-provider' provider_id=provider.id %}" class='m-0 p-0 edu-button edu-button-orange'>Edit Provider</a>
     </div>
     {% endif %}

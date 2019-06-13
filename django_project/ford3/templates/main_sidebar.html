@@ -1,0 +1,29 @@
+{% if provider %}
+	<div class="sidebar container-fluid px-0 pb-3">
+		<div class="col-12">
+			<div id="provider-photo" class="provider-photo">
+				{% if provider_logo %}
+					<img src="{{ provider_logo }}" class="img-provider-photo"/>
+				{% endif %}
+			</div>
+		</div>
+		<div class="col-12 side-bar-title" id="provider-name">
+			{% if provider %}
+				<a href="{% url 'show-provider' provider.id %}">{{ provider.name }}</a>
+			{% endif %}
+		</div>
+		<div class='col-md-12 px-0'>
+			<ul>
+				{% for campus in provider.campus %}
+					<li>
+						{% url 'show-campus' provider.id campus.id as show_campus %}
+						{% if show_campus %}
+							<a href="{{ show_campus }}">{{ campus.name }}</a>
+						{% endif %}
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% include 'sidebar-footer.html' %}
+	</div>
+{% endif %}

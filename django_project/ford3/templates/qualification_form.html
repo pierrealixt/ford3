@@ -21,7 +21,26 @@
 	</div>
 	<div class="col-md-12">
 	{% if multi_step_form %}
-		<ul class="container nav-wizard-steps nav nav-pills nav-fill">
+
+		<div class="d-md-block d-lg-block d-xl-none d-sm-block d-xs-block">
+			<div class="dropdown col-md-4 offset-md-8 pr-0 pb-2 ">
+				<button class="edu-button edu-button-grey" type="button"
+				        id="dropdownMenuButton" data-toggle="dropdown">
+					Go to step
+				</button>
+				<div class="dropdown-menu">
+					{% for form_name in form_name_list %}
+
+							<a class="dropdown-item"
+							   href="{% url 'edit-qualification' provider_id=provider.id campus_id=qualification.campus.id qualification_id=qualification.id %}?step={{ form_identifier_list|get_dictionary_item:form_name }}&multi-step=true">
+								<span>{{ form_name }}</span>
+							</a>
+
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		<ul class="container nav-wizard-steps nav nav-pills nav-fill d-none d-xl-flex">
 			{% for form_name in form_name_list %}
 				<li class="nav-item">
 					<a  href="{% url 'edit-qualification' provider_id=provider.id campus_id=qualification.campus.id qualification_id=qualification.id %}?step={{ form_identifier_list|get_dictionary_item:form_name }}&multi-step=true" class="row nav-link {% if forloop.counter == 1 %}

@@ -9,7 +9,7 @@
 
 {% block body %}
     {% block wizard_breadcrumb %}
-        <div class="wizard-breadcrumb">
+        <div class="wizard-form wizard-breadcrumb">
         {% for step_name in wizard.steps.all %}
             <span class="breadcrumb-item">
                 <span class="step-number-badge">
@@ -24,7 +24,7 @@
     {% endblock wizard_breadcrumb %}
 
     {% block wizard_form %}
-        <form action="" method="post">
+        <form action="" method="post" class="wizard-form">
             {% csrf_token %}
             <table>
                 {{ wizard.management_form }}

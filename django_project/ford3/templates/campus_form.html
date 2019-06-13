@@ -15,18 +15,34 @@
           href="{% static 'css/libs/jquery-ui-1.12.1-custom/jquery-ui.min.css' %}">
 {% endblock %}
 
+
 {% block body %}
 <div class="row">
     <div class="col-md-12">
         <h3>{{ campus }} - {{ form_name_list|index:wizard.steps.step0 }}</h3>
     </div>
-    {% if multi_step_form %}
-        <div class='col-md-12'>
-            <ul class="container nav-wizard-steps nav nav-pills nav-fill">
-	            {% for form_name in form_name_list %}
+	{% if multi_step_form %}
+		<div class='col-md-12'>
+			<div class="dropdown col-md-4 offset-md-8 pr-0 pb-2 d-xl-none">
+				<button class="edu-button edu-button-grey" type="button"
+				        id="dropdownMenuButton" data-toggle="dropdown">
+					Go to step
+				</button>
+				<div class="dropdown-menu">
+					{% for form_name in form_name_list %}
+						<a class="dropdown-item"
+						   href="{% url 'edit-campus' provider_id=provider.id campus_id=campus.id %}?step={{ form_identifier_list|get_dictionary_item:form_name }}&multi-step=true">
+							<span class="col-xs-6 col-sm-3">{{ form_name }}</span>
+						</a>
+					{% endfor %}
+				</div>
+			</div>
 
-			            <li class="nav-item">
-				            <a href="{% url 'edit-campus' provider_id=provider.id campus_id=campus.id %}?step={{ form_identifier_list|get_dictionary_item:form_name }}&multi-step=true"  class="row nav-link
+			<ul class="container nav-wizard-steps nav nav-pills nav-fill mx-0 d-none d-xl-flex">
+				{% for form_name in form_name_list %}
+					<li class="nav-item">
+						<a href="{% url 'edit-campus' provider_id=provider.id campus_id=campus.id %}?step={{ form_identifier_list|get_dictionary_item:form_name }}&multi-step=true"
+						   class="row nav-link
 						{% if forloop.counter == 1 %}
 	                        first
 	                    {% endif %}
@@ -36,9 +52,9 @@
 							<span class="nav-item-number">
 								<span class="nav-item-number-inner">{{ forloop.counter }}</span>
 	                        </span>
-					            <span class="col-md-11 nav-item-caption">{{ form_name }}</span>
-				            </a>
-				            <span class="nav-link-triangle
+							<span class="col-md-11 nav-item-caption">{{ form_name }}</span>
+						</a>
+						<span class="nav-link-triangle
 	                    {% if forloop.counter == 1 %}
 	                        first
 	                    {% endif %}
@@ -46,13 +62,12 @@
 	                        active
 	                    {% elif forloop.counter < wizard.steps.step1 %} done {% else %} disabled {% endif %}">
 	                </span>
+					</li>
 
-                    </li>
+				{% endfor %}
 
-                {% endfor %}
-
-            </ul>
-        </div>
+			</ul>
+		</div>
     {% endif %}
 </div>
 <div class='row'>

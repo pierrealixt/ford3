@@ -1,0 +1,10 @@
+{#{% if not providers %}#}
+	<li>
+		<a href="{% url 'dashboard' %}">Providers</a>
+	</li>
+	{% if perms.ford3.view_user %}
+		<li>
+			<a href="{% url 'dashboard-users' %}">Users</a>
+		</li>
+	{% endif %}
+{#{% endif %}#}
