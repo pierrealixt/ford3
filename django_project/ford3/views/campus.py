@@ -6,6 +6,7 @@ from django.shortcuts import (
     get_object_or_404,
     redirect
 )
+from django.db import DataError
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.utils.datastructures import MultiValueDictKeyError
@@ -59,6 +60,8 @@ def create(request, provider_id):
     except MultiValueDictKeyError:
         # arg campus_name not present in request.POST
         context['campus_error'] = 'Bad request.'
+    except DataError:
+        context['campus_error'] = 'Campus name is too long. (255 characters maximum)'
 
     return render(request, 'provider.html', context)
 
