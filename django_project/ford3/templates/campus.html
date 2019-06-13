@@ -122,7 +122,7 @@
                         {% for qualification in campus.qualifications %}
                             <tr class="row border-bottom no-gutters h-100">
                                 <td class="col-md-7 my-auto mx-auto">
-                                    <a class='text-left' href="{% url 'show-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">{{ qualification.saqa_qualification__name }} (SAQA_ID: {{ qualification.saqa_qualification__saqa_id }})</a>
+                                    <a class='text-left' href="{% url 'show-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">{{ qualification.saqa_qualification__name|truncatechars:42 }} (SAQA_ID: {{ qualification.saqa_qualification__saqa_id }})</a>
                                 </td>
                                 <td class=" col-md-2 my-auto mx-auto text-center">
                                     <span class='h-100'>{{ qualification.edited_at }}</span>
