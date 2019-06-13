@@ -280,7 +280,7 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
             'Details',
             'Duration & Fees',
             'Requirements',
-            'Interest & Jobs',
+            'Interests & Jobs',
             'Important Dates',
         ]
         context['form_identifier_list'] = (
