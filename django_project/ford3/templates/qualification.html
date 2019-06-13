@@ -73,8 +73,12 @@
 						<b>Duration</b>
 					</div>
 					<div class="col">
-						{{ qualification.duration|is_number_none }}
-						{{ qualification.duration_time_repr }}{{ qualification.duration_time_repr|pluralize:qualification.duration }}
+						{% if qualification.duration %}
+							{{ qualification.duration|is_number_none }}
+							{{ qualification.duration_time_repr }}{{ qualification.duration_time_repr|pluralize:qualification.duration }}
+						{% else %}
+							{{ qualification.duration|is_none }}
+						{% endif %}
 					</div>
 				</div>
 				<div class="row py-1">
