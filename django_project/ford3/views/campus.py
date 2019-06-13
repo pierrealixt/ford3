@@ -61,8 +61,7 @@ def create(request, provider_id):
         # arg campus_name not present in request.POST
         context['campus_error'] = 'Bad request.'
     except DataError:
-        context['campus_error'] = 'Campus name is too long. (255 characters maximum)'
-
+        context['campus_error'] = 'Campus name is too long. (255 characters maximum)' # noqa
     return render(request, 'provider.html', context)
 
 

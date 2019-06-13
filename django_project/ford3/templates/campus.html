@@ -8,7 +8,7 @@
 <div class='row'>
     <div class='col-md-12'>
     {% autoescape off %}
-        <h3>{{ campus }}</h3>
+        <h3>{{ campus|truncatechars:42 }}</h3>
 
         <div class='row'>
             <div class='col'>
