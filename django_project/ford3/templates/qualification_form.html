@@ -51,7 +51,8 @@
 
         {% endfor %}
     </ul>
-	{% endif %}
+    {% endif %}
+
     {% if wizard.steps.step1 == 4 %}
         <div class='row border-bottom mb-3 no-gutters'
                 id='occupations-form'>
@@ -213,6 +214,7 @@
 
             </div>
         {% endif %}
+    
     <form action="" method="post">{% csrf_token %}
         <div class="form-group">
             {{ wizard.management_form }}
@@ -222,41 +224,20 @@
             {% else %}
                 {% crispy wizard.form wizard.form.helper %}
             {% endif %}
-            {% if wizard.steps.step1 == 3 %}
-                <div>
-                    {% for each_subject in subjects_list %}
-                        <div id="div_id_2-subject"
-                                class="form-group row">
-                            <label for="id_2-subject"
-                                    class="col-form-label col-md-3">
-                                Subject {{ each_subject.index }}:
-                            </label>
-                            <div class="col-md-9 row">
-                                <select name="2-subject"
-                                        class="col-md-4 select form-control"
-                                        id="id_2-subject">
-                                    <option value="{{ each_subject.id }}"
-                                            selected="">{{ each_subject.name }}</option>
-                                </select>
-                                <div class="col-md-4">
-                                    <input type="number"
-                                            name="2-subject-minimum-score"
-                                            placeholder="Minimum Score"
-                                            class="textInput form-control subject-minimum-score"
-                                            value="{{ each_subject.minimum_score }}">
-                                </div>
-                                <div class="col-md-4">
-                                    <button type="button"
-                                            class="remove-subject-btn btn btn-default"
-                                            onclick="removeSubject(this)">Remove Subject
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
         </div>
+
+        {% if wizard.steps.step1 == 3 %}
+        <div id='subjects-widget' class='row'></div>
+        <div class='row'>
+            <!-- <div class='col-sm-12'>
+                <hr />
+            </div> -->
+            <div class='col-sm-2'>
+                <input id='add-new-subject-form' type='button' value='Add a new subject' class='edu-button edu-button-orange border-0' style='display:none'/>
+            </div>
+        </div>
+        {% endif %}
+
 
 		<div class="row form-actions">
 			{% if multi_step_form %}
@@ -305,6 +286,15 @@
         src="{% static 'js/libs/jquery-ui-1.12.1-custom/jquery-ui.min.js' %}"></script>
 <script type="text/javascript"
         src="{% static 'js/qualification_form.js' %}"></script>
+{% if wizard.steps.step1 == 3 %}
+
+<script type="text/javascript">
+    const SUBJECTS = {{ subjects|safe }}
+</script>
+<script type="text/javascript"
+    src="{% static 'js/qualification_subjects.js' %}">
+    </script>
+{% endif %}
 {% if wizard.steps.step1 == 4 %}
     <script type="text/javascript"
             src="{% static 'js/qualification_occupations.js' %}"></script>

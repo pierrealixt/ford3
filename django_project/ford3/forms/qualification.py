@@ -2,7 +2,6 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
 from ford3.models.interest import Interest
-from ford3.models.subject import Subject
 
 
 class QualificationForm(forms.Form):
@@ -177,31 +176,13 @@ class QualificationRequirementsForm(QualificationForm):
         coerce=lambda x: x == 'True',
         required=False,
         choices=((True, 'Yes'), (False, 'No')),
-        widget=forms.RadioSelect
+        widget=forms.RadioSelect()
     )
 
-    subject = forms.ModelChoiceField(
-        label='Subject 1',
-        queryset=Subject.objects.all(),
+    # (subject_id, min_score), (..., ...), ...
+    subjects_scores = forms.CharField(
         required=False,
-        widget=forms.Select(
-            attrs={'class': 'col-md-4 subject-list'}
-        ),
-    )
-
-    subject_list = forms.CharField(
-        required=False,
-        widget=forms.HiddenInput(
-            attrs={'id': 'subject-list'}
-        ),
-    )
-
-    minimum_score_list = forms.CharField(
-        required=False,
-        widget=forms.HiddenInput(
-            attrs={'id': 'minimum-score-list'}
-        ),
-        initial='0',
+        widget=forms.HiddenInput()
     )
 
 

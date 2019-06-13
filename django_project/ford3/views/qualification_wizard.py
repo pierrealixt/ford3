@@ -1,3 +1,4 @@
+import re
 from collections import OrderedDict
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, Http404, get_object_or_404
@@ -73,42 +74,41 @@ class QualificationFormWizardDataProcess(object):
                 continue
         return qualification_fields
 
-    def add_subjects(self, form_data):
+    def add_or_update_subjects(self, form_data):
         """
         Add subjects to qualification
         :param form_data: dict of form data
         """
-        # Remove old subjects
-        if (QualificationEntranceRequirementSubject.objects.filter(
-                qualification=self.qualification).count() > 0):
+        if form_data['require_certain_subjects']:
             QualificationEntranceRequirementSubject.objects.filter(
                 qualification=self.qualification).delete()
-            subject_list = form_data['subject_list'].split(',')
-            minimum_score_list = form_data['minimum_score_list'].split(',')
-            for index, subject_value in enumerate(subject_list):
-                try:
-                    subject = Subject.objects.get(
-                        id=subject_value
-                    )
-                except (Subject.DoesNotExist, ValueError):
-                    continue
-                requirement_subjects, created = (
-                    QualificationEntranceRequirementSubject.objects.
-                    get_or_create(
-                        subject=subject,
-                        qualification=self.qualification,
-                    )
-                )
-                try:
-                    minimum_score_value = int(minimum_score_list[index])
-                except IndexError:
-                    continue
-                if minimum_score_value == -1:
-                    continue
-                requirement_subjects.minimum_score = (
-                    minimum_score_value
-                )
-                requirement_subjects.save()
+
+            for subject_score_tuple in form_data['subjects_scores'].split(','):
+                match = re.match(r'\(([0-9]*) ([0-9]*)\)', subject_score_tuple)
+                if match:
+                    subject_id, minimum_score = match.groups()
+                    try:
+                        req_subject = QualificationEntranceRequirementSubject\
+                            .objects\
+                            .get(
+                                subject_id=subject_id,
+                                qualification_id=self.qualification.id)
+
+                        req_subject.minimum_score = minimum_score
+                        req_subject.save()
+
+                    except QualificationEntranceRequirementSubject.DoesNotExist: # noqa
+                        req_subject = QualificationEntranceRequirementSubject\
+                            .objects\
+                            .create(
+                                qualification_id=self.qualification.id,
+                                subject_id=subject_id,
+                                minimum_score=minimum_score
+                            )
+        else:
+            QualificationEntranceRequirementSubject.objects.filter(
+                qualification=self.qualification).delete()
+
 
     def add_or_update_requirements(self, form_data):
         """
@@ -167,17 +167,6 @@ class QualificationFormWizardDataProcess(object):
         qualification_form_data = self.qualification_form_data(
             form_data
         )
-        # Check duration
-        # try:
-        #     if form_data['duration']:
-        #         qualification_form_data['duration_in_months'] = (
-        #             self.duration_in_months(
-        #                 duration=form_data['duration'],
-        #                 duration_type=form_data['duration_type']
-        #             )
-        #         )
-        # except KeyError:
-        #     pass
 
         Qualification.objects.filter(
             id=self.qualification.id
@@ -205,6 +194,12 @@ class QualificationFormWizardDataProcess(object):
         try:
             # Add requirements
             self.add_or_update_requirements(form_data)
+        except KeyError:
+            pass
+
+        try:
+            # Add subjects
+            self.add_or_update_subjects(form_data)
         except KeyError:
             pass
 
@@ -300,8 +295,9 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
             if self.qualification.campus.provider.provider_logo else ""
 
         if self.steps.current == 'qualification-requirements':
-            context['subjects_list'] = \
-                self.qualification.entrance_req_subjects_list
+            context['subjects'] = list(Subject.objects
+                .all()
+                .values('id', 'name'))
 
         if self.steps.current == 'qualification-interests-jobs':
             context['occupations'] = self.qualification.occupations.all()
@@ -324,6 +320,18 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
             initial_dict.update({
                 'occupations_ids': occupations_ids,
                 'interest_list': initial_dict['interests']})
+        if step == 'qualification-requirements':
+            subjects_scores = ','.join([
+                f'({req_subject.subject_id} {req_subject.minimum_score})'
+                for req_subject in
+                QualificationEntranceRequirementSubject
+                .objects
+                .filter(
+                    qualification_id=self.qualification.id)])
+
+            initial_dict.update({
+                'subjects_scores': subjects_scores
+            })
         return initial_dict
 
     def done(self, form_list, **kwargs):
@@ -331,51 +339,18 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
         for form in form_list:
             if form.is_bound and form.prefix != \
                     'qualification-important-dates':
-                if form.prefix == 'qualification-requirements':
-                    context = self.get_context_data(form=form, **kwargs)
-                    self.add_required_subjects(
-                        context['view'].storage.data
-                        ['step_data']
-                        ['qualification-requirements'])
-                    form_data.update(form.cleaned_data)
-                else:
-                    form_data.update(form.cleaned_data)
+                form_data.update(form.cleaned_data)
 
         qualification_data_process = QualificationFormWizardDataProcess(
             self.qualification,
             self.request.user
         )
-        qualification_data_process.process_data(
-            form_data
-        )
+        qualification_data_process.process_data(form_data)
 
         url = reverse(
             'show-qualification',
             args=(self.provider.id, self.campus.id, self.qualification.id))
         return redirect(url)
-
-    def add_required_subjects(self, step_data):
-        # Remove old subjects
-        if (QualificationEntranceRequirementSubject.objects.filter(
-                qualification__id=self.qualification.id).count() == 0):
-            QualificationEntranceRequirementSubject.objects.filter(
-                qualification__id=self.qualification.id).delete()
-            new_subject_values = step_data['2-subject']
-            new_minimum_scores = step_data['2-subject-minimum-score']
-            number_of_new_subjects = len(new_subject_values)
-            for i in range(0, number_of_new_subjects):
-                try:
-                    subject = Subject.objects.filter(
-                        id=new_subject_values[i]).first()
-                    new_subject = QualificationEntranceRequirementSubject()
-                    new_subject.subject = subject
-                    new_subject.qualification = self.qualification
-                    new_subject.minimum_score = new_minimum_scores[i]
-                    new_subject.save()
-                except (Subject.DoesNotExist, ValueError):
-                    # ToDo: I need to alert the user one of the subjects could
-                    #  not be saved
-                    pass
 
     def render_done(self, form, **kwargs):
         """
