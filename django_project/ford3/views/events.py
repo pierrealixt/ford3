@@ -53,7 +53,7 @@ def create(request, owner_id, event_type):
     new_event.name = request.POST['name']
     new_event.date_start = request.POST['date_start']
     new_event.date_end = request.POST['date_end']
-    new_event.http_link = request.POST['http_link']
+    new_event.http_link = add_http_to_link(request.POST['http_link'])
 
     try:
         new_event.full_clean()
