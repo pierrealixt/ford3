@@ -140,6 +140,8 @@ class TestQualificationWizard(TestCase):
             'min_nqf_level': 'LEVEL_1',
             'interview': True,
             'portfolio': True,
+            'assessment': True,
+            'assessment_comment': 'assessment comment',
             'portfolio_comment': 'comment',
             'require_aps_score': False,
             'aps_calculator_link': 'http://test.com',

@@ -19,6 +19,13 @@ class Requirement(models.Model):
         null=True,
         help_text="Is there an assessment as part of the application process?",
         default=False)
+    assessment_comment = models.CharField(
+        blank=True,
+        null=True,
+        unique=False,
+        help_text='Additional information regarding the assessment involved.',
+        max_length=255)
+
     interview = models.BooleanField(
         blank=True,
         null=True,
@@ -48,6 +55,7 @@ class Requirement(models.Model):
         help_text="Additional information regarding the portfolio to be "
                   "submitted",
         max_length=255)
+
     aps_calculator_link = models.URLField(
         blank=True,
         null=True,

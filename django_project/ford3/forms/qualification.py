@@ -146,6 +146,31 @@ class QualificationRequirementsForm(QualificationForm):
         max_length=120
     )
 
+    assessment = forms.TypedChoiceField(
+        label='Does it involve any other assessment?',
+        coerce=lambda x: x == 'True',
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect(
+            attrs={
+                'data-disabler': 'assessment'
+            }
+        )
+    )
+
+    assessment_comment = forms.CharField(
+        label='Assessment requirements',
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                'rows': '2',
+                'placeholder': 'What does the assessment involve?',
+                'data-field': 'assessment'
+            }
+        ),
+        max_length=120
+    )
+
     require_aps_score = forms.TypedChoiceField(
         label='Does it require an APS score?',
         coerce=lambda x: x == 'True',

@@ -109,7 +109,6 @@ class QualificationFormWizardDataProcess(object):
             QualificationEntranceRequirementSubject.objects.filter(
                 qualification=self.qualification).delete()
 
-
     def add_or_update_requirements(self, form_data):
         """
         Add requirements to qualification
@@ -122,7 +121,7 @@ class QualificationFormWizardDataProcess(object):
             requirement_exists = True
 
         if requirement_exists:
-            existing_requirement = self.qualification.requirement
+            existing_requirement: Requirement = self.qualification.requirement
             existing_requirement.min_nqf_level = (
                 form_data['min_nqf_level'])
             existing_requirement.interview = (
@@ -131,12 +130,17 @@ class QualificationFormWizardDataProcess(object):
                 form_data['portfolio'])
             existing_requirement.portfolio_comment = (
                 form_data['portfolio_comment'])
+            existing_requirement.assessment = (
+                form_data['assessment'])
+            existing_requirement.assessment_comment = (
+                form_data['assessment_comment'])
             existing_requirement.require_aps_score = (
                 form_data['require_aps_score'])
             existing_requirement.aps_calculator_link = (
                 form_data['aps_calculator_link'])
             existing_requirement.require_certain_subjects = (
                 form_data['require_certain_subjects'])
+
             existing_requirement.save()
         else:
             requirement_fields = {}

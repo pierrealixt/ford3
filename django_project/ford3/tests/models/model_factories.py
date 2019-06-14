@@ -71,6 +71,7 @@ class ModelFactories:
             min_nqf_level=1234,
             portfolio=False,
             portfolio_comment='Optional if available',
+            assessment_comment='An assessment comment',
             aps_calculator_link='http://apscalculator.nr')
 
         return requirement_test_object_instance

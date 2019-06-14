@@ -110,7 +110,7 @@
 								{{ qualification.requirement.min_nqf_level|filter_level|is_none }}
 							</div>
 						</div>
-						<div class="row py-2">
+						<div class="row pt-2">
 							<div class="col-md-4 col-sm-6">
 								<b>Is there an interview </b>
 							</div>
@@ -133,6 +133,24 @@
 								</div>
 								<div class="col">
 									{{ qualification.requirement.portfolio_comment }}
+								</div>
+							</div>
+						{% endif %}
+						<div class="row pt-2">
+							<div class="col-md-4 col-sm-6">
+								<b>Involves an assessment</b>
+							</div>
+							<div class="col">
+								{{ qualification.requirement.assessment|yesno:"Yes,No" }}
+							</div>
+						</div>
+						{% if qualification.requirement.assessment %}
+							<div class="row pb-2">
+								<div class="col-md-4 col-sm-6">
+									<b>Assessment requirements</b>
+								</div>
+								<div class="col">
+									{{ qualification.requirement.assessment_comment }}
 								</div>
 							</div>
 						{% endif %}
