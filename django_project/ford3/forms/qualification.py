@@ -134,11 +134,11 @@ class QualificationRequirementsForm(QualificationForm):
     )
 
     portfolio_comment = forms.CharField(
-        label='What does the portfolio require?',
+        label='Portfolio requirements',
         required=False,
         widget=forms.Textarea(
             attrs={
-                'rows': '5',
+                'rows': '2',
                 'placeholder': 'What does the portfolio require?',
                 'data-field': 'portfolio'
             }
