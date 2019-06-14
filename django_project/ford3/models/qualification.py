@@ -54,7 +54,7 @@ class Qualification(models.Model):
         blank=True,
         null=True,
         help_text="A short description of what the qualification entails",
-        max_length=120)
+        max_length=250)
     long_description = models.CharField(
         blank=True,
         null=True,

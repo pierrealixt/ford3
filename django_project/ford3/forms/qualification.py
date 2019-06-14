@@ -19,7 +19,7 @@ class QualificationForm(forms.Form):
 class QualificationDetailForm(QualificationForm):
     short_description = forms.CharField(
         label='Short description of this qualification',
-        help_text='*120 characters max '
+        help_text='*250 characters max '
                   '- This field is required for publication',
         required=False,
         widget=forms.Textarea(
@@ -27,7 +27,7 @@ class QualificationDetailForm(QualificationForm):
                 'rows': '2',
                 'placeholder': 'Brief summary of the qualification'}
         ),
-        max_length=120
+        max_length=250
     )
     long_description = forms.CharField(
         label='Long description of this qualification',
