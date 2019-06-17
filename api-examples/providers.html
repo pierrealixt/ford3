@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>OpenEdu - Providers</title>
+</head>
+<body>
+    
+<script type='text/javascript'>
+    OPENEDU_API_URL = 'http://ford3.kartoza.com/api'
+    API_ENDPOINTS = {
+        providers: `${OPENEDU_API_URL}/v1/providers/`
+    }
+
+    fetch(API_ENDPOINTS.providers)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(myJson) {
+            console.log(JSON.stringify(myJson));
+        });
+</script>
+</body>
+</html>
