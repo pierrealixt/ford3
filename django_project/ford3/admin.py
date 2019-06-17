@@ -49,7 +49,7 @@ class UserAdminForm(forms.ModelForm):
 class UserAdmin(admin.ModelAdmin):
     form = UserAdminForm
     list_display = (
-        'email', 'edu_group_name', 'account_activated',
+        'email', 'edu_group_name',
         'is_active', 'first_name', 'last_name',
         'get_groups'
     )
