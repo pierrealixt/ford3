@@ -9,6 +9,7 @@ INSTALLED_APPS = (
 
 INSTALLED_APPS += (
     # add third party (pip installed) apps here
+    'corsheaders',
 )
 
 MIGRATION_MODULES = {'accounts': 'core.migration'}
@@ -43,7 +44,15 @@ INSTALLED_APPS += (
 MIDDLEWARE += [
     # For rosetta localisation
     'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware'
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'
+CORS_ALLOW_METHODS = (
+    'GET'
+)
 
 DEFAULT_FILE_STORAGE = (
     'django_hashedfilenamestorage.storage.HashedFilenameFileSystemStorage')

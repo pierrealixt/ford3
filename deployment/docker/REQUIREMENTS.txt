@@ -16,6 +16,7 @@ django-grappelli
 django-allauth
 # support special characters
 Unidecode
+django-cors-headers
 
 # Production test related
 selenium==3.141.0
