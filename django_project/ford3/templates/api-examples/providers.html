@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>OpenEdu - Providers</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<div class='container'></div>
+<script type='text/javascript'>
+const fetchProviders = async () => {
+    fetch(API_ENDPOINTS.providers)
+    .then(function(response) {
+        return response.json()
+    })
+    .then(function(myJson) {
+        return JSON.stringify(myJson)
+    });
+}
+
+const qualificationsCount = (provider) => {
+    return provider.campus.reduce((acc, currentValue, currentIndex, array) => {
+        return acc + currentValue.qualification_set.length
+    }, 0)
+}
+
+const showQualifications = (provider) => {
+    let html
+    html = `<dl>`
+    provider.campus.forEach(campus => {
+        html += `<dt>${campus.name}</dt>`
+        if (campus.qualification_set.length > 0) {
+            campus.qualification_set.forEach(qualification => {
+                html += `<dd>${qualification.saqa_qualification.name}</dd>`
+            })
+        } else {
+            html += `<dd>No qualifications yet</dd>`
+        }
+    })
+    html += `</dl>`
+    return html
+}
+
+const showQualificationsCount = (provider) => {
+    const count = qualificationsCount(provider)
+    if (count > 1) {
+        return `${count} qualifications`
+    } else if (count === 1) {
+        return `${count} qualification`
+    } else {
+        return `0 qualification`
+    }
+}
+
+(async function () {
+    OPENEDU_API_URL = 'http://ford3.kartoza.com/api'
+    API_ENDPOINTS = {
+        providers: `${OPENEDU_API_URL}/v1/providers/`
+    }
+
+
+    const response = await fetch(API_ENDPOINTS.providers)
+    const providers = await response.json()
+    providers.forEach(provider => {
+        const html = `
+        <div class='row'>
+            <div class='col-sm-12'>
+                <h3>${provider.name}</h3>
+                <h6>${showQualificationsCount(provider)} in ${provider.campus.length} campus</h6>
+                ${showQualifications(provider)}
+            </div>
+        </div>
+        `
+
+        document.querySelector('.container').innerHTML += html
+    })
+})()
+
+</script>
+</body>
+</html>
