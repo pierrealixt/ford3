@@ -14,13 +14,13 @@ class User(AbstractUser):
     objects = UserManager()
 
     email = models.EmailField(unique=True, null=True)
+    is_active = models.BooleanField(default=False)
     is_province = models.BooleanField(
         'province status', default=False)
     is_provider = models.BooleanField(
         'provider status', default=False)
     is_campus = models.BooleanField(
         'campus status', default=False)
-    account_activated = models.BooleanField(default=False)
     provinces = models.ManyToManyField(
         'ford3.Province',
         blank=True)

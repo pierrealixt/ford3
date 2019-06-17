@@ -40,7 +40,7 @@
                 </td>
                 <td>
                     {% autoescape off %}
-                    {{ user.account_activated|checked_or_crossed }}
+                    {{ user.is_active|checked_or_crossed }}
                     {% endautoescape %}
                 </td>
                 </tr>
