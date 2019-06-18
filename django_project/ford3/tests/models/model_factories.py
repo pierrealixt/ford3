@@ -1,6 +1,7 @@
 # coding=utf-8
 """Factory for building model instances for testing."""
 import datetime
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group
 from ford3.models.campus import Campus
 from ford3.models.field_of_study import FieldOfStudy
@@ -18,6 +19,7 @@ from ford3.models.saqa_qualification import SAQAQualification
 from ford3.models.user import User
 from ford3.enums.open_edu_groups import OpenEduGroups
 from ford3.models.qualification_entrance_requirement_subject import QualificationEntranceRequirementSubject  # noqa
+
 
 
 class ModelFactories:
@@ -142,27 +144,32 @@ class ModelFactories:
         return occupation_test_object_instance
 
     @staticmethod
-    def get_provider_test_object(new_id=1):
-        provider_test_object_instance = Provider.objects.create(
-            name='Object Test Name',
-            website='www.mytest.com',
-            # provider_logo='http://sometestplaceholder/logo.png',
-            email='Test@test.com',
-            admissions_contact_no='0137527576',
-            physical_address_postal_code='1200',
-            physical_address_line_1='24 Test Street',
-            physical_address_line_2='TestVille',
-            physical_address_city='Testopalis',
-            postal_address_differs=True,
-            postal_address_postal_code='1111',
-            postal_address_line_1='PO BOX 12345',
-            postal_address_line_2='TestVille',
-            postal_address_city='Testopalis',
-            telephone='27821233322',
-            provider_type='Technicon',
-        )
+    def get_provider_test_object(new_id=1, new_name='Object Test Name'):
+        try:
+            provider_test_object_instance = Provider.objects.create(
+                name=new_name,
+                website='www.mytest.com',
+                # provider_logo='http://sometestplaceholder/logo.png',
+                email='Test@test.com',
+                admissions_contact_no='0137527576',
+                physical_address_postal_code='1200',
+                physical_address_line_1='24 Test Street',
+                physical_address_line_2='TestVille',
+                physical_address_city='Testopalis',
+                postal_address_differs=True,
+                postal_address_postal_code='1111',
+                postal_address_line_1='PO BOX 12345',
+                postal_address_line_2='TestVille',
+                postal_address_city='Testopalis',
+                telephone='27821233322',
+                provider_type='Technicon',
+            )
+            return provider_test_object_instance
+        except ValidationError:
+            newer_name = new_name + 'A'
+            return ModelFactories.get_provider_test_object(1, newer_name)
 
-        return provider_test_object_instance
+
 
     @staticmethod
     def get_sub_field_of_study_test_object(new_id=1):

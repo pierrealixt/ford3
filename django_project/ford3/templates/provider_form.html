@@ -26,7 +26,9 @@
         <div class='col-md-12 p-0'>
             <form class='container' action="{{ submit_url }}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                
+                   {% if provider_error|length > 0 %}
+                    <div id='provider-error' class="alert alert-danger">{{ provider_error }}</div>
+                    {% endif %}
                 <div class='row'>
                     <div class='col-md-4'>
                         <label>Provider's name <span class="text-danger">*</span> </label>

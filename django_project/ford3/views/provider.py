@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import (
@@ -42,7 +43,12 @@ def create(request):
                 request.user)
         except IntegrityError:
             return render(request, 'provider_form.html', {'form': form})
-
+        except ValidationError as ve:
+            context = {
+                'provider_error': ve.message_dict['provider_name'][0],
+                'form': form
+            }
+            return render(request, 'provider_form.html', context)
         redirect_url = reverse(
             'show-provider',
             args=[str(provider.id)])
@@ -87,9 +93,16 @@ def update(request, provider_id):
         id=provider_id)
     form = ProviderForm(request.POST, request.FILES, instance=provider)
     if form.is_valid():
-        provider = form.save()
-        provider.edited_by = request.user
-        provider.save()
+        try:
+            provider = form.save()
+            provider.edited_by = request.user
+            provider.save()
+        except ValidationError as ve:
+            context = {
+                'provider_error': ve.message_dict['provider_name'][0],
+                'form': form
+            }
+            return render(request, 'provider_form.html', context)
         redirect_url = reverse(
             'show-provider',
             args=[str(provider.id)])

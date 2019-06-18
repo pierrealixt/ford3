@@ -1,6 +1,7 @@
 from django.core.validators import RegexValidator
 from django.db import models, transaction
 from ford3.models.campus import Campus
+from django.core.exceptions import ValidationError
 
 
 class ActiveProviderManager(models.Manager):
@@ -204,3 +205,18 @@ class Provider(models.Model):
             {self.postal_address_city},
             {self.postal_address_postal_code}
         '''
+
+    def save(self, *args, **kwargs):
+        if self.id is None:
+            if len(self.name) == 0:
+                raise ValidationError({'provider_name': 'Name is required.'})
+        provider_name_query = Provider.objects.filter(
+                name__iexact=self.name,
+                deleted=False)
+        provider_with_name_count = provider_name_query.count()
+        # If it exists and it is not my own name raise the error
+
+        if (provider_with_name_count > 1) or (provider_with_name_count > 0 and provider_name_query.first() != self):  # noqa
+            raise ValidationError(
+                {'provider_name': 'That name is already taken.'})
+        super().save(*args, **kwargs)
