@@ -42,7 +42,7 @@ def handler500(request, template_name='500.html', *args, **kwargs):
 urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^site-admin/', admin.site.urls),
-    url(r'^ford3/', include('ford3.urls')),
+    url(r'^', include('ford3.urls')),
     url(r'^api/', include('api.urls')),
     url(r'^', include('base.urls')),
     url(
