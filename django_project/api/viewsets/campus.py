@@ -12,5 +12,8 @@ class CampusViewSet(viewsets.ReadOnlyModelViewSet):
     Returns a list of all campuses registered with OpenEdu.
 
     """
-    queryset = Campus.active_objects.all()
+
     serializer_class = CampusSerializer
+
+    def get_queryset(self):
+        return Campus.active_objects.all()

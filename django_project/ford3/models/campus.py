@@ -9,8 +9,6 @@ class ActiveCampusManager(models.Manager):
 
 
 class Campus(models.Model):
-
-
     provider = models.ForeignKey(
         'ford3.provider',
         on_delete=models.CASCADE)
