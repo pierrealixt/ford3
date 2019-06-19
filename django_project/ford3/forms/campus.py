@@ -23,6 +23,13 @@ class CampusDetailForm(CampusForm):
         "Phone number must be at least 10 digits and at max 15 digits. "
         "It can start with +(country code)")
 
+    name = forms.CharField(
+        label='Name',
+        required=True,
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Campus name'}
+        ))
+
     telephone = forms.CharField(
         label='Switchboard',
         widget=forms.TextInput(
