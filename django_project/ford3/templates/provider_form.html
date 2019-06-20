@@ -119,6 +119,18 @@
                         {{ form.email }}
                     </div>
                 </div>
+	            <div class="row my-3">
+		            <div class="col-md-4">
+			            <label>Please select your location</label><br>
+			            Use the search function to find your address.<br>
+			            If your address is not present:<ul>
+			            <li>Use the search function to find the general area</li>
+			            <li>Click on the map to pinpoint the location.</li>
+			            <li>Update your physical address.</li></ul>
+		            </div>
+		            <div id="address_map" class="col rounded my-2"
+			                 tabindex="0"></div>
+	            </div>
 
                 <div class="row my-3">
                     <div class="col-md-4">
@@ -187,7 +199,8 @@
                         <button type="submit" class="edu-button edu-button-blue">Submit</button>
                     </div>
                 </div>
-                
+                <input type="hidden" id="id_location_value_x" name="location_value_x" value="{{ form.initial.location_value_x }}">
+                <input type="hidden" id="id_location_value_y" name="location_value_y" value="{{ form.initial.location_value_y }}">
             </form>
         </div>
     </div>
@@ -195,16 +208,22 @@
 {% endblock body %}
 
 {% block footer %}
-<script type="text/javascript" src="{% static 'js/provider_form.js' %}"></script>
-<script type="text/javascript">
-    const MAX_SIZE = 100 * 1024
-    $('#id_provider_logo').bind('change', function() {
-        if (this.files[0].size > MAX_SIZE) {
-            alert(`${this.files[0].name} is too big. Max size is 100 Kb.`);
-            $('#id_provider_logo').val('')
-        }
+	<script src="https://unpkg.com/openlayers@4.6.5/dist/ol.js"></script>
+	<script src="https://unpkg.com/ol-popup@2.0.0/src/ol-popup.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/ol-geocoder"></script>
 
-            
-    });
-</script>
+	<link rel="stylesheet"
+	      href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css"
+	      type="text/css">
+	<link href="https://cdn.jsdelivr.net/npm/ol-geocoder@latest/dist/ol-geocoder.min.css"
+	      rel="stylesheet">
+	<link href="https://unpkg.com/ol-popup@2.0.0/src/ol-popup.css"
+	      rel="stylesheet">
+	<link rel="stylesheet" type="text/css"
+	      href="{% static 'css/map.css' %}">
+	<script type="text/javascript"
+	        src="{% static 'js/provider_form.js' %}"></script>
+	<script src="{% static 'js/map.js' %}"></script>
+	<script src="{% static 'js/provider_form_location.js' %}"></script>
+
 {% endblock %}

@@ -25,7 +25,7 @@ class CampusDetailForm(CampusForm):
 
     name = forms.CharField(
         label='Name',
-        required=True,
+        required=False,
         widget=forms.TextInput(
             attrs={'placeholder': 'Campus name'}
         ))
@@ -120,6 +120,15 @@ class CampusLocationForm(CampusForm):
                 'placeholder': 'Post code'
             }
         ))
+
+    location_value_x = forms.FloatField(
+        required=False,
+        widget=forms.HiddenInput()
+    )
+    location_value_y = forms.FloatField(
+        required=False,
+        widget=forms.HiddenInput()
+    )
 
 
 class CampusImportantDatesForm(CampusForm):

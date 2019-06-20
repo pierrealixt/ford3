@@ -31,11 +31,13 @@ def new(request):
 @require_http_methods(['POST'])
 def create(request):
     form = ProviderForm(request.POST, request.FILES)
+
     if form.is_valid():
         provider = form.save(commit=False)
         try:
             provider.created_by = request.user
             provider.edited_by = request.user
+            provider.save_location_data(request.POST)
             provider.save()
 
             provider.create_campus(
@@ -62,7 +64,6 @@ def create(request):
         return render(request, 'provider_form.html', context)
 
 
-
 @login_required()
 @permission_required('ford3.change_provider', raise_exception=True)
 @require_http_methods(['GET'])
@@ -74,10 +75,20 @@ def edit(request, provider_id):
     submit_url = reverse(
         'update-provider',
         args=[str(provider.id)])
+    try:
+        form.initial.update({
+            'location_value_x': provider.location.x,
+            'location_value_y': provider.location.y})
+    except (IndexError, AttributeError):
+        form.initial.update({
+            'location_value_x': 0,
+            'location_value_y': 0})
+
     context = {
         'form': form,
         'submit_url': submit_url
     }
+
     return render(
         request,
         'provider_form.html',
@@ -92,8 +103,10 @@ def update(request, provider_id):
         Provider,
         id=provider_id)
     form = ProviderForm(request.POST, request.FILES, instance=provider)
+
     if form.is_valid():
         try:
+            provider.save_location_data(request.POST)
             provider = form.save()
             provider.edited_by = request.user
             provider.save()
@@ -115,6 +128,14 @@ def update(request, provider_id):
             'submit_url': submit_url
         }
 
+        try:
+            form.initial.update({
+                'location_value_x': provider.location.x,
+                'location_value_y': provider.location.y})
+        except (IndexError, AttributeError):
+            form.initial.update({
+                'location_value_x': 0,
+                'location_value_y': 0})
         return render(
             request,
             'provider_form.html',

@@ -6,15 +6,14 @@
 {% block title %}{{ campus.name }} • Edit campus{% endblock %}
 
 {% block head %}
-    {{ wizard.form.media }}
-    <link rel="stylesheet" type="text/css"
-          href="{% static 'css/wizard_form.css' %}">
-    <link rel="stylesheet" type="text/css"
-          href="{% static 'css/campus_form.css' %}">
-    <link rel="stylesheet" type="text/css"
-          href="{% static 'css/libs/jquery-ui-1.12.1-custom/jquery-ui.min.css' %}">
+	{{ wizard.form.media }}
+	<link rel="stylesheet" type="text/css"
+	      href="{% static 'css/wizard_form.css' %}">
+	<link rel="stylesheet" type="text/css"
+	      href="{% static 'css/campus_form.css' %}">
+	<link rel="stylesheet" type="text/css"
+	      href="{% static 'css/libs/jquery-ui-1.12.1-custom/jquery-ui.min.css' %}">
 {% endblock %}
-
 
 {% block body %}
 <div class="row">
@@ -71,131 +70,147 @@
     {% endif %}
 </div>
 <div class='row'>
-    <div class='col-md-12'>
+	<div class='col-md-12'>
+		{% if wizard.steps.step1 == 3 %}
+			<div class='row'>
+				<div class='col-md-6'>
+					<input id='create-or-update-event-url' type='hidden'
+					       value='{% url "create-or-update-event" owner_id=campus.id event_type='campus' %}'/>
+					<input id='delete-event-url' type='hidden'
+					       value='{% url "delete-event" event_type='campus' %}'/>
 
-                {% if wizard.steps.step1 == 3 %}
-                    <div class='row'>
-                        <div class='col-md-6'>
-                            <input id='create-or-update-event-url' type='hidden' value='{% url "create-or-update-event" owner_id=campus.id event_type='campus' %}' />
-                            <input id='delete-event-url' type='hidden' value='{% url "delete-event" event_type='campus' %}' />
+					<div id='form-event'>
+						<label class="mt-1">Name*</label>
+						<input required placeholder="eg. Open day"
+						       type='text' name='name'/>
+						<label class="mt-1">Start date*</label>
+						<input required placeholder="2019-10-26"
+						       type='text' name='date_start'
+						       class='mydatepicker'/>
+						<label class="mt-1">End date*</label>
+						<input placeholder="2019-10-28" required
+						       type='text' name='date_end'
+						       class='mydatepicker'/>
+						<label class="mt-1">Website</label>
+						<input type='text'
+						       placeholder="http://www.event-site.co.za"
+						       name='http_link'/>
+						<div data-role='new-event-form-error'
+						     class='mt-2 alert alert-danger d-none'></div>
+						<div class="row no-gutters">
+							<button class='col-md-4 edu-button edu-button-orange'
+							        data-action='create-event'>Create
+							</button>
+							<button class='col-md-4 edu-button edu-button-orange d-none'
+							        data-action='update-event'>Update
+							</button>
+							<button class='col-md-4 edu-button edu-button-orange d-none'
+							        data-action='cancel-update-event'>Cancel
+							</button>
+						</div>
+					</div>
 
-                    <div id='form-event'>
-                        <label class="mt-1">Name*</label>
-                        <input required placeholder="eg. Open day"
-                                type='text' name='name'/>
-                        <label class="mt-1">Start date*</label>
-                        <input required placeholder="2019-10-26"
-                                type='text' name='date_start'
-                                class='mydatepicker'/>
-                        <label class="mt-1">End date*</label>
-                        <input placeholder="2019-10-28" required
-                                type='text' name='date_end'
-                                class='mydatepicker'/>
-                        <label class="mt-1">Website</label>
-                        <input type='text'
-                                placeholder="http://www.event-site.co.za"
-                                name='http_link'/>
-                        <div data-role='new-event-form-error'
-                                class='mt-2 alert alert-danger d-none'></div>
-                        <div class="row no-gutters">
-                            <button class='col-md-4 edu-button edu-button-orange'
-                                    data-action='create-event'>Create
-                            </button>
-                            <button class='col-md-4 edu-button edu-button-orange d-none'
-                                    data-action='update-event'>Update
-                            </button>
-                            <button class='col-md-4 edu-button edu-button-orange d-none'
-                                    data-action='cancel-update-event'>Cancel
-                            </button>
-                        </div>
-                    </div>
-                    {% if not multi_step_form %}
-                        <div class="row no-gutters form-actions mt-4">
-                            <div class="col-md-4">
-                                <a href="{% url 'show-campus' provider_id=provider.id campus_id=campus.id %}"
-                                    class="edu-button edu-button-blue"
-                                    id='my-next-button'>Return to campus</a>
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
-                <div id='events-list' class='col-md-6'>
-                    <ul>
-                        <li class='event-example event event-list-item d-none pb-3 border-bottom'
-                            data-event-id=''>
+					{% if not multi_step_form %}
+						<div class="row no-gutters form-actions mt-4">
+							<div class="col-md-4">
+								<a href="{% url 'show-campus' provider_id=provider.id campus_id=campus.id %}"
+								   class="edu-button edu-button-blue"
+								   id='my-next-button'>Return to campus</a>
+							</div>
+						</div>
+					{% endif %}
+
+				</div>
+				<div id='events-list' class='col-md-6'>
+					<ul>
+						<li class='event-example event event-list-item d-none pb-3 border-bottom'
+						    data-event-id=''>
                                         <span class='font-weight-bold'
-                                                data-role='name'></span>
+                                              data-role='name'></span>
+							<div class='row'>
+								<div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
+								<span class='col-md-6'
+								      data-role='date_start'></span>
+							</div>
+							<div class='row'>
+								<div class='col-md-1 ml-4 font-weight-bold'>End:</div>
+								<span class='col-md-6'
+								      data-role='date_end'></span>
+								<div class='col-md-3'></div>
+							</div>
+							<div class='row'>
+								<div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
+								<span class='col-md-6'
+								      data-role='http_link'><a
+										target='_blank'
+										href=''></a></span>
+							</div>
+							<button class='edit-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
+							        data-action='edit-event'>Edit
+							</button>
+							<button class='delete-event align-self-end col-md-3 edu-button edu-button-orange'
+							        data-action='delete-event'>Delete
+							</button>
+						</li>
 
-                            <div class='row'>
-                                <div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
-                                <span class='col-md-6'
-                                        data-role='date_start'></span>
-                            </div>
-                            <div class='row'>
-                                <div class='col-md-1 ml-4 font-weight-bold'>End:</div>
-                                <span class='col-md-6'
-                                        data-role='date_end'></span>
-                                <div class='col-md-3'></div>
-                            </div>
-                            <div class='row'>
-                                <div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
-                                <span class='col-md-6'
-                                        data-role='http_link'><a
-                                        target='_blank'
-                                        href=''></a></span>
-                            </div>
-
-                            <button class='edit-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
-                                    data-action='edit-event'>Edit
-                            </button>
-                            <button class='delete-event align-self-end col-md-3 edu-button edu-button-orange'
-                                    data-action='delete-event'>Delete
-                            </button>
-                        </li>
-                        {% for event in campus.events %}
-                            <li class='event event-list-item pb-3 border-bottom'
-                                data-event-id='{{ event.id }}'>
+						{% for event in campus.events %}
+							<li class='event event-list-item pb-3 border-bottom'
+							    data-event-id='{{ event.id }}'>
                                         <span class='font-weight-bold'
-                                                data-role='name'>{{ event.name }}</span>
+                                              data-role='name'>{{ event.name }}</span>
 
-                                <div class='row'>
-                                    <div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
-                                    <span class='col-md-6'
-                                            data-role='date_start'>{{ event.date_start|date:"Y-m-d" }}</span>
-                                </div>
-                                <div class='row'>
-                                    <div class='col-md-1 ml-4 font-weight-bold'>End:</div>
-                                    <span class='col-md-6'
-                                            data-role='date_end'>{{ event.date_end|date:"Y-m-d" }}</span>
-                                    <div class='col-md-3'></div>
-                                </div>
-                                {% if event.http_link %}
-                                    <div class='row'>
-                                        <div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
-                                        <span class='col-md-6'
-                                                data-role='http_link'><a
-                                                target='_blank'
-                                                href='{{ event.http_link }}'>{{ event.http_link }}</a></span>
-                                    </div>
-                                {% endif %}
-                                <button class='edit-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
-                                        data-action='edit-event'>Edit
-                                </button>
-                                <button class='delete-event align-self-end col-md-3 edu-button edu-button-orange'
-                                        data-action='delete-event'>Delete
-                                </button>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
+								<div class='row'>
+									<div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
+									<span class='col-md-6'
+									      data-role='date_start'>{{ event.date_start|date:"Y-m-d" }}</span>
+								</div>
+								<div class='row'>
+									<div class='col-md-1 ml-4 font-weight-bold'>End:</div>
+									<span class='col-md-6'
+									      data-role='date_end'>{{ event.date_end|date:"Y-m-d" }}</span>
+									<div class='col-md-3'></div>
+								</div>
+								{% if event.http_link %}
+									<div class='row'>
+										<div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
+										<span class='col-md-6'
+										      data-role='http_link'><a
+												target='_blank'
+												href='{{ event.http_link }}'>{{ event.http_link }}</a></span>
+									</div>
+								{% endif %}
+								<button class='edit-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
+								        data-action='edit-event'>Edit
+								</button>
+								<button class='delete-event align-self-end col-md-3 edu-button edu-button-orange'
+								        data-action='delete-event'>Delete
+								</button>
+							</li>
+						{% endfor %}
 
-            </div>
-        {% endif %}
+					</ul>
+				</div>
 
+			</div>
+		{% endif %}
 
-        <form action="" method="post">{% csrf_token %}
-            <div class="form-group">
-                {{ wizard.management_form }}
+		<form action="" method="post">{% csrf_token %}
+			<div class="form-group">
+
+				{% if wizard.steps.step1 == 2 %}
+		            <div class="row my-3">
+			            <div class="col-md-3"> <label>Please select your location</label><br>
+			            Use the search function to find your address.<br>
+			            If your address is not present:<ul>
+			            <li>Use the search function to find the general area</li>
+			            <li>Click on the map to pinpoint the location.</li>
+			            <li>Update your physical address.</li></ul>
+			            </div>
+			            <div id="address_map" class="col rounded"
+			                 tabindex="0"></div>
+		            </div>
+	            {% endif %}
+	            {{ wizard.management_form }}
                 {% if wizard.form.forms %}
                     {{ wizard.form.management_form }}
                     {% crispy wizard.form wizard.form.helper %}
@@ -427,20 +442,37 @@
 {% endblock %}
 
 {% block footer %}
-<script type="text/javascript"
+	<script type="text/javascript"
         src="{% static 'js/libs/jquery-ui-1.12.1-custom/jquery-ui.min.js' %}"></script>
+
 <script type="text/javascript">
-$(document).ready(function () {
-  $(window).keydown(function (event) {
-    if (event.keyCode === 13) {
-      event.preventDefault()
-      return false
-    }
-  })
-})
+    $(document).ready(function () {
+        $(window).keydown(function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault()
+                return false
+            }
+        })
+    })
 </script>
-{%  if wizard.steps.step1 == 2 %}
-	<script type="text/javascript" src="{% static 'js/campus.js' %}"></script>
+	{% if wizard.steps.step1 == 2 %}
+		<script src="https://unpkg.com/openlayers@4.6.5/dist/ol.js"></script>
+		<script src="https://unpkg.com/ol-popup@2.0.0/src/ol-popup.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/ol-geocoder"></script>
+
+		<script type="text/javascript"
+		        src="{% static 'js/campus.js' %}"></script>
+		<script src="{% static 'js/map.js' %}"></script>
+		<script src="{% static 'js/campus_form_location.js' %}"></script>
+		<link rel="stylesheet"
+		      href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css"
+		      type="text/css">
+		<link href="https://cdn.jsdelivr.net/npm/ol-geocoder@latest/dist/ol-geocoder.min.css" rel="stylesheet">
+		<link href="https://unpkg.com/ol-popup@2.0.0/src/ol-popup.css"
+		      rel="stylesheet">
+		<link rel="stylesheet" type="text/css"
+		      href="{% static 'css/map.css' %}">
+
 {%  endif %}
 {% if wizard.steps.step1 == 3 %}
     <script type="text/javascript" src="{% static 'js/datepicker.js' %}"></script>

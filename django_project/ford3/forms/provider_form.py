@@ -35,7 +35,7 @@ class ProviderForm(forms.models.ModelForm):
             'postal_address_line_2',
             'postal_address_city',
             'postal_address_postal_code',
-            'provider_logo',)
+            'provider_logo')
         province = forms.ModelChoiceField(
             queryset=Province.objects.all())
         widgets = {
@@ -72,6 +72,8 @@ class ProviderForm(forms.models.ModelForm):
                 attrs={'placeholder': 'City'}),
             'postal_address_postal_code': forms.fields.TextInput(
                 attrs={'placeholder': 'Post Code'}),
+            'location_value': forms.fields.TextInput(
+                attrs={'type': 'hidden'}),
         }
         error_messages = {
             'telephone': {'required': EMPTY_TEL_ERROR},
