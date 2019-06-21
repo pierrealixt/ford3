@@ -20,9 +20,9 @@ class Campus(models.Model):
         help_text='The name of the campus',
         max_length=255)
     location = models.PointField(
-      blank=True,
-      null=True,
-      help_text='The spatial point position of the campus')
+        blank=True,
+        null=True,
+        help_text='The spatial point position of the campus')
     photo = models.FileField(
         blank=False,
         null=True,
@@ -207,6 +207,21 @@ class Campus(models.Model):
             {self.physical_address_line_2}
             {self.physical_address_city}
             {self.physical_address_postal_code}
+        '''
+
+    @property
+    def postal_address(self):
+        if self.postal_address_line_1 is None \
+            and self.postal_address_line_2 is None \
+                and self.postal_address_city is None \
+                and self.postal_address_postal_code is None:
+            return None
+
+        return f'''
+            {self.postal_address_line_1}
+            {self.postal_address_line_2}
+            {self.postal_address_city}
+            {self.postal_address_postal_code}
         '''
 
     def save_postal_data(self, form_data):
