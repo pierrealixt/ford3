@@ -4,9 +4,9 @@ from django.contrib.gis.geos import Point
 from ford3.models.campus import Campus
 from ford3.models.qualification import Qualification
 from ford3.completion_audit.completion_audit import CompletionAudit # noqa
-from ford3.completion_audit.completion_audit import (
-    CAMPUS_COMPLETION_RULES,
-    QUALIFICATION_COMPLETION_RULES
+from ford3.completion_audit.rules import (
+    CAMPUS as CAMPUS_COMPLETION_RULES,
+    QUALIFICATION as QUALIFICATION_COMPLETION_RULES
 )
 
 

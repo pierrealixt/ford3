@@ -8,7 +8,7 @@
 <div class='row'>
     <div class='col-md-12'>
     {% autoescape off %}
-        <h3>{{ campus|truncatechars:42 }}</h3>
+        <h3>{{ campus|truncatechars:42 }} ({{ campus.completion_rate }}%)</h3>
 
         <div class='row'>
             <div class='col'>
@@ -114,7 +114,8 @@
                 <table class='table table-borderless'>
                     <thead>
                         <tr class='row text-purple no-gutters'>
-                            <th class="col-md-7 align-middle text-center">Qualifications</th>
+                            <th class="col-md-5 align-middle text-center">Qualifications</th>
+                            <th class="col-md-2 align-middle text-center">Completion rate</th>
                             <th class="col-md-2 align-middle text-center">Last edited</th>
                             <th class="col-md-3 align-middle text-center">Actions</th>
                         </tr>
@@ -122,8 +123,11 @@
                     <tbody>
                         {% for qualification in campus.qualifications %}
                             <tr class="row border-bottom no-gutters h-100">
-                                <td class="col-md-7 my-auto mx-auto">
+                                <td class="col-md-5 my-auto mx-auto">
                                     <a class='text-left' href="{% url 'show-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">{{ qualification.saqa_qualification__name|truncatechars:42 }} (SAQA_ID: {{ qualification.saqa_qualification__saqa_id }})</a>
+                                </td>
+                                <td class=" col-md-2 my-auto mx-auto text-center">
+                                    {{ qualification.completion_rate }}%
                                 </td>
                                 <td class=" col-md-2 my-auto mx-auto text-center">
                                     <span class='h-100'>{{ qualification.edited_at }}</span>

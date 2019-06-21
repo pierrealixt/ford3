@@ -7,6 +7,8 @@ from ford3.models.occupation import Occupation
 from ford3.models.qualification_entrance_requirement_subject import QualificationEntranceRequirementSubject  # noqa
 from ford3.models.qualification_event import QualificationEvent
 from ford3.models_logic.qualification_audit import QualificationAudit
+from ford3.completion_audit.rules import QUALIFICATION as completion_rules
+
 
 
 class ActiveQualificationManager(models.Manager):
@@ -88,9 +90,8 @@ class Qualification(models.Model):
     distance_learning = models.BooleanField(
         blank=True,
         null=True,
-        default=False,
         help_text="Does this qualification have a distance learning option?")
-    completion_rate = models.IntegerField(
+    completion_rate = models.PositiveIntegerField(
         blank=True,
         null=True,
         help_text="What has the completion rate for this qualifcation been?",
@@ -111,20 +112,17 @@ class Qualification(models.Model):
         blank=True,
         null=True,
         help_text="Would the skill obtained by completing this qualification "
-                  "be considered a critical skill?",
-        default=False)
+                  "be considered a critical skill?")
     green_occupation = models.BooleanField(
         blank=True,
         null=True,
         help_text="Would the occupations this qualification prepares you for "
-                  "be considered environmentally friendly?",
-        default=False)
+                  "be considered environmentally friendly?")
     high_demand_occupation = models.BooleanField(
         blank=True,
         null=True,
         help_text="Are the occupations this qualification prepares you for "
-                  "in high demand?",
-        default=False)
+                  "in high demand?")
     created_at = models.DateTimeField(
         auto_now_add=True)
     edited_at = models.DateTimeField(
@@ -154,6 +152,8 @@ class Qualification(models.Model):
         on_delete=models.CASCADE,
         related_name='qualification_deleted_by'
     )
+
+    COMPLETION_RULES = completion_rules
 
     objects = models.Manager()
     active_objects = ActiveQualificationManager()
