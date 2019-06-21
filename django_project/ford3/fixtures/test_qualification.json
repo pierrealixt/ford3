@@ -1,0 +1,46 @@
+[
+    {
+        "model": "ford3.Qualification",
+        "pk": 1,
+        "fields": {
+            "campus_id": 1,
+            "name": "Qualification Name",
+            "short_description": "Some short description",
+            "long_description": "Some long description",
+            "duration": 10,
+            "duration_time_repr": "year",
+            "full_time": true,
+            "credits_after_completion": 10,
+            "distance_learning": false,
+            "total_cost": 120000,
+            "total_cost_comment": "I am a comment",
+            "critical_skill": true,
+            "green_occupation": false,
+            "high_demand_occupation": false,
+            "created_at": "2019-05-30 15:18:56.665177-07:00",
+            "edited_at": "2019-05-30 15:18:56.665177-07:00"
+        }
+    },
+    {
+        "model": "ford3.Qualification",
+        "pk": 2,
+        "fields": {
+            "campus_id": 1,
+            "name": "Qualification 2/13 Completion",
+            "short_description": "Some short description",
+            "long_description": "Some long description",
+            "duration":  null,
+            "duration_time_repr": null,
+            "full_time": null,
+            "credits_after_completion": null,
+            "distance_learning": null,
+            "total_cost": null,
+            "total_cost_comment": null,
+            "critical_skill": null,
+            "green_occupation": null,
+            "high_demand_occupation": null,
+            "created_at": "2019-05-30 15:18:56.665177-07:00",
+            "edited_at": "2019-05-30 15:18:56.665177-07:00"
+        }
+    }    
+]

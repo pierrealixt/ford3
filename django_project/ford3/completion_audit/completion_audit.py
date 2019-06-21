@@ -74,9 +74,48 @@ QUALIFICATION_COMPLETION_RULES = [
         'funcs': [isPresent]
     },
     {
-        'prop': 'requirement.assesment',
+        'prop': 'requirement.assessment',
         'funcs': [isPresent]
-    }
+    },
+    {
+        'prop': 'requirement.assessment_comment',
+        'funcs': [isPresent],
+        'require': 'requirement.assessment'
+    },
+    {
+        'prop': 'requirement.interview',
+        'funcs': [isPresent],
+    },
+    {
+        'prop': 'requirement.admission_point_score',
+        'funcs': [isPresent],
+    },
+    {
+        'prop': 'requirement.min_nqf_level',
+        'funcs': [isPresent],
+    },
+    {
+        'prop': 'requirement.portfolio',
+        'funcs': [isPresent],
+    },
+    {
+        'prop': 'requirement.portfolio_comment',
+        'funcs': [isPresent],
+        'require': 'requirement.portfolio'
+    },
+    {
+        'prop': 'requirement.require_aps_score',
+        'funcs': [isPresent],
+    },
+    {
+        'prop': 'requirement.aps_calculator_link',
+        'funcs': [isPresent],
+        'require': 'requirement.require_aps_score'
+    },
+    {
+        'prop': 'requirement.require_certain_subjects',
+        'funcs': [isPresent]
+    },
 ]
 
 
@@ -88,11 +127,26 @@ class CompletionAudit():
 
     def run(self) -> int:
         for rule in self.rules:
-            result = [
-                func(getattr(self.obj, rule['prop']))
-                for func in rule['funcs']
-            ]
+            require = True
+            if 'require' in rule:
+                require = self.eval_expr(self.obj, rule['require'], False)
 
+            value = self.eval_expr(self.obj, rule['prop'], None)
+            result = [
+                func(value)
+                for func in rule['funcs']
+                if require
+            ]
+            print(rule)
+            print(result)
+            print(value)
             self.completion_rate += False not in result
 
         return int((self.completion_rate / len(self.rules)) * 100)
+
+    def eval_expr(self, obj, prop, ret_except_val):
+        try:
+            expr = eval(f'obj.{prop}')
+        except:
+            expr = ret_except_val
+        return expr

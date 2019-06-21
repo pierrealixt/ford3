@@ -1,0 +1,36 @@
+[
+    {
+        "model": "ford3.Requirement",
+        "pk": 1,
+        "fields": {
+            "qualification_id": 1,
+            "assessment": true,
+            "assessment_comment": "Assessment comment",
+            "interview": true,
+            "admission_point_score": 5,
+            "min_nqf_level": "Something random",
+            "portfolio": true,
+            "portfolio_comment": "Portfolio comment",
+            "aps_calculator_link": "www.link.com",
+            "require_aps_score": true,
+            "require_certain_subjects": false
+        }
+    },
+    {
+        "model": "ford3.Requirement",
+        "pk": 2,
+        "fields": {
+            "qualification_id": 2,
+            "assessment": false,
+            "assessment_comment": null,
+            "interview": null,
+            "admission_point_score": null,
+            "min_nqf_level": null,
+            "portfolio": null,
+            "portfolio_comment": null,
+            "aps_calculator_link": null,
+            "require_aps_score": null,
+            "require_certain_subjects": null
+        }
+    }
+]

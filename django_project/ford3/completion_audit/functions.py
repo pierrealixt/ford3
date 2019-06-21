@@ -1,9 +1,10 @@
-
 def isPresent(value):
     if type(value) is int:
         return isPresentForInteger(value)
     elif type(value) is str:
         return isPresentForString(value)
+    elif type(value) is bool:
+        return True
     else:
         return False
 
