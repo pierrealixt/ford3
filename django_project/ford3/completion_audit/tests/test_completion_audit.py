@@ -1,6 +1,4 @@
-from collections import namedtuple
 from django.test import TestCase
-from django.contrib.gis.geos import Point
 from ford3.models.campus import Campus
 from ford3.models.qualification import Qualification
 from ford3.completion_audit.completion_audit import CompletionAudit # noqa
@@ -8,11 +6,6 @@ from ford3.completion_audit.rules import (
     CAMPUS as CAMPUS_COMPLETION_RULES,
     QUALIFICATION as QUALIFICATION_COMPLETION_RULES
 )
-
-
-def create_complete_campus():
-    campusTuple = namedtuple('Campus', 'name, location, telephone, email, max_students_per_year, physical_address, postal_address_differs, postal_address') # noqa
-    return campusTuple('Muizenberg', Point(42, 42), '0791015050', 'admin@admin.com', 1042, '42 street name, city name', False, '')
 
 
 class TestCampusCompletionAudit(TestCase):

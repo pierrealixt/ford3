@@ -137,7 +137,7 @@ class Campus(models.Model):
     deleted = models.BooleanField(
         default=False,
         help_text="Campus has been deleted")
-    
+
     completion_rate = models.PositiveIntegerField(
         blank=True,
         null=True,
@@ -146,7 +146,6 @@ class Campus(models.Model):
     )
 
     COMPLETION_RULES = completion_rules
-
 
     objects = models.Manager()
     active_objects = ActiveCampusManager()
@@ -235,7 +234,7 @@ class Campus(models.Model):
             {self.postal_address_city}
             {self.postal_address_postal_code}
         '''
-    
+
     @property
     def qualifications_completion_rate(self):
         try:
