@@ -1,5 +1,8 @@
+import decimal
+
+
 def isPresent(value):
-    if type(value) is int:
+    if type(value) in [int, float, decimal.Decimal]:
         return isPresentForInteger(value)
     elif type(value) is str:
         return isPresentForString(value)

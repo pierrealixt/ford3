@@ -137,9 +137,11 @@ class CompletionAudit():
                 for func in rule['funcs']
                 if require
             ]
-            print(rule)
-            print(result)
-            print(value)
+            if rule['prop'] == 'total_cost':
+
+                print(rule)
+                print(result)
+                print(value)
             self.completion_rate += False not in result
 
         return int((self.completion_rate / len(self.rules)) * 100)

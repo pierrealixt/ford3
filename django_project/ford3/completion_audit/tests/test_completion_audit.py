@@ -48,13 +48,10 @@ class TestQualificationCompletionAudit(TestCase):
 
     def test_complete_qualification(self):
         self.qualification = Qualification.objects.get(pk=1)
-
         self.audit = CompletionAudit(
             obj=self.qualification,
             rules=QUALIFICATION_COMPLETION_RULES)
-
         completion_rate = self.audit.run()
-
         self.assertEqual(completion_rate, 100)
 
     def test_incomplete_qualification(self):
@@ -66,4 +63,14 @@ class TestQualificationCompletionAudit(TestCase):
 
         completion_rate = self.audit.run()
 
-        self.assertEqual(completion_rate, 16)
+        self.assertEqual(completion_rate, 28)
+        self.qualification.assessment = True
+        self.qualification.save()
+
+        self.audit = CompletionAudit(
+            obj=self.qualification,
+            rules=QUALIFICATION_COMPLETION_RULES)
+
+        completion_rate = self.audit.run()
+
+        self.assertEqual(completion_rate, 31)
