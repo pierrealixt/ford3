@@ -121,75 +121,11 @@
 					{% endif %}
 
 				</div>
-				<div id='events-list' class='col-md-6'>
-					<ul>
-						<li class='event-example event event-list-item d-none pb-3 border-bottom'
-						    data-event-id=''>
-                                        <span class='font-weight-bold'
-                                              data-role='name'></span>
-							<div class='row'>
-								<div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
-								<span class='col-md-6'
-								      data-role='date_start'></span>
-							</div>
-							<div class='row'>
-								<div class='col-md-1 ml-4 font-weight-bold'>End:</div>
-								<span class='col-md-6'
-								      data-role='date_end'></span>
-								<div class='col-md-3'></div>
-							</div>
-							<div class='row'>
-								<div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
-								<span class='col-md-6'
-								      data-role='http_link'><a
-										target='_blank'
-										href=''></a></span>
-							</div>
-							<button class='edit-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
-							        data-action='edit-event'>Edit
-							</button>
-							<button class='delete-event align-self-end col-md-3 edu-button edu-button-orange'
-							        data-action='delete-event'>Delete
-							</button>
-						</li>
+			{%  include 'events.html' with events=campus.events %}
 
-						{% for event in campus.events %}
-							<li class='event event-list-item pb-3 border-bottom'
-							    data-event-id='{{ event.id }}'>
-                                        <span class='font-weight-bold'
-                                              data-role='name'>{{ event.name }}</span>
 
-								<div class='row'>
-									<div class='col-md-1 ml-4 font-weight-bold'>Start:</div>
-									<span class='col-md-6'
-									      data-role='date_start'>{{ event.date_start|date:"Y-m-d" }}</span>
-								</div>
-								<div class='row'>
-									<div class='col-md-1 ml-4 font-weight-bold'>End:</div>
-									<span class='col-md-6'
-									      data-role='date_end'>{{ event.date_end|date:"Y-m-d" }}</span>
-									<div class='col-md-3'></div>
-								</div>
-								{% if event.http_link %}
-									<div class='row'>
-										<div class='col-md-1 ml-4 font-weight-bold'>URL:</div>
-										<span class='col-md-6'
-										      data-role='http_link'><a
-												target='_blank'
-												href='{{ event.http_link }}'>{{ event.http_link }}</a></span>
-									</div>
-								{% endif %}
-								<button class='edit-event align-self-end col-md-3 edu-button edu-button-blue mb-0'
-								        data-action='edit-event'>Edit
-								</button>
-								<button class='delete-event align-self-end col-md-3 edu-button edu-button-orange'
-								        data-action='delete-event'>Delete
-								</button>
-							</li>
-						{% endfor %}
 
-					</ul>
-				</div>
+
 
 			</div>
 		{% endif %}

@@ -136,3 +136,9 @@ ul.errorlist {
     margin: 0;
     padding: 0;
 }
+
+
+.text-break {
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
