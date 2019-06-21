@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.gis.geos import Point, GEOSGeometry
 from ford3.models.campus_event import CampusEvent
 
 
@@ -9,8 +10,6 @@ class ActiveCampusManager(models.Manager):
 
 
 class Campus(models.Model):
-
-
     provider = models.ForeignKey(
         'ford3.provider',
         on_delete=models.CASCADE)
@@ -151,8 +150,17 @@ class Campus(models.Model):
                     name__iexact=self.name,
                     deleted=False).exists():
                 raise ValidationError({'campus': 'Name is already taken.'})
-
         super().save(*args, **kwargs)
+
+    def save_location_data(self, cleaned_data):
+        x_value = cleaned_data['location_value_x']
+        y_value = cleaned_data['location_value_y']
+        geometry_point = GEOSGeometry(Point(
+            x_value,
+            y_value))
+        self.location = geometry_point
+
+        self.save()
 
     @property
     def events(self):

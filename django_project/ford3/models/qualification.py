@@ -14,6 +14,12 @@ class ActiveQualificationManager(models.Manager):
         return super().get_queryset().filter(deleted=False)
 
 
+class PublishedQualificationManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(published=True).filter(
+            deleted=False)
+
+
 class Qualification(models.Model):
     subjects = models.ManyToManyField(
         'ford3.subject',
@@ -151,6 +157,7 @@ class Qualification(models.Model):
 
     objects = models.Manager()
     active_objects = ActiveQualificationManager()
+    published_objects = PublishedQualificationManager()
 
     def __str__(self):
         return self.saqa_qualification.name

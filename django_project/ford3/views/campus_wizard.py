@@ -87,8 +87,17 @@ class CampusFormWizard(LoginRequiredMixin, CookieWizardView):
 
         initial_dict.update({
             'saqa_ids': saqa_ids,
-            'event_ids': event_ids
+            'event_ids': event_ids,
         })
+        try:
+            initial_dict.update({
+                'location_value_x': self.campus.location.x,
+                'location_value_y': self.campus.location.y})
+        except (IndexError, AttributeError):
+            initial_dict.update({
+                'location_value_x': 0,
+                'location_value_y': 0})
+
         return initial_dict
 
     def process_step(self, form):
@@ -101,6 +110,7 @@ class CampusFormWizard(LoginRequiredMixin, CookieWizardView):
             if form == 'campus-details':
                 self.campus.save_form_data(cleaned_data)
             elif form == 'campus-location':
+                self.campus.save_location_data(cleaned_data)
                 self.campus.save_postal_data(cleaned_data)
             elif form == 'campus-qualifications':
                 self.campus.save_qualifications(

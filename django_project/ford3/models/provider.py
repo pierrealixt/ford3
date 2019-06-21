@@ -1,7 +1,9 @@
-from django.core.validators import RegexValidator
 from django.db import models, transaction
-from ford3.models.campus import Campus
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
+from django.contrib.gis.db.models import PointField
+from django.contrib.gis.geos import Point, GEOSGeometry
+from ford3.models.campus import Campus
 
 
 class ActiveProviderManager(models.Manager):
@@ -19,7 +21,6 @@ class Provider(models.Model):
         message=
         "Phone number must be at least 10 digits and at max 15 digits. "
         "It can start with +(country code).")
-
     name = models.CharField(
         blank=False,
         null=False,
@@ -85,6 +86,10 @@ class Provider(models.Model):
         unique=False,
         help_text="The city which the provider is in",
         max_length=255)
+    location = PointField(
+        blank=True,
+        null=True,
+        help_text="The spatial point of the provider's head office")
     provider_logo = models.ImageField(
         blank=True,
         upload_to='provider_logo',
@@ -220,3 +225,14 @@ class Provider(models.Model):
             raise ValidationError(
                 {'provider_name': 'That name is already taken.'})
         super().save(*args, **kwargs)
+
+    def save_location_data(self, data):
+        x_value = data['location_value_x']
+        y_value = data['location_value_y']
+        geometry_point = GEOSGeometry(Point(
+            float(x_value),
+            float(y_value))
+        )
+        self.location = geometry_point
+
+        self.save()

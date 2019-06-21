@@ -35,3 +35,13 @@ function disablePostalAddress () {
     })
   }
 }
+
+const MAX_SIZE = 100 * 1024
+$('#id_provider_logo').bind('change', function () {
+  if (this.files[0].size > MAX_SIZE) {
+    alert(`${this.files[0].name} is too big. Max size is 100 Kb.`);
+    $('#id_provider_logo').val('')
+  }
+
+
+});

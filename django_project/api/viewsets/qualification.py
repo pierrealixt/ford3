@@ -12,5 +12,7 @@ class QualificationViewSet(viewsets.ReadOnlyModelViewSet):
     list:
     Returns a list of all qualifications registered with OpenEdu.
     """
-    queryset = Qualification.active_objects.all()
     serializer_class = QualificationSerializer
+
+    def get_queryset(self):
+        return Qualification.published_objects.all()

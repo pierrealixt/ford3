@@ -1,4 +1,4 @@
-{#{% if not providers %}#}
+{% if not provider %}
 	<li>
 		<a href="{% url 'dashboard' %}">Providers</a>
 	</li>
@@ -7,4 +7,4 @@
 			<a href="{% url 'dashboard-users' %}">Users</a>
 		</li>
 	{% endif %}
-{#{% endif %}#}
+{% endif %}
