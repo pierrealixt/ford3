@@ -7,6 +7,7 @@ from ford3.models.campus import Campus
 
 class ProviderSerializer(serializers.ModelSerializer):
     campus = serializers.SerializerMethodField()
+    province = serializers.StringRelatedField()
 
     def get_campus(self, obj):
         queryset = list(Campus.active_objects.filter(provider_id=obj.id).all())
