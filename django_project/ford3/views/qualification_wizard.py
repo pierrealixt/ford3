@@ -280,8 +280,6 @@ class QualificationFormWizard(
 
     def get(self, *args, **kwargs):
         self.qualification
-        # if not self.qualification:
-        #     raise Http404()
         if 'step' in self.request.GET:
             return super().render_goto_step(self.request.GET['step'], **kwargs)
         else:
