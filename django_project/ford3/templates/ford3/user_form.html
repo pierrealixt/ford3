@@ -30,11 +30,11 @@
         {% endif %}
         {% if user.is_province or user.is_provider %}
         <div class='col-md-6'>
-            {% if form_error %}
-            <div class='alert alert-danger'>
-                {{ form_error}}
-            </div>
-            {% endif %}
+	        {% if form_error %}
+		        <div class='alert alert-danger'>
+			        {{ form_error }}
+		        </div>
+	        {% endif %}
             <form method="post">{% csrf_token %}
                 {{ form.as_p }}
                 <input type="submit" value="Create" class='edu-button edu-button-orange border-0'>

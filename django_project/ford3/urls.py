@@ -158,6 +158,14 @@ urlpatterns = [
         'occupations/',
         occupations.index,
         name='list-occupations'),
+    path(
+        'profile/',
+        account.show,
+        name='show-profile'),
+    path(
+        'profile/edit',
+        account.edit,
+        name='edit-profile'),
     url(
         r'^activate/'
         r'(?P<uidb64>[0-9A-Za-z_\-]+)/'

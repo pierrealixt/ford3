@@ -20,11 +20,14 @@
 	    <ul class="navbar-nav ml-md-auto text-right text-white">
 		    <li class="my-1">
 			    <div class="d-lg-block d-xl-block d-none">
-				    <p class="text-white">{{ user.first_name }} {{ user.last_name }}
-			    &nbsp;|&nbsp;</p>
+				    <a href="{% url 'show-profile' %}"
+				       class="text-white">{{ user.first_name }} {{ user.last_name }}
+			    </a>&nbsp;|&nbsp;
 				    </div>
 			    <div class="d-lg-none d-xl-none">
-				    <p class="text-white">{{ user.first_name }} {{ user.last_name }}</p>
+				    <a href="{% url 'show-profile' %}">
+					    <p class="text-white">{{ user.first_name }} {{ user.last_name }}</p>
+				    </a>
 			    </div>
 		    </li>
 

@@ -1,11 +1,49 @@
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login
-from django.urls import reverse
-from ford3.models.user import User
+from django.views.decorators.http import require_http_methods
+
+from ford3.forms.profile import ProfileForm
 from ford3.forms.user_account_activation import UserAccountActivationForm
+from ford3.models.user import User
 from ford3.tokens import account_activation_token
+
+
+@login_required
+@require_http_methods(['GET'])
+def show(request):
+    user = request.user
+    data = {'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email}
+    context = {
+        'form': ProfileForm(data),
+        'title': 'Profile'
+    }
+    return render(request, 'account/profile.html', context)
+
+
+@login_required
+@require_http_methods(['POST'])
+def edit(request):
+    user = request.user
+    # form = ProfileForm(request.POST)
+    form = ProfileForm(request.POST)
+    if form.is_valid():
+        data = form.cleaned_data
+        user.first_name = data['first_name']
+        user.last_name = data['last_name']
+        user.email = data['email']
+        user.save()
+        data['message'] = 'Details successfully updated.'
+    context = {
+        'form': form,
+        'data': data,
+    }
+    return render(request, 'account/profile.html', context)
 
 
 def activate(request, uidb64, token):
