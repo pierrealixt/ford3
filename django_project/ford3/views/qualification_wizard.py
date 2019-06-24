@@ -150,7 +150,7 @@ class QualificationFormWizardDataProcess(object):
             for requirement_field in requirement_form_fields.keys():
                 try:
                     getattr(Requirement, requirement_field)
-                    if form_data[requirement_field]:
+                    if requirement_field in form_data:
                         requirement_fields[requirement_field] = (
                             form_data[requirement_field]
                         )

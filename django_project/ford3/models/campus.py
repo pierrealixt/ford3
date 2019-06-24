@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.gis.geos import Point, GEOSGeometry
 from ford3.models.campus_event import CampusEvent
+from ford3.completion_audit.rules import CAMPUS as completion_rules
 
 
 class ActiveCampusManager(models.Manager):
@@ -20,9 +21,9 @@ class Campus(models.Model):
         help_text='The name of the campus',
         max_length=255)
     location = models.PointField(
-      blank=True,
-      null=True,
-      help_text='The spatial point position of the campus')
+        blank=True,
+        null=True,
+        help_text='The spatial point position of the campus')
     photo = models.FileField(
         blank=False,
         null=True,
@@ -137,6 +138,15 @@ class Campus(models.Model):
         default=False,
         help_text="Campus has been deleted")
 
+    completion_rate = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        default=0,
+        help_text="How much of the campus' details has been completed?"
+    )
+
+    COMPLETION_RULES = completion_rules
+
     objects = models.Manager()
     active_objects = ActiveCampusManager()
 
@@ -190,7 +200,8 @@ class Campus(models.Model):
                 'saqa_qualification__accredited',
                 'edited_at',
                 'published',
-                'ready_to_publish')
+                'ready_to_publish',
+                'completion_rate')
         return list(queryset)
 
     @property
@@ -213,6 +224,31 @@ class Campus(models.Model):
             {self.physical_address_city}
             {self.physical_address_postal_code}
         '''
+
+    @property
+    def postal_address(self):
+        if self.postal_address_line_1 is None \
+            and self.postal_address_line_2 is None \
+                and self.postal_address_city is None \
+                and self.postal_address_postal_code is None:
+            return None
+
+        return f'''
+            {self.postal_address_line_1}
+            {self.postal_address_line_2}
+            {self.postal_address_city}
+            {self.postal_address_postal_code}
+        '''
+
+    @property
+    def qualifications_completion_rate(self):
+        try:
+            return int(sum([
+                qualification['completion_rate']
+                for qualification in self.qualifications
+            ]) / len(self.qualifications))
+        except ZeroDivisionError:
+            return 0
 
     def save_postal_data(self, form_data):
         postal_address_differs = form_data.get(

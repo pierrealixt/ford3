@@ -8,7 +8,7 @@
 <div class='row'>
     <div class='col-md-12'>
     {% autoescape off %}
-        <h3>{{ campus|truncatechars:42 }}</h3>
+        <h3>{{ campus|truncatechars:42 }} ({{ campus.completion_rate }}%)</h3>
 
         <div class='row'>
             <div class='col'>
@@ -32,10 +32,31 @@
         </div>
         <div class='row py-4'>
             <div class='col-md-12'>
-	            <p><b>Name</b> {{ campus.name|is_none }}</p>
-                <p><b>Switchboard</b> {{ campus.telephone|is_none }}</p>
-                <p><b>E-mail address</b> {{ campus.email|is_none }}</p>
-                <p><b>Annual student capacity</b> {{ campus.max_students_per_year|is_none }}</p>
+                <div class="row">
+                    <div class="col-md-4 col-sm-6">
+                        <b>Switchboard</b>
+                    </div>
+                    <div class="col">
+                        <p>{{ campus.telephone|is_none }}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-sm-6">
+                        <b>E-mail address</b>
+                    </div>
+                    <div class="col">
+                        <p>{{ campus.email|is_none }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-6">
+                        <b>Annual student capacity</b>
+                    </div>
+                    <div class="col">
+                        <p>{{ campus.max_students_per_year|is_none }}</p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class='row'>
@@ -57,9 +78,15 @@
 	        </div>
         </div>
         <div class='row'>
-            <div class='col-md-6 py-4'>
-                <p><b>Physical address</b></p>
-                <p>{{ campus.physical_address|is_none }}</p>
+            <div class='col-md-12'>
+                <div class="row">
+                    <div class="col-md-4 col-sm-6">
+                        <b>Physical address</b>
+                    </div>
+                    <div class="col">
+                        <p>{{ campus.physical_address|is_none }}</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -83,11 +110,6 @@
         </div>
 		{% include 'list_events.html' with events=campus.events %}
 
-
-
-
-        <div class='row'>
-        </div>
 
         <div class='row py-4'>
             <div class='col'>
@@ -114,7 +136,8 @@
                 <table class='table table-borderless'>
                     <thead>
                         <tr class='row text-purple no-gutters'>
-                            <th class="col-md-7 align-middle text-center">Qualifications</th>
+                            <th class="col-md-5 align-middle text-center">Qualifications</th>
+                            <th class="col-md-2 align-middle text-center">Completion rate</th>
                             <th class="col-md-2 align-middle text-center">Last edited</th>
                             <th class="col-md-3 align-middle text-center">Actions</th>
                         </tr>
@@ -122,8 +145,11 @@
                     <tbody>
                         {% for qualification in campus.qualifications %}
                             <tr class="row border-bottom no-gutters h-100">
-                                <td class="col-md-7 my-auto mx-auto">
+                                <td class="col-md-5 my-auto mx-auto">
                                     <a class='text-left' href="{% url 'show-qualification' provider_id=provider.id campus_id=campus.id qualification_id=qualification.id %}">{{ qualification.saqa_qualification__name|truncatechars:42 }} (SAQA_ID: {{ qualification.saqa_qualification__saqa_id }})</a>
+                                </td>
+                                <td class=" col-md-2 my-auto mx-auto text-center">
+                                    {{ qualification.completion_rate }}%
                                 </td>
                                 <td class=" col-md-2 my-auto mx-auto text-center">
                                     <span class='h-100'>{{ qualification.edited_at }}</span>

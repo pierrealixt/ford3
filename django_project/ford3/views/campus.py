@@ -35,11 +35,13 @@ def show(request, provider_id, campus_id):
     return render(request, 'campus.html', context)
 
 
-@login_required()
+@login_required
+@permission_required('ford3.add_campus', raise_exception=True)
 def create(request, provider_id):
     if request.method == 'GET':
         url = reverse('show-provider', args=[str(provider_id)])
         return redirect(url)
+
 
     provider = get_object_or_404(
         Provider,

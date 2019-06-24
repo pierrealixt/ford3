@@ -17,8 +17,7 @@ class Requirement(models.Model):
     assessment = models.BooleanField(
         blank=True,
         null=True,
-        help_text="Is there an assessment as part of the application process?",
-        default=False)
+        help_text="Is there an assessment as part of the application process?")
     assessment_comment = models.CharField(
         blank=True,
         null=True,
@@ -29,8 +28,7 @@ class Requirement(models.Model):
     interview = models.BooleanField(
         blank=True,
         null=True,
-        help_text="Is there an interview as part of the application process?",
-        default=False)
+        help_text="Is there an interview as part of the application process?")
     admission_point_score = models.IntegerField(
         blank=True,
         null=True,
@@ -47,8 +45,7 @@ class Requirement(models.Model):
         blank=True,
         null=True,
         help_text="Does the applicant need to submit a portfolio as part of "
-                  "the application process?",
-        default=False)
+                  "the application process?")
     portfolio_comment = models.CharField(
         blank=True,
         null=True,
@@ -64,14 +61,12 @@ class Requirement(models.Model):
     require_aps_score = models.BooleanField(
         blank=True,
         null=True,
-        help_text="Does the applicant need to acheive a certain APS score?",
-        default=False)
+        help_text="Does the applicant need to acheive a certain APS score?")
     require_certain_subjects = models.BooleanField(
         blank=True,
         null=True,
         help_text="Are there specific subjects listed as a prerequisite for "
-                  "this qualification",
-        default=False)
+                  "this qualification")
 
     def __unicode__(self):
         return self.description
