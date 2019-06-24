@@ -5,6 +5,7 @@ from django.shortcuts import redirect, Http404, get_object_or_404
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from django.urls import reverse
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.forms.models import model_to_dict
 from django.template.defaulttags import register
 from formtools.wizard.views import CookieWizardView
@@ -12,13 +13,31 @@ from ford3.views.wizard_utilities import get_form_identifier_list_from_keys
 from ford3.models.campus import Campus
 from ford3.models.provider import Provider
 from ford3.models.field_of_study import FieldOfStudy
+from ford3.decorators import (
+    predicate_provider,
+    predicate_campus
+)
 
 
-class CampusFormWizard(LoginRequiredMixin, CookieWizardView):
+class CampusFormWizard(
+    UserPassesTestMixin,
+    LoginRequiredMixin,
+    CookieWizardView):
+
     template_name = 'campus_form.html'
     file_storage = FileSystemStorage(
         location=os.path.join(settings.MEDIA_ROOT, 'photos'))
-    new_campus_events = []
+
+    def test_func(self):
+        return predicate_provider(
+            self.request.user,
+            self.kwargs['provider_id']) and\
+            predicate_campus(
+                self.kwargs['provider_id'],
+                self.kwargs['campus_id'])
+
+    def handle_no_permission(self):
+        return redirect(reverse('dashboard'))
 
     @property
     def campus(self):
