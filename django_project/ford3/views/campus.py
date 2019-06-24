@@ -12,9 +12,12 @@ from django.core.exceptions import ValidationError
 from django.utils.datastructures import MultiValueDictKeyError
 from ford3.models.campus import Campus
 from ford3.models.provider import Provider
+from ford3.decorators import provider_check, campus_check
 
 
 @login_required
+@provider_check
+@campus_check
 def show(request, provider_id, campus_id):
     campus = get_object_or_404(
         Campus,
@@ -37,6 +40,7 @@ def show(request, provider_id, campus_id):
 
 @login_required
 @permission_required('ford3.add_campus', raise_exception=True)
+@provider_check
 def create(request, provider_id):
     if request.method == 'GET':
         url = reverse('show-provider', args=[str(provider_id)])
@@ -70,6 +74,8 @@ def create(request, provider_id):
 @login_required()
 @permission_required('ford3.delete_provider', raise_exception=True)
 @require_http_methods(['GET'])
+@provider_check
+@campus_check
 def delete(request, provider_id, campus_id):
     campus = get_object_or_404(
         Campus,

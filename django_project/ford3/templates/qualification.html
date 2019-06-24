@@ -273,7 +273,7 @@
 		{% endautoescape %}
 	</div>
 	{% if perms.ford3.delete_qualification %}
-		<div class='col-md-2 my-5'>
+		<div class='col-md-3 my-5'>
 			<a
 					href="{% url 'delete-qualification' provider_id=provider.id campus_id=qualification.campus.id qualification_id=qualification.id %}"
 					class='m-0 p-0 edu-button btn-danger danger'

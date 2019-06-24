@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'django_hashedfilenamestorage',
     'rest_framework',
+    'django_filters',
 )
 
 REST_FRAMEWORK = {
@@ -139,7 +140,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
-    'DEFAULT_VERSION': 'v1'
+    'DEFAULT_VERSION': 'v1',
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)  # noqa
 }
 
 # A sample logging configuration. The only tangible logging

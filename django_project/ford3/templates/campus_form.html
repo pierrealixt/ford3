@@ -231,33 +231,33 @@
                                 <div class='tab-pane active'
                                         id='search-qualif' role='tabpanel'
                                         aria-labelledby='search-qualif-tab'>
-                                    <div class='row mx-3'>
-                                        <div class='col-md-12 px-0'>
-                                            <p class='text-muted my-4'>Search for a SAQA qualification by its name and id</p>
-                                        </div>
+                                    <div class="container px-4">
+	                                    <div class='row'>
+		                                    <div class='col-md-12 px-0'>
+			                                    <p class='text-muted my-4'>Search for a SAQA qualification by its name and id</p>
+		                                    </div>
+	                                    </div>
+
+	                                    <div class='row'>
+		                                    <div class='col-md-9 px-0'>
+			                                    <input type='text'
+			                                           data-action='search-qualif'
+
+			                                           placeholder="e.g: 36009, laws"/>
+			                                    <input type='hidden'
+			                                           id='search-qualif-url'
+			                                           value='{% url "search-saqa-qualifications" %}'/>
+		                                    </div>
+		                                    <button type='button'
+		                                            class="edu-button-orange border-0 col-md-3 my-0 p-2"
+		                                            data-action='clear-qualifs'>clear
+		                                    </button>
+	                                    </div>
+	                                    <div class="border border-top-0 border-left-0 border-right-0 row pt-3"></div>
                                     </div>
 
-                                    <div class='row mx-3'>
-                                        <div class='col-md-9 px-0'>
-                                            <input type='text'
-                                                    data-action='search-qualif'
-                                                    class="h-100 p-3"
-                                                    placeholder="e.g: 36009, laws"/>
-                                            <input type='hidden'
-                                                    id='search-qualif-url'
-                                                    value='{% url "search-saqa-qualifications" %}'/>
-                                        </div>
-                                        <div class="col-md-3 px-0">
-                                            <button type='button'
-                                                    class="edu-button-orange h-100 w-100 border-0"
-                                                    data-action='clear-qualifs'>clear
-                                            </button>
-                                        </div>
-                                    </div>
 
-                                    <hr class='mx-3'/>
-
-                                    <div id='search-error-alert'
+	                                <div id='search-error-alert'
                                             class='row mx-3 d-none'>
                                         <div class='col-md-12 px-0'>
                                             <div class='col-md-12 alert alert-danger'>No results.</div>

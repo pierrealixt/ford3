@@ -5,6 +5,7 @@ from django.shortcuts import redirect, Http404, get_object_or_404
 from django.urls import reverse
 from django.forms.models import model_to_dict
 from django.template.defaulttags import register
+from django.contrib.auth.mixins import UserPassesTestMixin
 from formtools.wizard.views import CookieWizardView
 from ford3.views.wizard_utilities import get_form_identifier_list_from_keys
 from ford3.models.qualification import Qualification
@@ -18,6 +19,11 @@ from ford3.forms.qualification import (
     QualificationDurationFeesForm,
     QualificationRequirementsForm,
     QualificationInterestsAndJobsForm,
+)
+from ford3.decorators import (
+    predicate_provider,
+    predicate_campus,
+    predicate_qualification
 )
 
 
@@ -209,9 +215,27 @@ class QualificationFormWizardDataProcess(object):
 
 
 
-class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
+class QualificationFormWizard(
+    UserPassesTestMixin,
+    LoginRequiredMixin,
+    CookieWizardView):
+
     template_name = 'qualification_form.html'
     initial_dict = {}
+
+    def test_func(self):
+        return predicate_provider(
+            self.request.user,
+            self.kwargs['provider_id']) and\
+            predicate_campus(
+                self.kwargs['provider_id'],
+                self.kwargs['campus_id']) and\
+            predicate_qualification(
+                self.kwargs['campus_id'],
+                self.kwargs['qualification_id'])
+
+    def handle_no_permission(self):
+        return redirect(reverse('dashboard'))
 
     @property
     def provider(self):
@@ -247,18 +271,15 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
         Get qualification from id
         :return: qualification object
         """
-        qualification_id = self.kwargs['qualification_id']
-        if not qualification_id:
+        try:
+            return self.provider.campus_set.get(
+                pk=self.kwargs['campus_id']).qualification_set.get(
+                    pk=self.kwargs['qualification_id'])
+        except (Provider.DoesNotExist, Campus.DoesNotExist, Qualification.DoesNotExist):
             raise Http404()
-        return get_object_or_404(
-            Qualification,
-            id=qualification_id
-        )
 
     def get(self, *args, **kwargs):
-        qualification = self.qualification
-        if not qualification:
-            raise Http404()
+        self.qualification
         if 'step' in self.request.GET:
             return super().render_goto_step(self.request.GET['step'], **kwargs)
         else:
