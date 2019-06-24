@@ -8,7 +8,9 @@ django-pure-pagination
 django-reversion
 django-formtools==2.1
 djangorestframework
+django-filter==2.1.0
 
+markdown==3.1.1
 easy-thumbnails
 django-widget-tweaks
 sentry-sdk==0.7.14
