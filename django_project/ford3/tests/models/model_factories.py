@@ -25,10 +25,12 @@ from ford3.models.qualification_entrance_requirement_subject import Qualificatio
 class ModelFactories:
     @staticmethod
     def create_user_provider():
-        user = User(
+        user = User.objects.create_user(
             email='hello@test.com',
-            is_provider=True)
-        user.save()
+            is_provider=True,
+            password='password',
+            is_active=True)
+
         provider_group = Group.objects.get(pk=OpenEduGroups.PROVIDER.value)
         provider_group.user_set.add(user)
         return user

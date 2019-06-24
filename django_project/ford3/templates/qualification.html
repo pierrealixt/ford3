@@ -121,7 +121,7 @@
 							{{ qualification.requirement.min_nqf_level|filter_level|is_none }}
 						</div>
 					</div>
-					<div class="row pt-2">
+					<div class="row py-2">
 						<div class="col-md-4 col-sm-6">
 							<b>Is there an interview </b>
 						</div>
@@ -129,7 +129,7 @@
 							{{ qualification.requirement.interview|yesno:"Yes,No" }}
 						</div>
 					</div>
-					<div class="row pt-2">
+					<div class="row py-2">
 						<div class="col-md-4 col-sm-6">
 							<b>Requires a portfolio</b>
 						</div>
@@ -138,7 +138,7 @@
 						</div>
 					</div>
 					{% if qualification.requirement.portfolio %}
-						<div class="row pb-2">
+						<div class="row py-2">
 							<div class="col-md-4 col-sm-6">
 								<b>Portfolio Requirements</b>
 							</div>
@@ -147,7 +147,7 @@
 							</div>
 						</div>
 					{% endif %}
-					<div class="row pt-2">
+					<div class="row py-2">
 						<div class="col-md-4 col-sm-6">
 							<b>Involves an assessment</b>
 						</div>
@@ -156,7 +156,7 @@
 						</div>
 					</div>
 					{% if qualification.requirement.assessment %}
-						<div class="row pb-2">
+						<div class="row py-2">
 							<div class="col-md-4 col-sm-6">
 								<b>Assessment requirements</b>
 							</div>
@@ -165,7 +165,7 @@
 							</div>
 						</div>
 					{% endif %}
-					<div class="row pt-2">
+					<div class="row py-2">
 						<div class="col-md-4 col-sm-6">
 							<b>Requires an APS score </b>
 						</div>
@@ -173,26 +173,28 @@
 							{{ qualification.requirement.require_aps_score|yesno:"Yes,No" }}
 						</div>
 					</div>
-					<div class="row pb-2">
-						{% if qualification.requirement.require_aps_score %}
-							<div class="col-md-4 col-sm-6">
-								<b>APS calculator link </b>
-							</div>
-							<div class="col">
-								{{ qualification.requirement.aps_calculator_link }}
-							</div>
-						{% endif %}
-					</div>
+					{% if qualification.requirement.require_aps_score %}
+                        <div class="row py-2">
+                            <div class="col-md-4 col-sm-6">
+                                <b>APS calculator link </b>
+                            </div>
+                            <div class="col">
+                                {{ qualification.requirement.aps_calculator_link }}
+                            </div>
+                        </div>
+                    {% endif %}
 					{% if qualification.requirement.require_certain_subjects %}
 						<div class="row py-2">
-							<div class="col-md-6">
-								<b>Subjects</b><br/>
-								<ul>
-									{% for subject in qualification.entrance_req_subjects_list %}
-										<li>{{ subject.name }}: {{ subject.minimum_score }}%</li>
-									{% endfor %}
-								</ul>
-							</div>
+                            <div class="col-md-4 col-sm-6">
+                                <b>Subjects</b>
+                            </div>
+                            <div class="col">
+                                <ul class='pl-4'>
+                                    {% for subject in qualification.entrance_req_subjects_list %}
+                                        <li>{{ subject.name }}: {{ subject.minimum_score }}%</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
 						</div>
 					{% endif %}
 				</div>
@@ -210,20 +212,24 @@
 			</div>
 			<div class='row py-3'>
 				<div class='col-md-12'>
-					<div class="row">
-						<div class="col-12">
+					<div class="row py-2">
+                        <div class="col-md-4 col-sm-6">
 							<b>Interests</b>
-							<br/>
-							<ul>
+                        </div>
+                        <div class="col">
+							<ul class='pl-4'>
 								{% for  interest in qualification.interest_name_list %}
 									<li>{{ interest }}</li>
 								{% endfor %}
 							</ul>
-						</div>
-						<div class="col-12">
+                        </div>
+                    </div>
+					<div class="row py-2">
+						<div class="col-md-4 col-sm-6">
 							<b>Occupations</b>
-							<br/>
-							<ul>
+                        </div>
+                        <div class="col">
+                            <ul class='pl-4'>
 								{% for occupation in qualification.occupation_name_list %}
 									<li>{{ occupation }}</li>
 
@@ -232,21 +238,23 @@
 						</div>
 					</div>
 					<div class="row py-2">
-						<div class="col-12">
-							<b>This qualification prepares a learner for a</b>
-						</div>
-						<ul>
-							<li>
-								{{ qualification.critical_skill|checked_or_crossed }} Critical skill
-							</li>
-							<li>
-								{{ qualification.green_occupation|checked_or_crossed }} Green occupation
-							</li>
-							<li>
-								{{ qualification.high_demand_occupation|checked_or_crossed }} High demand occupation
-							</li>
+                        <div class="col-md-4 col-sm-6">
+                            <b>This qualification prepares a learner for a</b>
+                        </div>
+                        <div class="col">
+                            <ul class='pl-4'>
+                                <li>
+                                    {{ qualification.critical_skill|checked_or_crossed }} Critical skill
+                                </li>
+                                <li>
+                                    {{ qualification.green_occupation|checked_or_crossed }} Green occupation
+                                </li>
+                                <li>
+                                    {{ qualification.high_demand_occupation|checked_or_crossed }} High demand occupation
+                                </li>
 
-						</ul>
+                            </ul>
+                        </div>
 					</div>
 				</div>
 			</div>

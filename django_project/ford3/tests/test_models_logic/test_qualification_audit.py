@@ -36,10 +36,9 @@ class TestQualificationAudit(TestCase):
         self.assertTrue(self.qa.audit_min_nqf_level())
 
     def test_audit_required_subjects(self):
-        self.assertTrue(self.qa.audit_required_subjects())
+        self.assertFalse(self.qa.audit_required_subjects())
         self.requirement.require_certain_subjects = True
         self.requirement.save()
-        self.assertFalse(self.qa.audit_required_subjects())
         self.subject1 = (
             ModelFactories.get_qualification_entrance_requirement_to())
         self.subject1.qualification = self.qualification
@@ -52,11 +51,12 @@ class TestQualificationAudit(TestCase):
 
     def test_save_qualification_runs_audit(self):
         self.assertFalse(self.qualification.ready_to_publish)
-        self.qualification.save()
-        self.assertTrue(self.qualification.ready_to_publish)
-        self.qualification.short_description = ""
-        self.qualification.save()
-        self.assertFalse(self.qualification.ready_to_publish)
+        self.requirement.require_certain_subjects = True
+        self.requirement.save()
+        self.subject1 = (
+            ModelFactories.get_qualification_entrance_requirement_to())
+        self.subject1.qualification = self.qualification
+        self.subject1.save()
         self.qualification.short_description = "Something"
         self.qualification.save()
         self.assertTrue(self.qualification.ready_to_publish)

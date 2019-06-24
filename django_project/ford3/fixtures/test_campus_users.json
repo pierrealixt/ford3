@@ -4,6 +4,7 @@
         "pk": 3,
         "fields": {
             "email": "email@campus.com",
+            "password": "password",
             "username": "campus",
             "is_campus": true,
             "groups": [3],
