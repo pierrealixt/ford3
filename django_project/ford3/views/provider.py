@@ -9,6 +9,7 @@ from django.db import IntegrityError
 from django.urls import reverse
 from ford3.forms.provider_form import ProviderForm
 from ford3.models.provider import Provider
+from ford3.decorators import provider_check
 
 
 @login_required()
@@ -67,6 +68,7 @@ def create(request):
 @login_required()
 @permission_required('ford3.change_provider', raise_exception=True)
 @require_http_methods(['GET'])
+@provider_check
 def edit(request, provider_id):
     provider = get_object_or_404(
         Provider,
@@ -98,6 +100,7 @@ def edit(request, provider_id):
 @login_required()
 @permission_required('ford3.change_provider', raise_exception=True)
 @require_http_methods(['POST'])
+@provider_check
 def update(request, provider_id):
     provider = get_object_or_404(
         Provider,
@@ -146,6 +149,7 @@ def update(request, provider_id):
 
 @login_required
 @require_http_methods(['GET'])
+@provider_check
 def show(request, provider_id):
     provider = get_object_or_404(
         Provider,
@@ -166,6 +170,7 @@ def show(request, provider_id):
 @login_required()
 @permission_required('ford3.delete_provider', raise_exception=True)
 @require_http_methods(['GET'])
+@provider_check
 def delete(request, provider_id):
     provider = get_object_or_404(
         Provider,

@@ -8,8 +8,12 @@ from django.shortcuts import (
 from ford3.models.qualification import (
     Qualification
 )
+from ford3.decorators import provider_check, campus_check, qualification_check
 
 
+@provider_check
+@campus_check
+@qualification_check
 def show_qualification(request, provider_id, campus_id, qualification_id):
     qualification = get_object_or_404(
         Qualification,
@@ -26,6 +30,9 @@ def show_qualification(request, provider_id, campus_id, qualification_id):
     return render(request, 'qualification.html', context)
 
 
+@provider_check
+@campus_check
+@qualification_check
 def delete_qualification(request, provider_id, campus_id, qualification_id):
     qualification = get_object_or_404(
         Qualification,
