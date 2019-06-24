@@ -26,7 +26,7 @@ class Qualification(models.Model):
         through='QualificationEntranceRequirementSubject')
     campus = models.ForeignKey(
         'ford3.campus',
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='qualification_set')
     saqa_qualification = models.ForeignKey(
         SAQAQualification,
@@ -37,7 +37,6 @@ class Qualification(models.Model):
         null=True,
         default=False,
         help_text="Has this qualification been published?")
-
     ready_to_publish = models.BooleanField(
         blank=True,
         null=True,
@@ -133,14 +132,14 @@ class Qualification(models.Model):
     created_by = models.ForeignKey(
         'ford3.User',
         null=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='qualification_created_by'
     )
 
     edited_by = models.ForeignKey(
         'ford3.User',
         null=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='qualification_edited_by'
     )
 
@@ -151,7 +150,7 @@ class Qualification(models.Model):
     deleted_by = models.ForeignKey(
         'ford3.User',
         null=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='qualification_deleted_by'
     )
 
@@ -237,6 +236,10 @@ class Qualification(models.Model):
     @property
     def part_time(self):
         return not self.full_time
+
+    def soft_delete(self):
+        self.deleted = True
+        self.save()
 
     def set_saqa_qualification(self, saqa_id):
         """

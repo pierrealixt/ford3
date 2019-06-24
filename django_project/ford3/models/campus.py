@@ -115,21 +115,21 @@ class Campus(models.Model):
     created_by = models.ForeignKey(
         'ford3.User',
         null=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='campus_created_by'
     )
 
     edited_by = models.ForeignKey(
         'ford3.User',
         null=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='campus_edited_by'
     )
 
     deleted_by = models.ForeignKey(
         'ford3.User',
         null=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='campus_deleted_by'
     )
 
@@ -160,6 +160,11 @@ class Campus(models.Model):
             y_value))
         self.location = geometry_point
 
+        self.save()
+
+    def soft_delete(self):
+        self.soft_delete_all_qualifications()
+        self.deleted = True
         self.save()
 
     @property
@@ -284,6 +289,10 @@ class Campus(models.Model):
                 saqa_qualification__id=saqa_id,
                 campus=self)
             qualif.delete()
+
+    def soft_delete_all_qualifications(self):
+        for qualification in self.qualification_set.all():
+            qualification.soft_delete()
 
     def __str__(self):
         return self.name
