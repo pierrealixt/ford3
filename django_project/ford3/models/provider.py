@@ -236,3 +236,9 @@ class Provider(models.Model):
         self.location = geometry_point
 
         self.save()
+
+    def soft_delete(self):
+        self.deleted = True
+        for campus in self.campus_set.all():
+            campus.soft_delete()
+        self.save()

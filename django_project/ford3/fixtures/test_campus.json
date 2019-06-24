@@ -1,0 +1,28 @@
+[
+    {
+        "model": "ford3.Campus",
+        "pk": 1,
+        "fields": {
+            "provider_id": 1,
+            "name": "Muizenberg",
+            "telephone": "0791015050",
+            "email": "admin@admin.com",
+            "max_students_per_year": 42,
+            "physical_address_line_1": "42 Universe street",
+            "postal_address_line_1": "PO box 42",
+            "created_at": "2019-05-30 15:18:56.665177-07:00",
+            "edited_at": "2019-05-30 15:18:56.665177-07:00"
+        }
+    },
+    {
+        "model": "ford3.Campus",
+        "pk": 2,
+        "fields": {
+            "provider_id": 1,
+            "name": "Muizenberg",
+            "telephone": null,
+            "created_at": "2019-05-30 15:18:56.665177-07:00",
+            "edited_at": "2019-05-30 15:18:56.665177-07:00"
+        }
+    }    
+]

@@ -1,5 +1,6 @@
 from django.urls import reverse
-from django.test import TestCase
+from django.test import TestCase, Client
+from django.contrib.auth.models import Permission
 from ford3.tests.models.model_factories import ModelFactories
 
 
@@ -7,6 +8,7 @@ class TestCreateCampusView(TestCase):
     fixtures = ['groups']
 
     def setUp(self):
+        self.client = Client()
         self.provider = ModelFactories.get_provider_test_object()
         self.url = reverse('create-campus', args=[str(self.provider.id)])
 
@@ -14,12 +16,15 @@ class TestCreateCampusView(TestCase):
             'campus_name': 'My Campus'
         }
 
-        user = ModelFactories.create_user_provider()
-        self.client.force_login(user, backend=None)
+        self.user = ModelFactories.create_user_provider()
+        self.user.user_permissions.add(
+            Permission.objects.get(codename='add_campus'))
+        self.client.login(
+            email=self.user.email,
+            password='password')
 
     def test_create_campus(self):
         response = self.client.post(self.url, self.data)
-
         self.assertIn(self.data['campus_name'], str(response.content))
 
     def test_create_duplicate_campus(self):

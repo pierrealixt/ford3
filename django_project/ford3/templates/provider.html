@@ -50,24 +50,16 @@
             <div class='campus-card mx-auto text-center'>
                 <div class='card-body h-100'>
                     <h5 class='card-title'><a class='text-white' href="{% url 'show-campus' provider_id=provider.id campus_id=campus.id %}">{{ campus.name }}</a></h5>
-                    {# disabled for now #}
-                    <!--div class='campus-completion-rate'>
-                        <p>
-                            <span>20%</span>
-                            <br />
-                            complete
-                        </p>
-                    </div-->
 
                     <ul class='list-inline mt-3 text-center'>
                         <li class='list-inline-item'>
-                            Qualifications
-                            <h3 class="text-white">{{ campus.qualifications|length }}</h3>
+                            Campus information
+                            <h3 class="text-white">{{ campus.completion_rate }}%</h3>
                         </li>
 
                         <li class='list-inline-item'>
-                            Events
-                            <h3 class="text-white">{{ campus.events|length }} </h3>
+                            Qualifications information
+                            <h3 class="text-white">{{ campus.qualifications_completion_rate }}%</h3>
                         </li>
                     </ul>
                     {% if perms.ford3.change_campus %}
