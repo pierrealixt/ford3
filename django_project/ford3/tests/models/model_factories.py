@@ -17,6 +17,7 @@ from ford3.models.qualification_event import QualificationEvent
 from ford3.models.interest import Interest
 from ford3.models.saqa_qualification import SAQAQualification
 from ford3.models.user import User
+from ford3.models.province import Province
 from ford3.enums.open_edu_groups import OpenEduGroups
 from ford3.models.qualification_entrance_requirement_subject import QualificationEntranceRequirementSubject  # noqa
 
@@ -26,13 +27,39 @@ class ModelFactories:
     @staticmethod
     def create_user_provider():
         user = User.objects.create_user(
-            email='hello@test.com',
+            email='hello_provider@test.com',
             is_provider=True,
             password='password',
             is_active=True)
-
         provider_group = Group.objects.get(pk=OpenEduGroups.PROVIDER.value)
         provider_group.user_set.add(user)
+        return user
+
+    @staticmethod
+    def create_user_province():
+        user = User.objects.create_user(
+            email='hello_province@test.com',
+            is_province=True,
+            password='password',
+            is_active=True)
+
+        user.provinces.set([Province.objects.get(pk=1)])
+
+
+        province_group = Group.objects.get(pk=OpenEduGroups.PROVINCE.value)
+        province_group.user_set.add(user)
+        return user
+
+    @staticmethod
+    def create_user_campus():
+        user = User.objects.create_user(
+            email='hello_campus@test.com',
+            is_campus=True,
+            password='password',
+            is_active=True)
+
+        campus_group = Group.objects.get(pk=OpenEduGroups.CAMPUS.value)
+        campus_group.user_set.add(user)
         return user
 
     @staticmethod

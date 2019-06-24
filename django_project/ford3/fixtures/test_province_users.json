@@ -4,7 +4,6 @@
         "pk": 1,
         "fields": {
             "email": "province@email.com",
-            "password": "password",
             "username": "province",
             "is_province": true,
             "provinces": [1],
