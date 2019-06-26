@@ -16,7 +16,12 @@ class QualificationSerializer(serializers.ModelSerializer):
     occupations = OccupationSerializer(many=True)
     interests = InterestSerializer(many=True)
     requirement = RequirementSerializer()
+    campus = serializers.StringRelatedField()
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = Qualification
-        exclude = CommonExcludedFields.user_details
+        exclude = CommonExcludedFields.user_details + ['completion_rate']
+
+    def get_name(self, obj):
+        return obj.saqa_qualification.name

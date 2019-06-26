@@ -25,13 +25,12 @@ class QualificationViewSet(viewsets.ReadOnlyModelViewSet):
         'full_time',
         'credits_after_completion',
         'distance_learning',
-        'completion_rate',
         'total_cost',
         'critical_skill',
         'green_occupation',
         'high_demand_occupation'
     )
-    ordering_fields = ('name', 'id', 'total_cost')
+    ordering_fields = ('id')
 
     def get_queryset(self):
         return Qualification.published_objects.all()

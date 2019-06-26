@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'/>
+    <link href='https://unpkg.com/@fullcalendar/core/main.css'
+            rel='stylesheet'/>
+    <link href='https://unpkg.com/@fullcalendar/daygrid/main.css'
+            rel='stylesheet'/>
+    <script src='https://unpkg.com/@fullcalendar/core/main.js'></script>
+    <script src='https://unpkg.com/@fullcalendar/daygrid/main.js'></script>
+    <title>OpenEdu - API examples - Campus Events shown in a calendar</title>
+</head>
+
+<body>
+    <h1>OpenEdu Campus & Qualifications events</h1>
+<div id='calendar'></div>
+<script type='text/javascript'>
+const computeTitle = (resource, event, key) => {
+    return [
+        event.name,
+        resource.name,
+        key === 'qualification' ? resource.campus : '',
+    ].filter(t => t).join(' ** ')
+}
+
+(async function () {
+    const calendarEl = document.getElementById('calendar');
+
+    let calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: ['dayGrid'],
+    });
+    calendar.render()
+
+    // OPENEDU_API_URL = 'localhost'
+    OPENEDU_API_URL = 'http://ford3.kartoza.com/api'
+    API_ENDPOINTS = {
+        campus: `${OPENEDU_API_URL}/v1/campus/`,
+        qualification: `${OPENEDU_API_URL}/v1/qualifications/`,
+    }
+    Object.keys(API_ENDPOINTS).forEach(async key => {
+        const response = await fetch(API_ENDPOINTS[key])
+        const result = await response.json()
+        result
+            .filter(data => data[`${key}_events`].length > 0)
+            .forEach(resource => {
+                resource[`${key}_events`].forEach(event => {
+                    calendar.addEvent({
+                        'id': event['id'],
+                        'title': computeTitle(resource, event, key),
+                        'start': event['date_start'],
+                        'end': event['date_end'],
+                        'url': event['http_link']
+                    })
+                })
+            })
+        })
+
+
+})()
+</script>
+</body>
+
+</html>
+
+<script>
+
+</script>
