@@ -6,8 +6,10 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.shortcuts import render
+from django.views.generic import TemplateView
 from sentry_sdk import capture_message
 from ford3.forms.custom_auth_form import CustomAuthForm
+
 
 # from django.conf.urls.static import static
 
@@ -54,8 +56,10 @@ urlpatterns = [
         auth_views.LogoutView.as_view(), {'next_page': '/'},
         name='logout'),
     url(r'^api-auth/', include('rest_framework.urls')),
-    # url(r'^', include('ford3.urls')),
-    # url(r'^accounts/', include('allauth.urls')),
+    url('providers.html', TemplateView.as_view(
+        template_name='api-examples/providers.html')),
+    url('calendar.html', TemplateView.as_view(
+        template_name='api-examples/calendar.html'))
 ]
 
 if settings.DEBUG:
