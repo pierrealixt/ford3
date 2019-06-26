@@ -201,7 +201,8 @@ class Campus(models.Model):
                 'edited_at',
                 'published',
                 'ready_to_publish',
-                'completion_rate')
+                'completion_rate') \
+            .order_by('id')
         return list(queryset)
 
     @property
