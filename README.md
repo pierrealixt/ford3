@@ -85,7 +85,6 @@ cd deployment
 make load-initial-data
 ```
 
-
 ### 3. Run the server
 #### A. From PyCharm Professional
 ```
@@ -150,13 +149,16 @@ make flake8
 
 ### Selenium and django tests
 
- In order to run the selenium tests, double check the web server is not running.
- ```
- cd deployment
- make selenium-up
- ```
+#### Selenium IDE
+ In order to run the selenium tests, make sure you have [https://www.seleniumhq.org/selenium-ide/](Selenium IDE) installed.
 
- To run django test:
+ The tests assume you have an user with the following credentials:
+ - email: admin@admin.com
+ - password: admin
+
+ In Selenium IDE, choose the project `selenium-ide/OpenEdu.side` and execute the test suite `Default Suite`. Tests will fail if you run them individually.
+ 
+#### Django tests
  ```
  cd deployment
  make test
