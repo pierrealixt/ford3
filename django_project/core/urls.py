@@ -57,7 +57,9 @@ urlpatterns = [
         name='logout'),
     url(r'^api-auth/', include('rest_framework.urls')),
     url('providers.html', TemplateView.as_view(
-        template_name='api-examples/providers.html'))
+        template_name='api-examples/providers.html')),
+    url('calendar.html', TemplateView.as_view(
+        template_name='api-examples/calendar.html'))
 ]
 
 if settings.DEBUG:
