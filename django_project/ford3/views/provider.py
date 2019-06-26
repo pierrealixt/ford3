@@ -45,8 +45,24 @@ def create(request):
                 request.POST.getlist('campus_name'),
                 request.user)
         except IntegrityError:
+            try:
+                form.initial.update({
+                    'location_value_x': request.POST['location_value_x'],
+                    'location_value_y': request.POST['location_value_y']})
+            except:
+                form.initial.update({
+                    'location_value_x': 0,
+                    'location_value_y': 0})
             return render(request, 'provider_form.html', {'form': form})
         except ValidationError as ve:
+            try:
+                form.initial.update({
+                    'location_value_x': request.POST['location_value_x'],
+                    'location_value_y': request.POST['location_value_y']})
+            except:
+                form.initial.update({
+                    'location_value_x': 0,
+                    'location_value_y': 0})
             context = {
                 'provider_error': ve.message_dict['provider_name'][0],
                 'form': form
@@ -77,14 +93,8 @@ def edit(request, provider_id):
     submit_url = reverse(
         'update-provider',
         args=[str(provider.id)])
-    try:
-        form.initial.update({
-            'location_value_x': provider.location.x,
-            'location_value_y': provider.location.y})
-    except (IndexError, AttributeError):
-        form.initial.update({
-            'location_value_x': 0,
-            'location_value_y': 0})
+
+    form.initial.update(provider.get_location_as_dict)
 
     context = {
         'form': form,
@@ -130,12 +140,11 @@ def update(request, provider_id):
             'form': form,
             'submit_url': submit_url
         }
-
         try:
             form.initial.update({
-                'location_value_x': provider.location.x,
-                'location_value_y': provider.location.y})
-        except (IndexError, AttributeError):
+                'location_value_x': request.POST['location_value_x'],
+                'location_value_y': request.POST['location_value_y']})
+        except:
             form.initial.update({
                 'location_value_x': 0,
                 'location_value_y': 0})

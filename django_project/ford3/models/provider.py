@@ -227,18 +227,38 @@ class Provider(models.Model):
         super().save(*args, **kwargs)
 
     def save_location_data(self, data):
-        x_value = data['location_value_x']
-        y_value = data['location_value_y']
-        geometry_point = GEOSGeometry(Point(
-            float(x_value),
-            float(y_value))
-        )
-        self.location = geometry_point
-
-        self.save()
+        try:
+            x_value = data['location_value_x']
+            y_value = data['location_value_y']
+            geometry_point = GEOSGeometry(Point(
+                float(x_value),
+                float(y_value))
+            )
+            self.location = geometry_point
+            self.save()
+        except ValueError:
+            raise ValidationError(
+                {
+                    'location':
+                        'Invalid location. Please reselect the '
+                        'location from the map and ensure your location '
+                        'details are entered correctly'
+                 })
 
     def soft_delete(self):
         self.deleted = True
         for campus in self.campus_set.all():
             campus.soft_delete()
         self.save()
+
+    @property
+    def get_location_as_dict(self):
+        try:
+            result = ({
+                'location_value_x': self.location.x,
+                'location_value_y': self.location.y})
+        except (IndexError, AttributeError):
+            result = ({
+                'location_value_x': 0,
+                'location_value_y': 0})
+        return result
