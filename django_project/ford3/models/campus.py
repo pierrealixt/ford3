@@ -305,8 +305,10 @@ class Campus(models.Model):
         if len(form_data['saqa_ids']) == 0:
             return
 
-        # symmetric difference
-        ids = set(self.saqa_ids) ^ set(form_data['saqa_ids'].split(' '))
+        ids = [
+            sid for sid in form_data['saqa_ids'].split(' ')
+            if sid not in self.saqa_ids
+        ]
 
         for saqa_id in ids:
             qualif = self.qualification_set.create(
@@ -318,14 +320,16 @@ class Campus(models.Model):
 
     def delete_qualifications(self, form_data):
         # ids missing in form_data must be deleted
-        ids = set(form_data['saqa_ids'].split(' ')) ^ set(self.saqa_ids)
-        ids = [saqa_id for saqa_id in ids if len(saqa_id) > 0]
+        ids = [
+            sid for sid in self.saqa_ids
+            if sid not in form_data['saqa_ids'].split(' ')
+        ]
 
         for saqa_id in ids:
             qualif = self.qualification_set.filter(
                 saqa_qualification__id=saqa_id,
                 campus=self)
-            qualif.delete()
+            qualif.update(deleted=True)
 
     def soft_delete_all_qualifications(self):
         for qualification in self.qualification_set.all():
