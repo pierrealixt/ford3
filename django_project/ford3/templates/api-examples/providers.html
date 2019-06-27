@@ -8,7 +8,11 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<div class='container'></div>
+<div class='container'>
+    <div class='row'>
+        <div class='col-md-12'><h1>OpenEdu - Providers, Campus & Qualifications</h1></div>
+    </div>
+</div>
 <script type='text/javascript'>
 const fetchProviders = async () => {
     fetch(API_ENDPOINTS.providers)
@@ -22,7 +26,12 @@ const fetchProviders = async () => {
 
 const qualificationsCount = (provider) => {
     return provider.campus.reduce((acc, currentValue, currentIndex, array) => {
-        return acc + currentValue.qualification_set.length
+        if (currentValue.published_qualifications) {
+            return acc + currentValue.published_qualifications.length
+        } else {
+            return acc + 0
+        }
+        
     }, 0)
 }
 
@@ -31,8 +40,8 @@ const showQualifications = (provider) => {
     html = `<dl>`
     provider.campus.forEach(campus => {
         html += `<dt>${campus.name}</dt>`
-        if (campus.qualification_set.length > 0) {
-            campus.qualification_set.forEach(qualification => {
+        if (campus.published_qualifications && campus.published_qualifications.length > 0) {
+            campus.published_qualifications.forEach(qualification => {
                 html += `<dd>${qualification.saqa_qualification.name}</dd>`
             })
         } else {
@@ -63,12 +72,13 @@ const showQualificationsCount = (provider) => {
 
     const response = await fetch(API_ENDPOINTS.providers)
     const providers = await response.json()
+    console.log(providers)
     providers.forEach(provider => {
         const html = `
-        <div class='row'>
+        <div class='row border-bottom'>
             <div class='col-sm-12'>
                 <h3>${provider.name}</h3>
-                <h6>${showQualificationsCount(provider)} in ${provider.campus.length} campus</h6>
+                <p class='text-muted'>${showQualificationsCount(provider)} in ${provider.campus.length} campus</p>
                 ${showQualifications(provider)}
             </div>
         </div>
