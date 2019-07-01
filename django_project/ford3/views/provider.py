@@ -64,7 +64,10 @@ def create(request):
                     'location_value_x': 0,
                     'location_value_y': 0})
             context = {
-                'provider_error': ve.message_dict['provider_name'][0],
+                'provider_error': ''.join([
+                    m_val[0]
+                    for m_key, m_val
+                    in ve.message_dict.items()]),
                 'form': form
             }
             return render(request, 'provider_form.html', context)
@@ -125,7 +128,10 @@ def update(request, provider_id):
             provider.save()
         except ValidationError as ve:
             context = {
-                'provider_error': ve.message_dict['provider_name'][0],
+                'provider_error': ''.join([
+                    m_val[0]
+                    for m_key, m_val
+                    in ve.message_dict.items()]),
                 'form': form
             }
             return render(request, 'provider_form.html', context)
