@@ -5,9 +5,16 @@ const setupMap = (location_x, location_y) => {
   // This code is adapted from the fiddle demo for: https://github.com/jonataswalker/ol-geocoder
   let olsource = new ol.source.OSM()
   let olview = new ol.View({
-    center: [30.5595, 22.9375],
-    zoom: 5,
-    projection: 'EPSG:4326' })
+    center: [0, 0],
+    zoom: 5
+  })
+
+  console.log(current_location)
+  if (location_x.length === 0 && location_y.length === 0) {
+    olview.setCenter([2753529.9913838077, -3460334.186405535])
+  } else {
+    olview.setCenter(current_location)
+  }
 
   let baseLayer = new ol.layer.Tile({ source: olsource })
 
@@ -37,10 +44,10 @@ const setupMap = (location_x, location_y) => {
     setupMap(evt.coordinate[0], evt.coordinate[1])
     setAddress(evt)
   })
-  olview.animate({
-    center: current_location,
-    duration: 2000
-  })
+  // olview.animate({
+  //   center: current_location,
+  //   duration: 2000
+  // })
 
   map.on('singleclick', function (evt) {
     setLocation(evt)
