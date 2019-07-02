@@ -1,7 +1,7 @@
-const setupMap = (location_x, location_y) => {
-  let map_container = document.getElementById('address_map')
-  map_container.innerHTML = ''
-  let current_location = [location_x, location_y]
+const setupMap = (locationX, locationY) => {
+  let mapContainer = document.getElementById('address_map')
+  mapContainer.innerHTML = ''
+  let currentLocation = [locationX, locationY]
   // This code is adapted from the fiddle demo for: https://github.com/jonataswalker/ol-geocoder
   let olsource = new ol.source.OSM()
   let olview = new ol.View({
@@ -9,25 +9,24 @@ const setupMap = (location_x, location_y) => {
     zoom: 5
   })
 
-  console.log(current_location)
-  if (location_x.length === 0 && location_y.length === 0) {
+  if (locationX.length === 0 && locationY.length === 0) {
     olview.setCenter([2753529.9913838077, -3460334.186405535])
   } else {
-    olview.setCenter(current_location)
+    olview.setCenter(currentLocation)
   }
 
   let baseLayer = new ol.layer.Tile({ source: olsource })
 
   let map = new ol.Map({
 
-    target: map_container,
+    target: mapContainer,
     view: olview,
     layers: [baseLayer]
   })
   // popup
   let popup = new ol.Overlay.Popup()
   map.addOverlay(popup)
-  addMarker(map, current_location)
+  addMarker(map, currentLocation)
   // Instantiate with some options and add the Control
   let geocoder = new Geocoder('nominatim', {
     provider: 'osm',
@@ -44,10 +43,10 @@ const setupMap = (location_x, location_y) => {
     setupMap(evt.coordinate[0], evt.coordinate[1])
     setAddress(evt)
   })
-  // olview.animate({
-  //   center: current_location,
-  //   duration: 2000
-  // })
+  olview.animate({
+    center: currentLocation,
+    duration: 2000
+  })
 
   map.on('singleclick', function (evt) {
     setLocation(evt)
@@ -55,18 +54,18 @@ const setupMap = (location_x, location_y) => {
   })
 }
 
-const marker = null
-const markerVectorLayer = null
-const vectorSource = null
+// const marker = null
+// const markerVectorLayer = null
+// const vectorSource = null
 
-const addMarker = (map, current_location) => {
+const addMarker = (map, currentLocation) => {
   if (this.markerVectorLayer) {
     this.vectorSource.clear()
   }
   // Location 0, 0 indicates no location has been saved
-  if (!((current_location[0] == 0) && (current_location[1] == 0))) {
+  if (!((currentLocation[0] == 0) && (currentLocation[1] == 0))) {
     this.marker = new ol.Feature({
-      geometry: new ol.geom.Point(current_location)
+      geometry: new ol.geom.Point(currentLocation)
     })
     this.vectorSource = new ol.source.Vector({
       features: [this.marker]
