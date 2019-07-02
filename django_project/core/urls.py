@@ -56,10 +56,18 @@ urlpatterns = [
         auth_views.LogoutView.as_view(), {'next_page': '/'},
         name='logout'),
     url(r'^api-auth/', include('rest_framework.urls')),
-    url('providers.html', TemplateView.as_view(
+
+    # API Examples
+    url(r'api-examples/$', TemplateView.as_view(
+        template_name='api-examples/index.html')),
+
+    url(r'api-examples/providers/$', TemplateView.as_view(
         template_name='api-examples/providers.html')),
-    url('calendar.html', TemplateView.as_view(
-        template_name='api-examples/calendar.html'))
+    url(r'api-examples/calendar/$', TemplateView.as_view(
+        template_name='api-examples/calendar.html')),
+    url(r'api-examples/map/$', TemplateView.as_view(
+        template_name='api-examples/map.html')),
+
 ]
 
 if settings.DEBUG:
