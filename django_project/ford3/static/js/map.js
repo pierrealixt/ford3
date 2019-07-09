@@ -1,32 +1,32 @@
 const setupMap = (locationX, locationY) => {
   let mapContainer = document.getElementById('address_map')
-  mapContainer.innerHTML = ''
-  let currentLocation = [locationX, locationY]
-  // This code is adapted from the fiddle demo for: https://github.com/jonataswalker/ol-geocoder
+  let currentLocation = [parseFloat(locationX), parseFloat(locationY)]
+
   let olsource = new ol.source.OSM()
   let olview = new ol.View({
+    projection: 'EPSG:3857',
     center: [0, 0],
     zoom: 5
   })
-
-  if (locationX.length === 0 && locationY.length === 0) {
-    olview.setCenter([2753529.9913838077, -3460334.186405535])
-  } else {
-    olview.setCenter(currentLocation)
-  }
-
   let baseLayer = new ol.layer.Tile({ source: olsource })
-
   let map = new ol.Map({
-
     target: mapContainer,
     view: olview,
     layers: [baseLayer]
   })
+
+  if (parseInt(locationX) === 0 && parseInt(locationY) === 0) {
+    const sa3857 = [2753529.9913838077, -3460334.186405535]
+    olview.setCenter(sa3857)
+  } else {
+    olview.setCenter(currentLocation)
+    addMarker(map, currentLocation)
+  }
+
   // popup
   let popup = new ol.Overlay.Popup()
   map.addOverlay(popup)
-  addMarker(map, currentLocation)
+
   // Instantiate with some options and add the Control
   let geocoder = new Geocoder('nominatim', {
     provider: 'osm',
@@ -43,10 +43,6 @@ const setupMap = (locationX, locationY) => {
     setupMap(evt.coordinate[0], evt.coordinate[1])
     setAddress(evt)
   })
-  olview.animate({
-    center: currentLocation,
-    duration: 2000
-  })
 
   map.on('singleclick', function (evt) {
     setLocation(evt)
@@ -54,9 +50,9 @@ const setupMap = (locationX, locationY) => {
   })
 }
 
-// const marker = null
-// const markerVectorLayer = null
-// const vectorSource = null
+const marker = null
+const markerVectorLayer = null
+const vectorSource = null
 
 const addMarker = (map, currentLocation) => {
   if (this.markerVectorLayer) {

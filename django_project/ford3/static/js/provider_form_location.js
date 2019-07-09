@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
-  let locationX = document.querySelector('#id_location_value_x').value
-  let locationY = document.querySelector('#id_location_value_y').value
+  let locationX = document.querySelector('#id_location_value_x').value || 0
+  let locationY = document.querySelector('#id_location_value_y').value || 0
   setupMap(locationX, locationY)
 })
 

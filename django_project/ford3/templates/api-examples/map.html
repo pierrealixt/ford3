@@ -40,7 +40,7 @@
         const initMap = () => {
             const sa3857 = [2753529.9913838077, -3460334.186405535]
             const sa4326 = from3857to4326(sa3857)
-    
+            console.log(sa4326)
             let map = L.map('map').setView([sa4326[1], sa4326[0]], 5)
             let osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,

@@ -1,8 +1,8 @@
 
 $(document).ready(function () {
-  let location_x = document.querySelector('#id_campus-location-location_value_x').value
-  let location_y = document.querySelector('#id_campus-location-location_value_y').value
-  setupMap(location_x, location_y)
+  let locationX = document.querySelector('#id_campus-location-location_value_x').value || 0
+  let locationY = document.querySelector('#id_campus-location-location_value_y').value || 0
+  setupMap(locationX, locationY)
 })
 
 const setAddress = (evt) => {
