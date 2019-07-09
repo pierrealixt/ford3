@@ -157,6 +157,8 @@ make flake8
  - password: admin
 
  In Selenium IDE, choose the project `selenium-ide/OpenEdu.side` and execute the test suite `Default Suite`. Tests will fail if you run them individually.
+
+ Before running the tests, you must start a local server.
  
 #### Django tests
  ```
