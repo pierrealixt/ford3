@@ -11,7 +11,6 @@ from api.serializers.utilities.common_excluded_fields import CommonExcludedField
 
 class QualificationSerializer(serializers.ModelSerializer):
     qualification_events = QualificationEventSerializer(many=True)
-    subjects = SubjectSerializer(many=True)
     saqa_qualification = SAQAQualificationSerializer()
     occupations = OccupationSerializer(many=True)
     interests = InterestSerializer(many=True)

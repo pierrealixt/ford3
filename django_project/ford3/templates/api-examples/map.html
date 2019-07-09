@@ -1,0 +1,259 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>OpenEdu - API Examples - Map</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.5.0/proj4.js"></script>
+    <style>
+        #map { height: 420px; }
+
+        .legend {
+            background: white;
+            opacity: 0.8;
+            padding: 5px;
+        }
+        .legend ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .legend li {
+            margin-bottom: 10px;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-md-12'>
+                <div id='map'></div>
+            </div>
+            <div class='col-md-12'>
+                <div id='qualification'></div>
+            </div>
+        </div>
+    </div>
+
+    <script type='text/javascript'>
+    (async function () {
+        // OPENEDU_API_URL = 'http://localhost/api'
+        OPENEDU_API_URL = 'http://ford3.kartoza.com/api'
+        API_ENDPOINTS = {
+            provider: `${OPENEDU_API_URL}/v1/providers/`
+        }
+
+        const from3857to4326 = (coords) => {
+            return proj4('EPSG:3857', 'EPSG:4326', coords)
+        }
+
+        const initMap = () => {
+            const sa3857 = [2753529.9913838077, -3460334.186405535]
+            const sa4326 = from3857to4326(sa3857)
+            let map = L.map('map').setView([sa4326[1], sa4326[0]], 5)
+            let osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            })
+            osmLayer.addTo(map)
+            return map
+        }
+
+        const initLegend = () => {
+            let legend = L.control({position: 'topright'})
+            legend.onAdd = function(map) {
+                let div = L.DomUtil.create('div', 'legend')
+                let providerPin = "{% static 'images/api-examples/map-pin-provider.svg' %}"
+                let campusPin = "{% static 'images/api-examples/map-pin-campus.svg' %}"
+                div.innerHTML = `
+                    <ul>
+                        <li><img style='width: 30px; height: 30px' src="${providerPin}" />Providers</li>
+                        <li><img style='width: 30px; height: 30px' src="${campusPin}" />Campus</li>
+                    </ul>
+                `
+                return div
+
+            }
+            return legend
+        }
+        const createCampusMarker = (campus) => {
+            const coords = from3857to4326([campus.location.lat, campus.location.lng])
+            const icon = L.icon({
+                iconUrl: "{% static 'images/api-examples/map-pin-campus.svg' %}",
+                iconSize: [30, 30]
+            })
+            
+            let marker = L.marker([coords[1], coords[0]], {
+                title: campus.name,
+                icon: icon
+            })
+            marker.bindPopup(`
+                <h6>${campus.name} - (${campus.id})</h6>
+                ${displayQualificationsList(campus)}
+            `)
+
+            marker.on('popupopen', function(evt) {
+                document.querySelectorAll('li[data-qualification-id]').forEach(li => {
+                    li.addEventListener('click', evt => {
+                        const qualification = campus.published_qualifications.filter(q => q.id === parseInt(evt.target.dataset['qualificationId']))[0]
+                        displayQualification(qualification)
+                    })
+                })
+            })
+            return marker
+        }
+
+        const createProviderMarker = (provider, campusMarkers) => {
+            const coords = from3857to4326([provider.location.lat, provider.location.lng])
+            const icon = L.icon({
+                iconUrl: "{% static 'images/api-examples/map-pin-provider.svg' %}",
+                iconSize: [30, 30]
+            })
+            let marker = L.marker([coords[1], coords[0]], {
+                title: provider.name,
+                icon: icon
+            })
+            marker.bindPopup(`
+                <h6>${provider.name} - (${provider.id})</h6>
+                <p class='text-muted'>${provider.provider_type}</p>
+                <p>
+                    ${provider.physical_address_line_1}
+                    ${provider.physical_address_line_2}
+                    ${provider.physical_address_city}
+                    ${provider.physical_address_postal_code}
+                </p>
+                <p>
+                    ${provider.telephone} - ${provider.admissions_contact_no}
+                    <br />
+                    ${provider.email}
+                    <br />
+                    ${displayWebsite(provider.website)}
+                </p>
+                ${displayLinkToCampus(provider)}
+            `)
+
+
+
+            marker.on('popupopen', function(evt) {
+                const displayCampusLink = document.querySelector(`p[data-provider-id="${provider.id}"]`)
+                if (displayCampusLink) {
+                    document.querySelector(`p[data-provider-id="${provider.id}"]`).addEventListener('click', function (evt) {
+                        marker.closePopup()
+                        campusMarkers.addTo(map)
+                        map.fitBounds(campusMarkers.getBounds());
+                    })
+                }
+            })
+            return marker
+        }
+
+        const displayWebsite = (website) => {
+            if (website) {
+                return `<a href='${website}'>${website}</a>`
+            }
+            return ''
+        }
+
+        const displayLinkToCampus = (provider) => {
+            if (provider.campus.length > 0) {
+                return `<p style='cursor: pointer' data-provider-id="${provider.id}">Show me the ${provider.campus.length} campus</p>`
+            }
+            return ''
+        }
+
+        const displayQualificationsList = (campus)  => {
+            if (campus.published_qualifications.length > 0) {
+                let html = campus.published_qualifications.map(qualification => {
+                    return `<li style='cursor: pointer' data-qualification-id='${qualification.id}'>${qualification.name}</li>`
+                })
+                return `<ul>${html.join('')}</ul>`
+            }
+            return 'No qualification yet.'
+        }
+
+        const displayQualification = (qualification) => {
+            const qContainer = document.querySelector('#qualification')
+            qContainer.innerHTML = `
+                <h3>${qualification.name} - ${qualification.campus}</h3>
+                <p class='text-muted'>${qualification.saqa_qualification.field_of_study}</p>
+                <p>Description
+                    <ul>
+                        <li>short: ${qualification.short_description}</li>
+                        <li>long: ${qualification.long_description}</li>
+                    </ul>
+                </p>
+                <ul>
+                    <li>Duration: ${qualification.duration} ${qualification.duration_time_repr} - ${qualification.full_time ? 'Full-time' : 'Part-time'}</li>
+                    <li>Total cost: ZAR ${qualification.total_cost} (${qualification.total_cost_comment})</li>
+                    <li>Occupations: ${qualification.occupations.map(occ => occ.name).join(', ')}</li>
+                    <li>Interests: ${qualification.interests.map(i => i.name).join(', ')}</li>
+                    <li>Requirements: ${displayRequirements(qualification.requirement, qualification.subjects)}
+                </ul>
+            `
+        }
+
+        const displayRequirements = (requirement) => {
+            let requirementList = []
+            if (requirement.assessment) {
+                requirementList.push(`<li>Assessment: Yes (${requirement.assessment_comment})`)
+            }
+            if (requirement.portfolio) {
+                requirementList.push(`<li>Portfolio: Yes (${requirement.portfolio_comment})`)
+            }
+            if (requirement.interview) {
+                requirementList.push(`<li>Interview: Yes`)
+            }
+            if (requirement.require_aps_score) {
+                requirementList.push(`<li>APS score: Yes, <a href='${requirement.aps_calculator_link}'>${requirement.aps_calculator_link}</a>`)
+            }
+            if (requirement.require_certain_subjects) {
+                requirementList.push(`<li>Required subjects:
+                    <ul>
+                        ${requirement.subjects.map(s => `<li>${s.name} - ${s.minimum_score}%</li>`).join('')}
+                    </ul>
+                </li>`)
+            }
+            return `
+                <ul>
+                    <li>Required entrance qualification: ${requirement.min_nqf_level}</li>
+                    ${requirementList.join('')}
+                </ul>
+            `
+        }
+
+        const map = initMap()
+        const legend = initLegend()
+        legend.addTo(map)
+
+        const response = await fetch(API_ENDPOINTS['provider'])
+        const result = await response.json()
+        result
+            .forEach(provider => {
+                let campusMarkers = []
+                provider.campus.forEach(campus => {
+                    if (campus.location) {
+                        
+                        let marker = createCampusMarker(campus)
+                        campusMarkers.push(marker)
+                    }
+                })
+                if (provider.location) {
+                    let marker = createProviderMarker(provider, L.featureGroup(campusMarkers))
+                    marker.addTo(map)
+                }
+            })
+        // let paris3857 = [264185.4790106404, 6243987.966559477]
+
+
+        
+    })()
+
+    </script>
+</body>
+</html>

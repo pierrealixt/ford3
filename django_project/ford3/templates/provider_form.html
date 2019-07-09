@@ -1,19 +1,36 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
-{% block title %}{{ provider.name }} • Edit provider{% endblock %}
+{% block title %}
+{% if form.name is False %}
+     Add provider
+{% else %}
+    {{ form.instance.name }} • Edit provider
+{% endif %}
+{% endblock %}
 
 {% block side_navbar %}
-{% include 'dashboard/dashboard_sidebar.html' %}
+{% if form.instance.name %}
+    <nav id="sidebar"
+    class="col-md-3 col-lg-3 col-xl-2 px-0 d-none d-sm-none d-lg-block">
+    {% include 'main_sidebar.html' with provider=form.instance %}
+    </nav>
+
+{% else %}
+    {% include 'dashboard/dashboard_sidebar.html' %}
+{% endif %}
+
 {% endblock %}
 
 {% block body %}
     <div class='row'>
         <div class='col-md-12'>
-            <h3>Add a provider</h3>
+            {% if not form.instance.name %}
+                <h3>Add a provider</h3>
+            {% endif %}
         </div>
     </div>
+    
 
     <div class="row">
         <div class='col-md-12'>

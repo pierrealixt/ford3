@@ -275,7 +275,7 @@ class QualificationFormWizard(
             return self.provider.campus_set.get(
                 pk=self.kwargs['campus_id']).qualification_set.get(
                     pk=self.kwargs['qualification_id'])
-        except (Provider.DoesNotExist, Campus.DoesNotExist, Qualification.DoesNotExist):
+        except (Provider.DoesNotExist, Campus.DoesNotExist, Qualification.DoesNotExist): # noqa
             raise Http404()
 
     def get(self, *args, **kwargs):
