@@ -38,9 +38,9 @@ class TestCampus(TestCase):
         self.user = User.objects.get(pk=3)
 
     def test_soft_delete_campus(self):
-        self.assertTrue(self.campus.deleted)
-        self.campus.soft_delete()
         self.assertFalse(self.campus.deleted)
+        self.campus.soft_delete()
+        self.assertTrue(self.campus.deleted)
 
 
     def test_campus_description(self):

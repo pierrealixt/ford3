@@ -2,29 +2,36 @@ from django.urls import reverse
 from django.test import TestCase, Client
 from django.contrib.auth.models import Permission
 from ford3.tests.models.model_factories import ModelFactories
+from ford3.models.user import User
+from django.contrib.auth.models import Group
 
 
 class TestCreateCampusView(TestCase):
-    fixtures = ['groups']
+    fixtures = ['groups', 'sa_provinces']
 
     def setUp(self):
         self.client = Client()
+        self.user = User.objects.create_user(
+            'email@email.com', 'password', is_provider=True, is_active=True)
+        self.user.groups.add(Group.objects.get(name='PROVIDER-ADMINS'))
+        self.user.user_permissions.add(
+            Permission.objects.get(codename='add_campus'))
+
         self.provider = ModelFactories.get_provider_test_object()
+        self.provider.created_by = self.user
+        self.provider.save()
         self.url = reverse('create-campus', args=[str(self.provider.id)])
 
         self.data = {
             'campus_name': 'My Campus'
         }
-
-        self.user = ModelFactories.create_user_provider()
-        self.user.user_permissions.add(
-            Permission.objects.get(codename='add_campus'))
         self.client.login(
             email=self.user.email,
             password='password')
 
+
     def test_create_campus(self):
-        response = self.client.post(self.url, self.data)
+        response = self.client.post(self.url, self.data, follow=True)
         self.assertIn(self.data['campus_name'], str(response.content))
 
     def test_create_duplicate_campus(self):

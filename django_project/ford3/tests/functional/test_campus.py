@@ -237,7 +237,7 @@ class TestCampusFormDataBinding(SeleniumTestCase):
         self.driver.get(self.campus_form_url)
         # User sees the first page's title
         title = self.driver.find_element_by_tag_name('h2').text
-        print(title)
+
         self.assertIn('Campus Details', title)
         # and the footer shows him what page he is on
         self.assert_footer('Page 1 of')
@@ -304,7 +304,6 @@ class TestCampusFormDataBinding(SeleniumTestCase):
 
         # User sees the first page's title
         title = self.driver.find_element_by_tag_name('h2').text
-        print(title)
         self.assertIn('Campus Details', title)
         # and the footer shows him what page he is on
         self.assert_footer('Page 1 of')
