@@ -12,6 +12,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.5.0/proj4.js"></script>
     <style>
         #map { height: 420px; }
+
+        .legend {
+            background: white;
+            opacity: 0.8;
+            padding: 5px;
+        }
+        .legend ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .legend li {
+            margin-bottom: 10px;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -28,8 +43,8 @@
 
     <script type='text/javascript'>
     (async function () {
-        OPENEDU_API_URL = 'http://localhost/api'
-        // OPENEDU_API_URL = 'http://ford3.kartoza.com/api'
+        // OPENEDU_API_URL = 'http://localhost/api'
+        OPENEDU_API_URL = 'http://ford3.kartoza.com/api'
         API_ENDPOINTS = {
             provider: `${OPENEDU_API_URL}/v1/providers/`
         }
@@ -37,10 +52,10 @@
         const from3857to4326 = (coords) => {
             return proj4('EPSG:3857', 'EPSG:4326', coords)
         }
+
         const initMap = () => {
             const sa3857 = [2753529.9913838077, -3460334.186405535]
             const sa4326 = from3857to4326(sa3857)
-            console.log(sa4326)
             let map = L.map('map').setView([sa4326[1], sa4326[0]], 5)
             let osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
@@ -48,6 +63,24 @@
             })
             osmLayer.addTo(map)
             return map
+        }
+
+        const initLegend = () => {
+            let legend = L.control({position: 'topright'})
+            legend.onAdd = function(map) {
+                let div = L.DomUtil.create('div', 'legend')
+                let providerPin = "{% static 'images/api-examples/map-pin-provider.svg' %}"
+                let campusPin = "{% static 'images/api-examples/map-pin-campus.svg' %}"
+                div.innerHTML = `
+                    <ul>
+                        <li><img style='width: 30px; height: 30px' src="${providerPin}" />Providers</li>
+                        <li><img style='width: 30px; height: 30px' src="${campusPin}" />Campus</li>
+                    </ul>
+                `
+                return div
+
+            }
+            return legend
         }
         const createCampusMarker = (campus) => {
             const coords = from3857to4326([campus.location.lat, campus.location.lng])
@@ -195,6 +228,8 @@
         }
 
         const map = initMap()
+        const legend = initLegend()
+        legend.addTo(map)
 
         const response = await fetch(API_ENDPOINTS['provider'])
         const result = await response.json()
