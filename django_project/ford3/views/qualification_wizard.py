@@ -1,7 +1,13 @@
+import re
+from collections import OrderedDict
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, Http404, get_object_or_404
 from django.urls import reverse
+from django.forms.models import model_to_dict
+from django.template.defaulttags import register
+from django.contrib.auth.mixins import UserPassesTestMixin
 from formtools.wizard.views import CookieWizardView
+from ford3.views.wizard_utilities import get_form_identifier_list_from_keys
 from ford3.models.qualification import Qualification
 from ford3.models.requirement import Requirement
 from ford3.models.subject import Subject
@@ -13,6 +19,11 @@ from ford3.forms.qualification import (
     QualificationDurationFeesForm,
     QualificationRequirementsForm,
     QualificationInterestsAndJobsForm,
+)
+from ford3.decorators import (
+    predicate_provider,
+    predicate_campus,
+    predicate_qualification
 )
 
 
@@ -65,44 +76,44 @@ class QualificationFormWizardDataProcess(object):
                 qualification_fields[qualification_field] = (
                     form_data[qualification_field]
                 )
-            except AttributeError:
+            except (AttributeError, KeyError):
                 continue
         return qualification_fields
 
-    def add_subjects(self, form_data):
+    def add_or_update_subjects(self, form_data):
         """
         Add subjects to qualification
         :param form_data: dict of form data
         """
-        # Remove old subjects
-        QualificationEntranceRequirementSubject.objects.filter(
-            qualification=self.qualification).delete()
-        subject_list = form_data['subject_list'].split(',')
-        minimum_score_list = form_data['minimum_score_list'].split(',')
-        for index, subject_value in enumerate(subject_list):
-            try:
-                subject = Subject.objects.get(
-                    id=subject_value
-                )
-            except (Subject.DoesNotExist, ValueError):
-                continue
-            requirement_subjects, created = (
-                QualificationEntranceRequirementSubject.objects.
-                get_or_create(
-                    subject=subject,
-                    qualification=self.qualification,
-                )
-            )
-            try:
-                minimum_score_value = int(minimum_score_list[index])
-            except IndexError:
-                continue
-            if minimum_score_value == -1:
-                continue
-            requirement_subjects.minimum_score = (
-                minimum_score_value
-            )
-            requirement_subjects.save()
+        if form_data['require_certain_subjects']:
+            QualificationEntranceRequirementSubject.objects.filter(
+                qualification=self.qualification).delete()
+
+            for subject_score_tuple in form_data['subjects_scores'].split(','):
+                match = re.match(r'\(([0-9]*) ([0-9]*)\)', subject_score_tuple)
+                if match:
+                    subject_id, minimum_score = match.groups()
+                    try:
+                        req_subject = QualificationEntranceRequirementSubject\
+                            .objects\
+                            .get(
+                                subject_id=subject_id,
+                                qualification_id=self.qualification.id)
+
+                        req_subject.minimum_score = minimum_score
+                        req_subject.save()
+
+                    except QualificationEntranceRequirementSubject.DoesNotExist: # noqa
+                        req_subject = QualificationEntranceRequirementSubject\
+                            .objects\
+                            .create(
+                                qualification_id=self.qualification.id,
+                                subject_id=subject_id,
+                                minimum_score=minimum_score
+                            )
+        else:
+            QualificationEntranceRequirementSubject.objects.filter(
+                qualification=self.qualification).delete()
 
     def add_or_update_requirements(self, form_data):
         """
@@ -110,13 +121,13 @@ class QualificationFormWizardDataProcess(object):
         :param form_data: dict of form data
         """
         # Check if there is already a requirements object
-        requirement_exists = True
-        existing_requirement: Requirement = self.qualification.requirement
-        try:
-            existing_requirement.qualification
-        except AttributeError:
+        if self.qualification.requirement is None:
             requirement_exists = False
+        else:
+            requirement_exists = True
+
         if requirement_exists:
+            existing_requirement: Requirement = self.qualification.requirement
             existing_requirement.min_nqf_level = (
                 form_data['min_nqf_level'])
             existing_requirement.interview = (
@@ -125,12 +136,17 @@ class QualificationFormWizardDataProcess(object):
                 form_data['portfolio'])
             existing_requirement.portfolio_comment = (
                 form_data['portfolio_comment'])
+            existing_requirement.assessment = (
+                form_data['assessment'])
+            existing_requirement.assessment_comment = (
+                form_data['assessment_comment'])
             existing_requirement.require_aps_score = (
                 form_data['require_aps_score'])
             existing_requirement.aps_calculator_link = (
                 form_data['aps_calculator_link'])
             existing_requirement.require_certain_subjects = (
                 form_data['require_certain_subjects'])
+
             existing_requirement.save()
         else:
             requirement_fields = {}
@@ -140,7 +156,7 @@ class QualificationFormWizardDataProcess(object):
             for requirement_field in requirement_form_fields.keys():
                 try:
                     getattr(Requirement, requirement_field)
-                    if form_data[requirement_field]:
+                    if requirement_field in form_data:
                         requirement_fields[requirement_field] = (
                             form_data[requirement_field]
                         )
@@ -157,17 +173,10 @@ class QualificationFormWizardDataProcess(object):
         Process qualification form data then update qualification
         :param form_data: dict of form data
         """
+
         qualification_form_data = self.qualification_form_data(
             form_data
         )
-        # Check duration
-        if form_data['duration']:
-            qualification_form_data['duration_in_months'] = (
-                self.duration_in_months(
-                    duration=form_data['duration'],
-                    duration_type=form_data['duration_type']
-                )
-            )
 
         Qualification.objects.filter(
             id=self.qualification.id
@@ -175,25 +184,61 @@ class QualificationFormWizardDataProcess(object):
             **qualification_form_data,
             edited_by=self.edited_by
         )
+        try:
+            # Update interests
+            interests = form_data['interest_list']
+            for interest in self.qualification.interests.all():
+                self.qualification.interests.remove(interest)
+            for interest in interests:
+                self.qualification.interests.add(interest)
+        except KeyError:
+            pass
 
-        # Update interests
-        interests = form_data['interest_list']
-        for interest in self.qualification.interests.all():
-            self.qualification.interests.remove(interest)
-        for interest in interests:
-            self.qualification.interests.add(interest)
+        try:
+            # Update occupations
+            occupations = form_data['occupations_ids']
+            self.qualification.toggle_occupations(occupations)
+        except KeyError:
+            pass
 
-        # Update occupations
-        occupations = form_data['occupations_ids']
-        self.qualification.toggle_occupations(occupations)
+        try:
+            # Add requirements
+            self.add_or_update_requirements(form_data)
+        except KeyError:
+            pass
 
-        # Add requirements
-        self.add_or_update_requirements(form_data)
+        try:
+            # Add subjects
+            self.add_or_update_subjects(form_data)
+        except KeyError:
+            pass
 
 
-class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
+
+class QualificationFormWizard(
+    UserPassesTestMixin,
+    LoginRequiredMixin,
+    CookieWizardView):
+
     template_name = 'qualification_form.html'
     initial_dict = {}
+
+    def test_func(self):
+        if self.request.user.is_authenticated:
+            return predicate_provider(
+                self.request.user,
+                self.kwargs['provider_id']) and\
+                predicate_campus(
+                    self.kwargs['provider_id'],
+                    self.kwargs['campus_id']) and\
+                predicate_qualification(
+                    self.kwargs['campus_id'],
+                    self.kwargs['qualification_id'])
+        else:
+            return False
+
+    def handle_no_permission(self):
+        return redirect(reverse('dashboard'))
 
     @property
     def provider(self):
@@ -229,20 +274,33 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
         Get qualification from id
         :return: qualification object
         """
-        qualification_id = self.kwargs['qualification_id']
-        if not qualification_id:
+        try:
+            return self.provider.campus_set.get(
+                pk=self.kwargs['campus_id']).qualification_set.get(
+                    pk=self.kwargs['qualification_id'])
+        except (Provider.DoesNotExist, Campus.DoesNotExist, Qualification.DoesNotExist): # noqa
             raise Http404()
-        return get_object_or_404(
-            Qualification,
-            id=qualification_id
-        )
 
     def get(self, *args, **kwargs):
-        self.set_initial_data()
-        qualification = self.qualification
-        if not qualification:
-            raise Http404()
-        return super(QualificationFormWizard, self).get(*args, **kwargs)
+        self.qualification
+        if 'step' in self.request.GET:
+            return super().render_goto_step(self.request.GET['step'], **kwargs)
+        else:
+            return super(QualificationFormWizard, self).get(*args, **kwargs)
+
+    def render_next_step(self, form, **kwargs):
+        """
+        This method gets called when the next step/form should be rendered.
+        `form` contains the last/current form.
+        """
+        # get the form instance based on the data from the storage backend
+        # (if available).
+
+        if 'step' in self.request.GET and 'multi-step' not in self.request.GET:
+            return self.render_done(form, **kwargs)
+        else:
+            return super().render_next_step(form, **kwargs)
+
 
     def get_context_data(self, form, **kwargs):
         context = super().get_context_data(form, **kwargs)
@@ -250,9 +308,12 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
             'Details',
             'Duration & Fees',
             'Requirements',
-            'Interest & Jobs',
+            'Interests & Jobs',
             'Important Dates',
         ]
+        context['form_identifier_list'] = (
+            get_form_identifier_list_from_keys(
+                self.form_list, context['form_name_list']))
         context['qualification'] = self.qualification
         context['provider'] = self.provider
         # make sure logo has been uploaded before set the context
@@ -260,108 +321,103 @@ class QualificationFormWizard(LoginRequiredMixin, CookieWizardView):
         context['provider_logo'] = \
             self.qualification.campus.provider.provider_logo.url \
             if self.qualification.campus.provider.provider_logo else ""
-        context['subjects_list'] = (
-            self.qualification.entrance_req_subjects_list)
-        context['events_list'] = self.qualification.events
-        context['occupations'] = self.qualification.occupations.all()
+
+        if self.steps.current == 'qualification-requirements':
+            context['subjects'] = list(Subject.objects
+                .all()
+                .values('id', 'name'))
+
+        if self.steps.current == 'qualification-interests-jobs':
+            context['occupations'] = self.qualification.occupations.all()
+
+        if self.steps.current == 'qualification-important-dates':
+            context['events_list'] = self.qualification.events
+        context['multi_step_form'] = True
+        if 'step' in self.request.GET and 'multi-step' not in self.request.GET:
+            context['multi_step_form'] = False
+
         return context
 
     def get_form_initial(self, step):
-        if step == '3':
-            # interets and occupations step
+        initial_dict = model_to_dict(self.qualification)
+        if step == 'qualification-requirements' and\
+            self.qualification.requirement is not None:
+            initial_dict = model_to_dict(self.qualification.requirement)
+        if step == 'qualification-interests-jobs':
             occupations_ids = ' '.join(self.qualification.occupation_ids)
-            return {'occupations_ids': occupations_ids}
+            initial_dict.update({
+                'occupations_ids': occupations_ids,
+                'interest_list': initial_dict['interests']})
+        if step == 'qualification-requirements':
+            subjects_scores = ','.join([
+                f'({req_subject.subject_id} {req_subject.minimum_score})'
+                for req_subject in
+                QualificationEntranceRequirementSubject
+                .objects
+                .filter(
+                    qualification_id=self.qualification.id)])
+
+            initial_dict.update({
+                'subjects_scores': subjects_scores
+            })
+        return initial_dict
 
     def done(self, form_list, **kwargs):
         form_data = dict()
         for form in form_list:
-            if form.prefix == '2':
-                context = self.get_context_data(form=form, **kwargs)
-                self.add_required_subjects(
-                    context['view'].storage.data['step_data']['2'])
-                form_data.update(form.cleaned_data)
-            else:
+            if form.is_bound and form.prefix != \
+                    'qualification-important-dates':
                 form_data.update(form.cleaned_data)
 
         qualification_data_process = QualificationFormWizardDataProcess(
             self.qualification,
             self.request.user
         )
-        qualification_data_process.process_data(
-            form_data
-        )
+        qualification_data_process.process_data(form_data)
 
         url = reverse(
             'show-qualification',
             args=(self.provider.id, self.campus.id, self.qualification.id))
         return redirect(url)
 
-    def add_required_subjects(self, step_data):
-        # Remove old subjects
-        QualificationEntranceRequirementSubject.objects.filter(
-            qualification__id=self.qualification.id).delete()
-        new_subject_values = step_data['2-subject']
-        new_minimum_scores = step_data['2-subject-minimum-score']
-        number_of_new_subjects = len(new_subject_values)
-        for i in range(0, number_of_new_subjects):
-            try:
-                subject = Subject.objects.filter(
-                    id=new_subject_values[i]).first()
-                new_subject = QualificationEntranceRequirementSubject()
-                new_subject.subject = subject
-                new_subject.qualification = self.qualification
-                new_subject.minimum_score = new_minimum_scores[i]
-                new_subject.save()
-            except (Subject.DoesNotExist, ValueError):
-                # ToDo: I need to alert the user one of the subjects could
-                #  not be saved
-                pass
+    def render_done(self, form, **kwargs):
+        """
+        This method gets called when all forms passed. The method should also
+        re-validate all steps to prevent manipulation. If any form fails to
+        validate, `render_revalidation_failure` should get called.
+        If everything is fine call `done`.
+        """
 
-    def set_initial_data(self):
-        try:
-            self.initial_dict['0'] = ({
-                'short_description': self.qualification.short_description,
-                'long_description': self.qualification.long_description,
-                'distance_learning': self.qualification.distance_learning
-            })
-        except (IndexError, AttributeError):
-            pass
-        try:
-            self.initial_dict['1'] = ({
-                'full_time': self.qualification.full_time,
-                'part_time': self.qualification.part_time,
-                'duration': self.qualification.duration_in_months,
-                'duration_type': 'month',
-                'total_cost': self.qualification.total_cost,
-                'total_cost_comment': self.qualification.total_cost_comment
-            })
-        except (IndexError, AttributeError):
-            pass
-        try:
-            self.initial_dict['2'] = ({
-                'min_nqf_level':
-                    self.qualification.requirement.min_nqf_level,
-                    'interview': self.qualification.requirement.interview,
-                'portfolio': self.qualification.requirement.portfolio,
-                'portfolio_comment':
-                    self.qualification.requirement.portfolio_comment,
-                'require_aps_score':
-                    self.qualification.requirement.require_aps_score,
-                'aps_calculator_link':
-                    self.qualification.requirement.aps_calculator_link,
-                'require_certain_subjects':
-                    self.qualification.requirement.require_certain_subjects
-            })
-        except (IndexError, AttributeError):
-            pass
-        try:
-            self.initial_dict['3'] = ({
-                'occupations_ids': self.occupation_ids,
-                'interest_list': self.qualification.interest_id_list,
-                'critical_skill': self.qualification.critical_skill,
-                'green_occupation': self.qualification.green_occupation,
-                'high_demand_occupation':
-                    self.qualification.high_demand_occupation
-            })
-        except (IndexError, AttributeError):
-            pass
+        final_forms = OrderedDict()
+        if ('step' in self.request.GET and 'multi-step'
+                not in self.request.GET and self.request.method != 'POST'):
+            form_list = [self.request.GET['step']]
+        else:
+            form_list = self.get_form_list()
+
+        # walk through the form list and try to validate the data again.
+        for form_key in form_list:
+            form_obj = self.get_form(
+                step=form_key,
+                data=self.storage.get_step_data(form_key),
+                files=self.storage.get_step_files(form_key)
+            )
+            if not form_obj.is_valid() and form_obj.is_bound:
+                return self.render_revalidation_failure(
+                    form_key, form_obj, **kwargs)
+            if form_obj.is_valid and form_obj.is_bound:
+                final_forms[form_key] = form_obj
+
+        # render the done view and reset the wizard before returning the
+        # response. This is needed to prevent from rendering done with the
+        # same data twice.
+        done_response = self.done(
+            final_forms.values(), form_dict=final_forms, **kwargs)
+        self.storage.reset()
+        self.qualification.save()
+        return done_response
+
+
+@register.filter
+def get_dictionary_item(dictionary, key):
+    return dictionary.get(key)

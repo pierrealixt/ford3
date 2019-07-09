@@ -4,7 +4,9 @@
         "pk": 2,
         "fields": {
             "email": "provider@email.com",
+            "password": "password",
             "username": "provider",
+            "is_active": true,
             "is_provider": true,
             "groups": [2]
         }

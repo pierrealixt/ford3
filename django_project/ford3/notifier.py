@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
+from ford3.tokens import account_activation_token
 
 
 class Notifier:
@@ -16,6 +16,6 @@ class Notifier:
                 'valid_link_days': settings.VALID_LINK_DAYS,
                 'uid': urlsafe_base64_encode(
                     force_bytes(user.pk)).decode(),
-                'token': default_token_generator.make_token(user),
+                'token': account_activation_token.make_token(user),
             })
         user.email_user(subject, message)

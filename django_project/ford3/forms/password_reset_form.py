@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
@@ -69,12 +70,11 @@ class PasswordResetForm(forms.Form):
             if not domain_override:
                 current_site = get_current_site(request)
                 site_name = current_site.name
-                domain = current_site.domain
             else:
-                site_name = domain = domain_override
+                site_name = domain_override
             context = {
                 'email': email,
-                'domain': domain,
+                'domain': settings.SERVER_PUBLIC_HOST,
                 'site_name': site_name,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                 'user': user,

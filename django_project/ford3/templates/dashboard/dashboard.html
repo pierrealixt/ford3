@@ -1,29 +1,58 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block head %}
+
+
+{% endblock %}
+
 
  {% block title %}
 	Dashboard
 {% endblock %}
 
 {% block side_navbar %}
-{% include 'dashboard_sidebar.html' %}
+{% include 'dashboard/dashboard_sidebar.html' %}
 {% endblock %}
+
+{% block dashboard_menu %}
+<div class="d-sm-block d-md-none">
+    <div class="small-sidebar-menu col-12">
+        <ul>
+            <li>
+                <a href="{% url 'dashboard' %}" class="text-white px-3">Providers</a>
+            </li>
+            {% if perms.ford3.view_user %}
+            <li>
+                <a href="{% url 'dashboard-users' %}" class="text-white px-3">Users</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+
+</div>
+{% endblock %}
+
 
 {% block body %}
 <div class='row'>
-    <div class='col-md-10'>
+    <div class='col'>
         <h3>Providers</h3>
     </div>
     {% if perms.ford3.add_provider %}
-    <div class='col-md-2'>
+    <div class='col-xs-8
+                col-sm-6
+                col-md-4
+                col-lg-3
+                col-xl-2'>
         <a href="{% url 'new-provider' %}" class='edu-button edu-button-orange'>Add a provider</a>
     </div>
     {% endif %}
-
-    <div class='col-md-12'>
+</div>
+	<div class='row'>
+    <div class='col-12'>
             {% if providers %}
-            <table class="table">
+            <table class="table table-responsive-sm">
                 <thead>
                     <tr>
                     <th scope="col">Provider</th>
@@ -56,6 +85,7 @@
                 No providers yet.
             {% endif %}
     </div>
+	</div>
 </div>
 {% endblock %}
 

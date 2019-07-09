@@ -293,7 +293,7 @@ const setSearchEvent = () => {
     clearTimeout(timeout)
 
     timeout = setTimeout(function () {
-      if (elem.value.length > 3) { ajaxSearchQualifications(elem.value) }
+      if (elem.value.length > 2) { ajaxSearchQualifications(elem.value) }
     }, 842)
   }
 }

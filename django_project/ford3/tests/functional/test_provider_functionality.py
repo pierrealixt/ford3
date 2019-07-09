@@ -64,11 +64,11 @@ class TestProviderForm(SeleniumTestCase):
         inputbox.send_keys('0821233444')
 
         # They are asked for their admission contact no.
-        inputbox = self.driver.find_element_by_name('admissions_contact_no')
-        self.assertEqual(
-            inputbox.get_attribute('placeholder'),
-            'Admissions contact number'
-        )
+        # inputbox = self.driver.find_element_by_name('admissions_contact_no')
+        # # self.assertEqual(
+        # #     inputbox.get_attribute('placeholder'),
+        # #     'Admissions contact number'
+        # # )
 
         # Which they enter as
         inputbox.send_keys('0137441422')

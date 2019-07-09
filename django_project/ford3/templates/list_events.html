@@ -4,17 +4,21 @@
 			<p class='text-muted'>None</p>
 		{% endif %}
 		{% for event in events %}
-			<p>
-				<b>{{ event.name }}</b>
+			<div class="row py-2">
+				<div class="col-md-4 col-sm-6">
+					<b>{{ event.name }}</b>
+				</div>
+				<div class="col">
+					{{ event.date_start }} - {{ event.date_end }}
+					{% if event.http_link %}
+						<a href="{{ event.http_link }}"
+						   target="_blank">({{ event.http_link }})</a>
+						<br>
 
-				{{ event.date_start }} - {{ event.date_end }}
-				{% if event.http_link %}
-					<a href="{{ event.http_link }}"
-					   target="_blank">({{ event.http_link }})</a>
-					<br>
-
-				{% endif %}
-			</p>
+					{% endif %}
+				</div>
+			</div>
 		{% endfor %}
 	</div>
 </div>
+

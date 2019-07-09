@@ -8,6 +8,15 @@
     body {
         background: var(--c-blue-l);
     }
+	.login-footer {
+
+	    bottom: 0;
+		color: var(--c-navy) !important;
+	}
+
+	.login-footer a {
+		color: var(--c-navy) !important;
+	}
 </style>
 {% endblock %}
 
@@ -15,7 +24,14 @@
 
 <div class="container-fluid" id="login-page"> 
     <div class="row py-5">
-        <div class="col-md-3 mx-auto rounded px-4" id="login-form">
+
+        <div class="col-10
+                    col-xs-10
+                    col-sm-8
+                    col-md-5
+                    col-lg-5
+                    col-xl-3
+         mx-auto rounded px-4" id="login-form">
         {% block registration %}
             <div class="row">
                 <div class="col-md-12">
@@ -35,7 +51,7 @@
                     <h4 class="text-center text-white">Login</h4>
                 </div>
             </div>
-              <form method="post" class='text-white'>
+	        <form method="post" class='text-white'>
                 {% csrf_token %}
                 {{ form.as_p }}
                 <div class="row">

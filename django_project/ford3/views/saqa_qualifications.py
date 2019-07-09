@@ -1,4 +1,5 @@
 import json
+from django.db import DataError
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.core.exceptions import ValidationError
 from django.utils.datastructures import MultiValueDictKeyError
@@ -41,6 +42,11 @@ def create(request):
         return JsonResponse({
             'success': False,
             'error': 'Field of study is invalid.'})
+
+    except DataError:
+        return JsonResponse({
+            'success': False,
+            'error': 'Qualification\'s name is too long. (255 characters max)'}) # noqa
 
     except MultiValueDictKeyError:
         return HttpResponseBadRequest()

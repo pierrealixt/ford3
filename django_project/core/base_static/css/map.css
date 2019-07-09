@@ -1,0 +1,53 @@
+
+.ol-viewport button {
+    background-color: var(--c-blue);
+    display: block;
+    margin: 1px;
+    padding: 0;
+    color: #fff;
+    font-size: 1.14em;
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+    height: 1.375em;
+    width: 1.375em;
+    line-height: .4em;
+}
+
+.ol-geocoder .gcd-gl-control {
+    height: 1.925rem;
+    width: 1.925rem;
+}
+
+.ol-geocoder .gcd-gl-btn {
+    background-color: var(--c-blue);
+    display: block;
+    margin: 1px;
+    padding: 0;
+    color: #fff;
+    font-size: 1.14em;
+    font-weight: 700;
+    text-decoration: none;
+    text-align: center;
+    height: 1.375em;
+    width: 1.375em;
+    line-height: .4em;
+}
+
+.ol-geocoder .gcd-gl-expanded {
+    height: 1.925rem;
+    width: 15.625em;
+}
+
+.gcd-gl-btn {
+    left: 0.1rem !important;
+}
+
+.ol-geocoder .gcd-gl-input {
+    height: 85%;
+    top: 0.15rem;
+}
+
+#gcd-input-query {
+    padding-right: 1.2rem
+}

@@ -20,7 +20,7 @@ const getOccupationsList = () => {
 }
 
 const getFormOccupationsInput = () => {
-  return document.getElementById('id_3-occupations_ids')
+  return document.getElementById('id_qualification-interests-jobs-occupations_ids')
 }
 
 const getSelectedOccupationsList = () => {

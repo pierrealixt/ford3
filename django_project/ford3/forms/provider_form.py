@@ -2,9 +2,9 @@ from django import forms
 from django.core.exceptions import ValidationError
 from ford3.models.provider import Provider
 from ford3.models.province import Province
+from ford3.views.wizard_utilities import add_http_to_link
 
-
-EMPTY_TEL_ERROR = 'Your telephone number is required.'
+EMPTY_TEL_ERROR = 'Your switchboard telephone number is required.'
 EMPTY_EMAIL_ERROR = 'Your email is required.'
 
 
@@ -18,7 +18,6 @@ class ProviderForm(forms.models.ModelForm):
 
     class Meta:
         model = Provider
-        # provinces_to_form = Province.to_form()
         fields = (
             'name',
             'province',
@@ -36,7 +35,7 @@ class ProviderForm(forms.models.ModelForm):
             'postal_address_line_2',
             'postal_address_city',
             'postal_address_postal_code',
-            'provider_logo',)
+            'provider_logo')
         province = forms.ModelChoiceField(
             queryset=Province.objects.all())
         widgets = {
@@ -54,7 +53,7 @@ class ProviderForm(forms.models.ModelForm):
                 attrs={'placeholder': '+271234567890 or 123456789012345'}),
             'email': forms.fields.EmailInput(
                 attrs={'placeholder': 'example@example.com'}),
-            'website': forms.fields.URLInput(
+            'website': forms.fields.TextInput(
                 attrs={'placeholder': 'www.yourwebsitename.com'}),
             'physical_address_line_1': forms.fields.TextInput(
                 attrs={'placeholder': 'Address Line 1'}),
@@ -63,7 +62,7 @@ class ProviderForm(forms.models.ModelForm):
             'physical_address_city': forms.fields.TextInput(
                 attrs={'placeholder': 'City'}),
             'physical_address_postal_code': forms.fields.TextInput(
-                attrs={'placeholder': 'Postal/ZIP Code'}),
+                attrs={'placeholder': 'Post Code'}),
             'postal_address_differs' : forms.fields.CheckboxInput(),
             'postal_address_line_1': forms.fields.TextInput(
                 attrs={'placeholder': 'Address Line 1'}),
@@ -72,7 +71,9 @@ class ProviderForm(forms.models.ModelForm):
             'postal_address_city': forms.fields.TextInput(
                 attrs={'placeholder': 'City'}),
             'postal_address_postal_code': forms.fields.TextInput(
-                attrs={'placeholder': 'Postal/ZIP Code'}),
+                attrs={'placeholder': 'Post Code'}),
+            'location_value': forms.fields.TextInput(
+                attrs={'type': 'hidden'}),
         }
         error_messages = {
             'telephone': {'required': EMPTY_TEL_ERROR},
@@ -85,3 +86,7 @@ class ProviderForm(forms.models.ModelForm):
             if provider_logo.size > 100 * 1024:
                 raise ValidationError("Max file size is 100 Kb")
             return provider_logo
+
+    def clean_website(self):
+        http_link = self.cleaned_data.get('website', False)
+        return add_http_to_link(http_link)

@@ -97,3 +97,12 @@
     font-weight: 800;
     margin-left: 10px;
 }
+
+.form-group.row .offset-md-3 {
+    margin: unset;
+}
+
+.form-check-label {
+    font-weight: normal;
+}
+

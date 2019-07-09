@@ -1,19 +1,36 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
-{% block title %}{{ provider.name }} • Edit provider{% endblock %}
+{% block title %}
+{% if form.name is False %}
+     Add provider
+{% else %}
+    {{ form.instance.name }} • Edit provider
+{% endif %}
+{% endblock %}
 
 {% block side_navbar %}
-{% include 'dashboard_sidebar.html' %}
+{% if form.instance.name %}
+    <nav id="sidebar"
+    class="col-md-3 col-lg-3 col-xl-2 px-0 d-none d-sm-none d-lg-block">
+    {% include 'main_sidebar.html' with provider=form.instance %}
+    </nav>
+
+{% else %}
+    {% include 'dashboard/dashboard_sidebar.html' %}
+{% endif %}
+
 {% endblock %}
 
 {% block body %}
     <div class='row'>
         <div class='col-md-12'>
-            <h3>Add a provider</h3>
+            {% if not form.instance.name %}
+                <h3>Add a provider</h3>
+            {% endif %}
         </div>
     </div>
+    
 
     <div class="row">
         <div class='col-md-12'>
@@ -26,7 +43,9 @@
         <div class='col-md-12 p-0'>
             <form class='container' action="{{ submit_url }}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                
+                   {% if provider_error|length > 0 %}
+                    <div id='provider-error' class="alert alert-danger">{{ provider_error }}</div>
+                    {% endif %}
                 <div class='row'>
                     <div class='col-md-4'>
                         <label>Provider's name <span class="text-danger">*</span> </label>
@@ -81,7 +100,7 @@
 
                 <div class="row my-3">
                     <div class="col-md-4">
-                        <label>Telephone number <span class="text-danger">*</span></label>
+                        <label>Switchboard <span class="text-danger">*</span></label>
                         {{ form.telephone.errors }}
                     </div>
                     <div class="col-md-8">
@@ -91,7 +110,7 @@
                 </div>
                 <div class="row my-3">
                     <div class="col-md-4">
-                        <label>Admissions contact number <span class="text-danger">*</span></label>
+                        <label>Admissions <span class="text-danger">*</span></label>
                         {{ form.admissions_contact_no.errors }}
                     </div>
                     <div class="col-md-8">
@@ -117,6 +136,18 @@
                         {{ form.email }}
                     </div>
                 </div>
+	            <div class="row my-3">
+		            <div class="col-md-4">
+			            <label>Please select your location</label><br>
+			            Use the search function to find your address.<br>
+			            If your address is not present:<ul>
+			            <li>Use the search function to find the general area</li>
+			            <li>Click on the map to pinpoint the location.</li>
+			            <li>Update your physical address.</li></ul>
+		            </div>
+		            <div id="address_map" class="col rounded my-2"
+			                 tabindex="0"></div>
+	            </div>
 
                 <div class="row my-3">
                     <div class="col-md-4">
@@ -177,40 +208,6 @@
                         </div>
                     </div>
                 </div>
-                {% if is_new_provider %}
-                <div class="row my-3">
-                    <div class='col-md-8'>
-                        <h4>Campuses</h4>
-                    </div>
-                    <div class='col-md-4'>
-                        <div id="add-campus-name" class="edu-button edu-button-orange">
-                            Add Campus
-                        </div>
-                    </div>
-                    <div class='col-md-12'>
-                        <hr />
-                    </div>
-                </div>
-                <div id="campus-names-input-wrapper">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>Campus Name <span class="text-danger">*</span></label>
-                        </div>
-                        <div class="col-md-7">
-                            <input 
-                                name="campus_name" 
-                                required class="campus_name"
-                                type="text" placeholder="•••••••••••••••••" />
-                        </div>
-                        <div class="col-md-1">
-                            <div class="remove-campus-button">
-                                <div class="remove-campus-button-inner ">X</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {% endif %}
                 <div class='row'>
                     <div class='col-md-12'>
                         <hr />
@@ -219,7 +216,8 @@
                         <button type="submit" class="edu-button edu-button-blue">Submit</button>
                     </div>
                 </div>
-                
+                <input type="hidden" id="id_location_value_x" name="location_value_x" value="{{ form.initial.location_value_x }}">
+                <input type="hidden" id="id_location_value_y" name="location_value_y" value="{{ form.initial.location_value_y }}">
             </form>
         </div>
     </div>
@@ -227,16 +225,22 @@
 {% endblock body %}
 
 {% block footer %}
-<script type="text/javascript" src="{% static 'js/provider_form.js' %}"></script>
-<script type="text/javascript">
-    const MAX_SIZE = 100 * 1024
-    $('#id_provider_logo').bind('change', function() {
-        if (this.files[0].size > MAX_SIZE) {
-            alert(`${this.files[0].name} is too big. Max size is 100 Kb.`);
-            $('#id_provider_logo').val('')
-        }
+	<script src="https://unpkg.com/openlayers@4.6.5/dist/ol.js"></script>
+	<script src="https://unpkg.com/ol-popup@2.0.0/src/ol-popup.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/ol-geocoder"></script>
 
-            
-    });
-</script>
+	<link rel="stylesheet"
+	      href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css"
+	      type="text/css">
+	<link href="https://cdn.jsdelivr.net/npm/ol-geocoder@latest/dist/ol-geocoder.min.css"
+	      rel="stylesheet">
+	<link href="https://unpkg.com/ol-popup@2.0.0/src/ol-popup.css"
+	      rel="stylesheet">
+	<link rel="stylesheet" type="text/css"
+	      href="{% static 'css/map.css' %}">
+	<script type="text/javascript"
+	        src="{% static 'js/provider_form.js' %}"></script>
+	<script src="{% static 'js/map.js' %}"></script>
+	<script src="{% static 'js/provider_form_location.js' %}"></script>
+
 {% endblock %}

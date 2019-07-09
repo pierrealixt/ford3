@@ -6,6 +6,24 @@ from ford3.models.user import User
 from ford3.tests.models.model_factories import ModelFactories
 
 
+class TestCampusWithoutFixtures(TestCase):
+    def setUp(self):
+        self.campus = ModelFactories.get_campus_test_object(
+            new_id=420)
+        # self.user = User.objects.get(pk=3)
+
+    def test_soft_delete_campus(self):
+        self.qualification1 = ModelFactories.get_qualification_test_object()
+        self.qualification1.campus = self.campus
+        self.assertFalse(self.campus.deleted)
+        self.assertFalse(self.qualification1.deleted)
+        self.qualification1.save()
+        self.campus.soft_delete()
+        self.qualification1 = self.campus.qualification_set.first()
+        self.assertTrue(self.campus.deleted)
+        self.assertTrue(self.qualification1.deleted)
+
+
 class TestCampus(TestCase):
     fixtures = [
         'groups',
@@ -18,6 +36,12 @@ class TestCampus(TestCase):
         self.campus = ModelFactories.get_campus_test_object(
             new_id=420)
         self.user = User.objects.get(pk=3)
+
+    def test_soft_delete_campus(self):
+        self.assertFalse(self.campus.deleted)
+        self.campus.soft_delete()
+        self.assertTrue(self.campus.deleted)
+
 
     def test_campus_description(self):
         # new_campus = ModelFactories.get_campus_test_object(1)

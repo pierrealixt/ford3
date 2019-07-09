@@ -1,0 +1,73 @@
+<nav class="navbar navbar-expand-lg fixed-top">
+    {% block dashboard_menu %}
+    {% endblock %}
+    {# logo for medium screens #}
+    <div class="open-edu-logo col-md-2 text-center d-none d-md-block">
+        <a href="{% url 'dashboard' %}" style='text-decoration: none;' class="navbar-brand">
+            <span class='text-white'>Open</span><span class='text-blue'>Edu</span>
+        </a>
+    </div>
+    {# logo for smal screens #}
+    <a href="{% url 'dashboard' %}" style='text-decoration: none;' class="d-md-none navbar-brand">
+            <span class='text-white'>Open</span><span class='text-blue'>Edu</span>
+    </a>
+    {# end of logo #}
+    <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+	{#	Start of hamburger navbar for <= md #}
+    <div class="navbar-collapse offcanvas-collapse">
+	    <ul class="navbar-nav ml-md-auto text-right text-white">
+		    <li class="my-1">
+			    <div class="d-lg-block d-xl-block d-none">
+				    <a href="{% url 'show-profile' %}"
+				       class="text-white">{{ user.first_name }} {{ user.last_name }}
+			    </a>&nbsp;|&nbsp;
+				    </div>
+			    <div class="d-lg-none d-xl-none">
+				    <a href="{% url 'show-profile' %}">
+					    <p class="text-white">{{ user.first_name }} {{ user.last_name }}</p>
+				    </a>
+			    </div>
+		    </li>
+
+		    <li class="my-1">
+			    <div class="d-lg-block d-xl-block d-none">
+				    <a href="{% url 'dashboard' %}"
+				       class="text-white">Dashboard</a>&nbsp;|&nbsp;
+			    </div>
+			    <div class="d-lg-none d-xl-none">
+				    <a href="{% url 'dashboard' %}"
+				       class="text-white">Dashboard</a>
+			    </div>
+		    </li>
+
+		    {% if user.is_superuser %}
+			    <li class="my-1">
+			    <div class="d-lg-block d-xl-block d-none">
+				    <a class='text-white' href='/site-admin'>Administration</a>&nbsp;|&nbsp;
+			    </div>
+			      <div class="d-lg-none d-xl-none">
+				      <a class='text-white' href='/site-admin'>Administration</a>
+			      </div>
+			    </li>
+		    {% endif %}
+
+		    <li class="my-1">
+			    <a href="{% url 'logout' %}?next=/accounts/login"
+			       class="text-white">Logout</a>
+		    </li>
+	    </ul>
+	    <div class='w-100 d-lg-none d-md-block'>
+		    <hr class='mt-1 border-white'/>
+	    </div>
+	    <div class="d-lg-none d-md-block collapsed-sidebar-list">
+		    {% include 'main_sidebar.html' %}
+	    </div>
+	    <ul class="navbar-nav ml-auto text-right d-lg-none d-md-block">
+		    {% include 'dashboard/dashboard_sidebar_list_items.html' %}
+	    </ul>
+    </div>
+	{#	End of hamburger navbar #}
+{# end of menu for different screens #}
+</nav>

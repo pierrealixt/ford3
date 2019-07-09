@@ -1,5 +1,8 @@
-from django.core.validators import RegexValidator
 from django.db import models, transaction
+from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
+from django.contrib.gis.db.models import PointField
+from django.contrib.gis.geos import Point, GEOSGeometry
 from ford3.models.campus import Campus
 
 
@@ -16,9 +19,8 @@ class Provider(models.Model):
     phone_regex = RegexValidator(
         regex=r'^\+?1?\d{10,15}$',
         message=
-        "Phone number must be at least 10 digits and at max 15 digits."
-        "It can start with +(country code)")
-
+        "Phone number must be at least 10 digits and at max 15 digits. "
+        "It can start with +(country code).")
     name = models.CharField(
         blank=False,
         null=False,
@@ -37,10 +39,10 @@ class Provider(models.Model):
         blank=False,
         null=True,
         unique=False,
-        help_text="The provider's telephone number",
+        help_text="The provider's switchboard",
         validators=[phone_regex],
         max_length=16)
-    website = models.CharField(
+    website = models.URLField(
         blank=True,
         null=True,
         unique=False,
@@ -63,7 +65,7 @@ class Provider(models.Model):
         blank=False,
         null=False,
         unique=False,
-        help_text="The provider's 4 digit postal code",
+        help_text="The provider's 4 digit post code",
         max_length=4)
 
     physical_address_line_1 = models.CharField(
@@ -84,6 +86,10 @@ class Provider(models.Model):
         unique=False,
         help_text="The city which the provider is in",
         max_length=255)
+    location = PointField(
+        blank=True,
+        null=True,
+        help_text="The spatial point of the provider's head office")
     provider_logo = models.ImageField(
         blank=True,
         upload_to='provider_logo',
@@ -204,3 +210,55 @@ class Provider(models.Model):
             {self.postal_address_city},
             {self.postal_address_postal_code}
         '''
+
+    def save(self, *args, **kwargs):
+        if self.id is None:
+            if len(self.name) == 0:
+                raise ValidationError({'provider_name': 'Name is required.'})
+        provider_name_query = Provider.objects.filter(
+                name__iexact=self.name,
+                deleted=False)
+        provider_with_name_count = provider_name_query.count()
+        # If it exists and it is not my own name raise the error
+
+        if (provider_with_name_count > 1) or (provider_with_name_count > 0 and provider_name_query.first() != self):  # noqa
+            raise ValidationError(
+                {'provider_name': 'That name is already taken.'})
+        super().save(*args, **kwargs)
+
+    def save_location_data(self, data):
+        try:
+            x_value = data['location_value_x']
+            y_value = data['location_value_y']
+            geometry_point = GEOSGeometry(Point(
+                float(x_value),
+                float(y_value))
+            )
+            self.location = geometry_point
+            self.save()
+        except ValueError:
+            raise ValidationError(
+                {
+                    'location':
+                        'Invalid location. Please reselect the '
+                        'location from the map and ensure your location '
+                        'details are entered correctly'
+                 })
+
+    def soft_delete(self):
+        self.deleted = True
+        for campus in self.campus_set.all():
+            campus.soft_delete()
+        self.save()
+
+    @property
+    def get_location_as_dict(self):
+        try:
+            result = ({
+                'location_value_x': self.location.x,
+                'location_value_y': self.location.y})
+        except (IndexError, AttributeError):
+            result = ({
+                'location_value_x': 0,
+                'location_value_y': 0})
+        return result

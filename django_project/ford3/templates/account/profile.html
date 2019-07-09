@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+
+{% block side_navbar %}
+	{% include 'dashboard/dashboard_sidebar.html' %}
+	{# end of sidebar #}
+{% endblock %}
+
+{% block body %}
+	<div class="row">
+		<div class="col-md-12">
+			<h3 class='form-campus-title'>Update Profile</h3>
+		</div>
+		<form method="POST" class="col-md-12" action="{% url 'edit-profile' %}">
+			{% if data.message %}
+				<div class='alert alert-success mt-4'>
+					{{ data.message }}
+				</div>
+			{% endif %}
+			{% csrf_token %}
+			{% crispy form form.helper %}
+			<div class="row">
+				<div class="col-md-12">
+					<a href="{% url 'password_reset' %}">Reset Password</a>
+				</div>
+			</div>
+			<div class="row">
+
+				<div class="col-md-4 pb-4 pt-2">
+					<input type="submit"
+					       class="edu-button edu-button-orange border-0 align-right"
+					       value="Submit">
+				</div>
+			</div>
+
+		</form>
+	</div>
+{% endblock %}
+

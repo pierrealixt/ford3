@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import (
@@ -8,6 +9,7 @@ from django.db import IntegrityError
 from django.urls import reverse
 from ford3.forms.provider_form import ProviderForm
 from ford3.models.provider import Provider
+from ford3.decorators import provider_check
 
 
 @login_required()
@@ -30,19 +32,45 @@ def new(request):
 @require_http_methods(['POST'])
 def create(request):
     form = ProviderForm(request.POST, request.FILES)
+
     if form.is_valid():
         provider = form.save(commit=False)
         try:
             provider.created_by = request.user
             provider.edited_by = request.user
+            provider.save_location_data(request.POST)
             provider.save()
 
             provider.create_campus(
                 request.POST.getlist('campus_name'),
                 request.user)
         except IntegrityError:
+            try:
+                form.initial.update({
+                    'location_value_x': request.POST['location_value_x'],
+                    'location_value_y': request.POST['location_value_y']})
+            except:
+                form.initial.update({
+                    'location_value_x': 0,
+                    'location_value_y': 0})
             return render(request, 'provider_form.html', {'form': form})
-
+        except ValidationError as ve:
+            try:
+                form.initial.update({
+                    'location_value_x': request.POST['location_value_x'],
+                    'location_value_y': request.POST['location_value_y']})
+            except:
+                form.initial.update({
+                    'location_value_x': 0,
+                    'location_value_y': 0})
+            context = {
+                'provider_error': ''.join([
+                    m_val[0]
+                    for m_key, m_val
+                    in ve.message_dict.items()]),
+                'form': form
+            }
+            return render(request, 'provider_form.html', context)
         redirect_url = reverse(
             'show-provider',
             args=[str(provider.id)])
@@ -56,10 +84,10 @@ def create(request):
         return render(request, 'provider_form.html', context)
 
 
-
 @login_required()
 @permission_required('ford3.change_provider', raise_exception=True)
 @require_http_methods(['GET'])
+@provider_check
 def edit(request, provider_id):
     provider = get_object_or_404(
         Provider,
@@ -68,10 +96,14 @@ def edit(request, provider_id):
     submit_url = reverse(
         'update-provider',
         args=[str(provider.id)])
+
+    form.initial.update(provider.get_location_as_dict)
+
     context = {
         'form': form,
         'submit_url': submit_url
     }
+
     return render(
         request,
         'provider_form.html',
@@ -81,15 +113,28 @@ def edit(request, provider_id):
 @login_required()
 @permission_required('ford3.change_provider', raise_exception=True)
 @require_http_methods(['POST'])
+@provider_check
 def update(request, provider_id):
     provider = get_object_or_404(
         Provider,
         id=provider_id)
     form = ProviderForm(request.POST, request.FILES, instance=provider)
+
     if form.is_valid():
-        provider = form.save()
-        provider.edited_by = request.user
-        provider.save()
+        try:
+            provider.save_location_data(request.POST)
+            provider = form.save()
+            provider.edited_by = request.user
+            provider.save()
+        except ValidationError as ve:
+            context = {
+                'provider_error': ''.join([
+                    m_val[0]
+                    for m_key, m_val
+                    in ve.message_dict.items()]),
+                'form': form
+            }
+            return render(request, 'provider_form.html', context)
         redirect_url = reverse(
             'show-provider',
             args=[str(provider.id)])
@@ -101,7 +146,14 @@ def update(request, provider_id):
             'form': form,
             'submit_url': submit_url
         }
-
+        try:
+            form.initial.update({
+                'location_value_x': request.POST['location_value_x'],
+                'location_value_y': request.POST['location_value_y']})
+        except:
+            form.initial.update({
+                'location_value_x': 0,
+                'location_value_y': 0})
         return render(
             request,
             'provider_form.html',
@@ -112,6 +164,7 @@ def update(request, provider_id):
 
 @login_required
 @require_http_methods(['GET'])
+@provider_check
 def show(request, provider_id):
     provider = get_object_or_404(
         Provider,
@@ -132,6 +185,7 @@ def show(request, provider_id):
 @login_required()
 @permission_required('ford3.delete_provider', raise_exception=True)
 @require_http_methods(['GET'])
+@provider_check
 def delete(request, provider_id):
     provider = get_object_or_404(
         Provider,

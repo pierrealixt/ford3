@@ -1,5 +1,5 @@
 psycopg2-binary
-Django==2.1.7
+Django==2.1.9
 django-crispy-forms
 django-braces
 django-model-utils
@@ -8,7 +8,9 @@ django-pure-pagination
 django-reversion
 django-formtools==2.1
 djangorestframework
+django-filter==2.1.0
 
+markdown==3.1.1
 easy-thumbnails
 django-widget-tweaks
 sentry-sdk==0.7.14
@@ -16,9 +18,14 @@ django-grappelli
 django-allauth
 # support special characters
 Unidecode
+django-cors-headers
 
 # Production test related
 selenium==3.141.0
 django-extensions==2.1.6
 django-test-without-migrations==0.6
 django-hashedfilenamestorage
+
+# Documentation
+sphinx
+coreapi

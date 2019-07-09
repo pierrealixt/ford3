@@ -1,6 +1,8 @@
 # coding=utf-8
 """Factory for building model instances for testing."""
 import datetime
+from django.core.exceptions import ValidationError
+from django.contrib.auth.models import Group
 from ford3.models.campus import Campus
 from ford3.models.field_of_study import FieldOfStudy
 from ford3.models.occupation import Occupation
@@ -15,19 +17,49 @@ from ford3.models.qualification_event import QualificationEvent
 from ford3.models.interest import Interest
 from ford3.models.saqa_qualification import SAQAQualification
 from ford3.models.user import User
+from ford3.models.province import Province
 from ford3.enums.open_edu_groups import OpenEduGroups
-from django.contrib.auth.models import Group
+from ford3.models.qualification_entrance_requirement_subject import QualificationEntranceRequirementSubject  # noqa
+
 
 
 class ModelFactories:
     @staticmethod
     def create_user_provider():
-        user = User(
-            email='hello@test.com',
-            is_provider=True)
+        user = User.objects.create_user(
+            email='hello_provider@test.com',
+            is_provider=True,
+            password='password',
+            is_active=True)
+        user.groups.add(Group.objects.get(pk=OpenEduGroups.PROVIDER.value))
         user.save()
-        provider_group = Group.objects.get(pk=OpenEduGroups.PROVIDER.value)
-        provider_group.user_set.add(user)
+        return user
+
+    @staticmethod
+    def create_user_province():
+        user = User.objects.create_user(
+            email='hello_province@test.com',
+            is_province=True,
+            password='password',
+            is_active=True)
+
+        user.provinces.set([Province.objects.get(pk=1)])
+
+
+        province_group = Group.objects.get(pk=OpenEduGroups.PROVINCE.value)
+        province_group.user_set.add(user)
+        return user
+
+    @staticmethod
+    def create_user_campus():
+        user = User.objects.create_user(
+            email='hello_campus@test.com',
+            is_campus=True,
+            password='password',
+            is_active=True)
+
+        campus_group = Group.objects.get(pk=OpenEduGroups.CAMPUS.value)
+        campus_group.user_set.add(user)
         return user
 
     @staticmethod
@@ -36,9 +68,9 @@ class ModelFactories:
             name='Object Test Name',
             short_description='Some short description',
             long_description='Some very long description that just goes on...',
-            duration_in_months=12,
+            duration=12,
+            duration_time_repr='month',
             full_time=True,
-            part_time=False,
             credits_after_completion=200,
             distance_learning=False,
             total_cost=100000,
@@ -70,6 +102,7 @@ class ModelFactories:
             min_nqf_level=1234,
             portfolio=False,
             portfolio_comment='Optional if available',
+            assessment_comment='An assessment comment',
             aps_calculator_link='http://apscalculator.nr')
 
         return requirement_test_object_instance
@@ -140,27 +173,32 @@ class ModelFactories:
         return occupation_test_object_instance
 
     @staticmethod
-    def get_provider_test_object(new_id=1):
-        provider_test_object_instance = Provider.objects.create(
-            name='Object Test Name',
-            website='www.mytest.com',
-            # provider_logo='http://sometestplaceholder/logo.png',
-            email='Test@test.com',
-            admissions_contact_no='0137527576',
-            physical_address_postal_code='1200',
-            physical_address_line_1='24 Test Street',
-            physical_address_line_2='TestVille',
-            physical_address_city='Testopalis',
-            postal_address_differs=True,
-            postal_address_postal_code='1111',
-            postal_address_line_1='PO BOX 12345',
-            postal_address_line_2='TestVille',
-            postal_address_city='Testopalis',
-            telephone='27821233322',
-            provider_type='Technicon',
-        )
+    def get_provider_test_object(new_id=1, new_name='Object Test Name'):
+        try:
+            provider_test_object_instance = Provider.objects.create(
+                name=new_name,
+                website='www.mytest.com',
+                # provider_logo='http://sometestplaceholder/logo.png',
+                email='Test@test.com',
+                admissions_contact_no='0137527576',
+                physical_address_postal_code='1200',
+                physical_address_line_1='24 Test Street',
+                physical_address_line_2='TestVille',
+                physical_address_city='Testopalis',
+                postal_address_differs=True,
+                postal_address_postal_code='1111',
+                postal_address_line_1='PO BOX 12345',
+                postal_address_line_2='TestVille',
+                postal_address_city='Testopalis',
+                telephone='27821233322',
+                provider_type='Technicon',
+            )
+            return provider_test_object_instance
+        except ValidationError:
+            newer_name = new_name + 'A'
+            return ModelFactories.get_provider_test_object(1, newer_name)
 
-        return provider_test_object_instance
+
 
     @staticmethod
     def get_sub_field_of_study_test_object(new_id=1):
@@ -212,3 +250,15 @@ class ModelFactories:
         )
 
         return saqa_qualification_test_object
+
+    @staticmethod
+    def get_qualification_entrance_requirement_to():
+        qualification_entrance_requirement_test_object = (
+            QualificationEntranceRequirementSubject.objects.create(
+                minimum_score=10,
+                required=True,
+                qualification=ModelFactories.get_qualification_test_object(),
+                subject=ModelFactories.get_subject_test_object()
+            )
+        )
+        return qualification_entrance_requirement_test_object

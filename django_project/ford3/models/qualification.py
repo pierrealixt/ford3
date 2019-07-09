@@ -4,13 +4,22 @@ from ford3.models.saqa_qualification import SAQAQualification
 from ford3.models.requirement import Requirement
 from ford3.models.interest import Interest
 from ford3.models.occupation import Occupation
-from ford3.models.qualification_entrance_requirement_subject import QualificationEntranceRequirementSubject # noqa
+from ford3.models.qualification_entrance_requirement_subject import QualificationEntranceRequirementSubject  # noqa
 from ford3.models.qualification_event import QualificationEvent
+from ford3.models_logic.qualification_audit import QualificationAudit
+from ford3.completion_audit.rules import QUALIFICATION as completion_rules
+
 
 
 class ActiveQualificationManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(deleted=False)
+
+
+class PublishedQualificationManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(published=True).filter(
+            deleted=False)
 
 
 class Qualification(models.Model):
@@ -19,12 +28,23 @@ class Qualification(models.Model):
         through='QualificationEntranceRequirementSubject')
     campus = models.ForeignKey(
         'ford3.campus',
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='qualification_set')
     saqa_qualification = models.ForeignKey(
         SAQAQualification,
         null=True,
         on_delete=models.PROTECT)
+    published = models.BooleanField(
+        blank=True,
+        null=True,
+        default=False,
+        help_text="Has this qualification been published?")
+    ready_to_publish = models.BooleanField(
+        blank=True,
+        null=True,
+        default=False,
+        help_text=("Has the qualification's details been completed in enough "
+                   "detail to allow publication."))
     occupations = models.ManyToManyField(
         'ford3.occupation',
         blank=True)
@@ -41,27 +61,27 @@ class Qualification(models.Model):
         blank=True,
         null=True,
         help_text="A short description of what the qualification entails",
-        max_length=120)
+        max_length=250)
     long_description = models.CharField(
         blank=True,
         null=True,
         help_text="A longer description of the qualification for the student"
                   " who is interested and would like to know more",
         max_length=500)
-    duration_in_months = models.IntegerField(
+    duration = models.IntegerField(
         blank=True,
         null=True,
-        help_text="How long the qualification takes to complete (in months)")
+        help_text="How long the qualification takes to complete")
+    duration_time_repr = models.CharField(
+        blank=True,
+        null=True,
+        help_text="Represent the duration of the qualification in month or year", # noqa
+        max_length=100
+    )
     full_time = models.BooleanField(
         blank=True,
         null=True,
-        default=False,
         help_text="Can this qualification be completed on a full-time basis?")
-    part_time = models.BooleanField(
-        blank=True,
-        null=True,
-        default=False,
-        help_text="Can this qualification be completed on a part-time basis?")
     credits_after_completion = models.IntegerField(
         blank=True,
         null=True,
@@ -69,9 +89,8 @@ class Qualification(models.Model):
     distance_learning = models.BooleanField(
         blank=True,
         null=True,
-        default=False,
         help_text="Does this qualification have a distance learning option?")
-    completion_rate = models.IntegerField(
+    completion_rate = models.PositiveIntegerField(
         blank=True,
         null=True,
         help_text="What has the completion rate for this qualifcation been?",
@@ -92,20 +111,17 @@ class Qualification(models.Model):
         blank=True,
         null=True,
         help_text="Would the skill obtained by completing this qualification "
-                  "be considered a critical skill?",
-        default=False)
+                  "be considered a critical skill?")
     green_occupation = models.BooleanField(
         blank=True,
         null=True,
         help_text="Would the occupations this qualification prepares you for "
-                  "be considered environmentally friendly?",
-        default=False)
+                  "be considered environmentally friendly?")
     high_demand_occupation = models.BooleanField(
         blank=True,
         null=True,
         help_text="Are the occupations this qualification prepares you for "
-                  "in high demand?",
-        default=False)
+                  "in high demand?")
     created_at = models.DateTimeField(
         auto_now_add=True)
     edited_at = models.DateTimeField(
@@ -114,14 +130,14 @@ class Qualification(models.Model):
     created_by = models.ForeignKey(
         'ford3.User',
         null=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='qualification_created_by'
     )
 
     edited_by = models.ForeignKey(
         'ford3.User',
         null=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='qualification_edited_by'
     )
 
@@ -132,34 +148,37 @@ class Qualification(models.Model):
     deleted_by = models.ForeignKey(
         'ford3.User',
         null=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='qualification_deleted_by'
     )
 
+    COMPLETION_RULES = completion_rules
+
     objects = models.Manager()
     active_objects = ActiveQualificationManager()
+    published_objects = PublishedQualificationManager()
 
     def __str__(self):
         return self.saqa_qualification.name
 
-    @property
-    def requirements(self) -> List[Requirement]:
-        requirement_query = Requirement.objects.filter(
-            qualification__id=self.id).order_by('id').values()
-        return list(requirement_query)
+    def audit_for_publish(self):
+        audit_result = QualificationAudit(self).evaluate_audit()
+
+        if not self.published and audit_result and not self.ready_to_publish:
+            self.ready_to_publish = True
+            self.save()
+        elif (self.ready_to_publish or self.published) and not audit_result:
+            self.ready_to_publish = False
+            self.published = False
+            self.save()
 
     @property
-    def requirement(self) -> Requirement:
-        requirement_query = Requirement.objects.filter(
-            qualification__id=self.id).order_by('id').first()
-        return requirement_query
-
-    def add_events(self, qualification_events):
-        if len(qualification_events) == 0:
-            return
-        for each_qualification_event in qualification_events:
-            each_qualification_event.qualification = self
-            each_qualification_event.save()
+    def requirement(self):
+        try:
+            return Requirement.objects.get(
+                qualification_id=self.id)
+        except Requirement.DoesNotExist:
+            return None
 
     @property
     def interest_id_list(self) -> List[int]:
@@ -214,7 +233,18 @@ class Qualification(models.Model):
             qualification__id=self.id).values()
         return list(event_query)
 
+    @property
+    def part_time(self):
+        return not self.full_time
+
+    def soft_delete(self):
+        self.deleted = True
+        self.save()
+
     def set_saqa_qualification(self, saqa_id):
+        """
+        Set SAQA qualificiation.
+        """
         saqa_qualif = SAQAQualification.objects.get(id=saqa_id)
         self.saqa_qualification = saqa_qualif
 

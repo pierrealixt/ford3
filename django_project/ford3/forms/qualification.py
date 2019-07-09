@@ -2,7 +2,6 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
 from ford3.models.interest import Interest
-from ford3.models.subject import Subject
 
 
 class QualificationForm(forms.Form):
@@ -20,22 +19,23 @@ class QualificationForm(forms.Form):
 class QualificationDetailForm(QualificationForm):
     short_description = forms.CharField(
         label='Short description of this qualification',
-        help_text='*120 character max',
+        help_text='*250 characters max '
+                  '- This field is required for publication',
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                'rows': '2',
+                'placeholder': 'Brief summary of the qualification'}
+        ),
+        max_length=250
+    )
+    long_description = forms.CharField(
+        label='Long description of this qualification',
+        help_text='*500 characters max',
         required=False,
         widget=forms.Textarea(
             attrs={
                 'rows': '5',
-                'placeholder': 'Brief summary of the qualification'}
-        ),
-        max_length=120
-    )
-    long_description = forms.CharField(
-        label='Long description of this qualification',
-        help_text='*500 character max',
-        required=False,
-        widget=forms.Textarea(
-            attrs={
-                'rows': '10',
                 'cols': '40',
                 'placeholder': 'Write full description of the qualification'}
         ),
@@ -52,18 +52,11 @@ class QualificationDetailForm(QualificationForm):
 
 class QualificationDurationFeesForm(QualificationForm):
     full_time = forms.TypedChoiceField(
-        label='Full-Time qualification',
+        label='Type of the qualification',
+        help_text='<br>This field is required for publication',
         coerce=lambda x: x == 'True',
+        choices=((True, 'Full-time'), (False, 'Part-time')),
         required=False,
-        choices=((True, 'Yes'), (False, 'No')),
-        widget=forms.RadioSelect
-    )
-
-    part_time = forms.TypedChoiceField(
-        label='Part-time qualification',
-        coerce=lambda x: x == 'True',
-        required=False,
-        choices=((True, 'Yes'), (False, 'No')),
         widget=forms.RadioSelect
     )
 
@@ -75,7 +68,7 @@ class QualificationDurationFeesForm(QualificationForm):
         )
     )
 
-    duration_type = forms.ChoiceField(
+    duration_time_repr = forms.ChoiceField(
         label=' ',
         choices=[
             ('month', 'Month'),
@@ -88,7 +81,7 @@ class QualificationDurationFeesForm(QualificationForm):
     )
 
     total_cost = forms.DecimalField(
-        label='Total cost of qualification',
+        label='Total cost of the qualification',
         required=False,
         widget=forms.TextInput(
             attrs={'placeholder': 'ZAR'}
@@ -113,7 +106,8 @@ class QualificationDurationFeesForm(QualificationForm):
 class QualificationRequirementsForm(QualificationForm):
     min_nqf_level = forms.ChoiceField(
         label='Required entrance qualification',
-        help_text='*List from SAQA',
+        help_text='*List from SAQA '
+                  '- This field is required for publication',
         required=False,
         choices=[('', '-')] + [
             (level, level.value) for level in SaqaQualificationLevel]
@@ -140,13 +134,38 @@ class QualificationRequirementsForm(QualificationForm):
     )
 
     portfolio_comment = forms.CharField(
-        label='What does the portfolio require?',
+        label='Portfolio requirements',
         required=False,
         widget=forms.Textarea(
             attrs={
-                'rows': '5',
+                'rows': '2',
                 'placeholder': 'What does the portfolio require?',
                 'data-field': 'portfolio'
+            }
+        ),
+        max_length=120
+    )
+
+    assessment = forms.TypedChoiceField(
+        label='Does it involve any other assessment?',
+        coerce=lambda x: x == 'True',
+        required=False,
+        choices=((True, 'Yes'), (False, 'No')),
+        widget=forms.RadioSelect(
+            attrs={
+                'data-disabler': 'assessment'
+            }
+        )
+    )
+
+    assessment_comment = forms.CharField(
+        label='Assessment requirements',
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                'rows': '2',
+                'placeholder': 'What does the assessment involve?',
+                'data-field': 'assessment'
             }
         ),
         max_length=120
@@ -177,34 +196,18 @@ class QualificationRequirementsForm(QualificationForm):
 
     require_certain_subjects = forms.TypedChoiceField(
         label='Does the qualification require certain subjects?',
+        help_text='<br>If "Yes", please add at least one required subject if '
+                  'you wish to publish this qualification',
         coerce=lambda x: x == 'True',
         required=False,
         choices=((True, 'Yes'), (False, 'No')),
-        widget=forms.RadioSelect
+        widget=forms.RadioSelect()
     )
 
-    subject = forms.ModelChoiceField(
-        label='Subject 1',
-        queryset=Subject.objects.all(),
+    # (subject_id, min_score), (..., ...), ...
+    subjects_scores = forms.CharField(
         required=False,
-        widget=forms.Select(
-            attrs={'class': 'col-md-4 subject-list'}
-        ),
-    )
-
-    subject_list = forms.CharField(
-        required=False,
-        widget=forms.HiddenInput(
-            attrs={'id': 'subject-list'}
-        ),
-    )
-
-    minimum_score_list = forms.CharField(
-        required=False,
-        widget=forms.HiddenInput(
-            attrs={'id': 'minimum-score-list'}
-        ),
-        initial='0',
+        widget=forms.HiddenInput()
     )
 
 
@@ -225,33 +228,28 @@ class QualificationInterestsAndJobsForm(QualificationForm):
         widget=forms.HiddenInput(),
         required=False)
 
-    critical_skill = forms.TypedChoiceField(
+    critical_skill = forms.BooleanField(
         label=(
-            'Does the qualification prepare for a '
-            '<b>critical skills</b> occupation?'
+            'This qualification prepares a learner for a '
+            '<b>critical skills</b> occupation.'
         ),
         required=False,
-        choices=((True, 'Yes'), (False, 'No')),
-        widget=forms.RadioSelect
     )
 
-    green_occupation = forms.TypedChoiceField(
+    green_occupation = forms.BooleanField(
         label=(
-            'Does the qualification prepare for a <b>green</b> occupation?'
+            'This qualification prepares a learner for a <b>green</b> '
+            'occupation.'
         ),
         required=False,
-        choices=((True, 'Yes'), (False, 'No')),
-        widget=forms.RadioSelect
     )
 
-    high_demand_occupation = forms.TypedChoiceField(
+    high_demand_occupation = forms.BooleanField(
         label=(
-            'Does the qualification '
-            'prepare for a <b>high demand</b> occupation?'
+            'This qualification prepares a learner for a <b>high demand</b> '
+            'occupation.'
         ),
         required=False,
-        choices=((True, 'Yes'), (False, 'No')),
-        widget=forms.RadioSelect
     )
 
 

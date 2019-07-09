@@ -10,7 +10,8 @@ from ford3.views import (
     campus,
     provider,
     sub_field_of_study,
-    occupations
+    occupations,
+    qualification
 )
 from ford3.views.users import (
     UserList,
@@ -42,20 +43,20 @@ from ford3.forms.password_reset_form import PasswordResetForm
 from ford3.forms.set_password_form import SetPasswordForm
 
 
-qualification_wizard = QualificationFormWizard.as_view(
-    [
-        QualificationDetailForm,
-        QualificationDurationFeesForm,
-        QualificationRequirementsForm,
-        QualificationInterestsAndJobsForm,
-        QualificationImportantDatesForm,
-    ],
-)
+QUALIFICATION_FORMS = [
+    ('qualification-details', QualificationDetailForm),
+    ('qualification-duration', QualificationDurationFeesForm),
+    ('qualification-requirements', QualificationRequirementsForm),
+    ('qualification-interests-jobs', QualificationInterestsAndJobsForm),
+    ('qualification-important-dates', QualificationImportantDatesForm),
+]
+
+qualification_wizard = QualificationFormWizard.as_view(QUALIFICATION_FORMS)
 
 CAMPUS_FORMS = [
     ('campus-details', CampusDetailForm),
     ('campus-location', CampusLocationForm),
-    ('campus-dates', CampusImportantDatesForm),
+    ('campus-events', CampusImportantDatesForm),
     ('campus-qualifications', CampusQualificationsForm)
 ]
 
@@ -125,6 +126,20 @@ urlpatterns = [
         '/'.join([
             'providers/<int:provider_id>',
             'campus/<int:campus_id>',
+            'qualifications/<int:qualification_id>/publish/']),
+        qualification.toggle_publication,
+        name='publish-qualification'),
+    path(
+        '/'.join([
+            'providers/<int:provider_id>',
+            'campus/<int:campus_id>',
+            'qualifications/<int:qualification_id>/unpublish/']),
+        qualification.toggle_publication,
+        name='unpublish-qualification'),
+    path(
+        '/'.join([
+            'providers/<int:provider_id>',
+            'campus/<int:campus_id>',
             'qualifications/<int:qualification_id>/']),
         views.show_qualification,
         name='show-qualification'),
@@ -143,6 +158,14 @@ urlpatterns = [
         'occupations/',
         occupations.index,
         name='list-occupations'),
+    path(
+        'profile/',
+        account.show,
+        name='show-profile'),
+    path(
+        'profile/edit',
+        account.edit,
+        name='edit-profile'),
     url(
         r'^activate/'
         r'(?P<uidb64>[0-9A-Za-z_\-]+)/'

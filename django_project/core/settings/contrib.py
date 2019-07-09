@@ -9,6 +9,7 @@ INSTALLED_APPS = (
 
 INSTALLED_APPS += (
     # add third party (pip installed) apps here
+    'corsheaders',
 )
 
 MIGRATION_MODULES = {'accounts': 'core.migration'}
@@ -43,7 +44,15 @@ INSTALLED_APPS += (
 MIDDLEWARE += [
     # For rosetta localisation
     'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware'
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'
+CORS_ALLOW_METHODS = (
+    'GET'
+)
 
 DEFAULT_FILE_STORAGE = (
     'django_hashedfilenamestorage.storage.HashedFilenameFileSystemStorage')
@@ -80,30 +89,22 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 
     # `allauth` specific authentication methods, such as login by e-mail
-    'allauth.account.auth_backends.AuthenticationBackend',
+    # 'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-INSTALLED_APPS += (
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.github',
-)
+# INSTALLED_APPS += (
+#     'allauth',
+#     'allauth.account',
+#     'allauth.socialaccount'
+# )
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': ['user:email', 'public_repo', 'read:org']
-    }
-}
-
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_USERNAME_VALIDATORS = None
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_SIGNUP_FORM_CLASS = 'base.forms.SignupForm'
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+# ACCOUNT_UNIQUE_EMAIL = True
+# ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_USERNAME_VALIDATORS = None
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_SIGNUP_FORM_CLASS = 'base.forms.SignupForm'
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 # Set default template pack
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

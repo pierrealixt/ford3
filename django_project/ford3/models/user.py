@@ -4,20 +4,23 @@ from django.db import models
 from django.db.models import Count
 from ford3.models.provider import Provider
 from ford3.enums.open_edu_groups import OpenEduGroups
+from ford3.managers.user_manager import UserManager
 
 
 class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    objects = UserManager()
+
     email = models.EmailField(unique=True, null=True)
+    is_active = models.BooleanField(default=False)
     is_province = models.BooleanField(
         'province status', default=False)
     is_provider = models.BooleanField(
         'provider status', default=False)
     is_campus = models.BooleanField(
         'campus status', default=False)
-    account_activated = models.BooleanField(default=False)
     provinces = models.ManyToManyField(
         'ford3.Province',
         blank=True)

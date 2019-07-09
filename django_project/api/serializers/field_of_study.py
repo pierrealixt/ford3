@@ -6,4 +6,4 @@ class FieldOfStudySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FieldOfStudy
-        fields = '__all__'
+        fields = ['name']

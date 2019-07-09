@@ -9,6 +9,7 @@
     color: #fff;
     transition: all 0.3s;
     min-height: 100vh;
+    padding-bottom: 4rem;
 }
 
 #sidebar.active {
@@ -25,34 +26,33 @@
     }
 }
 
-#sidebar ul {
+.sidebar ul {
     width: 100%;
     padding: 0;
 }
 
-#sidebar ul li {
-    padding-left: 1rem;
-    padding-top: 0.5rem;
+.sidebar ul li {
     width: 100%;
     list-style: none;
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.13);
-    height: 2.5rem;
+    height: 100%;
     line-height: 1.25rem;
     color: var(--c-grey-l);
+    padding: 0.5rem 1rem;
 }
 
-#sidebar ul li:hover {
+.sidebar ul li:hover {
     color: white;
     background-color: rgba(255, 255, 255, 0.21);
 
 }
 
-#sidebar ul li.selected {
+.sidebar ul li.selected {
     background-color: rgba(255, 255, 255, 0.21);
 }
 
-#sidebar ul li.active {
+.sidebar ul li.active {
     background-color: rgba(255, 255, 255, 0.29);
 }
 
@@ -106,8 +106,48 @@
 
 .side-bar-kartoza-icon {
     height: 2rem;
-    position: fixed;
-    width: 250px;
+    width: 2rem;
     background-position: center;
     bottom: 0;
+    background-color: transparent;
 }
+
+.side-bar-footer {
+    font-family: "Avenir";
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.44px;
+    text-transform: uppercase;
+    text-align: center;
+    width: 100%;
+    display: inline-flex;
+    position: fixed;
+    bottom: 0;
+    background-color: var(--c-purple);
+}
+
+.powered-by-kartoza-left {
+    margin-right: -3px;
+    padding-top: 2px;
+}
+
+.powered-by-kartoza-right {
+    margin-left: -3px;
+    padding-top: 2px;
+}
+
+.collapsed-sidebar-list {
+    width: 100vw;
+    left: -15px;
+    position: relative;
+}
+
+.collapsed-sidebar-list a {
+     color: white !important;
+}
+
+.navbar-collapse a {
+    color: white;
+}
+

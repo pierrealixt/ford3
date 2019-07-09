@@ -6,8 +6,10 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.shortcuts import render
+from django.views.generic import TemplateView
 from sentry_sdk import capture_message
 from ford3.forms.custom_auth_form import CustomAuthForm
+
 
 # from django.conf.urls.static import static
 
@@ -42,7 +44,7 @@ def handler500(request, template_name='500.html', *args, **kwargs):
 urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^site-admin/', admin.site.urls),
-    url(r'^ford3/', include('ford3.urls')),
+    url(r'^', include('ford3.urls')),
     url(r'^api/', include('api.urls')),
     url(r'^', include('base.urls')),
     url(
@@ -54,8 +56,18 @@ urlpatterns = [
         auth_views.LogoutView.as_view(), {'next_page': '/'},
         name='logout'),
     url(r'^api-auth/', include('rest_framework.urls')),
-    # url(r'^', include('ford3.urls')),
-    # url(r'^accounts/', include('allauth.urls')),
+
+    # API Examples
+    url(r'api-examples/$', TemplateView.as_view(
+        template_name='api-examples/index.html')),
+
+    url(r'api-examples/providers/$', TemplateView.as_view(
+        template_name='api-examples/providers.html')),
+    url(r'api-examples/calendar/$', TemplateView.as_view(
+        template_name='api-examples/calendar.html')),
+    url(r'api-examples/map/$', TemplateView.as_view(
+        template_name='api-examples/map.html')),
+
 ]
 
 if settings.DEBUG:

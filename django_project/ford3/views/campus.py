@@ -6,14 +6,18 @@ from django.shortcuts import (
     get_object_or_404,
     redirect
 )
+from django.db import DataError
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.utils.datastructures import MultiValueDictKeyError
 from ford3.models.campus import Campus
 from ford3.models.provider import Provider
+from ford3.decorators import provider_check, campus_check
 
 
 @login_required
+@provider_check
+@campus_check
 def show(request, provider_id, campus_id):
     campus = get_object_or_404(
         Campus,
@@ -31,15 +35,17 @@ def show(request, provider_id, campus_id):
             campus.provider.provider_logo.url
             if campus.provider.provider_logo else ""
     }
-
     return render(request, 'campus.html', context)
 
 
-@login_required()
+@login_required
+@permission_required('ford3.add_campus', raise_exception=True)
+@provider_check
 def create(request, provider_id):
     if request.method == 'GET':
         url = reverse('show-provider', args=[str(provider_id)])
         return redirect(url)
+
 
     provider = get_object_or_404(
         Provider,
@@ -60,13 +66,16 @@ def create(request, provider_id):
     except MultiValueDictKeyError:
         # arg campus_name not present in request.POST
         context['campus_error'] = 'Bad request.'
-
+    except DataError:
+        context['campus_error'] = 'Campus name is too long. (255 characters maximum)' # noqa
     return render(request, 'provider.html', context)
 
 
 @login_required()
 @permission_required('ford3.delete_provider', raise_exception=True)
 @require_http_methods(['GET'])
+@provider_check
+@campus_check
 def delete(request, provider_id, campus_id):
     campus = get_object_or_404(
         Campus,

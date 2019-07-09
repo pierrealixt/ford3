@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "name": "PROVINCE-ADMINS",
-            "permissions": [52, 76, 116, 80, 45, 46, 47, 48]
+            "permissions": [52, 76, 80, 45, 46, 47, 48]
         }
     },
     {

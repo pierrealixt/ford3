@@ -6,5 +6,4 @@ from api.serializers.utilities.common_excluded_fields import CommonExcludedField
 class QualificationEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = QualificationEvent
-        # excluded = CommonExcludedFields.common
-        fields = '__all__'
+        exclude = ['qualification']

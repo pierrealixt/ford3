@@ -36,6 +36,6 @@ USE_X_FORWARDED_HOST = True
 # Set debug to false for production
 DEBUG = TEMPLATE_DEBUG = False
 
-SERVER_EMAIL = 'tim@kartoza.com'
+SERVER_EMAIL = 'no_reply@openedu.org.za'
 EMAIL_HOST = 'kartoza.com'
-DEFAULT_FROM_EMAIL = 'tim@kartoza.com'
+DEFAULT_FROM_EMAIL = 'no_reply@openedu.org.za'

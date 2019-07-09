@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from rest_framework.documentation import include_docs_urls
 from api.viewsets.provider import ProvidersViewSet
 from api.viewsets.qualification import QualificationViewSet
 from api.viewsets.campus import CampusViewSet
@@ -55,4 +56,5 @@ urlpatterns = [
     url(r'^(?P<version>(v1))/campus-events/(?P<pk>\d+)/$',
         CampusEventViewSet.as_view({'get': 'retrieve'}),
         name='show-campus_event-api'),
+    url(r'^docs/', include_docs_urls(title='OpenEdu API v1'))
 ]

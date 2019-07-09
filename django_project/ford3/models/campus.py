@@ -1,7 +1,8 @@
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
+from django.contrib.gis.geos import Point, GEOSGeometry
 from ford3.models.campus_event import CampusEvent
+from ford3.completion_audit.rules import CAMPUS as completion_rules
 
 
 class ActiveCampusManager(models.Manager):
@@ -10,12 +11,6 @@ class ActiveCampusManager(models.Manager):
 
 
 class Campus(models.Model):
-    phone_regex = RegexValidator(
-        regex=r'^\+?1?\d{10,15}$',
-        message=
-        "Phone number must be at least 10 digits and at max 15 digits."
-        "It can start with +(country code)")
-
     provider = models.ForeignKey(
         'ford3.provider',
         on_delete=models.CASCADE)
@@ -26,9 +21,9 @@ class Campus(models.Model):
         help_text='The name of the campus',
         max_length=255)
     location = models.PointField(
-      blank=True,
-      null=True,
-      help_text='The spatial point position of the campus')
+        blank=True,
+        null=True,
+        help_text='The spatial point position of the campus')
     photo = models.FileField(
         blank=False,
         null=True,
@@ -39,8 +34,7 @@ class Campus(models.Model):
         blank=False,
         null=True,
         unique=False,
-        help_text="The campus' telephone number",
-        validators=[phone_regex],
+        help_text="The campus' switchboard",
         max_length=16)
     email = models.EmailField(
         blank=False,
@@ -77,7 +71,7 @@ class Campus(models.Model):
         blank=False,
         null=True,
         unique=False,
-        help_text="The campus' physical address postal code",
+        help_text="The campus' physical address post code",
         max_length=255)
 
     postal_address_differs = models.BooleanField(
@@ -122,27 +116,36 @@ class Campus(models.Model):
     created_by = models.ForeignKey(
         'ford3.User',
         null=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='campus_created_by'
     )
 
     edited_by = models.ForeignKey(
         'ford3.User',
         null=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='campus_edited_by'
     )
 
     deleted_by = models.ForeignKey(
         'ford3.User',
         null=True,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='campus_deleted_by'
     )
 
     deleted = models.BooleanField(
         default=False,
         help_text="Campus has been deleted")
+
+    completion_rate = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        default=0,
+        help_text="How much of the campus' details has been completed?"
+    )
+
+    COMPLETION_RULES = completion_rules
 
     objects = models.Manager()
     active_objects = ActiveCampusManager()
@@ -157,8 +160,22 @@ class Campus(models.Model):
                     name__iexact=self.name,
                     deleted=False).exists():
                 raise ValidationError({'campus': 'Name is already taken.'})
-
         super().save(*args, **kwargs)
+
+    def save_location_data(self, cleaned_data):
+        x_value = cleaned_data['location_value_x']
+        y_value = cleaned_data['location_value_y']
+        geometry_point = GEOSGeometry(Point(
+            x_value,
+            y_value))
+        self.location = geometry_point
+
+        self.save()
+
+    def soft_delete(self):
+        self.soft_delete_all_qualifications()
+        self.deleted = True
+        self.save()
 
     @property
     def events(self):
@@ -181,7 +198,11 @@ class Campus(models.Model):
                 'saqa_qualification__name',
                 'saqa_qualification__saqa_id',
                 'saqa_qualification__accredited',
-                'edited_at')
+                'edited_at',
+                'published',
+                'ready_to_publish',
+                'completion_rate') \
+            .order_by('id')
         return list(queryset)
 
     @property
@@ -204,6 +225,31 @@ class Campus(models.Model):
             {self.physical_address_city}
             {self.physical_address_postal_code}
         '''
+
+    @property
+    def postal_address(self):
+        if self.postal_address_line_1 is None \
+            and self.postal_address_line_2 is None \
+                and self.postal_address_city is None \
+                and self.postal_address_postal_code is None:
+            return None
+
+        return f'''
+            {self.postal_address_line_1}
+            {self.postal_address_line_2}
+            {self.postal_address_city}
+            {self.postal_address_postal_code}
+        '''
+
+    @property
+    def qualifications_completion_rate(self):
+        try:
+            return int(sum([
+                qualification['completion_rate']
+                for qualification in self.qualifications
+            ]) / len(self.qualifications))
+        except ZeroDivisionError:
+            return 0
 
     def save_postal_data(self, form_data):
         postal_address_differs = form_data.get(
@@ -259,8 +305,10 @@ class Campus(models.Model):
         if len(form_data['saqa_ids']) == 0:
             return
 
-        # symmetric difference
-        ids = set(self.saqa_ids) ^ set(form_data['saqa_ids'].split(' '))
+        ids = [
+            sid for sid in form_data['saqa_ids'].split(' ')
+            if sid not in self.saqa_ids
+        ]
 
         for saqa_id in ids:
             qualif = self.qualification_set.create(
@@ -272,14 +320,20 @@ class Campus(models.Model):
 
     def delete_qualifications(self, form_data):
         # ids missing in form_data must be deleted
-        ids = set(form_data['saqa_ids'].split(' ')) ^ set(self.saqa_ids)
-        ids = [saqa_id for saqa_id in ids if len(saqa_id) > 0]
+        ids = [
+            sid for sid in self.saqa_ids
+            if sid not in form_data['saqa_ids'].split(' ')
+        ]
 
         for saqa_id in ids:
             qualif = self.qualification_set.filter(
                 saqa_qualification__id=saqa_id,
                 campus=self)
-            qualif.delete()
+            qualif.update(deleted=True)
+
+    def soft_delete_all_qualifications(self):
+        for qualification in self.qualification_set.all():
+            qualification.soft_delete()
 
     def __str__(self):
         return self.name
