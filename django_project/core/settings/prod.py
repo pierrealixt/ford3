@@ -37,5 +37,5 @@ USE_X_FORWARDED_HOST = True
 DEBUG = TEMPLATE_DEBUG = False
 
 SERVER_EMAIL = 'no_reply@openedu.org.za'
-EMAIL_HOST = 'kartoza.com'
+
 DEFAULT_FROM_EMAIL = 'no_reply@openedu.org.za'
