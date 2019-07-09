@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from ford3.models.qualification import Qualification
 from api.serializers.qualification_event import QualificationEventSerializer
-from api.serializers.subject import SubjectSerializer
 from api.serializers.saqa_qualification import SAQAQualificationSerializer
 from api.serializers.occupation import OccupationSerializer
 from api.serializers.interest import InterestSerializer
