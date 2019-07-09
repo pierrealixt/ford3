@@ -31,8 +31,8 @@ class ModelFactories:
             is_provider=True,
             password='password',
             is_active=True)
-        provider_group = Group.objects.get(pk=OpenEduGroups.PROVIDER.value)
-        provider_group.user_set.add(user)
+        user.groups.add(Group.objects.get(pk=OpenEduGroups.PROVIDER.value))
+        user.save()
         return user
 
     @staticmethod

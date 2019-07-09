@@ -224,15 +224,18 @@ class QualificationFormWizard(
     initial_dict = {}
 
     def test_func(self):
-        return predicate_provider(
-            self.request.user,
-            self.kwargs['provider_id']) and\
-            predicate_campus(
-                self.kwargs['provider_id'],
-                self.kwargs['campus_id']) and\
-            predicate_qualification(
-                self.kwargs['campus_id'],
-                self.kwargs['qualification_id'])
+        if self.request.user.is_authenticated:
+            return predicate_provider(
+                self.request.user,
+                self.kwargs['provider_id']) and\
+                predicate_campus(
+                    self.kwargs['provider_id'],
+                    self.kwargs['campus_id']) and\
+                predicate_qualification(
+                    self.kwargs['campus_id'],
+                    self.kwargs['qualification_id'])
+        else:
+            return False
 
     def handle_no_permission(self):
         return redirect(reverse('dashboard'))

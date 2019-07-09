@@ -5,7 +5,9 @@
         "fields": {
             "email": "province@email.com",
             "username": "province",
+            "password": "password",
             "is_province": true,
+            "is_active": true,
             "provinces": [1],
             "groups": [1]
         }
