@@ -27,20 +27,18 @@ DATABASES = {
     }
 }
 
-
-# See fig.yml file for postfix container definition
-#
+# Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# Host for sending e-mail.
-EMAIL_HOST = 'smtp'
-# Port for sending e-mail.
-EMAIL_PORT = 25
-# SMTP authentication information for EMAIL_HOST.
-# See fig.yml for where these are defined
-EMAIL_HOST_USER = 'noreply@kartoza.com'
-EMAIL_HOST_PASSWORD = 'docker'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+MAIL_DOMAIN = os.getenv('MAIL_DOMAIN')
+SMTP_USER = os.getenv('SMTP_USER')
+SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
+
+EMAIL_HOST_USER = f'{SMTP_USER}@{MAIL_DOMAIN}'
+EMAIL_HOST_PASSWORD = SMTP_PASSWORD
 EMAIL_USE_TLS = False
-EMAIL_SUBJECT_PREFIX = '[FORD3]'
+EMAIL_SUBJECT_PREFIX = os.getenv('EMAIL_SUBJECT_PREFIX')
 
 LOGGING = {
     'version': 1,
@@ -58,4 +56,5 @@ LOGGING = {
     },
 }
 
-SERVER_PUBLIC_HOST = 'http://ford3.kartoza.com'
+SITE_URL = os.getenv('SITEURL')
+SERVER_PUBLIC_HOST = f'http://{SITE_URL}'
