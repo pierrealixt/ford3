@@ -68,24 +68,7 @@ make migrate
 make collectstatic
 ```
 
-### 2. Populate initial Data
-#### Add superuser
-Admin user is required to administer the site.
-To add admin:
-
-```
-cd deployment
-make superuser
-# write your usename, email, and password
-```
-
-#### Add initial data
-```
-cd deployment
-make load-initial-data
-```
-
-### 3. Run the server
+### 2. Configure docker
 ```
 cd deployment/ansible/development/group_vars
 cp all.sample.yml all.yml
@@ -127,6 +110,23 @@ make migrate
 make up
 make shell
 python manage.py runserver 0.0.0.0:8080
+```
+
+### 3. Populate initial Data
+#### Add superuser
+Admin user is required to administer the site.
+To add admin:
+
+```
+cd deployment
+make superuser
+# write your usename, email, and password
+```
+
+#### Add initial data
+```
+cd deployment
+make load-initial-data
 ```
 
 #### 4. Open Browser
