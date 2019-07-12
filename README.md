@@ -68,31 +68,13 @@ make migrate
 make collectstatic
 ```
 
-### 2. Populate initial Data
-#### Add superuser
-Admin user is required to administer the site.
-To add admin:
-
-```
-cd deployment
-make superuser
-# write your usename, email, and password
-```
-
-#### Add initial data
-```
-cd deployment
-make load-initial-data
-```
-
-### 3. Run the server
-#### A. From PyCharm Professional
+### 2. Configure docker
 ```
 cd deployment/ansible/development/group_vars
 cp all.sample.yml all.yml
 ```
 
-- edit line 6 (*remote_user*), 8 (*remote_group*), and 10 (*project_path*) in all.yml accordingly
+- edit line 4 (*use_pycharm*), line 6 (*remote_user*), 8 (*remote_group*), and 10 (*project_path*) in all.yml accordingly
   - make sure that *remote_user* is equal to your local user
   - *remote_group* is likely stay the same if using linux and macOS
   - *project_path* is equal to `/home/web/ford3`
@@ -102,9 +84,10 @@ cd deployment/ansible
 mkdir tmp
 cd ..
 make setup-ansible
-# choose your pycharm version from the list
+# choose your pycharm version from the list or hit Enter if you don't use pycharm.
 ```
 
+#### A. From PyCharm Professional
 - Open PyCharm
 - Notice your pycharm, there should be *Ford3* django server in the toolbar.
   - Wait for a couple of minutes. Make sure the PyCharm has loaded all the necessary files.
@@ -124,8 +107,26 @@ make up
 ```
 cd deployment
 make migrate
+make up
 make shell
 python manage.py runserver 0.0.0.0:8080
+```
+
+### 3. Populate initial Data
+#### Add superuser
+Admin user is required to administer the site.
+To add admin:
+
+```
+cd deployment
+make superuser
+# write your usename, email, and password
+```
+
+#### Add initial data
+```
+cd deployment
+make load-initial-data
 ```
 
 #### 4. Open Browser
