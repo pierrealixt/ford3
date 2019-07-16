@@ -188,7 +188,7 @@ superuser:
 	@echo "------------------------------------------------------------------"
 	@echo "Creating a superuser in production mode"
 	@echo "------------------------------------------------------------------"
-	@docker-compose exec uwsgi python manage.py createsuperuser
+	@docker-compose exec uwsgi python manage.py custom_createsuperuser
 
 dbbash:
 	@echo
