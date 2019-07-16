@@ -39,42 +39,32 @@ For deployment we use [docker](http://docker.com) so you need to have docker
 running on the host. Ford3 is a django app so it will help if you have
 some knowledge of running a django site.
 
-To run the project locally, there are four steps:
-1. Build the images and set up the docker env
-2. Populate initial data
-3. Run the server
-4. Open browser
+### Clone
 
-### 1. Build the images and set up the docker for the project
-
-Clone the repo
 ```
 git clone git://github.com/kartoza/ford3.git
+cd ford3
 ```
 
 - We will use Makefile script available under deployment folder.
 - Any `make` commands should be run under deployment folder.
 
-
+### Build
 ```
-cd ford3/deployment
+cd deployment
 cp btsync-db.env.EXAMPLE btsync-db.env
 cp btsync-media.env.EXAMPLE btsync-media.env
 make build
 make permissions
-make web
-# Wait a few seconds for the DB to start before to do the next command
-make migrate
-make collectstatic
 ```
 
-### 2. Configure docker
+### Docker
 ```
 cd deployment/ansible/development/group_vars
 cp all.sample.yml all.yml
 ```
 
-- edit line 4 (*use_pycharm*), line 6 (*remote_user*), 8 (*remote_group*), and 10 (*project_path*) in all.yml accordingly
+- edit `all.yml` line 4 (*use_pycharm*), line 6 (*remote_user*), 8 (*remote_group*), and 10 (*project_path*) in all.yml accordingly
   - make sure that *remote_user* is equal to your local user
   - *remote_group* is likely stay the same if using linux and macOS
   - *project_path* is equal to `/home/web/ford3`
@@ -84,10 +74,31 @@ cd deployment/ansible
 mkdir tmp
 cd ..
 make setup-ansible
-# choose your pycharm version from the list or hit Enter if you don't use pycharm.
+```
+Choose your pycharm version from the list or hit Enter if you don't use pycharm.
+
+
+```
+make up
+```
+Wait 30 seconds for the database to be started.
+
+```
+make migrate
+make collectstatic
 ```
 
-#### A. From PyCharm Professional
+### Add superuser
+```
+make superuser
+```
+
+### Add initial data (occupations, subjects, interests, groups, provinces, SAQA qualifications)
+```
+make load-initial-data
+```
+
+### Run a server through PyCharm (skip if you don't use PyCharm)
 - Open PyCharm
 - Notice your pycharm, there should be *Ford3* django server in the toolbar.
   - Wait for a couple of minutes. Make sure the PyCharm has loaded all the necessary files.
@@ -97,65 +108,47 @@ make setup-ansible
   - If the server doesn't run, try:
 
 ```
-cd deployment
 make down
 make up
 ```
 
 
-#### B. From CLI
+### Run a server from a container
 ```
-cd deployment
-make migrate
 make up
 make shell
 python manage.py runserver 0.0.0.0:8080
 ```
 
-### 3. Populate initial Data
-#### Add superuser
-Admin user is required to administer the site.
-To add admin:
+### Browse
 
-```
-cd deployment
-make superuser
-# write your usename, email, and password
-```
-
-#### Add initial data
-```
-cd deployment
-make load-initial-data
-```
-
-#### 4. Open Browser
-
-- Open browser and type: `http://localhost`
-- You have the project running now
+Open your favorite browser and go to: `http://localhost`
 
 ## Useful tools for development
-
-These tools are suggested before developers make a pull request to the repo.
 
 ###  Coding style
 
 **flake8** is used to make sure the code is aligned with coding style.
 
 ```
-cd deployment
 make flake8
 ```
-- Fix the code if the tool complaint about the coding
+
 
 ### Selenium and django tests
 
 #### Selenium IDE
  In order to run the selenium tests, make sure you have [https://www.seleniumhq.org/selenium-ide/](Selenium IDE) installed.
 
- The tests assume you have an user with the following credentials:
+ The tests assume the existence of an user with the following credentials:
  - email: admin@admin.com
  - password: admin
+
+ Otherwise, create one with:
+ ```
+ cd deployment
+ make superuser
+ ```
 
  In Selenium IDE, choose the project `selenium-ide/OpenEdu.side` and execute the test suite `Default Suite`. Tests will fail if you run them individually.
 
