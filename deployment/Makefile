@@ -408,6 +408,8 @@ load-initial-data:
 	@docker-compose exec uwsgi python manage.py loaddata sa_provinces.json
 	@docker-compose exec uwsgi python manage.py import_saqa_qualifications
 
+runserver:
+	@docker-compose exec uwsgi python manage.py runserver 0.0.0.0:8080
 
 # --------------- help --------------------------------
 
