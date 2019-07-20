@@ -1,0 +1,23 @@
+[
+    {
+        "model": "ford3.PeopleGroup",
+        "pk": null,
+        "fields": {
+            "group": "Previously disadvantaged"
+        }
+    },
+    {
+        "model": "ford3.PeopleGroup",
+        "pk": null,
+        "fields": {
+            "group": "No disadvantaged"
+        }
+    },
+    {
+        "model": "ford3.PeopleGroup",
+        "pk": null,
+        "fields": {
+            "group": "International students"
+        }
+    }
+]

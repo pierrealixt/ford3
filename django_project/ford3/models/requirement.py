@@ -1,5 +1,8 @@
+import re
 from django.db import models
 from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
+from ford3.models.admission_point_score import AdmissionPointScore
+from ford3.models.people_group import PeopleGroup
 
 
 class Requirement(models.Model):
@@ -29,10 +32,7 @@ class Requirement(models.Model):
         blank=True,
         null=True,
         help_text="Is there an interview as part of the application process?")
-    admission_point_score = models.IntegerField(
-        blank=True,
-        null=True,
-        help_text="The admission point score required for the qualification")
+
     min_nqf_level = models.CharField(
         blank=True,
         null=True,
@@ -70,3 +70,45 @@ class Requirement(models.Model):
 
     def __unicode__(self):
         return self.description
+
+    @property
+    def admission_point_scores(self):
+        aps_set = AdmissionPointScore.objects.filter(requirement=self.id)
+        result = []
+        for pg in PeopleGroup.objects.all():
+            try:
+                aps = aps_set.get(people_group=pg.id)
+            except AdmissionPointScore.DoesNotExist:
+                from collections import namedtuple
+                aps = namedtuple('aps', ['id', 'value'])
+                aps = aps(*[0, 0])
+
+            result.append({
+                'id': aps.id,
+                'value': aps.value,
+                'group': {'id': pg.id, 'name': pg.group}
+            })
+        return result
+
+    @admission_point_scores.setter
+    def admission_point_scores(self, data):
+        aps_set = AdmissionPointScore.objects.filter(requirement=self.id)
+        for aps_tuple in data.split(','):
+            match = re.match(r'\(([0-9]*) ([0-9]*)\)', aps_tuple)
+            if match:
+                people_group_id, value = match.groups()
+                try:
+                    aps = aps_set.get(people_group=people_group_id)
+                    aps.value = value
+                    aps.save()
+                except AdmissionPointScore.DoesNotExist:
+                    aps = AdmissionPointScore()
+                    aps.people_group = PeopleGroup.objects.get(
+                        pk=people_group_id)
+                    aps.requirement = self
+                    aps.value = value
+
+                aps.save()
+
+    def reset_admission_point_scores(self):
+        AdmissionPointScore.objects.filter(requirement=self.id).delete()

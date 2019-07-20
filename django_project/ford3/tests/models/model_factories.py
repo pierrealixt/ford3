@@ -98,12 +98,10 @@ class ModelFactories:
             qualification=ModelFactories.get_qualification_test_object(),
             assessment=True,
             interview=True,
-            admission_point_score=24,
             min_nqf_level=1234,
             portfolio=False,
             portfolio_comment='Optional if available',
-            assessment_comment='An assessment comment',
-            aps_calculator_link='http://apscalculator.nr')
+            assessment_comment='An assessment comment',)
 
         return requirement_test_object_instance
 
