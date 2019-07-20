@@ -16,7 +16,8 @@ from ford3.models import (
     Prospect,
     User,
     ProvinceUser,
-    Province
+    Province,
+    PeopleGroup
 )
 
 
@@ -111,3 +112,4 @@ admin.site.register(SecondaryInstitutionType)
 admin.site.register(QualificationEvent)
 admin.site.register(SAQAQualification)
 admin.site.register(Prospect)
+admin.site.register(PeopleGroup)

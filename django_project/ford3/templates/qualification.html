@@ -126,7 +126,11 @@
 							<b>Is there an interview </b>
 						</div>
 						<div class="col">
-							{{ qualification.requirement.interview|yesno:"Yes,No" }}
+							{% if qualification.requirement.interview is None %}
+								{{ qualification.requirement.interview|is_none }}
+							{% else %}
+								{{ qualification.requirement.interview|yesno:"Yes,No" }}
+							{% endif %}							
 						</div>
 					</div>
 					<div class="row py-2">
@@ -134,7 +138,11 @@
 							<b>Requires a portfolio</b>
 						</div>
 						<div class="col">
-							{{ qualification.requirement.portfolio|yesno:"Yes,No" }}
+							{% if qualification.requirement.portfolio is None %}
+								{{ qualification.requirement.portfolio|is_none }}
+							{% else %}
+								{{ qualification.requirement.portfolio|yesno:"Yes,No" }}
+							{% endif %}
 						</div>
 					</div>
 					{% if qualification.requirement.portfolio %}
@@ -152,7 +160,11 @@
 							<b>Involves an assessment</b>
 						</div>
 						<div class="col">
-							{{ qualification.requirement.assessment|yesno:"Yes,No" }}
+							{% if qualification.requirement.assessment is None %}
+								{{ qualification.requirement.assessment|is_none }}
+							{% else %}
+								{{ qualification.requirement.assessment|yesno:"Yes,No" }}
+							{% endif %}
 						</div>
 					</div>
 					{% if qualification.requirement.assessment %}
@@ -171,18 +183,18 @@
 						</div>
 						<div class="col">
 							{{ qualification.requirement.require_aps_score|yesno:"Yes,No" }}
+							{% if qualification.requirement.require_aps_score %}
+							<ul class='pl-4'>
+								{% if qualification.requirement.aps_calculator_link %}
+									<li>APS calculator link: {{ qualification.requirement.aps_calculator_link }}</li>
+								{% endif %}
+								{% for aps in qualification.requirement.admission_point_scores %}
+								<li>{{ aps.group.name }}: {{ aps.value }}</li>
+								{% endfor %}
+							</ul>
+							{% endif %}
 						</div>
 					</div>
-					{% if qualification.requirement.require_aps_score %}
-                        <div class="row py-2">
-                            <div class="col-md-4 col-sm-6">
-                                <b>APS calculator link </b>
-                            </div>
-                            <div class="col">
-                                {{ qualification.requirement.aps_calculator_link }}
-                            </div>
-                        </div>
-                    {% endif %}
 					{% if qualification.requirement.require_certain_subjects %}
 						<div class="row py-2">
                             <div class="col-md-4 col-sm-6">
@@ -244,7 +256,7 @@
                         <div class="col">
                             <ul class='pl-4'>
                                 <li>
-                                    {{ qualification.critical_skill|checked_or_crossed }} Critical skill
+                                {{ qualification.critical_skill|checked_or_crossed }} Critical skill
                                 </li>
                                 <li>
                                     {{ qualification.green_occupation|checked_or_crossed }} Green occupation

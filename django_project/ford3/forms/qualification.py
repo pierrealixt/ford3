@@ -183,6 +183,11 @@ class QualificationRequirementsForm(QualificationForm):
         )
     )
 
+    admission_point_scores = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput()
+    )
+
     aps_calculator_link = forms.URLField(
         label='Link to APS Calculator',
         required=False,

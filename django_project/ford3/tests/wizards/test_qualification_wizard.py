@@ -1,10 +1,9 @@
 from django.urls import reverse
 from django.test import TestCase
-# from django.test.utils import override_settings  # noqa
 from ford3.tests.models.model_factories import ModelFactories
 from ford3.models.qualification import Qualification
-from ford3.models.requirement import Requirement
 from ford3.models.user import User
+from ford3.models.people_group import PeopleGroup
 from ford3.views.qualification_wizard import QualificationFormWizardDataProcess
 
 
@@ -18,7 +17,8 @@ class TestQualificationWizard(TestCase):
         'test_province_users',
         'test_provider_users',
         'test_campus_users',
-        'test_providers'
+        'test_providers',
+        'people_groups'
     ]
 
     wizard_step_1_data = {
@@ -146,20 +146,49 @@ class TestQualificationWizard(TestCase):
             'assessment': True,
             'assessment_comment': 'assessment comment',
             'portfolio_comment': 'comment',
+            'require_certain_subjects': False,
             'require_aps_score': False,
-            'aps_calculator_link': 'http://test.com',
-            'require_certain_subjects': False
+            'aps_calculator_link': '',
+            'admission_point_scores': '(1 12),(2 2),(3 43)'
         }
+
         self.qualification_data_process.add_or_update_requirements(
             requirement_form_data
         )
-        requirements = Requirement.objects.filter(
-            qualification=self.qualification.id
-        )
-        self.assertTrue(requirements.exists())
-        requirement = requirements[0]
+
+        requirement = self.qualification.requirement
         for key, value in requirement_form_data.items():
             self.assertEqual(
                 value,
                 getattr(requirement, key)
             )
+
+        # key "admission_point_scores" is removed from requirement_form_data
+        # require_aps_score is set to False
+        # it should return [0, 0, 0]
+        self.assertEqual([
+            aps['value']
+            for aps in requirement.admission_point_scores
+        ], [0] * 3)
+
+        # update the admission point scores
+        requirement_form_data['require_aps_score'] = True
+        requirement_form_data['aps_calculator_link'] = 'http://bbc.com'
+
+        requirement_form_data['admission_point_scores'] = ','.join([
+            f'({pg.id} 1000)'
+            for pg in PeopleGroup.objects.all()
+        ])
+
+        self.qualification_data_process.add_or_update_requirements(
+            requirement_form_data)
+
+        requirement = self.qualification.requirement
+
+        self.assertEqual([
+            aps['value']
+            for aps in requirement.admission_point_scores
+        ], [1000] * 3)
+
+        self.assertTrue(requirement.require_aps_score)
+        self.assertEqual(requirement.aps_calculator_link, 'http://bbc.com')
