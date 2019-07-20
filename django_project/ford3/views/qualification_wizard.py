@@ -331,7 +331,8 @@ class QualificationFormWizard(
         if self.steps.current == 'qualification-requirements':
             context['subjects'] = list(Subject.objects
                 .all()
-                .values('id', 'name'))
+                .values('id', 'name')
+                .order_by('is_language', 'name'))
 
             if self.qualification.requirement:
                 context['aps'] = json.dumps(self.qualification.requirement.admission_point_scores) # noqa
