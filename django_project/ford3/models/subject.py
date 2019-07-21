@@ -22,6 +22,11 @@ class Subject(models.Model):
         null=True,
         default=False,
         help_text="Is the subject a language?")
+    is_other = models.BooleanField(
+        blank=True,
+        null=True,
+        default=False,
+        help_text="Is the subject any other subject")
 
     def __str__(self):
         return self.name
