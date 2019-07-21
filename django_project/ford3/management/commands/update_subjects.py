@@ -8,7 +8,7 @@ from ford3.models.qualification_entrance_requirement_subject import Qualificatio
 class Command(BaseCommand):
     def handle(self, *args, **options):
         # add languages
-        for lng in ['English', 'Afrikaans', 'IsiNdebele', 'IsiXhosa', 'IsiZulu', 'Sepedi', 'Sesotho', 'Setswana', 'Xitstonga', 'Tshivenda', 'SeSwati']:
+        for lng in ['English', 'Afrikaans', 'IsiNdebele', 'IsiXhosa', 'IsiZulu', 'Sepedi', 'Sesotho', 'Setswana', 'Xitstonga', 'Tshivenda', 'SeSwati']: # noqa
             if not Subject.objects.filter(name=lng).exists():
                 print(f'Creating {lng}')
                 s = Subject()
