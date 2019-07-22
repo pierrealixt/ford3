@@ -2404,7 +2404,7 @@
         ["xpath=//div[8]/div[2]/ul/li", "xpath:position"],
         ["xpath=//li[contains(.,'Home language: 50%')]", "xpath:innerText"]
       ],
-      "value": "Home language: 50%"
+      "value": "Accounting: 50%"
     }, {
       "id": "e069b2bf-c36a-4d9c-ac14-2463654fc9c3",
       "comment": "",
@@ -2416,7 +2416,7 @@
         ["xpath=//div[8]/div[2]/ul/li[2]", "xpath:position"],
         ["xpath=//li[contains(.,'First additional language: 50%')]", "xpath:innerText"]
       ],
-      "value": "First additional language: 50%"
+      "value": "Agricultural Sciences: 50%"
     }, {
       "id": "76fa598a-bf58-422c-9d1e-49e6dbc7ee1b",
       "comment": "",
