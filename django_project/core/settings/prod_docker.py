@@ -31,7 +31,7 @@ DATABASES = {
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = os.getenv('EMAIL_PORT')
-MAIL_DOMAIN = os.getenv('MAIL_DOMAIN')
+MAIL_DOMAIN = os.getenv('MAILDOMAIN')
 SMTP_USER = os.getenv('SMTP_USER')
 SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
 
