@@ -3,140 +3,248 @@
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Home language"
+      "name": "English",
+      "is_language": true
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "First additional language"
+      "name": "Afrikaans",
+      "is_language": true
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Mathematics"
+      "name": "IsiNdebele",
+      "is_language": true
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Mathematical Literacy"
+      "name": "IsiXhosa",
+      "is_language": true
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Life orientation"
+      "name": "IsiZulu",
+      "is_language": true
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Accounting"
+      "name": "Sepedi",
+      "is_language": true
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Agricultural Sciences"
+      "name": "Sesotho",
+      "is_language": true
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Business Studies"
+      "name": "Setswana",
+      "is_language": true
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Dramatic Arts"
+      "name": "SeSwati",
+      "is_language": true
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Economics"
+      "name": "Tshivenda",
+      "is_language": true
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Engineering Graphics and Design"
+      "name": "Xitstonga",
+      "is_language": true
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Geography"
+      "name": "Mathematical Literacy",
+      "is_language": false
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "History"
+      "name": "Life orientation",
+      "is_language": false
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Consumer Studies"
+      "name": "Accounting",
+      "is_language": false
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Information Technology"
+      "name": "Agricultural Sciences",
+      "is_language": false
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Life Sciences"
+      "name": "Business Studies",
+      "is_language": false
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Music"
+      "name": "Dramatic Arts",
+      "is_language": false
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Physical Sciences"
+      "name": "Economics",
+      "is_language": false
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Religion Studies"
+      "name": "Engineering Graphics and Design",
+      "is_language": false
     }
   },
   {
     "model": "ford3.Subject",
     "pk": null,
     "fields": {
-      "name": "Visual Arts"
+      "name": "Geography",
+      "is_language": false
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "History",
+      "is_language": false
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Consumer Studies",
+      "is_language": false
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Information Technology",
+      "is_language": false
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Life Sciences",
+      "is_language": false
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Music",
+      "is_language": false
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Physical Sciences",
+      "is_language": false
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Religion Studies",
+      "is_language": false
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Visual Arts",
+      "is_language": false
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Any other subject",
+      "is_language": false
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Any other subject",
+      "is_language": false
+    }
+  },
+  {
+    "model": "ford3.Subject",
+    "pk": null,
+    "fields": {
+      "name": "Any other subject",
+      "is_language": false
     }
   }
 ]

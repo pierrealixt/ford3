@@ -1,3 +1,4 @@
+import json
 import re
 from collections import OrderedDict
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,6 +15,7 @@ from ford3.models.subject import Subject
 from ford3.models.qualification_entrance_requirement_subject import QualificationEntranceRequirementSubject # noqa
 from ford3.models.provider import Provider
 from ford3.models.campus import Campus
+from ford3.models.admission_point_score import AdmissionPointScore
 from ford3.forms.qualification import (
     QualificationDetailForm,
     QualificationDurationFeesForm,
@@ -120,13 +122,12 @@ class QualificationFormWizardDataProcess(object):
         Add requirements to qualification
         :param form_data: dict of form data
         """
-        # Check if there is already a requirements object
-        if self.qualification.requirement is None:
-            requirement_exists = False
-        else:
-            requirement_exists = True
 
-        if requirement_exists:
+        if 'admission_point_scores' in form_data:
+            aps = form_data['admission_point_scores']
+            del form_data['admission_point_scores']
+
+        if self.qualification.requirement is not None:
             existing_requirement: Requirement = self.qualification.requirement
             existing_requirement.min_nqf_level = (
                 form_data['min_nqf_level'])
@@ -140,12 +141,12 @@ class QualificationFormWizardDataProcess(object):
                 form_data['assessment'])
             existing_requirement.assessment_comment = (
                 form_data['assessment_comment'])
+            existing_requirement.require_certain_subjects = (
+                form_data['require_certain_subjects'])
             existing_requirement.require_aps_score = (
                 form_data['require_aps_score'])
             existing_requirement.aps_calculator_link = (
                 form_data['aps_calculator_link'])
-            existing_requirement.require_certain_subjects = (
-                form_data['require_certain_subjects'])
 
             existing_requirement.save()
         else:
@@ -167,6 +168,11 @@ class QualificationFormWizardDataProcess(object):
                     qualification=self.qualification,
                     **requirement_fields
                 )
+        if form_data['require_aps_score']:
+            if aps:
+                self.qualification.requirement.admission_point_scores = aps
+        else:
+            self.qualification.requirement.reset_admission_point_scores()
 
     def process_data(self, form_data):
         """
@@ -325,7 +331,13 @@ class QualificationFormWizard(
         if self.steps.current == 'qualification-requirements':
             context['subjects'] = list(Subject.objects
                 .all()
-                .values('id', 'name'))
+                .values('id', 'name')
+                .order_by('is_other', 'is_language', 'name'))
+
+            if self.qualification.requirement:
+                context['aps'] = json.dumps(self.qualification.requirement.admission_point_scores) # noqa
+            else:
+                context['aps'] = json.dumps(AdmissionPointScore.init())
 
         if self.steps.current == 'qualification-interests-jobs':
             context['occupations'] = self.qualification.occupations.all()
@@ -357,8 +369,19 @@ class QualificationFormWizard(
                 .filter(
                     qualification_id=self.qualification.id)])
 
+            if self.qualification.requirement:
+                aps_set = self.qualification.requirement.admission_point_scores
+            else:
+                aps_set = AdmissionPointScore.init()
+
+            aps = ','.join([
+                f"({r_aps['group']['id']} {r_aps['value']})"
+                for r_aps in aps_set
+            ])
+
             initial_dict.update({
-                'subjects_scores': subjects_scores
+                'subjects_scores': subjects_scores,
+                'admission_point_scores': aps
             })
         return initial_dict
 

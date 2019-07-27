@@ -16,3 +16,5 @@ from ford3.models.saqa_qualification import * # noqa
 from ford3.models.prospect import * # noqa
 from ford3.models.user import User, ProvinceUser # noqa
 from ford3.models.province import Province # noqa
+from ford3.models.people_group import PeopleGroup # noqa
+from ford3.models.admission_point_score import AdmissionPointScore # noqa

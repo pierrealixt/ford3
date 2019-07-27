@@ -188,7 +188,7 @@ superuser:
 	@echo "------------------------------------------------------------------"
 	@echo "Creating a superuser in production mode"
 	@echo "------------------------------------------------------------------"
-	@docker-compose exec uwsgi python manage.py createsuperuser
+	@docker-compose exec uwsgi python manage.py custom_createsuperuser
 
 dbbash:
 	@echo
@@ -406,6 +406,7 @@ load-initial-data:
 	@docker-compose exec uwsgi python manage.py loaddata interest.json
 	@docker-compose exec uwsgi python manage.py loaddata groups.json
 	@docker-compose exec uwsgi python manage.py loaddata sa_provinces.json
+	@docker-compose exec uwsgi python manage.py loaddata people_groups.json
 	@docker-compose exec uwsgi python manage.py import_saqa_qualifications
 
 

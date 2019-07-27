@@ -172,15 +172,17 @@
         </div>
 
         {% if wizard.steps.step1 == 3 %}
+        <!-- Subjects -->
         <div id='subjects-widget' class='row'></div>
         <div class='row'>
-            <!-- <div class='col-sm-12'>
-                <hr />
-            </div> -->
             <div class='col-sm-2'>
                 <input id='add-new-subject-form' type='button' value='Add a new subject' class='edu-button edu-button-orange border-0' style='display:none'/>
             </div>
         </div>
+
+        <!-- Admission Point Score-->
+        <div id='aps-widget' class='row'></div>
+
         {% endif %}
 
 
@@ -232,10 +234,15 @@
 
 <script type="text/javascript">
     const SUBJECTS = {{ subjects|safe }}
+
+    const APS = {{ aps|safe }}
 </script>
 <script type="text/javascript"
     src="{% static 'js/qualification_subjects.js' %}">
     </script>
+<script type="text/javascript"
+    src="{% static 'js/qualification_aps.js' %}">
+</script>
 {% endif %}
 {% if wizard.steps.step1 == 4 %}
     <script type="text/javascript"
@@ -248,8 +255,9 @@
 
 <script type="text/javascript">
     const toggleFieldDisability = (fieldId, disabled) => {
-        const field = document.querySelector(`[data-field="${fieldId}"]`)
-        field.disabled = disabled
+        document.querySelectorAll(`[data-field="${fieldId}"]`).forEach((field) => {
+            field.disabled = disabled
+        })
     }
 
     const disablerFields = document.querySelectorAll('input[data-disabler]')
