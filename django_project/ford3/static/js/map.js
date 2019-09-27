@@ -40,7 +40,7 @@ const setupMap = (locationX, locationY) => {
   map.addControl(geocoder)
   // Listen when an address is chosen
   geocoder.on('addresschosen', function (evt) {
-    setupMap(evt.coordinate[0], evt.coordinate[1])
+    // setupMap(evt.coordinate[0], evt.coordinate[1])
     setAddress(evt)
   })
 
