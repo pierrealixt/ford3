@@ -223,8 +223,8 @@ class ModelFactories:
         qualification_event_test_object = QualificationEvent.objects.create(
             qualification=ModelFactories.get_qualification_test_object(),
             name='Qualification Event Test Name',
-            date_start=datetime.date(2019, 3, 6),
-            date_end=datetime.date(2019, 8, 9),
+            date_start=datetime.datetime.now().date(),
+            date_end=datetime.datetime.now().date(),
             http_link='http://www.google.com')
 
         return qualification_event_test_object
