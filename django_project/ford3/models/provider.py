@@ -223,7 +223,7 @@ class Provider(models.Model):
 
         if (provider_with_name_count > 1) or (provider_with_name_count > 0 and provider_name_query.first() != self):  # noqa
             raise ValidationError(
-                {'provider_name': 'That name is already taken.'})
+                {'provider_name': 'This provider\'s name is already taken.'})
         super().save(*args, **kwargs)
 
     def save_location_data(self, data):

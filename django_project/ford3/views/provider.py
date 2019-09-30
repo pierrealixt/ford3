@@ -40,29 +40,11 @@ def create(request):
             provider.edited_by = request.user
             provider.save_location_data(request.POST)
             provider.save()
-
-            provider.create_campus(
-                request.POST.getlist('campus_name'),
-                request.user)
         except IntegrityError:
-            try:
-                form.initial.update({
-                    'location_value_x': request.POST['location_value_x'],
-                    'location_value_y': request.POST['location_value_y']})
-            except:
-                form.initial.update({
-                    'location_value_x': 0,
-                    'location_value_y': 0})
+            form.initial = set_form_location(form.initial, request.POST)
             return render(request, 'provider_form.html', {'form': form})
         except ValidationError as ve:
-            try:
-                form.initial.update({
-                    'location_value_x': request.POST['location_value_x'],
-                    'location_value_y': request.POST['location_value_y']})
-            except:
-                form.initial.update({
-                    'location_value_x': 0,
-                    'location_value_y': 0})
+            form.initial = set_form_location(form.initial, request.POST)
             context = {
                 'provider_error': ''.join([
                     m_val[0]
@@ -76,12 +58,25 @@ def create(request):
             args=[str(provider.id)])
         return redirect(redirect_url)
     else:
+        form.initial = set_form_location(form.initial, request.POST)
         context = {
             'form': form,
             'is_new_provider': True,
             'submit_url': reverse('create-provider')
         }
         return render(request, 'provider_form.html', context)
+
+
+def set_form_location(form, post_data):
+    try:
+        form.update({
+            'location_value_x': post_data['location_value_x'],
+            'location_value_y': post_data['location_value_y']})
+    except:
+        form.update({
+            'location_value_x': 0,
+            'location_value_y': 0})
+    return form
 
 
 @login_required()
