@@ -6,7 +6,8 @@ from api.viewsets.campus import CampusViewSet
 from api.viewsets.campus_event import CampusEventViewSet
 from api.viewsets.qualification_event import QualificationEventViewSet
 from api.viewsets.saqa_qualification import SAQAQualificationViewSet
-
+from api.viewsets.interest import InterestViewSet
+from api.viewsets.occupation import OccupationViewSet
 
 urlpatterns = [
     url(r'^(?P<version>(v1))/providers/$',
@@ -56,5 +57,13 @@ urlpatterns = [
     url(r'^(?P<version>(v1))/campus-events/(?P<pk>\d+)/$',
         CampusEventViewSet.as_view({'get': 'retrieve'}),
         name='show-campus_event-api'),
+
+    url(r'^(?P<version>(v1))/interests/$',
+        InterestViewSet.as_view({'get': 'list'}),
+        name='show-interests-api'),
+
+    url(r'^(?P<version>(v1))/occupations/$',
+        OccupationViewSet.as_view({'get': 'list'}),
+        name='show-occupations-api'),
     url(r'^docs/', include_docs_urls(title='OpenEdu API v1'))
 ]
