@@ -12,4 +12,4 @@ class OccupationSerializer(serializers.ModelSerializer):
 class OccupationNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Occupation
-        exclude = ['id', 'description', 'green_occupation', 'scarce_skill', 'tasks']
+        fields = ['name']
