@@ -1,3 +1,7 @@
+import io
+import json
+from datetime import datetime
+from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_http_methods
@@ -10,6 +14,13 @@ from django.urls import reverse
 from ford3.forms.provider_form import ProviderForm
 from ford3.models.provider import Provider
 from ford3.decorators import provider_check
+from ford3.smart_excel.smart_excel import SmartExcel
+from ford3.smart_excel.definition import (
+    OPENEDU_EXCEL_DEFINITION
+)
+from ford3.smart_excel.data_model import (
+    OpenEduSmartExcelData
+)
 
 
 @login_required()
@@ -192,3 +203,80 @@ def delete(request, provider_id):
     provider.save()
 
     return redirect(reverse('dashboard'))
+
+
+@login_required()
+@require_http_methods(['GET'])
+@provider_check
+def dump(request, provider_id):
+    provider = get_object_or_404(
+        Provider,
+        id=provider_id
+    )
+
+    filename = '{provider_name}_{date_today}.xlsx'.format(
+        provider_name=provider.name,
+        date_today=datetime.today().strftime('%Y-%m-%d')
+    )
+
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment;filename={filename}'.format(
+        filename=filename
+    )
+
+    response.write(excel_dump(provider.id))
+    return response
+
+
+@login_required()
+@require_http_methods(['POST'])
+@provider_check
+def upload(request, provider_id):
+    provider = get_object_or_404(
+        Provider,
+        id=provider_id
+    )
+
+    try:
+        data = import_excel(request.FILES['excel'], provider.id)
+    except Exception as e:
+        context = {
+            'error_upload': str(e),
+            'provider': provider
+        }
+        return render(request, 'provider.html', context)
+
+    context = {
+        'data': json.dumps(data),
+        'provider': provider
+    }
+    return render(request, 'import.html', context)
+
+
+def import_excel(file, provider_id):
+    path = '/tmp/excel.xlsx'
+
+    with open(path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+
+    excel = SmartExcel(
+        definition=OPENEDU_EXCEL_DEFINITION,
+        data=OpenEduSmartExcelData(provider_id),
+        path=path,
+    )
+
+    excel.parse()
+    return excel.parsed_data
+
+
+def excel_dump(provider_id):
+
+    excel = SmartExcel(
+        output=io.BytesIO(),
+        definition=OPENEDU_EXCEL_DEFINITION,
+        data=OpenEduSmartExcelData(provider_id)
+    )
+
+    excel.dump()
+    return excel.output.getvalue()

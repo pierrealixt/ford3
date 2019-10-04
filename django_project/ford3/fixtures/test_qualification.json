@@ -1,10 +1,19 @@
 [
     {
+        "model": "ford3.SAQAQualification",
+        "pk": 1,
+        "fields": {
+            "name": "SAQA name",
+            "saqa_id": 1000
+        }
+    },
+    {
         "model": "ford3.Qualification",
         "pk": 1,
         "fields": {
+            "saqa_qualification_id": 1,
             "campus_id": 1,
-            "name": "Qualification Name",
+            "name": "Qualification Name hello",
             "short_description": "Some short description",
             "long_description": "Some long description",
             "duration": 10,
@@ -25,6 +34,7 @@
         "model": "ford3.Qualification",
         "pk": 2,
         "fields": {
+            "saqa_qualification_id": 1,
             "campus_id": 1,
             "name": "Qualification 2/13 Completion",
             "short_description": "Some short description",
@@ -42,5 +52,5 @@
             "created_at": "2019-05-30 15:18:56.665177-07:00",
             "edited_at": "2019-05-30 15:18:56.665177-07:00"
         }
-    }    
+    }
 ]

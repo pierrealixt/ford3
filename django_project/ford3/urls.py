@@ -81,6 +81,12 @@ urlpatterns = [
     path('providers/<int:provider_id>/delete/',
         provider.delete,
         name='delete-provider'),
+    path('providers/<int:provider_id>/dump/',
+        provider.dump,
+        name='dump-provider'),
+    path('providers/<int:provider_id>/upload/',
+        provider.upload,
+        name='import-provider'),
     path(
         'providers/<int:provider_id>/campus/<int:campus_id>/edit/',
         campus_wizard,
@@ -137,6 +143,10 @@ urlpatterns = [
         qualification.toggle_publication,
         name='unpublish-qualification'),
     path(
+        'providers/<int:provider_id>/qualifications/import/',
+        views.import_qualification,
+        name='import-qualification'),
+    path(
         '/'.join([
             'providers/<int:provider_id>',
             'campus/<int:campus_id>',
@@ -187,7 +197,6 @@ urlpatterns = [
         UserCreate.as_view(),
         name='dashboard-users-add'
     ),
-    url(r'^test_widgets/$', views.widget_examples, name='test_widgets'),
     url(
         r'^accounts/login/$',
         auth_views.LoginView.as_view(authentication_form=CustomAuthForm),
