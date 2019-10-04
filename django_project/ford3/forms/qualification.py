@@ -49,6 +49,13 @@ class QualificationDetailForm(QualificationForm):
         widget=forms.RadioSelect
     )
 
+    http_link = forms.URLField(
+        label='Qualification\'s webpage',
+        help_text='*255 characters max',
+        required=False,
+        max_length=255
+    )
+
 
 class QualificationDurationFeesForm(QualificationForm):
     full_time = forms.TypedChoiceField(

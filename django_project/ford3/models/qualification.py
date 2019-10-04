@@ -122,6 +122,15 @@ class Qualification(models.Model):
         null=True,
         help_text="Are the occupations this qualification prepares you for "
                   "in high demand?")
+
+    http_link = models.URLField(
+        blank=True,
+        null=True,
+        unique=False,
+        help_text='A link to a web page containing additional details '
+                  'regarding this qualification',
+        max_length=255)
+
     created_at = models.DateTimeField(
         auto_now_add=True)
     edited_at = models.DateTimeField(
