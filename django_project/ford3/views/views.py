@@ -44,5 +44,55 @@ def delete_qualification(request, provider_id, campus_id, qualification_id):
     return redirect(reverse('dashboard'))
 
 
-def widget_examples(request):
-    return render_to_response('test_widgets.html')
+from ford3.models.campus import Campus
+from ford3.models.saqa_qualification import SAQAQualification
+
+# @login_required()
+# @require_http_methods(['POST'])
+
+def diff(key, obj, new_value):
+    if getattr(obj, key) != new_value:
+        setattr(obj, key, new_value)
+        obj.save()
+        return True
+    return False
+
+
+def import_qualification(request, provider_id):
+    import json
+    data = json.loads(request.body)
+    try:
+        campus = Campus.objects.get(
+            name=data['campus_name'],
+            provider_id=provider_id)
+
+        qualification = campus.qualification_set.filter(
+            deleted=False,
+            saqa_qualification__saqa_id=data['saqa_qualification_id']
+        )
+        if len(qualification) == 0:
+            pass
+            # create qualification
+        elif len(qualification) >= 1:
+            qualification = qualification[0]
+            report = {}
+            qualification_keys = [
+                key for key in data.keys()
+                if key.split('_')[0] == 'qualification'
+            ]
+            for key in qualification_keys:
+                report[key] = diff(
+                    key[key.find('_') + 1:],
+                    qualification,
+                    data[key])
+            import pdb; pdb.set_trace()
+
+
+
+    except Campus.DoesNotExist:
+        return 'campus_name does not belong to provider'
+
+
+
+
+

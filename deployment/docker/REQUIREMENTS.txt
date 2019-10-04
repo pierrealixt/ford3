@@ -29,3 +29,5 @@ django-hashedfilenamestorage
 # Documentation
 sphinx
 coreapi
+xlsxWriter
+openpyxl
