@@ -51,6 +51,16 @@
 						</div>
 					</div>
 				</div>
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-4 col-sm-6">
+							<b>Webpage</b>
+						</div>
+						<div class="col">
+							<a href="{{ qualification.http_link }}" target="_blank">{{ qualification.http_link }}</a>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="row py-3 mx-0">
 				<div class='col-md-10 edu-underline px-0'>
@@ -130,7 +140,7 @@
 								{{ qualification.requirement.interview|is_none }}
 							{% else %}
 								{{ qualification.requirement.interview|yesno:"Yes,No" }}
-							{% endif %}							
+							{% endif %}
 						</div>
 					</div>
 					<div class="row py-2">
