@@ -267,27 +267,55 @@ class Provider(models.Model):
 
     def import_excel_data(self, data):
         errors = {}
-        for i, obj in enumerate(data):
+        for idx, obj in enumerate(data):
             models = {}
+            errors[idx] = {}
             qualification_model = apps.get_model('ford3', 'Qualification')
-            current_qualification = qualification_model.objects.get(id=obj['id'])
+            qualification_entrance_requirement_subject_model = apps.get_model(
+                'ford3', 'QualificationEntranceRequirementSubject')
+            subject_model = apps.get_model('ford3', 'Subject')
+            qualification_id = obj['qualification__id']
+            current_qualification = qualification_model.objects.get(id=qualification_id)
+
             models['campus'] = current_qualification.campus
             models['saqa_qualification'] = current_qualification.saqa_qualification
             models['qualification'] = current_qualification
             models['requirement'] = current_qualification.requirement
-            if models['requirement']:
+
+            if not models['requirement']:
                 requirement = (apps.get_model('ford3', 'Requirement'))()
                 requirement.qualification_id = current_qualification.id
                 requirement.save()
                 models['requirement'] = requirement
 
             for key in obj:
-                if key != 'id':
+                if key != 'qualification__id':
+                    if key.find('--') > 0:
+                        original_key = key
+                        key = key[:key.find('--')]
+                        key_index = key[key.find('--')+2:]
+                    else:
+                        original_key = key
+                        key_index = 0
+                    if key == 'qualification_entrance_requirement_subject__subject':
+                        try:
+                            models['qualification_entrance_requirement_subject'] = (
+                                current_qualification.qualificationentrancerequirementsubject_set.all()[key_index])
+                            obj[key] = subject_model.objects.get(name=obj[key])
+                        except IndexError:
+                            subject_object = subject_model.objects.first()
+                            qualification_entrance_requirement_subject = (
+                                qualification_entrance_requirement_subject_model.objects.create(
+                                    qualification=current_qualification, subject=subject_object))
+                            # qualification_entrance_requirement_subject.qualification = current_qualification
+                            # qualification_entrance_requirement_subject.save()
+                            models['qualification_entrance_requirement_subject'] = (
+                                qualification_entrance_requirement_subject)
                     model_name = key[:key.find('__')]
                     try:
                         model = models[model_name]
                     except KeyError as e:
-                        errors[i][key] = str(e)
+                        errors[idx][key] = str(e)
                     property_name = key[key.find('__')+2:]
                     property_value = obj[key]
                     setattr(model, property_name, property_value)
