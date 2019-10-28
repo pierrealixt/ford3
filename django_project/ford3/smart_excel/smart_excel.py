@@ -117,6 +117,8 @@ class SmartExcel():
                 continue
 
             for col_index, col in enumerate(self.columns):
+                if col['index'] > 0:
+                    pass
                 col_index_base_1 = col_index + 1
                 row_index_base_1 = row_index + 1
                 value = self.workbook['Sheet1'].cell(
@@ -126,6 +128,9 @@ class SmartExcel():
                 parsed_row[col['key']] = value
 
             self.parsed_data.append(parsed_row)
+        return self.parsed_data
+
+
 
 
     def dump(self):

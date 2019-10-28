@@ -1,6 +1,15 @@
 import os
+import io
 import unittest
+from tempfile import NamedTemporaryFile
+from django.test import TestCase
+from django.conf import settings
+from json import dumps
 from ford3.smart_excel.smart_excel import SmartExcel
+from ford3.smart_excel.definition import OPENEDU_EXCEL_DEFINITION
+from ford3.views import provider
+from ford3.tests.models.model_factories import ModelFactories
+from ford3.models import Campus
 
 
 DUMMY_DEFINITION = [
@@ -128,20 +137,55 @@ class TestSmartExcelParse(unittest.TestCase):
             output=self.filepath
         ).dump()
 
-
     def test_parse(self):
         excel = SmartExcel(
             definition=self.definition,
             data=self.data,
             path=self.filepath
         )
-        excel.parse()
+        data = excel.parse()
 
-        data = excel.parsed_data
         self.assertEqual(data, [
             {'name': 'PA', 'age': 29, 'city': 'Paris'},
             {'name': 'Cairo', 'age': 0, 'city': 'Muizenberg'},
             {'name': 'Carina', 'age': 26, 'city': 'Windhoek'}])
+
+
+class TestSmartExcelParseProviderSheet(TestCase):
+    def setUp(self):
+        self.provider = ModelFactories.get_provider_test_object()
+        self.campus = ModelFactories.get_campus_test_object()
+        self.qualification = ModelFactories.get_qualification_test_object()
+        self.qualification.campus_id = self.campus
+        self.campus.provider_id = self.provider
+        self.campus.save()
+        self.qualification.save()
+
+    def test_parse(self):
+        output_data = provider.excel_dump(self.provider.id)
+        named_tempfile = NamedTemporaryFile(suffix='.xlsx')
+
+        with open(named_tempfile.name, 'wb') as file:
+            file.write(output_data)
+        # path = '{base_path}/ford3/tests/data_test/template.xlsx'.format(base_path=settings.DJANGO_PATH)
+
+        excel = SmartExcel(
+            definition=OPENEDU_EXCEL_DEFINITION,
+            data=DummyData(),
+            path=named_tempfile.name
+        )
+        # provider.dump(None, provider.id)
+        data = excel.parse()
+
+        original_name = self.qualification.name
+        self.campus.name = "Something else"
+        self.campus.save()
+
+        self.assertNotEqual(self.campus.name, original_name)
+
+        self.provider.import_excel_data(data)
+        self.campus = Campus.objects.get(pk=self.campus.id)
+        self.assertEqual(original_name, self.campus.name)
 
 
 # class TestSmartExcel(TestCase):

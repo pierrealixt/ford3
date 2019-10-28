@@ -50,8 +50,22 @@ OPENEDU_EXCEL_DEFINITION = [
         'kwargs': {
             'columns': [
                 {
+                    'name': 'DB Key',
+                    'key': 'qualification_id',
+                    'validations': {
+                        'excel': {
+                            'validate': 'integer',
+                            'criteria': '>=',
+                            'value': 0,
+                            'input_title': 'ID',
+                            'input_message': 'Cant touch this'  # noqa
+                        }
+                    },
+                    'format': 'locked'
+                },
+                {
                     'name': 'Campus name',
-                    'key': 'campus_name',
+                    'key': 'campus__name',
                     'validations': {
                         'list_source_func': 'get_campus_list',
                     },
@@ -59,7 +73,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'SAQA Qualification name',
-                    'key': 'saqa_qualification_name',
+                    'key': 'saqa_qualification__name',
                     'validations': {
                         'excel': {
                             'validate': 'length',
@@ -74,7 +88,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'SAQA Qualification ID',
-                    'key': 'saqa_qualification_saqa_id',
+                    'key': 'saqa_qualification__saqa_id',
                     'validations': {
                         'excel': {
                             'validate': 'integer',
@@ -88,7 +102,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Short description',
-                    'key': 'qualification_short_description',
+                    'key': 'qualification__short_description',
                     'validations': {
                         'excel': {
                             'validate': 'length',
@@ -103,7 +117,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Long description',
-                    'key': 'qualification_long_description',
+                    'key': 'qualification__long_description',
                     'validations': {
                         'excel': {
                             'validate': 'length',
@@ -118,7 +132,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Distance Learning',
-                    'key': 'qualification_distance_learning',
+                    'key': 'qualification__distance_learning',
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
@@ -126,7 +140,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Full time / Part time',
-                    'key': 'qualification_full_part_time',
+                    'key': 'qualification__full_part_time',
                     'validations': {
                         'list_source_func': 'get_full_part_time_list'
                     },
@@ -134,7 +148,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Web page',
-                    'key': 'qualification_webpage',
+                    'key': 'qualification__webpage',
                     'validations': {
                         'excel': {
                             'validate': 'any',
@@ -154,7 +168,7 @@ OPENEDU_EXCEL_DEFINITION = [
             'columns': [
                 {
                     'name': 'Duration',
-                    'key': 'qualification_duration',
+                    'key': 'qualification__duration',
                     'validations': {
                         'excel': {
                             'validate': 'integer',
@@ -168,7 +182,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'duration_time_repr',
-                    'key': 'qualification_time_repr',
+                    'key': 'qualification__time_repr',
                     'validations': {
                         'list_source_func': 'get_qualification_time_repr_list'
                     }
@@ -183,7 +197,7 @@ OPENEDU_EXCEL_DEFINITION = [
             'columns': [
                 {
                     'name': 'Total cost',
-                    'key': 'qualification_total_cost',
+                    'key': 'qualification__total_cost',
                     'validations': {
                         'excel': {
                             'validate': 'integer',
@@ -197,7 +211,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Total Cost comment',
-                    'key': 'qualification_total_cost_comment',
+                    'key': 'qualification__total_cost_comment',
                     'validations': {
                         'excel': {
                             'validate': 'length',
@@ -220,7 +234,7 @@ OPENEDU_EXCEL_DEFINITION = [
             'columns': [
                 {
                     'name': 'Preparation for critical skill?',
-                    'key': 'qualification_critical_skill',
+                    'key': 'qualification__critical_skill',
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
@@ -228,7 +242,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Preparation for green job?',
-                    'key': 'qualification_green_occupation',
+                    'key': 'qualification__green_occupation',
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
@@ -236,7 +250,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Preparation for high demand job?',
-                    'key': 'qualification_high_demand_occupation',
+                    'key': 'qualification__high_demand_occupation',
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
@@ -253,7 +267,7 @@ OPENEDU_EXCEL_DEFINITION = [
             'columns': [
                 {
                     'name': 'Required entrance qualification',
-                    'key': 'requirement_min_nqf_level',
+                    'key': 'requirement__min_nqf_level',
                     'validations': {
                         'list_source_func': 'get_required_entrance_qualification_list'
                     },
@@ -261,7 +275,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Is there an interview?',
-                    'key': 'requirement_interview',
+                    'key': 'requirement__interview',
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
@@ -269,7 +283,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Does it require a portfolio?',
-                    'key': 'requirement_portfolio',
+                    'key': 'requirement__portfolio',
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
@@ -277,13 +291,13 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Portfolio requirements',
-                    'key': 'requirement_portfolio_comment',
+                    'key': 'requirement__portfolio_comment',
                     'validations': {},
                     'format': 'unlocked'
                 },
                 {
                     'name': 'Does it involve any other assessment?',
-                    'key': 'requirement_assessment',
+                    'key': 'requirement__assessment',
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
@@ -291,7 +305,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Assessment requirements',
-                    'key': 'requirement_assessment_comment',
+                    'key': 'requirement__assessment_comment',
                     'validations': {},
                     'format': 'unlocked'
                 },
@@ -302,12 +316,12 @@ OPENEDU_EXCEL_DEFINITION = [
     {
         'group_name': 'Required subjects and scores',
         'func': 'add_group_column',
-        'repeat': 5,
         'kwargs': {
+            'repeat': 5,
             'columns': [
                 {
                     'name': 'Subject',
-                    'key': 'qualification_entrance_requirement_subject_subject',
+                    'key': 'qualification_entrance_requirement_subject__subject',
                     'validations': {
                         'list_source_func': 'get_subjects_list'
                     },
@@ -315,7 +329,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Score',
-                    'key': 'qualification_entrance_requirement_subject_minimum_score',
+                    'key': 'qualification_entrance_requirement_subject__minimum_score',
                     'validations': {
                         'excel': {
                             'validate': 'integer',
@@ -334,12 +348,12 @@ OPENEDU_EXCEL_DEFINITION = [
     {
         'group_name': 'Associated occupations',
         'func': 'add_group_column',
-        'repeat': 5,
         'kwargs': {
+            'repeat': 5,
             'columns': [
                 {
                     'name': 'Occupations',
-                    'key': 'occupation_name',
+                    'key': 'occupation__name',
                     'validations': {
                         'list_source_func': 'get_occupations_list'
                     },
@@ -351,12 +365,12 @@ OPENEDU_EXCEL_DEFINITION = [
     {
         'group_name': 'Associated interests',
         'func': 'add_group_column',
-        'repeat': 3,
         'kwargs': {
+            'repeat': 3,
             'columns': [
                 {
                     'name': 'Interests',
-                    'key': 'interest_name',
+                    'key': 'interest__name',
                     'validations': {
                         'list_source_func': 'get_interests_list'
                     },
