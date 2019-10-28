@@ -50,8 +50,8 @@ OPENEDU_EXCEL_DEFINITION = [
         'kwargs': {
             'columns': [
                 {
-                    'name': 'DB Key',
-                    'key': 'qualification_id',
+                    'name': 'Qualification ID',
+                    'key': 'qualification__id',
                     'validations': {
                         'excel': {
                             'validate': 'integer',

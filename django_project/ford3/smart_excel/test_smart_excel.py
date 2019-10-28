@@ -159,6 +159,9 @@ class TestSmartExcelParseProviderSheet(TestCase):
         self.qualification.campus_id = self.campus
         self.campus.provider_id = self.provider
         self.campus.save()
+        self.requirement_subject = ModelFactories.get_qualification_entrance_requirement_to()
+        self.requirement_subject.qualification = self.qualification
+        self.requirement_subject.save()
         self.qualification.save()
 
     def test_parse(self):
