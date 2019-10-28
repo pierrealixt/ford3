@@ -58,83 +58,83 @@ class OpenEduSmartExcelData():
         return ['month', 'year']
 
     def get_yes_no_list(self):
-        return ['Yes', 'No']
+        return ['True', 'False']
 
     def get_full_part_time_list(self):
         return ['Full time', 'Part time']
 
-    def write_saqa_qualification_name(self, obj, kwargs={}):
+    def write_saqa_qualification__name(self, obj, kwargs={}):
         return obj.saqa_qualification.name
 
-    def write_saqa_qualification_saqa_id(self, qualification, kwargs={}):
+    def write_saqa_qualification__saqa_id(self, qualification, kwargs={}):
         return qualification.saqa_qualification.saqa_id
 
-    def write_qualification_name(self, qualification, kwargs={}):
+    def write_qualification__name(self, qualification, kwargs={}):
         return qualification.name
 
-    def write_campus_name(self, obj, kwargs={}):
+    def write_campus__name(self, obj, kwargs={}):
         return obj.campus.name
 
-    def read_campus_name(self, obj, kwargs={}):
+    def read_campus__name(self, obj, kwargs={}):
         return Campus.objects.get(name=obj)
 
-    def write_occupation_name(self, qualification, kwargs={}):
+    def write_occupation__name(self, qualification, kwargs={}):
         try:
             return qualification.occupations.all()[kwargs['index']].name
         except IndexError:
             return None
 
-    def write_qualification_short_description(self, qualification, kwargs={}):
+    def write_qualification__short_description(self, qualification, kwargs={}):
         return qualification.short_description
 
-    def write_qualification_long_description(self, qualification, kwargs={}):
+    def write_qualification__long_description(self, qualification, kwargs={}):
         return qualification.long_description
 
-    def write_interest_name(self, qualification, kwargs={}):
+    def write_interest__name(self, qualification, kwargs={}):
         try:
             return qualification.interests.all()[kwargs['index']].name
         except IndexError:
             return None
 
-    def write_qualification_distance_learning(self, qualification, kwargs={}):
+    def write_qualification__distance_learning(self, qualification, kwargs={}):
         return bool_to_string(
             qualification.distance_learning,
             self.get_yes_no_list())
 
-    def write_qualification_full_part_time(self, qualification, kwargs={}):
+    def write_qualification__full_part_time(self, qualification, kwargs={}):
         return bool_to_string(
             qualification.full_time,
             self.get_full_part_time_list())
 
-    def write_qualification_entrance_requirement_subject_subject(self, qualification, kwargs={}):
+    def write_qualification_entrance_requirement_subject__subject(self, qualification, kwargs={}):
         return qualification.qualificationentrancerequirementsubject_set.all()[kwargs['index']].subject.name
 
-    def write_qualification_entrance_requirement_subject_minimum_score(self, qualification, kwargs={}):
+    def write_qualification_entrance_requirement_subject__minimum_score(self, qualification, kwargs={}):
         return qualification.qualificationentrancerequirementsubject_set.all()[kwargs['index']].minimum_score
 
-    def write_qualification_total_cost(self, qualification, kwargs={}):
+    def write_qualification__total_cost(self, qualification, kwargs={}):
         return qualification.total_cost
 
-    def write_qualification_total_cost_comment(self, qualification, kwargs={}):
+    def write_qualification__total_cost_comment(self, qualification, kwargs={}):
         return qualification.total_cost_comment
 
-    def write_qualification_critical_skill(self, qualification, kwargs={}):
+    def write_qualification__critical_skill(self, qualification, kwargs={}):
         return bool_to_string(
             qualification.critical_skill,
             self.get_yes_no_list())
 
-    def write_qualification_green_occupation(self, qualification, kwargs={}):
+    def write_qualification__green_occupation(self, qualification, kwargs={}):
         return bool_to_string(
             qualification.green_occupation,
             self.get_yes_no_list())
 
 
-    def write_qualification_high_demand_occupation(self, qualification, kwargs={}):
+    def write_qualification__high_demand_occupation(self, qualification, kwargs={}):
         return bool_to_string(
             qualification.high_demand_occupation,
             self.get_yes_no_list())
 
-    def write_requirement_min_nqf_level(self, qualification, kwargs={}):
+    def write_requirement__min_nqf_level(self, qualification, kwargs={}):
         try:
             if qualification.requirement:
                 level = qualification.requirement.min_nqf_level.split('.')[1]
@@ -149,16 +149,16 @@ class OpenEduSmartExcelData():
             level.value for level in SaqaQualificationLevel
         ]
 
-    def write_qualification_webpage(self, qualification, kwargs={}):
+    def write_qualification__webpage(self, qualification, kwargs={}):
         return qualification.http_link
 
-    def write_qualification_duration(self, qualification, kwargs={}):
+    def write_qualification__duration(self, qualification, kwargs={}):
         return qualification.duration
 
-    def write_qualification_time_repr(self, qualification, kwargs={}):
+    def write_qualification__time_repr(self, qualification, kwargs={}):
         return qualification.duration_time_repr
 
-    def write_requirement_interview(self, qualification, kwargs={}):
+    def write_requirement__interview(self, qualification, kwargs={}):
         if qualification.requirement:
             return bool_to_string(
                 qualification.requirement.interview,
@@ -166,7 +166,7 @@ class OpenEduSmartExcelData():
         else:
             return ''
 
-    def write_requirement_portfolio(self, qualification, kwargs={}):
+    def write_requirement__portfolio(self, qualification, kwargs={}):
         if qualification.requirement:
             return bool_to_string(
                 qualification.requirement.portfolio,
@@ -174,7 +174,7 @@ class OpenEduSmartExcelData():
         else:
             return ''
 
-    def write_requirement_assessment(self, qualification, kwargs={}):
+    def write_requirement__assessment(self, qualification, kwargs={}):
         if qualification.requirement:
             return bool_to_string(
                 qualification.requirement.assessment,
@@ -182,14 +182,21 @@ class OpenEduSmartExcelData():
         else:
             return ''
 
-    def write_requirement_portfolio_comment(self, qualification, kwargs={}):
+    def write_requirement__portfolio_comment(self, qualification, kwargs={}):
         if qualification.requirement:
             return qualification.requirement.portfolio_comment
         else:
             return ''
 
-    def write_requirement_assessment_comment(self, qualification, kwargs={}):
+    def write_requirement__assessment_comment(self, qualification, kwargs={}):
         if qualification.requirement:
             return qualification.requirement.assessment_comment
         else:
             return ''
+
+    def write_qualification_id(self, qualification, kwargs={}):
+        if qualification.id:
+            return qualification.id
+        else:
+            return ''
+

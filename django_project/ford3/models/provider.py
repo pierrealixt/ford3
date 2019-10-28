@@ -3,7 +3,9 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.contrib.gis.db.models import PointField
 from django.contrib.gis.geos import Point, GEOSGeometry
+from django.apps import apps
 from ford3.models.campus import Campus
+
 
 
 class ActiveProviderManager(models.Manager):
@@ -262,3 +264,31 @@ class Provider(models.Model):
                 'location_value_x': 0,
                 'location_value_y': 0})
         return result
+
+    def import_excel_data(self, data):
+        errors = {}
+        for i, obj in enumerate(data):
+            models = {}
+            qualification_model = apps.get_model('ford3', 'Qualification')
+            current_qualification = qualification_model.objects.get(id=obj['id'])
+            models['campus'] = current_qualification.campus
+            models['saqa_qualification'] = current_qualification.saqa_qualification
+            models['qualification'] = current_qualification
+            models['requirement'] = current_qualification.requirement
+            if models['requirement']:
+                requirement = (apps.get_model('ford3', 'Requirement'))()
+                requirement.qualification_id = current_qualification.id
+                requirement.save()
+                models['requirement'] = requirement
+
+            for key in obj:
+                if key != 'id':
+                    model_name = key[:key.find('__')]
+                    try:
+                        model = models[model_name]
+                    except KeyError as e:
+                        errors[i][key] = str(e)
+                    property_name = key[key.find('__')+2:]
+                    property_value = obj[key]
+                    setattr(model, property_name, property_value)
+                    model.save()
