@@ -298,25 +298,30 @@ class Provider(models.Model):
                         original_key = key
                         key_index = 0
                     if key == 'qualification_entrance_requirement_subject__subject':
+                        property_value = obj[key]
+                        if property_value:
+                            try:
+                                obj[key] = subject_model.objects.get(name=property_value).id
+                            except Exception as e:
+                                errors[idx][key] = str(e)
+                            else:
+                                try:
+                                    models['qualification_entrance_requirement_subject'] = (
+                                        current_qualification.qualificationentrancerequirementsubject_set.all()[key_index])
+
+                                except IndexError:
+                                    qualification_entrance_requirement_subject = (
+                                        qualification_entrance_requirement_subject_model.objects.create(
+                                            qualification=current_qualification, subject=property_value))
+                                    models['qualification_entrance_requirement_subject'] = (
+                                        qualification_entrance_requirement_subject)
+                    else:
+                        model_name = key[:key.find('__')]
                         try:
-                            models['qualification_entrance_requirement_subject'] = (
-                                current_qualification.qualificationentrancerequirementsubject_set.all()[key_index])
-                            obj[key] = subject_model.objects.get(name=obj[key])
-                        except IndexError:
-                            subject_object = subject_model.objects.first()
-                            qualification_entrance_requirement_subject = (
-                                qualification_entrance_requirement_subject_model.objects.create(
-                                    qualification=current_qualification, subject=subject_object))
-                            # qualification_entrance_requirement_subject.qualification = current_qualification
-                            # qualification_entrance_requirement_subject.save()
-                            models['qualification_entrance_requirement_subject'] = (
-                                qualification_entrance_requirement_subject)
-                    model_name = key[:key.find('__')]
-                    try:
-                        model = models[model_name]
-                    except KeyError as e:
-                        errors[idx][key] = str(e)
-                    property_name = key[key.find('__')+2:]
-                    property_value = obj[key]
-                    setattr(model, property_name, property_value)
-                    model.save()
+                            model = models[model_name]
+                        except KeyError as e:
+                            errors[idx][key] = str(e)
+                        property_name = key[key.find('__')+2:]
+                        property_value = obj[key]
+                        setattr(model, property_name, property_value)
+                        model.save()

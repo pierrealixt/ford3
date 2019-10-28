@@ -116,8 +116,9 @@ class SmartExcel():
             if row_index < self.meta_config['header_row']:
                 continue
             for col_index, col in enumerate(self.columns):
-                if col['index'] > 0:
-                    col['name'] = '{name}--{index}'.format(name=col['name'], index=col['index'])
+                if col['index'] > 0 and col['key'].find('--') == -1:
+                    new_key = '{key}--{index}'.format(key=col['key'], index=col['index'])
+                    col['key'] = new_key
                 col_index_base_1 = col_index + 1
                 row_index_base_1 = row_index + 1
                 value = self.workbook['Sheet1'].cell(
@@ -128,9 +129,6 @@ class SmartExcel():
 
             self.parsed_data.append(parsed_row)
         return self.parsed_data
-
-
-
 
     def dump(self):
         """
