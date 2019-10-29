@@ -1,19 +1,13 @@
 import os
-import io
 import unittest
 from tempfile import NamedTemporaryFile
 from django.test import TestCase
-from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from json import dumps
 from ford3.smart_excel.smart_excel import SmartExcel
 from ford3.smart_excel.definition import OPENEDU_EXCEL_DEFINITION
 from ford3.views import provider
 from ford3.tests.models.model_factories import ModelFactories
-from ford3.models import Campus
-from ford3.models import Qualification
-from ford3.models import QualificationEntranceRequirementSubject
-
+from ford3.models import Campus, QualificationEntranceRequirementSubject, Interest
 
 DUMMY_DEFINITION = [
     {
@@ -124,7 +118,6 @@ class TestSmartExcelDump(unittest.TestCase):
         self.assertTrue(excel.WRITEMODE)
 
 
-
 class TestSmartExcelParse(unittest.TestCase):
     def setUp(self):
         self.definition = DUMMY_DEFINITION
@@ -182,11 +175,6 @@ class TestSmartExcelParseProviderSheet(TestCase):
         self.data = excel.parse()
 
     def test_basic_parse(self):
-
-        # path = '{base_path}/ford3/tests/data_test/template.xlsx'.format(base_path=settings.DJANGO_PATH)
-
-
-
         original_name = self.qualification.name
         self.campus.name = "Something else"
         self.campus.save()
@@ -222,96 +210,20 @@ class TestSmartExcelParseProviderSheet(TestCase):
         qualification_entrance_subject = self.qualification.entrance_req_subjects_list[0]
         self.assertEqual(qualification_entrance_subject['minimum_score'], original_required_score)
 
-# class TestSmartExcel(TestCase):
-#     fixtures = ['interest', 'occupation', 'subject', 'groups',
-#         'sa_provinces',
-#         'test_province_users',
-#         'test_provider_users',
-#         'test_campus_users',
-# 'test_providers', 'test_campus', 'test_qualification']
+    def test_add_interest(self):
+        original_interest = self.qualification.interests.all()[0]
+        self.assertEqual(len(self.qualification.interests.all()), 1)
+        self.qualification.interests.clear()
+        self.assertEqual(len(self.qualification.interests.all()), 0)
+        self.provider.import_excel_data(self.data)
+        interest = self.qualification.interests.all()[0]
+        self.assertEqual(interest.id, original_interest.id)
 
-#     def setUp(self):
-#         qualif = Qualification.objects.all()[0]
-#         for occ in Occupation.objects.all()[0:5]:
-#             qualif.occupations.add(occ)
-
-#         for inte in Interest.objects.all()[0:3]:
-#             qualif.interests.add(inte)
-
-#         for sub in Subject.objects.all()[0:6]:
-#             cairo = QualificationEntranceRequirementSubject(
-#                 qualification=qualif,
-#                 subject=sub,
-#                 minimum_score=42
-#             )
-#             cairo.save()
-#         from ford3.models.requirement import Requirement
-#         from ford3.enums.saqa_qualification_level import SaqaQualificationLevel
-
-#         requirememt = Requirement()
-#         requirememt.qualification = qualif
-#         requirememt.min_nqf_level = SaqaQualificationLevel.LEVEL_3
-#         requirememt.save()
-
-
-#         qualif = Qualification.objects.all()[1]
-#         for occ in Occupation.objects.all()[5:10]:
-#             qualif.occupations.add(occ)
-
-#         for inte in Interest.objects.all()[3:6]:
-#             qualif.interests.add(inte)
-
-#         for sub in Subject.objects.all()[6:12]:
-#             cairo = QualificationEntranceRequirementSubject(
-#                 qualification=qualif,
-#                 subject=sub,
-#                 minimum_score=42
-#             )
-#             cairo.save()
-
-#         self.excel = SmartExcel()
-#         self.excel.data = OpenEduSmartExcelData(provider_id=1)
-
-#         OpenEduSmartExcel(self.excel)
-
-
-#     def test_next_letter(self):
-#         from ford3.tests.smart_excel.smart_excel import next_letter
-#         letter = next_letter(0)
-#         self.assertEqual(letter, 'A')
-
-#         letter = next_letter(1)
-#         self.assertEqual(letter, 'B')
-
-#         letter = next_letter(26)
-#         self.assertEqual(letter, 'AA')
-
-#         letter = next_letter(27)
-#         self.assertEqual(letter, 'AB')
-
-#         letter = next_letter(51)
-#         self.assertEqual(letter, 'AZ')
-
-#         letter = next_letter(52)
-#         self.assertEqual(letter, 'BA')
-
-#         letter = next_letter(53)
-#         self.assertEqual(letter, 'BB')
-
-#         letter = next_letter(78)
-#         self.assertEqual(letter, 'CA')
-
-#         letter = next_letter(701)
-#         self.assertEqual(letter, 'ZZ')
-
-#         letter = next_letter(702)
-#         self.assertEqual(letter, 'AAA')
-
-#         letter = next_letter(703)
-#         self.assertEqual(letter, 'AAB')
-
-#     def test_build(self):
-#         self.excel.build()
-
-#     def test_dump(self):
-#         self.excel.dump()
+    def test_add_occupation(self):
+        original_occupation = self.qualification.occupations.all()[0]
+        self.assertEqual(len(self.qualification.occupations.all()), 1)
+        self.qualification.occupations.clear()
+        self.assertEqual(len(self.qualification.occupations.all()), 0)
+        self.provider.import_excel_data(self.data)
+        occupation = self.qualification.occupations.all()[0]
+        self.assertEqual(occupation.id, original_occupation.id)
