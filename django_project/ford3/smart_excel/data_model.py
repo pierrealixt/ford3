@@ -69,6 +69,12 @@ class OpenEduSmartExcelData():
     def write_saqa_qualification__saqa_id(self, qualification, kwargs={}):
         return qualification.saqa_qualification.saqa_id
 
+    def write_qualification__id(self, qualification, kwargs={}):
+        if qualification.id:
+            return qualification.id
+        else:
+            return ''
+
     def write_qualification__name(self, qualification, kwargs={}):
         return qualification.name
 
@@ -108,9 +114,6 @@ class OpenEduSmartExcelData():
 
     def write_qualification_entrance_requirement_subject__subject(self, qualification, kwargs={}):
         return qualification.qualificationentrancerequirementsubject_set.all()[kwargs['index']].subject.name
-
-    def write_qualification_entrance_requirement_subject__id(self, qualification, kwargs={}):
-        return qualification.qualificationentrancerequirementsubject_set.all()[kwargs['index']].subject.id
 
     def write_qualification_entrance_requirement_subject__minimum_score(self, qualification, kwargs={}):
         return qualification.qualificationentrancerequirementsubject_set.all()[kwargs['index']].minimum_score
@@ -197,9 +200,5 @@ class OpenEduSmartExcelData():
         else:
             return ''
 
-    def write_qualification__id(self, qualification, kwargs={}):
-        if qualification.id:
-            return qualification.id
-        else:
-            return ''
+
 
