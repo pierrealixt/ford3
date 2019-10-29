@@ -4,6 +4,7 @@ import unittest
 from tempfile import NamedTemporaryFile
 from django.test import TestCase
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from json import dumps
 from ford3.smart_excel.smart_excel import SmartExcel
 from ford3.smart_excel.definition import OPENEDU_EXCEL_DEFINITION
@@ -166,13 +167,11 @@ class TestSmartExcelParseProviderSheet(TestCase):
         self.requirement_subject.save()
         self.qualification.save()
 
-    def test_basic_parse(self):
         output_data = provider.excel_dump(self.provider.id)
         named_tempfile = NamedTemporaryFile(suffix='.xlsx')
 
         with open(named_tempfile.name, 'wb') as file:
             file.write(output_data)
-        # path = '{base_path}/ford3/tests/data_test/template.xlsx'.format(base_path=settings.DJANGO_PATH)
 
         excel = SmartExcel(
             definition=OPENEDU_EXCEL_DEFINITION,
@@ -180,7 +179,13 @@ class TestSmartExcelParseProviderSheet(TestCase):
             path=named_tempfile.name
         )
         # provider.dump(None, provider.id)
-        data = excel.parse()
+        self.data = excel.parse()
+
+    def test_basic_parse(self):
+
+        # path = '{base_path}/ford3/tests/data_test/template.xlsx'.format(base_path=settings.DJANGO_PATH)
+
+
 
         original_name = self.qualification.name
         self.campus.name = "Something else"
@@ -188,41 +193,34 @@ class TestSmartExcelParseProviderSheet(TestCase):
 
         self.assertNotEqual(self.campus.name, original_name)
 
-        self.provider.import_excel_data(data)
+        self.provider.import_excel_data(self.data)
         self.campus = Campus.objects.get(pk=self.campus.id)
         self.assertEqual(original_name, self.campus.name)
 
     def test_alter_subject(self):
-        output_data = provider.excel_dump(self.provider.id)
-        named_tempfile = NamedTemporaryFile(suffix='.xlsx')
-
-        with open(named_tempfile.name, 'wb') as file:
-            file.write(output_data)
-        # path = '{base_path}/ford3/tests/data_test/template.xlsx'.format(base_path=settings.DJANGO_PATH)
-
-        excel = SmartExcel(
-            definition=OPENEDU_EXCEL_DEFINITION,
-            data=DummyData(),
-            path=named_tempfile.name
-        )
-        # provider.dump(None, provider.id)
-        data = excel.parse()
-
         original_required_score = self.qualification.entrance_req_subjects_list[0]['minimum_score']
-
         entrance_req_id = self.qualification.entrance_req_subjects_list[0]['id']
-
         qualification_entrance_subject = QualificationEntranceRequirementSubject.objects.get(pk=entrance_req_id)
-
         qualification_entrance_subject.minimum_score = 1
         qualification_entrance_subject.save()
-
         self.assertNotEqual(qualification_entrance_subject.minimum_score, original_required_score)
-
-        self.provider.import_excel_data(data)
+        self.provider.import_excel_data(self.data)
         qualification_entrance_subject = QualificationEntranceRequirementSubject.objects.get(pk=entrance_req_id)
         self.assertEqual(qualification_entrance_subject.minimum_score, original_required_score)
 
+    def test_add_subject(self):
+        original_required_score = self.qualification.entrance_req_subjects_list[0]['minimum_score']
+        entrance_req_id = self.qualification.entrance_req_subjects_list[0]['id']
+        QualificationEntranceRequirementSubject.objects.get(pk=entrance_req_id).delete()
+        try:
+            QualificationEntranceRequirementSubject.objects.get(pk=entrance_req_id)
+            self.fail('Object not deleted correctly')
+        except ObjectDoesNotExist:
+            pass
+
+        self.provider.import_excel_data(self.data)
+        qualification_entrance_subject = self.qualification.entrance_req_subjects_list[0]
+        self.assertEqual(qualification_entrance_subject['minimum_score'], original_required_score)
 
 # class TestSmartExcel(TestCase):
 #     fixtures = ['interest', 'occupation', 'subject', 'groups',
