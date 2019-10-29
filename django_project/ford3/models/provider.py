@@ -341,19 +341,21 @@ class Provider(models.Model):
         property_value = excel_row_obj[key]
         if property_value:
             try:
-                excel_row_obj[key] = subject_model.objects.get(name=property_value).id
+                current_subject = subject_model.objects.filter(name=property_value)[0]
+                excel_row_obj[key] = current_subject.id
             except Exception as e:
-                errors[key] = str(e)
-            else:
-                try:
-                    models_qualification_entrance_requirement_subject = (
-                        current_qualification.qualificationentrancerequirementsubject_set.all()[key_index])
-                except IndexError:
-                    qualification_entrance_requirement_subject = (
-                        qualification_entrance_requirement_subject_model.objects.create(
-                            qualification=current_qualification, subject=property_value))
-                    models_qualification_entrance_requirement_subject = (
-                        qualification_entrance_requirement_subject)
+                current_subject = subject_model.objects.create(name=property_value)
+
+            try:
+                models_qualification_entrance_requirement_subject = (
+                    current_qualification.qualificationentrancerequirementsubject_set.all()[key_index])
+            except IndexError:
+
+                qualification_entrance_requirement_subject = (
+                    qualification_entrance_requirement_subject_model.objects.create(
+                        qualification=current_qualification, subject=current_subject))
+                models_qualification_entrance_requirement_subject = (
+                    qualification_entrance_requirement_subject)
         return models_qualification_entrance_requirement_subject, errors
 
     def set_interest(self, excel_row_obj, key, key_index, current_qualification):
