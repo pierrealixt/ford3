@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.contrib.gis.db.models import PointField
 from django.contrib.gis.geos import Point, GEOSGeometry
-from django.apps import apps
+
 # from django.core.exceptions import ObjectDoesNotExist
 from ford3.models.campus import Campus
 
@@ -246,7 +246,7 @@ class Provider(models.Model):
                         'Invalid location. Please reselect the '
                         'location from the map and ensure your location '
                         'details are entered correctly'
-                 })
+                })
 
     def soft_delete(self):
         self.deleted = True
@@ -265,149 +265,3 @@ class Provider(models.Model):
                 'location_value_x': 0,
                 'location_value_y': 0})
         return result
-
-    def import_excel_data(self, data):
-        errors = {}
-        for idx, obj in enumerate(data):
-            errors[idx] = {}
-            qualification_model = apps.get_model('ford3', 'Qualification')
-
-            qualification_id = obj['qualification__id']
-            current_qualification = qualification_model.objects.get(id=qualification_id)
-            models = self.get_excel_import_models(current_qualification)
-            for key in obj:
-                if key == 'qualification__id':
-                    continue
-                key_index, key = self.parse_key(key)
-                if key == 'qualification_entrance_requirement_subject__subject':
-                    models['qualification_entrance_requirement_subject'], errors[idx] = (
-                        self.set_qualification_entrance_rs(obj, key, key_index, current_qualification))
-                elif key == 'interest__name':
-                    errors[idx] = self.set_interest(obj, key, key_index, current_qualification)
-                elif key == 'occupation__name':
-                    errors[idx] = self.set_occupation(obj, key, key_index, current_qualification)
-
-                else:
-                    model_name = key[:key.find('__')]
-                    try:
-                        model = models[model_name]
-                    except KeyError as e:
-                        errors[idx][key] = str(e)
-                    property_name = key[key.find('__')+2:]
-                    property_value = obj[key]
-                    if property_value and model:
-                        setattr(model, property_name, property_value)
-                        model.save()
-
-    def parse_key(self, key):
-        if key.find('--') != -1:  # This is a multi column insertion
-            key = key[:key.find('--')]
-            key_index = key[key.find('--') + 2:]
-        else:
-            key_index = 0
-        if type(key_index) != int:
-            key_index = 0
-        return key_index, key
-
-    def get_excel_import_models(self, current_qualification):
-        models = {}
-        models['campus'] = current_qualification.campus
-        models['saqa_qualification'] = current_qualification.saqa_qualification
-        models['qualification'] = current_qualification
-        models['requirement'] = current_qualification.requirement
-
-        if not models['requirement']:
-            requirement = (apps.get_model('ford3', 'Requirement'))()
-            requirement.qualification_id = current_qualification.id
-            requirement.save()
-            models['requirement'] = requirement
-
-        return models
-
-    def set_qualification_entrance_rs(self, excel_row_obj, key, key_index, current_qualification):
-        """
-        A subclass for import_excel_cell for getting the appropriate qualification_entrance_requirement_subject object
-        :param obj: The excel row object being imported
-        :param key: This should be qualification_entrance_requirement_subject__subject
-        :param key_index: As received from parse_key(self, key)
-        :param current_qualification: The qualification model object
-        :return: qualification_entrance_requirement_subject to work with, errors
-        """
-        models_qualification_entrance_requirement_subject = None
-        errors = {}
-        qualification_entrance_requirement_subject_model = apps.get_model(
-            'ford3', 'QualificationEntranceRequirementSubject')
-        subject_model = apps.get_model('ford3', 'Subject')
-        property_value = excel_row_obj[key]
-        if property_value:
-            try:
-                current_subject = subject_model.objects.filter(name=property_value)[0]
-                excel_row_obj[key] = current_subject.id
-            except Exception as e:
-                current_subject = subject_model.objects.create(name=property_value)
-
-            try:
-                models_qualification_entrance_requirement_subject = (
-                    current_qualification.qualificationentrancerequirementsubject_set.all()[key_index])
-            except IndexError:
-
-                qualification_entrance_requirement_subject = (
-                    qualification_entrance_requirement_subject_model.objects.create(
-                        qualification=current_qualification, subject=current_subject))
-                models_qualification_entrance_requirement_subject = (
-                    qualification_entrance_requirement_subject)
-        return models_qualification_entrance_requirement_subject, errors
-
-    def set_interest(self, excel_row_obj, key, key_index, current_qualification):
-        """
-        A subclass for import_excel_cell for adding an interest
-        :param obj: The excel row object being imported
-        :param key: This should be qualification_entrance_requirement_subject__subject
-        :param key_index: As received from parse_key(self, key)
-        :param current_qualification: The qualification model object
-        :return: errors
-        """
-        errors = {}
-        interest_model = apps.get_model('ford3', 'Interest')
-        property_value = excel_row_obj[key]
-        if property_value:
-            try:
-                interest = interest_model.objects.filter(name=property_value)[0]
-            except Exception as e:  # Interest not found
-                interest = interest_model.objects.create(name=property_value)
-            try:
-                existing_interests = list(current_qualification.interests.all().values())
-                existing_interests[key_index] = interest
-                current_qualification.interests.set(existing_interests)  # We overwrite the old list
-            except IndexError:  # Nothing was in that slot, we add a new one
-                current_qualification.interests.add(interest)
-        else:
-            errors[key] = 'No property value'
-        return errors
-
-    def set_occupation(self, excel_row_obj, key, key_index, current_qualification):
-        """
-        A subclass for import_excel_cell for adding an occupation
-        :param obj: The excel row object being imported
-        :param key: This should be qualification_entrance_requirement_subject__subject
-        :param key_index: As received from parse_key(self, key)
-        :param current_qualification: The qualification model object
-        :return: errors
-        """
-        errors = {}
-        interest_model = apps.get_model('ford3', 'Occupation')
-        property_value = excel_row_obj[key]
-        if property_value:
-            try:
-                occupation = interest_model.objects.filter(name=property_value)[0]
-            except Exception as e:  # Occupation not found
-                occupation = interest_model.objects.create(name=property_value)
-            try:
-                existing_occupations = list(current_qualification.occupations.all())
-                existing_occupations[key_index] = occupation
-                current_qualification.occupations.set(existing_occupations)  # We overwrite the old list
-            except IndexError:  # Nothing was in that slot, we add a new one
-                current_qualification.occupations.add(occupation)
-        else:
-            errors[key] = 'No property value'
-        return errors

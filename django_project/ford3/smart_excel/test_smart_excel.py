@@ -5,9 +5,15 @@ from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
 from ford3.smart_excel.smart_excel import SmartExcel
 from ford3.smart_excel.definition import OPENEDU_EXCEL_DEFINITION
-from ford3.views import provider
+from ford3.views import provider as providerView
 from ford3.tests.models.model_factories import ModelFactories
-from ford3.models import Campus, QualificationEntranceRequirementSubject, Interest
+from ford3.models import (
+    Campus,
+    QualificationEntranceRequirementSubject,
+    Interest
+)
+
+from ford3.import_qualifications import import_excel_data
 
 DUMMY_DEFINITION = [
     {
@@ -160,7 +166,7 @@ class TestSmartExcelParseProviderSheet(TestCase):
         self.requirement_subject.save()
         self.qualification.save()
 
-        output_data = provider.excel_dump(self.provider.id)
+        output_data = providerView.excel_dump(self.provider.id)
         named_tempfile = NamedTemporaryFile(suffix='.xlsx')
 
         with open(named_tempfile.name, 'wb') as file:
@@ -181,7 +187,10 @@ class TestSmartExcelParseProviderSheet(TestCase):
 
         self.assertNotEqual(self.campus.name, original_name)
 
-        self.provider.import_excel_data(self.data)
+        success, errors = import_excel_data(self.data)
+        self.assertTrue(success)
+        self.assertIsNone(errors)
+
         self.campus = Campus.objects.get(pk=self.campus.id)
         self.assertEqual(original_name, self.campus.name)
 
@@ -191,9 +200,16 @@ class TestSmartExcelParseProviderSheet(TestCase):
         qualification_entrance_subject = QualificationEntranceRequirementSubject.objects.get(pk=entrance_req_id)
         qualification_entrance_subject.minimum_score = 1
         qualification_entrance_subject.save()
+
         self.assertNotEqual(qualification_entrance_subject.minimum_score, original_required_score)
-        self.provider.import_excel_data(self.data)
+
+        success, errors = import_excel_data(self.data)
+
+        self.assertTrue(success)
+        self.assertIsNone(errors)
+
         qualification_entrance_subject = QualificationEntranceRequirementSubject.objects.get(pk=entrance_req_id)
+
         self.assertEqual(qualification_entrance_subject.minimum_score, original_required_score)
 
     def test_add_subject(self):
@@ -206,24 +222,113 @@ class TestSmartExcelParseProviderSheet(TestCase):
         except ObjectDoesNotExist:
             pass
 
-        self.provider.import_excel_data(self.data)
+        subject_name = ModelFactories.get_subject_test_object().name
+
+        row = {
+            'qualification__id': self.data[0]['qualification__id'],
+            'qualification_entrance_requirement_subject__subject': subject_name,
+            'qualification_entrance_requirement_subject__minimum_score': '42'
+        }
+
+        success, errors, diffs = import_excel_data(row)
+
+        self.assertTrue(success)
+        self.assertIsNone(errors)
+        self.assertEqual(
+            diffs,
+            {
+                'qualification_entrance_requirement_subject__minimum_score': {
+                    'new': '42',
+                    'old': None
+                }
+            }
+        )
+
         qualification_entrance_subject = self.qualification.entrance_req_subjects_list[0]
-        self.assertEqual(qualification_entrance_subject['minimum_score'], original_required_score)
+
+        self.assertEqual(qualification_entrance_subject['name'], subject_name)
+        self.assertEqual(qualification_entrance_subject['minimum_score'], 42)
+
+    def test_add_subject_failed(self):
+        row = {
+            'qualification__id': self.data[0]['qualification__id'],
+            'qualification_entrance_requirement_subject__subject': 'Penbra History',
+            'qualification_entrance_requirement_subject__minimum_score': '42'
+        }
+
+        success, errors = import_excel_data(row)
+
+        self.assertFalse(success)
+
+        self.assertEqual(
+            errors,
+            {
+                'qualification_entrance_requirement_subject__subject-0': 'The subject Penbra History does not exist.'
+            }
+        )
+
 
     def test_add_interest(self):
         original_interest = self.qualification.interests.all()[0]
         self.assertEqual(len(self.qualification.interests.all()), 1)
         self.qualification.interests.clear()
         self.assertEqual(len(self.qualification.interests.all()), 0)
-        self.provider.import_excel_data(self.data)
+
+        row = {
+            'qualification__id': self.data[0]['qualification__id'],
+            'interest__name': self.data[0]['interest__name']
+        }
+
+        success, errors, diffs = import_excel_data(row)
+
+        self.assertIsNone(errors)
+        self.assertTrue(success)
+        self.assertEqual(diffs, {})
+
+
         interest = self.qualification.interests.all()[0]
         self.assertEqual(interest.id, original_interest.id)
 
+    def test_add_interest_failed(self):
+        self.assertEqual(len(self.qualification.interests.all()), 1)
+        self.qualification.interests.clear()
+        self.assertEqual(len(self.qualification.interests.all()), 0)
+
+        row = {
+            'qualification__id': self.data[0]['qualification__id'],
+            'interest__name': 'penbra hunting'
+        }
+
+        success, errors = import_excel_data(row)
+
+        self.assertEqual(
+            errors,
+            {
+                'interest__name-0': 'The interest penbra hunting does not exist.'
+            }
+        )
+        self.assertFalse(success)
+
     def test_add_occupation(self):
+        # todo: change that test, similar to interest
         original_occupation = self.qualification.occupations.all()[0]
         self.assertEqual(len(self.qualification.occupations.all()), 1)
         self.qualification.occupations.clear()
         self.assertEqual(len(self.qualification.occupations.all()), 0)
-        self.provider.import_excel_data(self.data)
+
+        row = {
+            'qualification__id': self.data[0]['qualification__id'],
+            'occupation__name': original_occupation.name
+        }
+
+        success, errors, diffs = import_excel_data(row)
+        self.assertTrue(success)
+        self.assertIsNone(errors)
+
+        self.assertEqual(diffs, {})
+
         occupation = self.qualification.occupations.all()[0]
         self.assertEqual(occupation.id, original_occupation.id)
+
+    def test_add_occupation_failed(self):
+        pass
