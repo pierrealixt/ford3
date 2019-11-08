@@ -1,4 +1,5 @@
 from django.apps import apps
+from decimal import Decimal
 
 MODEL_DELIMITER = '__'
 ITERATION_DELIMITER = '--'
@@ -34,14 +35,14 @@ def import_excel_data(row):
             errors.update(error_subject)
 
         elif key == 'interest__name':
-            error_interest, dif_interest = set_interest(
+            error_interest, diff_interest = set_interest(
                 row,
                 key,
                 key_index,
                 current_qualification)
 
             errors.update(error_interest)
-
+            diffs[key] = diff_interest
 
         elif key == 'occupation__name':
             error_occupation, diff_occupation = set_occupation(
@@ -54,9 +55,10 @@ def import_excel_data(row):
             diffs[key] = diff_occupation
 
         else:
-            error_generic, diffs[key] = update_key(row, key, key_index, models)
+            error_generic, diff_generic = update_key(row, key, key_index, models)
             errors.update(error_generic)
 
+            diffs[key] = diff_generic
     if len(errors) > 0:
         return False, errors, diffs
     return True, None, diffs
@@ -77,6 +79,10 @@ def update_key(row, key, key_index, models):
             old_value = getattr(model, property_name)
             setattr(model, property_name, property_value)
             model.save()
+            if type(old_value) == Decimal:
+                old_value = float(old_value.real)
+            if type(property_value) == Decimal:
+                property_value = float(old_value.real)
             diff = {'old': old_value,
                     'new': property_value}
         except Exception as e:
@@ -128,7 +134,7 @@ def set_qualification_entrance_rs(
     :return: qualification_entrance_requirement_subject to work with, errors
     """  # noqa
 
-    models_qualification_entrance_requirement_subject = None
+    subject_instance = None
     errors = {}
     qualification_entrance_requirement_subject_model = apps.get_model(
         'ford3', 'QualificationEntranceRequirementSubject')
@@ -156,6 +162,7 @@ def set_qualification_entrance_rs(
         errors[f'{key}-{key_index}'] = (
             f'The subject {property_value} does not exist.'
         )
+
     return subject_instance, errors
 
 
@@ -176,15 +183,16 @@ def set_interest(row, key, key_index, current_qualification):
     property_value = row[key]
     if property_value is None:
         errors[f'{key}-{key_index}'] = 'No property value'
-        return errors
+        return errors, diff
 
     if interest_model.objects.filter(name=property_value).exists():
         interest = interest_model.objects.filter(name=property_value)[0]
         try:
-            existing_interests = list(current_qualification.interests.all().values())
-            existing_interests[key_index] = interest
-            diff = {'old': existing_interests.name,
+            existing_interests = list(current_qualification.interests.all())
+            existing_interest = list(existing_interests)
+            diff = {'old': existing_interest[key_index].name,
                     'new': property_value}
+            existing_interests[key_index] = interest
             # We overwrite the old list
             current_qualification.interests.set(existing_interests)
         except IndexError:

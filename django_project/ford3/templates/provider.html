@@ -7,7 +7,9 @@
 
 {% block body %}
 {% if error_upload %}
-BAD FILE
+<div class="col-12">
+    The file you are trying to upload is invalid.
+</div>
 {% endif %}
 <div class="row no-gutters">
     <div class='col-12'>
@@ -93,7 +95,7 @@ BAD FILE
             <li>Upload the spreadsheet back by dropping it here.</li>
         </ol>
 
-        <form enctype="multipart/form-data" method='POST' action="{% url 'import-provider' provider_id=provider.id %}">
+        <form enctype="multipart/form-data"  method='POST' action="{% url 'import-provider' provider_id=provider.id %}">
             {% csrf_token %}
             <input type="file" name='excel' accept=".xlsx" />
             <input type="submit" />
