@@ -5,6 +5,8 @@ from django.shortcuts import (
     redirect,
     reverse
 )
+import json
+import decimal
 from django.http.response import HttpResponse
 from ford3.models.qualification import (
     Qualification
@@ -51,14 +53,26 @@ def import_qualification(request, provider_id):
 
     row = json.loads(request.body)
 
-    success, errors = import_excel_data(row)
+    success, errors, diffs = import_excel_data(row)
 
     context = {
         'result': {
             'success': success,
-            'errors': errors
+            'errors': errors,
+            'diffs': diffs
         }
     }
+    response_string = json.dumps(context, cls=DecimalEncoder)
     return HttpResponse(
-        json.dumps(context),
+        response_string,
         content_type="application/json")
+
+
+class DecimalEncoder(json.JSONEncoder):
+    def _iterencode(self, o, markers=None):
+        if isinstance(o, decimal.Decimal):
+            # wanted a simple yield str(o) in the next line,
+            # but that would mean a yield on the line with super(...),
+            # which wouldn't work (see my comment below), so...
+            return (str(o) for o in [o])
+        return super(DecimalEncoder, self)._iterencode(o, markers)
