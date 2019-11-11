@@ -50,7 +50,9 @@ def delete_qualification(request, provider_id, campus_id, qualification_id):
 def import_qualification(request, provider_id):
     import json
     from ford3.import_qualifications import import_excel_data
-
+    if 'headers' in request.GET:
+        #  Build definition
+        pass
     row = json.loads(request.body)
 
     success, errors, diffs = import_excel_data(row)
@@ -59,7 +61,8 @@ def import_qualification(request, provider_id):
         'result': {
             'success': success,
             'errors': errors,
-            'diffs': diffs
+            'diffs': diffs,
+
         }
     }
     response_string = json.dumps(context, cls=DecimalEncoder)

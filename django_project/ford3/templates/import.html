@@ -1,4 +1,4 @@
-<div id="main_result"></div>
+<table id="main_result"></table>
 {% csrf_token %}
 <script type='text/javascript'>
 
@@ -7,8 +7,13 @@
         return document.querySelector('input[name="csrfmiddlewaretoken"]').value
     }
 
-    const processQualification = (providerId, data) => {
+    const processQualification = (providerId, data, idx, columns) => {
         url = '/providers/' + providerId + '/qualifications/import/'
+        let headers = false
+        if (idx == 0) {
+            headers = true
+        }
+
         const request = new XMLHttpRequest()
         request.open('POST', url, true)
         request.setRequestHeader('Content-Type', 'application/json')
@@ -19,7 +24,7 @@
                 const result = JSON.parse(request.responseText)
 
                 console.log(result)
-                update_result(request.responseText)
+                update_result(columns, request.responseText, headers)
             }
         }
         let result = request.send(JSON.stringify(data))
@@ -28,57 +33,75 @@
 
     const main = () => {
         const data = JSON.parse('{{ data|safe }}')
+        const columns = JSON.parse('{{ columns|safe }}')
         const providerId = '{{ provider.id|safe }}'
         let error_log = []
-        data.forEach((row) => {
-            error_log.push(processQualification(providerId, row))
+
+        data.forEach((row, idx) => {
+
+            error_log.push(processQualification(providerId, row, idx, columns))
         })
 
     }
 
-    const update_result = (result) => {
+
+    const getValue = (oldValue) => {
+        if (oldValue == undefined) return ''
+        if (oldValue.toString() == "false") {
+            return "False"
+        } else if (oldValue.toString() == "true") {
+            return "True"
+        } else return oldValue
+    }
+
+    const update_result = (columns, rowReport, headers) => {
+
         let main_result_div = document.getElementById("main_result")
-        let result_object = JSON.parse(result)
+        let result_object = JSON.parse(rowReport)
         let diffs = result_object['result']['diffs']
         let errors = result_object['result']['errors']
-        let diffs_html = get_diff_html(diffs)
-        let errors_html = get_errors_html(errors)
-        main_result_div.innerHTML += '<h2>Differences</h2>'
-        main_result_div.innerHTML += diffs_html
-        main_result_div.innerHTML += '<h2>Errors</h2>'
-        main_result_div.innerHTML += errors_html
-        main_result_div.innerHTML += '<br><br>'
-    }
 
-    const get_errors_html = (errors) => {
-        let class_arr = []
-        let field_arr = []
-        let error_arr = []
-        for (var key of Object.keys(errors))
-        {
-            let class_name = key.slice(0, key.indexOf(class_delimiter))
-            let field_name = key.slice(key.indexOf(class_delimiter) + class_delimiter.length, key.length)
-            let error = errors[key]
-            class_arr.push(class_name)
-            field_arr.push(field_name)
-            error_arr.push(error)
+        let header_arr = []
+        let value_arr = []
+
+        for (var column of columns) {
+            let key = column['key']
+            let name = column['name']
+            if (key in diffs) {
+                let header = `<th class="difference">${name}</th>`  // Saqa qualification requirement subject name
+                let old_value = getValue(diffs[key]['old'])
+                let new_value = getValue(diffs[key]['new'])
+                var next_cell = ''
+                if (old_value == new_value) {
+                    next_cell = `<td class='value_same'>${new_value}</td>`
+                } else {
+                    next_cell = `<td class='value_changed'><div class='old_value'>${old_value}</div><div class='new_value'>${new_value}</div></td>`
+                }
+                header_arr.push(`${header}`)
+                value_arr.push(next_cell)
+            }
+            if (key in errors) {
+                header_arr.push(`<th>${name}</th>`)
+                value_arr.push(`<td class="error">${errors[key]}</td>`)
+            }
         }
-
-        let header_row = getHeadingArrayHtml(class_arr, "header_row", "th")
-        let field_row = getHeadingArrayHtml(field_arr, "field_arr", "td")
-        let error_row = getErrorArrayHTML(error_arr)
-        let content = `<table id='difference_table'>${header_row}${field_row}${error_row}</table>`
-        return content
-    }
-
-    const getErrorArrayHTML = (error_arr) => {
-        let row = `<tr class="error_row">`
-        for (var error of error_arr) {
-            let next_cell = `<td>${error}</td>`
-            row += next_cell
+        let header_row = '<tr>'
+        for (var next_value of header_arr) {
+            header_row += `${next_value}`
         }
-        row += '</tr>'
-        return row
+        header_row += '</tr>'
+
+        let value_row = '<tr>'
+        for (var next_value of value_arr) {
+            value_row += `${next_value}`
+        }
+        value_row += '</tr>'
+        if (!headers) {
+            header_row = ''
+        }
+        let result = `${header_row}${value_row}`
+        main_result_div.innerHTML += result
+
     }
 
     const get_diff_html = (diffs) => {
@@ -101,8 +124,7 @@
             if (e == false) {
                 e = "False"
             }
-            if (e == true)
-            {
+            if (e == true) {
                 e = "True"
             }
             return e;
@@ -117,7 +139,6 @@
         let content = `<table id='difference_table'>${header_row}${field_row}${difference_row}</table>`
         return content
     }
-
 
 
     const getDifferenceRows = (old_arr, new_arr, length) => {
@@ -137,7 +158,8 @@
                         <div class='old_value'>${old_value}</div>
                         <div class='new_value'>${new_value}</div></td>`
             }
-            difference_row += next_cell}
+            difference_row += next_cell
+        }
         difference_row += '</tr>'
         return difference_row
     }
@@ -184,8 +206,9 @@
 <style>
 
     td.value_changed {
-    background-color: green;
-}
+        background-color: green;
+    }
+
     .old_header {
         width: 100%;
         border-bottom: solid;
@@ -194,13 +217,14 @@
     .new_header {
         width: 100%;
     }
+
     .old_value {
         width: 100%;
         border-bottom: solid;
     }
 
     .new_value {
-     width: 100%;
+        width: 100%;
     }
 
     #difference_table {
@@ -228,5 +252,9 @@
         text-align: left;
         background-color: #4CAF50;
         color: white;
+    }
+
+    .error {
+        background-color: red;
     }
 </style>
