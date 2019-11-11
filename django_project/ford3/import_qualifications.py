@@ -20,6 +20,39 @@ def import_excel_data(row):
     for key in row:
         if key == 'qualification__id':
             continue
+        if key == 'qualification__time_repr':
+            try:
+                new_value = row[key]
+                old_value = current_qualification.duration_time_repr
+                current_qualification.duration_time_repr = new_value
+                current_qualification.save()
+                diffs[key] = {'old': old_value,
+                              'new': new_value}
+            except Exception as e:
+                errors[key] = str(e)
+                diffs[key] = {'old': old_value,
+                              'new': new_value}
+            continue
+        if key == 'qualification__full_part_time':
+            value = row[key]
+            try:
+                old_value = "Full Time" if current_qualification.full_time else "Part Time"
+                if value == "Part Time":
+                    current_qualification.full_time = False
+                    new_value = "Part Time"
+                    diffs[key] = {'old': old_value,
+                                  'new': new_value}
+                else:
+                    current_qualification.full_time = True
+                    new_value = "Full Time"
+                    diffs[key] = {'old': old_value,
+                                  'new': new_value}
+                current_qualification.save()
+            except Exception as e:
+                errors[key] = str(e)
+                diffs[key] = {'old': old_value,
+                              'new': new_value}
+            continue
         key_index, key = parse_key(key)
         if key == 'qualification_entrance_requirement_subject__subject':
             subject_instance, error_subject = set_qualification_entrance_rs(

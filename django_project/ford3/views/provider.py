@@ -238,16 +238,21 @@ def upload(request, provider_id):
     )
 
     try:
-        data = import_excel(request.FILES['excel'], provider.id)
+        data, columns = import_excel(request.FILES['excel'], provider.id)
+
     except Exception as e:
         context = {
             'error_upload': str(e),
-            'provider': provider
+            'provider': provider,
         }
         return render(request, 'provider.html', context)
-
+    column_keys = []
+    for column in columns:
+        next_column = {'name': column['name'], 'key': column['key']}
+        column_keys.append(next_column)
     context = {
         'data': json.dumps(data),
+        'columns': json.dumps(column_keys),
         'provider': provider
     }
     return render(request, 'import.html', context)
@@ -267,7 +272,7 @@ def import_excel(file, provider_id):
     )
 
     excel.parse()
-    return excel.parsed_data
+    return excel.parsed_data, excel.columns
 
 
 def excel_dump(provider_id):
