@@ -80,29 +80,7 @@
         </div>
     {% endif %}
 </div>
-{% if perms.ford3.change_provider %}
-<div class="row no-gutters">
-    <div class='col'>
-        <h4>Import / Export</h4>
-    </div>
-    <div class='col-md-12'>
-        <hr class='m-1'/>
-    </div>
-    <div class='col-md-12'>
-        <ol>
-            <li><a href="{% url 'dump-provider' provider_id=provider.id %}">Download</a> the Excel spreadsheet template.</li>
-            <li>Use Excel to add / edit / delete your qualifications.</li>
-            <li>Upload the spreadsheet back by dropping it here.</li>
-        </ol>
 
-        <form enctype="multipart/form-data"  method='POST' action="{% url 'import-provider' provider_id=provider.id %}">
-            {% csrf_token %}
-            <input type="file" name='excel' accept=".xlsx" />
-            <input type="submit" />
-        </form>
-    </div>
-</div>
-{% endif %}
 <div class="row no-gutters">
     <div class='col'>
         <h4>Details</h4>
@@ -195,6 +173,37 @@
 </div>
 
 
+{% if perms.ford3.change_provider %}
+<div class="row no-gutters">
+
+    <div class='col'>
+        <h4>Import / Export </h4>
+    </div>
+    <div class='col-md-12'>
+        <hr class='m-1'/>
+    </div>
+
+
+    <div class='col-md-12'>
+        <ol>
+            <li><a href="{% url 'dump-provider' provider_id=provider.id %}">Download</a> the Excel spreadsheet template.</li>
+            <li>Use Excel to add / edit / delete your qualifications.</li>
+            <li>Upload the spreadsheet back by dropping it here.</li>
+        </ol>
+        <form enctype="multipart/form-data"  method='POST' action="{% url 'import-provider' provider_id=provider.id %}">
+            {% csrf_token %}
+            <input type="file" name='excel' accept=".xlsx" />
+            <input type="submit" />
+        </form>
+    </div>
+    {% if import_data%}
+    <div class="col-12">
+        {% include 'import.html' %}
+    </div>
+    {% endif %}
+</div>
+
+    {% endif %}
 {% include 'modal_campus_form.html' %}
 
 {% if campus_error|length > 0 %}

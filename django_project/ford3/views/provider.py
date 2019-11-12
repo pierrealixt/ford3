@@ -253,9 +253,10 @@ def upload(request, provider_id):
     context = {
         'data': json.dumps(data),
         'columns': json.dumps(column_keys),
-        'provider': provider
+        'provider': provider,
+        'import_data': True,
     }
-    return render(request, 'import.html', context)
+    return render(request, 'provider.html', context)
 
 
 def import_excel(file, provider_id):
