@@ -25,11 +25,14 @@ class OpenEduSmartExcelData():
             from ford3_qualification q
             INNER JOIN  ford3_campus c on c.id = q.campus_id
             INNER JOIN ford3_provider p on p.id = c.provider_id
+            INNER JOIN ford3_saqaqualification sq on sq.id = q.saqa_qualification_id
         where
             p.id = {provider_id}
-            and q.deleted = 'FALSE';
-        """.format(provider_id=self.provider.id))
-
+            and
+                NOT c.deleted
+        order by
+            q.deleted, sq.saqa_id DESC;
+        """.format(provider_id=self.provider.id))  # noqa
         self.results = [res for res in queryset]
 
     def get_campus_list(self):
@@ -41,7 +44,7 @@ class OpenEduSmartExcelData():
 
     def get_subjects_list(self):
         return [
-            sub.name for sub in Subject.objects.all()
+            f'{sub.name} ({sub.id})' for sub in Subject.objects.all()
         ]
 
     def get_occupations_list(self):
@@ -55,13 +58,20 @@ class OpenEduSmartExcelData():
         ]
 
     def get_qualification_time_repr_list(self):
-        return ['month', 'year']
+        return ['Month(s)', 'Year(s)']
 
+    @classmethod
     def get_yes_no_list(self):
-        return ['True', 'False']
+        return ['Yes', 'No']
 
+    @classmethod
     def get_full_part_time_list(self):
         return ['Full time', 'Part time']
+
+    def write_qualification__deleted(self, obj, kwargs={}):
+        return bool_to_string(
+            not obj.deleted,
+            self.get_yes_no_list())
 
     def write_saqa_qualification__name(self, obj, kwargs={}):
         return obj.saqa_qualification.name
@@ -86,7 +96,9 @@ class OpenEduSmartExcelData():
 
     def write_occupation__name(self, qualification, kwargs={}):
         try:
-            return qualification.occupations.all()[kwargs['index']].name
+            return qualification.occupations\
+                .all()\
+                .order_by('id')[kwargs['index']].name
         except IndexError:
             return None
 
@@ -98,7 +110,9 @@ class OpenEduSmartExcelData():
 
     def write_interest__name(self, qualification, kwargs={}):
         try:
-            return qualification.interests.all()[kwargs['index']].name
+            return qualification.interests\
+                .all()\
+                .order_by('id')[kwargs['index']].name
         except IndexError:
             return None
 
@@ -112,16 +126,24 @@ class OpenEduSmartExcelData():
             qualification.full_time,
             self.get_full_part_time_list())
 
-    def write_qualification_entrance_requirement_subject__subject(self, qualification, kwargs={}):
-        return qualification.qualificationentrancerequirementsubject_set.all()[kwargs['index']].subject.name
+    def write_qualification_entrance_requirement_subject__subject(
+        self, qualification, kwargs={}):
 
-    def write_qualification_entrance_requirement_subject__minimum_score(self, qualification, kwargs={}):
-        return qualification.qualificationentrancerequirementsubject_set.all()[kwargs['index']].minimum_score
+        subject = qualification.qualificationentrancerequirementsubject_set\
+            .all().order_by('id')[kwargs['index']].subject
+        return f'{subject.name} ({subject.id})'
+
+    def write_qualification_entrance_requirement_subject__minimum_score(
+        self, qualification, kwargs={}):
+
+        return qualification.qualificationentrancerequirementsubject_set\
+            .all().order_by('id')[kwargs['index']].minimum_score
 
     def write_qualification__total_cost(self, qualification, kwargs={}):
         return qualification.total_cost
 
-    def write_qualification__total_cost_comment(self, qualification, kwargs={}):
+    def write_qualification__total_cost_comment(
+        self, qualification, kwargs={}):
         return qualification.total_cost_comment
 
     def write_qualification__critical_skill(self, qualification, kwargs={}):
@@ -135,7 +157,9 @@ class OpenEduSmartExcelData():
             self.get_yes_no_list())
 
 
-    def write_qualification__high_demand_occupation(self, qualification, kwargs={}):
+    def write_qualification__high_demand_occupation(
+        self, qualification, kwargs={}):
+
         return bool_to_string(
             qualification.high_demand_occupation,
             self.get_yes_no_list())
@@ -200,5 +224,35 @@ class OpenEduSmartExcelData():
         else:
             return ''
 
+    def write_requirement__require_aps_score(self, qualification, kwargs={}):
+        if qualification.requirement:
+            return bool_to_string(
+                qualification.requirement.require_aps_score,
+                self.get_yes_no_list())
+        else:
+            return ''
 
+    def write_get_number_of_people_groups(self):
+        from ford3.models.people_group import PeopleGroup
+        return PeopleGroup.objects.count()
 
+    def write_get_name_of_people_group(self, qualification, kwargs={}):
+        from ford3.models.people_group import PeopleGroup
+        return PeopleGroup.objects.all().order_by('id')[kwargs['index']].group
+
+    def write_admission_point_score__value(self, qualification, kwargs={}):
+        if qualification.requirement:
+            return qualification\
+                .requirement.admission_point_scores[kwargs['index']]['value']
+        else:
+            return ''
+
+    def write_requirement__require_certain_subjects(
+        self, qualification, kwargs={}):
+
+        if qualification.requirement:
+            return bool_to_string(
+                qualification.requirement.require_certain_subjects,
+                self.get_yes_no_list())
+        else:
+            return ''

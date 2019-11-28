@@ -16,13 +16,23 @@ class TestAdmissionPointScore(TestCase):
         self.requirement = Requirement.objects.get(pk=1)
 
     def test_no_admission_point_scores(self):
-        self.assertEqual(self.requirement.admission_point_scores, [
+        without_id = [
+            {
+                'id': aps['id'],
+                'value': aps['value'],
+                'group': {
+                    'name': aps['group']['name']
+                }
+            }
+            for aps in self.requirement.admission_point_scores
+        ]
+        self.assertEqual(without_id, [
             {'id': 0, 'value': 0, 'group':
-                {'id': 1, 'name': 'Previously disadvantaged'}},
+                {'name': 'Previously disadvantaged'}},
             {'id': 0, 'value': 0, 'group':
-                {'id': 2, 'name': 'No disadvantaged'}},
+                {'name': 'No disadvantaged'}},
             {'id': 0, 'value': 0, 'group':
-                {'id': 3, 'name': 'International students'}}
+                {'name': 'International students'}}
         ])
 
     def test_only_one_admission_point_score(self):
@@ -35,13 +45,24 @@ class TestAdmissionPointScore(TestCase):
         aps.value = 42
         aps.save()
 
-        self.assertEqual(self.requirement.admission_point_scores, [
+        without_id = [
+            {
+                'id': aps['id'],
+                'value': aps['value'],
+                'group': {
+                    'name': aps['group']['name']
+                }
+            }
+            for aps in self.requirement.admission_point_scores
+        ]
+
+        self.assertEqual(without_id, [
             {'id': 0, 'value': 0, 'group':
-                {'id': 1, 'name': 'Previously disadvantaged'}},
+                {'name': 'Previously disadvantaged'}},
             {'id': 0, 'value': 0, 'group':
-                {'id': 2, 'name': 'No disadvantaged'}},
+                {'name': 'No disadvantaged'}},
             {'id': aps.id, 'value': aps.value, 'group':
-                {'id': 3, 'name': 'International students'}}
+                {'name': 'International students'}}
         ])
 
     def test_add_people_group(self):

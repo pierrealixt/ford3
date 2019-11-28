@@ -1,0 +1,20 @@
+.table-responsive > thead > tr > th {
+    background-color: var(--c-smoke);
+}
+
+.tableFixHead          { overflow-y: auto; height: auto; }
+.tableFixHead thead th { position: sticky; top: 0; }
+
+td.value_changed span {
+    padding: 10px;
+    display: block;
+}
+
+span.old_value {
+    background: lightcoral;
+}
+
+span.new_value {
+    background: lightgreen;
+
+}

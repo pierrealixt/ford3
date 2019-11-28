@@ -18,10 +18,10 @@ QUALIFICATION = [
         'prop': 'full_time',
         'funcs': [isPresent]
     },
-    {
-        'prop': 'credits_after_completion',
-        'funcs': [isPresent]
-    },
+    # {
+    #     'prop': 'credits_after_completion',
+    #     'funcs': [isPresent]
+    # },
     {
         'prop': 'distance_learning',
         'funcs': [isPresent]
@@ -59,10 +59,10 @@ QUALIFICATION = [
         'prop': 'requirement.interview',
         'funcs': [isPresent],
     },
-    {
-        'prop': 'requirement.admission_point_score',
-        'funcs': [isPresent],
-    },
+    # {
+    #     'prop': 'requirement.admission_point_score',
+    #     'funcs': [isPresent],
+    # },
     {
         'prop': 'requirement.min_nqf_level',
         'funcs': [isPresent],

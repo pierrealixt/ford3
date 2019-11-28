@@ -29,6 +29,20 @@ OPENEDU_EXCEL_DEFINITION = [
     {
         'func': 'add_format',
         'kwargs': {
+            'key': 'header_required',
+            'format': {
+                'border': 1,
+                'bg_color': '#226b30',
+                'bold': True,
+                'text_wrap': True,
+                'valign': 'vcenter',
+                'indent': 1,
+            }
+        }
+    },
+    {
+        'func': 'add_format',
+        'kwargs': {
             'key': 'locked',
             'format': {
                 'locked': True
@@ -42,6 +56,15 @@ OPENEDU_EXCEL_DEFINITION = [
             'format': {
                 'locked': False
             }
+        }
+    },
+    {
+        'func': 'add_format',
+        'kwargs': {
+            'key': 'currency',
+            'format': {
+            },
+            'num_format': 'R 0'
         }
     },
     {
@@ -101,6 +124,14 @@ OPENEDU_EXCEL_DEFINITION = [
                     'format': 'unlocked'
                 },
                 {
+                    'name': 'Is it still active?',
+                    'key': 'qualification__deleted',
+                    'validations': {
+                        'list_source_func': 'get_yes_no_list',
+                    },
+                    'format': 'locked'
+                },
+                {
                     'name': 'Short description',
                     'key': 'qualification__short_description',
                     'validations': {
@@ -113,7 +144,8 @@ OPENEDU_EXCEL_DEFINITION = [
                             'input_message': 'Maximum of 250 characters'
                         }
                     },
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 },
                 {
                     'name': 'Long description',
@@ -128,7 +160,8 @@ OPENEDU_EXCEL_DEFINITION = [
                             'input_message': 'Maximum of 500 characters'
                         }
                     },
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 },
                 {
                     'name': 'Distance Learning',
@@ -136,7 +169,8 @@ OPENEDU_EXCEL_DEFINITION = [
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 },
                 {
                     'name': 'Full time / Part time',
@@ -144,7 +178,8 @@ OPENEDU_EXCEL_DEFINITION = [
                     'validations': {
                         'list_source_func': 'get_full_part_time_list'
                     },
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 },
                 {
                     'name': 'Web page',
@@ -153,7 +188,7 @@ OPENEDU_EXCEL_DEFINITION = [
                         'excel': {
                             'validate': 'any',
                             'input_title': 'Qualification webpage',
-                            'input_message': 'Must be an internet link (http://)'
+                            'input_message': 'Must be an internet link (http://)'  # noqa
                         }
                     }
                 }
@@ -178,14 +213,16 @@ OPENEDU_EXCEL_DEFINITION = [
                             'input_message': 'e.g: 6 months / 2 years\nChoose month or year at the next column.' # noqa
                         }
                     },
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 },
                 {
-                    'name': 'duration_time_repr',
+                    'name': 'Duration - ',
                     'key': 'qualification__time_repr',
                     'validations': {
                         'list_source_func': 'get_qualification_time_repr_list'
-                    }
+                    },
+                    'required': True
                 }
             ]
         }
@@ -207,7 +244,8 @@ OPENEDU_EXCEL_DEFINITION = [
                             'input_message': 'Average cost of the full qualification.' # noqa
                         }
                     },
-                    'format': 'unlocked'
+                    'format': 'currency',
+                    'required': True
                 },
                 {
                     'name': 'Total Cost comment',
@@ -222,7 +260,8 @@ OPENEDU_EXCEL_DEFINITION = [
                             'input_message': 'Any comments regarding the cost and payment options of this qualification should be filled in here.' # noqa
                         }
                     },
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 }
             ]
         }
@@ -238,7 +277,8 @@ OPENEDU_EXCEL_DEFINITION = [
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 },
                 {
                     'name': 'Preparation for green job?',
@@ -246,7 +286,8 @@ OPENEDU_EXCEL_DEFINITION = [
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 },
                 {
                     'name': 'Preparation for high demand job?',
@@ -254,7 +295,8 @@ OPENEDU_EXCEL_DEFINITION = [
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 }
 
             ]
@@ -269,7 +311,7 @@ OPENEDU_EXCEL_DEFINITION = [
                     'name': 'Required entrance qualification',
                     'key': 'requirement__min_nqf_level',
                     'validations': {
-                        'list_source_func': 'get_required_entrance_qualification_list'
+                        'list_source_func': 'get_required_entrance_qualification_list'  # noqa
                     },
                     'format': 'unlocked'
                 },
@@ -279,7 +321,8 @@ OPENEDU_EXCEL_DEFINITION = [
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 },
                 {
                     'name': 'Does it require a portfolio?',
@@ -287,13 +330,15 @@ OPENEDU_EXCEL_DEFINITION = [
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 },
                 {
                     'name': 'Portfolio requirements',
                     'key': 'requirement__portfolio_comment',
                     'validations': {},
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 },
                 {
                     'name': 'Does it involve any other assessment?',
@@ -301,15 +346,72 @@ OPENEDU_EXCEL_DEFINITION = [
                     'validations': {
                         'list_source_func': 'get_yes_no_list'
                     },
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 },
                 {
                     'name': 'Assessment requirements',
                     'key': 'requirement__assessment_comment',
                     'validations': {},
-                    'format': 'unlocked'
+                    'format': 'unlocked',
+                    'required': True
                 },
 
+            ]
+        }
+    },
+    {
+        'group_name': 'APS',
+        'func': 'add_group_column',
+        'kwargs': {
+            'columns': [
+                {
+                    'name': 'Does it require an APS score?',
+                    'key': 'requirement__require_aps_score',
+                    'validations': {
+                        'list_source_func': 'get_yes_no_list'
+                    },
+                    'format': 'unlocked',
+                    'required': True
+                }
+            ]
+        }
+    },
+    {
+        'group_name': 'APS for groups',
+        'func': 'add_group_column',
+        'kwargs': {
+            'repeat_func': 'get_number_of_people_groups',
+            'columns': [
+                {
+                    'name_func': 'get_name_of_people_group',
+                    'key': 'admission_point_score__value',
+                    'validations': {
+                        'excel': {
+                            'validate': 'integer',
+                            'criteria': '>=',
+                            'value': 1,
+                            'input_title': 'APS score',
+                            'input_message': '' # noqa
+                        }
+                    },
+                }
+            ]
+        }
+    },
+    {
+        'group_name': '',
+        'func': 'add_group_column',
+        'kwargs': {
+            'columns': [
+                {
+                    'name': 'Does it require certain subjects?',
+                    'key': 'requirement__require_certain_subjects',
+                    'validations': {
+                        'list_source_func': 'get_yes_no_list'
+                    },
+                    'required': True
+                }
             ]
         }
     },
@@ -321,7 +423,7 @@ OPENEDU_EXCEL_DEFINITION = [
             'columns': [
                 {
                     'name': 'Subject',
-                    'key': 'qualification_entrance_requirement_subject__subject',
+                    'key': 'qualification_entrance_requirement_subject__subject',  # noqa
                     'validations': {
                         'list_source_func': 'get_subjects_list'
                     },
@@ -329,7 +431,7 @@ OPENEDU_EXCEL_DEFINITION = [
                 },
                 {
                     'name': 'Score',
-                    'key': 'qualification_entrance_requirement_subject__minimum_score',
+                    'key': 'qualification_entrance_requirement_subject__minimum_score',  # noqa
                     'validations': {
                         'excel': {
                             'validate': 'integer',
