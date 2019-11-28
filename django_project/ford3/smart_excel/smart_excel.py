@@ -23,7 +23,7 @@ class SmartExcel():
     data_worksheet_name = Name of the 'data' worksheet (used to store list options)
     READMODE: If this is set to True, only parsing is available.
     WRITEMODE: If this is set to true, only dumping is available.
-    """
+    """  # noqa
     header_row = 1
     max_row = 100
     meta_worksheet_name = '_meta'
@@ -51,7 +51,7 @@ class SmartExcel():
 
         :param output: The output of a xlsx file. Only in WRITEMODE.
         :type output: str or io.BytesIO()
-        """
+        """  # noqa
 
         assert definition and data
 
@@ -60,6 +60,8 @@ class SmartExcel():
         self.validations = {}
         self.groups = {}
 
+        self.data = data
+
         if path:
             self.READMODE = True
             self.init_read_mode(definition, path)
@@ -67,7 +69,6 @@ class SmartExcel():
             self.WRITEMODE = True
             self.init_write_mode(definition, output)
 
-        self.data = data
 
     def init_read_mode(self, definition, path):
         """
@@ -107,7 +108,7 @@ class SmartExcel():
     def parse(self):
         """
         Parse a xlsx file according to the definition and returns an list of dict (rows).
-        """
+        """  # noqa
         assert self.READMODE
 
         self.parsed_data = []
@@ -117,8 +118,11 @@ class SmartExcel():
                 continue
             for col_index, col in enumerate(self.columns):
                 if col['index'] > 0 and col['key'].find('--') == -1:
-                    new_key = '{key}--{index}'.format(key=col['key'], index=col['index'])
+                    new_key = '{key}--{index}'.format(
+                        key=col['key'],
+                        index=col['index'])
                     col['key'] = new_key
+
                 col_index_base_1 = col_index + 1
                 row_index_base_1 = row_index + 1
                 value = self.workbook['Sheet1'].cell(
@@ -163,31 +167,54 @@ class SmartExcel():
             if deef['func'] == 'add_group_column':
                 columns = deef['kwargs']['columns']
                 try:
-                    group_name = deef['kwargs']['group_name']
+                    group_name = deef['group_name']
                 except:
                     group_name = None
 
                 try:
-                    repeat = deef['kwargs']['repeat']
-                except:
+                    if 'repeat_func' in deef['kwargs']:
+                        repeat = getattr(
+                            self.data,
+                            'write_{key}'.format(
+                                key=deef['kwargs']['repeat_func']))()
+                    else:
+                        repeat = deef['kwargs']['repeat']
+                except KeyError:
                     repeat = 1
 
                 self.add_group_column(columns, group_name, repeat)
             elif deef['func'] == 'add_format' and self.WRITEMODE:
-                key = deef['kwargs']['key']
-                cell_format = deef['kwargs']['format']
-                self.add_format(key, cell_format)
+                self.add_format(deef['kwargs'])
 
 
-    def add_format(self, format_key, cell_format):
-        self.formats[format_key] = self.workbook.add_format(cell_format)
+    def add_format(self, cell_format):
+        self.formats[cell_format['key']] = self.workbook.add_format(
+            cell_format['format'])
+
+        if 'num_format' in cell_format:
+            self.formats[cell_format['key']].set_num_format(
+                cell_format['num_format'])
 
 
     def add_group_column(self, columns, group_name=None, repeat=1):
         for index in range(0, repeat):
             for column in columns:
                 tmp = copy.deepcopy(column)
+
+                if 'name_func' in tmp:
+                    tmp['name'] = self.get_value(
+                        self.data,
+                        'write_{key}'.format(key=tmp['name_func']),
+                        None, {'index': index})
+                    del tmp['name_func']
+
+                if repeat > 1:
+                    name = f'{tmp["name"]} - {index + 1}'
+                else:
+                    name = tmp['name']
+
                 tmp.update({
+                    'name': name,
                     'letter': next_letter(len(self.columns)),
                     'index': index
                 })
@@ -202,20 +229,31 @@ class SmartExcel():
 
                 self.columns.append(tmp)
 
-
     def write_header(self, column):
         cell = f'{column["letter"]}{self.header_row}'
-        self.main_ws.write(cell, column['name'], self.get_format('header'))
 
+        if 'required' in column:
+            cell_format = 'header_required'
+        else:
+            cell_format = 'header'
+
+        self.main_ws.write(cell, column['name'], self.get_format(cell_format))
 
     def set_list_source_func(self, cell_range, column):
         if 'list_source_func' in column['validations']:
             self.main_ws.data_validation(cell_range, {
                 'validate': 'list',
-                'source': f'={self.validations[column["key"]]["meta_source"]}'})
+                'source': f'={self.validations[column["key"]]["meta_source"]}'
+            })
 
     def column_cell_range(self, column):
-        return f'{column["letter"]}{self.header_row + 1}:{column["letter"]}{self.max_row}'
+        return '{start_letter}{start_pos}:{end_letter}{end_pos}'.format(
+            start_letter=column["letter"],
+            start_pos=self.header_row + 1,
+            end_letter=column["letter"],
+            end_pos=self.max_row
+        )
+        # return f'{}{}:{column["letter"]}{self.max_row}'
 
     def set_validations(self, column):
         if column["key"] in self.validations:
@@ -244,13 +282,14 @@ class SmartExcel():
                 }
                 tmp.update(column['validations'])
 
-                if 'list_source_func' in column['validations'] and column['key'] not in self.validations:
+                if 'list_source_func' in column['validations']\
+                    and column['key'] not in self.validations:
                     list_source = getattr(
                         self.data,
                         column['validations']['list_source_func'])()
 
                     tmp.update({
-                        'meta_source': f'={self.data_worksheet_name}!$A${tmp["row"]}:${next_letter(len(list_source) - 1)}${tmp["row"]}'
+                        'meta_source': f'={self.data_worksheet_name}!$A${tmp["row"]}:${next_letter(len(list_source) - 1)}${tmp["row"]}'  # noqa
                     })
 
                     self.data_ws.write_row(
@@ -313,7 +352,7 @@ class SmartExcel():
 
     def get_meta(self, klass, func, meta, kwargs):
         if func not in dir(klass):
-            raise Exception(f'method \'{func}\' not present in SmartExcelData class')
+            raise Exception(f'method \'{func}\' not present in SmartExcelData class')  # noqa
         try:
             meta = getattr(klass, func)(meta, kwargs)
         except IndexError:
@@ -323,9 +362,6 @@ class SmartExcel():
 
     def get_value(self, klass, func, obj, kwargs):
         return self.get_meta(klass, func, obj, kwargs)
-
-    def get_obj(self, klass, func, value, kwargs={}):
-        return self.get_meta(klass, func, value, kwargs)
 
     def get_values_for_column(self, column):
         return [

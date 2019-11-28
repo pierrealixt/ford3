@@ -3,6 +3,7 @@ from ford3.smart_excel.smart_excel import SmartExcel
 from ford3.smart_excel.definition import OPENEDU_EXCEL_DEFINITION
 from ford3.smart_excel.data_model import OpenEduSmartExcelData
 
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
 

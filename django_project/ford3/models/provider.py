@@ -265,3 +265,9 @@ class Provider(models.Model):
                 'location_value_x': 0,
                 'location_value_y': 0})
         return result
+
+    @property
+    def count_qualifications(self):
+        from ford3.models.qualification import Qualification
+        return Qualification.active_objects.filter(
+            campus_id__in=[c.id for c in self.campus]).count()

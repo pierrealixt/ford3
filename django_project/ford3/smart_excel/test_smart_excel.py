@@ -5,15 +5,18 @@ from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
 from ford3.smart_excel.smart_excel import SmartExcel
 from ford3.smart_excel.definition import OPENEDU_EXCEL_DEFINITION
+from ford3.smart_excel.data_model import OpenEduSmartExcelData
 from ford3.views import provider as providerView
 from ford3.tests.models.model_factories import ModelFactories
 from ford3.models import (
-    Campus,
     QualificationEntranceRequirementSubject,
-    Interest
+    Interest,
+    Subject,
+    Occupation
 )
-
-from ford3.import_qualifications import import_excel_data
+from ford3.excel_importer import (
+    update_qualification
+)
 
 DUMMY_DEFINITION = [
     {
@@ -100,6 +103,12 @@ class DummyData():
             'Saint-Dizier'
         ]
 
+    def write_get_repeat_func(self):
+        return len(self.results)
+
+    def write_get_name_func(self, instance, kwargs={}):
+        return self.results[kwargs['index']].name
+
 
 class TestSmartExcelDump(unittest.TestCase):
     def setUp(self):
@@ -154,16 +163,17 @@ class TestSmartExcelParse(unittest.TestCase):
 
 
 class TestSmartExcelParseProviderSheet(TestCase):
+    fixtures = ['subject', 'occupation', 'interest', 'people_groups']
+
     def setUp(self):
-        self.provider = ModelFactories.get_provider_test_object()
         self.campus = ModelFactories.get_campus_test_object()
-        self.qualification = ModelFactories.get_qualification_test_object()
-        self.qualification.campus_id = self.campus
-        self.campus.provider_id = self.provider
-        self.campus.save()
-        self.requirement_subject = ModelFactories.get_qualification_entrance_requirement_to()
-        self.requirement_subject.qualification = self.qualification
-        self.requirement_subject.save()
+        self.provider = self.campus.provider
+
+        self.requirement_subject = ModelFactories.get_qualification_entrance_requirement_to()  # noqa
+        self.qualification = self.requirement_subject.qualification
+
+        self.qualification.campus = self.campus
+        self.qualification.provider = self.provider
         self.qualification.save()
 
         output_data = providerView.excel_dump(self.provider.id)
@@ -174,161 +184,187 @@ class TestSmartExcelParseProviderSheet(TestCase):
 
         excel = SmartExcel(
             definition=OPENEDU_EXCEL_DEFINITION,
-            data=DummyData(),
+            data=OpenEduSmartExcelData(
+                provider_id=self.provider.id
+            ),
             path=named_tempfile.name
         )
         # provider.dump(None, provider.id)
         self.data = excel.parse()
 
-    def test_basic_parse(self):
-        original_name = self.qualification.name
-        self.campus.name = "Something else"
-        self.campus.save()
+    def test_total_cost(self):
+        row = self.data[0]
+        row['qualification__total_cost'] = 42
 
-        self.assertNotEqual(self.campus.name, original_name)
-
-        success, errors = import_excel_data(self.data)
-        self.assertTrue(success)
-        self.assertIsNone(errors)
-
-        self.campus = Campus.objects.get(pk=self.campus.id)
-        self.assertEqual(original_name, self.campus.name)
-
-    def test_alter_subject(self):
-        original_required_score = self.qualification.entrance_req_subjects_list[0]['minimum_score']
-        entrance_req_id = self.qualification.entrance_req_subjects_list[0]['id']
-        qualification_entrance_subject = QualificationEntranceRequirementSubject.objects.get(pk=entrance_req_id)
-        qualification_entrance_subject.minimum_score = 1
-        qualification_entrance_subject.save()
-
-        self.assertNotEqual(qualification_entrance_subject.minimum_score, original_required_score)
-
-        success, errors = import_excel_data(self.data)
+        success, diffs, _ = update_qualification(row)
 
         self.assertTrue(success)
-        self.assertIsNone(errors)
+        self.assertEqual(
+            diffs['qualification__total_cost'],
+            {
+                'name': 'total_cost',
+                'old': 'R 100000',
+                'new': 'R 42'
+            })
 
-        qualification_entrance_subject = QualificationEntranceRequirementSubject.objects.get(pk=entrance_req_id)
-
-        self.assertEqual(qualification_entrance_subject.minimum_score, original_required_score)
 
     def test_add_subject(self):
-        original_required_score = self.qualification.entrance_req_subjects_list[0]['minimum_score']
-        entrance_req_id = self.qualification.entrance_req_subjects_list[0]['id']
-        QualificationEntranceRequirementSubject.objects.get(pk=entrance_req_id).delete()
+        entrance_req_id = self.qualification.entrance_req_subjects_list[0]['id']  # noqa
+        QualificationEntranceRequirementSubject.objects.get(
+            pk=entrance_req_id).delete()
         try:
-            QualificationEntranceRequirementSubject.objects.get(pk=entrance_req_id)
+            QualificationEntranceRequirementSubject.objects.get(
+                pk=entrance_req_id)
+
             self.fail('Object not deleted correctly')
         except ObjectDoesNotExist:
             pass
 
-        subject_name = ModelFactories.get_subject_test_object().name
+        subject_1 = Subject.objects.get(name='English')
+        subject_2 = Subject.objects.get(name='Afrikaans')
 
         row = {
             'qualification__id': self.data[0]['qualification__id'],
-            'qualification_entrance_requirement_subject__subject': subject_name,
-            'qualification_entrance_requirement_subject__minimum_score': '42'
+            'qualification_entrance_requirement_subject__subject': f'{subject_1.name} ({subject_1.id})',  # noqa
+            'qualification_entrance_requirement_subject__minimum_score': '42',
+            'qualification_entrance_requirement_subject__subject--1': f'{subject_2.name} ({subject_2.id})',  # noqa
+            'qualification_entrance_requirement_subject__minimum_score--1': '42',  # noqa
+            'qualification_entrance_requirement_subject__subject--2': None,
+            'qualification_entrance_requirement_subject__minimum_score--2': None,  # noqa
+            'qualification_entrance_requirement_subject__subject--3': None,
+            'qualification_entrance_requirement_subject__minimum_score--3': None,  # noqa
+            'qualification_entrance_requirement_subject__subject--4': None,
+            'qualification_entrance_requirement_subject__minimum_score--4': None,  # noqa
+            'qualification_entrance_requirement_subject__subject--5': None,
+            'qualification_entrance_requirement_subject__minimum_score--5': None,  # noqa
         }
 
-        success, errors, diffs = import_excel_data(row)
+        success, diffs, _ = update_qualification(row)
 
         self.assertTrue(success)
-        self.assertIsNone(errors)
         self.assertEqual(
-            diffs,
+            diffs['qualification_entrance_requirement_subject__subject'],
             {
-                'qualification_entrance_requirement_subject__minimum_score': {
-                    'new': '42',
-                    'old': None
-                }
+                'old': None,
+                'new': f'English ({subject_1.id})'
+            }
+        )
+        self.assertEqual(
+            diffs['qualification_entrance_requirement_subject__minimum_score'],
+            {
+                'old': None,
+                'new': '42'
             }
         )
 
-        qualification_entrance_subject = self.qualification.entrance_req_subjects_list[0]
-
-        self.assertEqual(qualification_entrance_subject['name'], subject_name)
-        self.assertEqual(qualification_entrance_subject['minimum_score'], 42)
-
-    def test_add_subject_failed(self):
-        row = {
-            'qualification__id': self.data[0]['qualification__id'],
-            'qualification_entrance_requirement_subject__subject': 'Penbra History',
-            'qualification_entrance_requirement_subject__minimum_score': '42'
-        }
-
-        success, errors = import_excel_data(row)
-
-        self.assertFalse(success)
-
         self.assertEqual(
-            errors,
+            diffs['qualification_entrance_requirement_subject__subject--1'],
             {
-                'qualification_entrance_requirement_subject__subject-0': 'The subject Penbra History does not exist.'
+                'old': None,
+                'new': f'Afrikaans ({subject_2.id})'
+            }
+        )
+        self.assertEqual(
+            diffs['qualification_entrance_requirement_subject__minimum_score--1'],  # noqa
+            {
+                'old': None,
+                'new': '42'
             }
         )
 
+        qualification_entrance_subject_1 = self.qualification.entrance_req_subjects_list[0]  # noqa
+
+        self.assertEqual(qualification_entrance_subject_1['name'], subject_1.name)  # noqa
+        self.assertEqual(qualification_entrance_subject_1['minimum_score'], 42)
+
+        qualification_entrance_subject_2 = self.qualification.entrance_req_subjects_list[1]  # noqa
+
+        self.assertEqual(qualification_entrance_subject_2['name'], subject_2.name)  # noqa
+        self.assertEqual(qualification_entrance_subject_2['minimum_score'], 42)
 
     def test_add_interest(self):
-        original_interest = self.qualification.interests.all()[0]
+        # original_interest = self.qualification.interests.all()[0]
+        int_1 = Interest.objects.get(name='Health')
         self.assertEqual(len(self.qualification.interests.all()), 1)
         self.qualification.interests.clear()
         self.assertEqual(len(self.qualification.interests.all()), 0)
 
         row = {
             'qualification__id': self.data[0]['qualification__id'],
-            'interest__name': self.data[0]['interest__name']
+            'interest__name': int_1.name,
+            'interest__name--1': None,
+            'interest__name--2': None,
         }
 
-        success, errors, diffs = import_excel_data(row)
+        success, diffs, _ = update_qualification(row)
 
-        self.assertIsNone(errors)
         self.assertTrue(success)
-        self.assertEqual(diffs, {})
+        self.assertEqual(diffs['interest__name'], {
+            'old': None,
+            'new': int_1.name
+        })
 
 
         interest = self.qualification.interests.all()[0]
-        self.assertEqual(interest.id, original_interest.id)
-
-    def test_add_interest_failed(self):
-        self.assertEqual(len(self.qualification.interests.all()), 1)
-        self.qualification.interests.clear()
-        self.assertEqual(len(self.qualification.interests.all()), 0)
-
-        row = {
-            'qualification__id': self.data[0]['qualification__id'],
-            'interest__name': 'penbra hunting'
-        }
-
-        success, errors = import_excel_data(row)
-
-        self.assertEqual(
-            errors,
-            {
-                'interest__name-0': 'The interest penbra hunting does not exist.'
-            }
-        )
-        self.assertFalse(success)
+        self.assertEqual(interest.id, int_1.id)
 
     def test_add_occupation(self):
         # todo: change that test, similar to interest
-        original_occupation = self.qualification.occupations.all()[0]
+        # original_occupation = self.qualification.occupations.all()[0]
+        occ_1 = Occupation.objects.get(name='Abrasive Wheel Maker')
         self.assertEqual(len(self.qualification.occupations.all()), 1)
         self.qualification.occupations.clear()
         self.assertEqual(len(self.qualification.occupations.all()), 0)
 
         row = {
             'qualification__id': self.data[0]['qualification__id'],
-            'occupation__name': original_occupation.name
+            'occupation__name': occ_1.name,
+            'occupation__name--1': 'prout',
+            'occupation__name--2': None,
+            'occupation__name--3': None,
+            'occupation__name--4': None
         }
 
-        success, errors, diffs = import_excel_data(row)
+        success, diffs, _ = update_qualification(row)
         self.assertTrue(success)
-        self.assertIsNone(errors)
 
-        self.assertEqual(diffs, {})
+        self.assertEqual(diffs['occupation__name'], {
+            'new': 'Abrasive Wheel Maker',
+            'old': None
+        })
 
         occupation = self.qualification.occupations.all()[0]
-        self.assertEqual(occupation.id, original_occupation.id)
+        self.assertEqual(occupation.id, occ_1.id)
 
-    def test_add_occupation_failed(self):
-        pass
+    def test_update_aps(self):
+        row = {
+            'qualification__id': self.data[0]['qualification__id'],
+            'admission_point_score__value': 0,
+            'admission_point_score__value--1': 2,
+        }
+
+        success, diffs, _ = update_qualification(row)
+
+        self.assertEqual(
+            diffs['admission_point_score__value'],
+            {
+                'old': None,
+                'new': 0
+            }
+        )
+
+        self.assertEqual(
+            diffs['admission_point_score__value--1'],
+            {
+                'old': None,
+                'new': 2
+            }
+        )
+
+        self.assertEqual(
+            self.qualification.requirement.admission_point_scores[0]['value'],
+            0)
+
+        self.assertEqual(
+            self.qualification.requirement.admission_point_scores[1]['value'],
+            2)

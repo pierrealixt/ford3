@@ -62,8 +62,11 @@ class SAQAQualification(models.Model):
         creator_provider = Provider.objects.get(
             pk=data['provider_id'])
 
-        fos = FieldOfStudy.objects.get(
-            pk=data['fos_id'])
+        try:
+            fos = FieldOfStudy.objects.get(
+                pk=data['fos_id'])
+        except KeyError:
+            fos = None
 
         saqa_qualif = SAQAQualification(
             name=data['name'],

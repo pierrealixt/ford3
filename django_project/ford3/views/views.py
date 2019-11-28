@@ -1,7 +1,6 @@
 from django.shortcuts import (
     render,
     get_object_or_404,
-    render_to_response,
     redirect,
     reverse
 )
@@ -12,6 +11,10 @@ from ford3.models.qualification import (
     Qualification
 )
 from ford3.decorators import provider_check, campus_check, qualification_check
+from ford3.excel_importer import (
+    # create_qualification,
+    update_qualification
+)
 
 
 @provider_check
@@ -48,21 +51,15 @@ def delete_qualification(request, provider_id, campus_id, qualification_id):
 
 
 def import_qualification(request, provider_id):
-    import json
-    from ford3.import_qualifications import import_excel_data
-    if 'headers' in request.GET:
-        #  Build definition
-        pass
     row = json.loads(request.body)
 
-    success, errors, diffs = import_excel_data(row)
+    success, diffs, completion = update_qualification(row)
 
     context = {
         'result': {
             'success': success,
-            'errors': errors,
             'diffs': diffs,
-
+            'completion': completion
         }
     }
     response_string = json.dumps(context, cls=DecimalEncoder)

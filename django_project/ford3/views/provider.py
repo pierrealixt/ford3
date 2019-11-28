@@ -246,10 +246,13 @@ def upload(request, provider_id):
             'provider': provider,
         }
         return render(request, 'provider.html', context)
-    column_keys = []
-    for column in columns:
-        next_column = {'name': column['name'], 'key': column['key']}
-        column_keys.append(next_column)
+
+    column_keys = [
+        {'name': column['name'], 'key': column['key']}
+        for column in columns
+        if column['key'] != 'qualification__id'
+    ]
+
     context = {
         'data': json.dumps(data),
         'columns': json.dumps(column_keys),
